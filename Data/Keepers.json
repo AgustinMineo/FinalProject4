@@ -1,0 +1,13 @@
+[
+    {
+        "keeperId": null,
+        "lastName": "Agustin",
+        "firstName": "Mineo",
+        "cellPhone": "123124123123",
+        "birthDate": "2022-10-23",
+        "email": "agustin@mineo.com",
+        "password": "123456",
+        "availabilityDays": "2022-10-23",
+        "animalSize": "Grande"
+    }
+]

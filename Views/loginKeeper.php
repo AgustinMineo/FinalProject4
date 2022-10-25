@@ -1,35 +1,25 @@
-<?php 
-namespace Views;
-?>
-<style>
-    .divider:after,
-.divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
-}
-</style>
+<?php namespace Views;?>
+
 <section class="vh-100">
     
   <div class="container py-5 h-100">
     <div class="row d-flex align-items-center justify-content-center h-100">
       <div class="col-md-8 col-lg-7 col-xl-6">
-        <img src="https://img.freepik.com/free-photo/dark-skinned-lady-keeps-lips-rounded-wants-kiss-adorable-pet-plays-with-small-puppy_273609-34276.jpg?w=1380&t=st=1666563380~exp=1666563980~hmac=431b7a8d6d50bc91aebedbb981270f797809736c04cdac774c7844ab7e793b6d"
+        <img src="https://img.freepik.com/premium-photo/tourist-with-backpack-walks-dog-field-nature-mountains-travel_163305-85442.jpg?w=1380"
           class="img-fluid" alt="Person with dog image">
       </div>
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-        <form>
+        <form action="<?php echo '/FinalProject4/' ?>User/loginKeeper" method="post">
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <input type="email" id="form1Example13" class="form-control form-control-lg" />
-            <label class="form-label" for="form1Example13">Email address</label>
+            <input type="email" name="email" class="form-control form-control-lg" />
+            <label class="form-label" for="">Email address</label>
           </div>
 
           <!-- Password input -->
           <div class="form-outline mb-4">
-            <input type="password" id="form1Example23" class="form-control form-control-lg" />
-            <label class="form-label" for="form1Example23">Password</label>
+            <input type="password" name="password" class="form-control form-control-lg" />
+            <label class="form-label" for="">Password</label>
           </div>
 
           <div class="d-flex justify-content-around align-items-center mb-4">

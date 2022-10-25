@@ -73,7 +73,15 @@ class KeeperDAO implements IKeeperDAO{
       }else{
           echo "The owners file doesn't exists";
       }
-
+  }
+  public function searchEmail($email){
+    $this->RetriveData();
+        foreach($this->keeperList as $value){ /// Buscamos dentro del arreglo de keeper
+            if($value->getEmail()== $email){ /// Si el correo es el mismo, entonces devolvemos el keeper, sino
+                    return $value;
+            }
+        }
+        return null;
   }
 }
 ?>

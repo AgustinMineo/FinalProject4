@@ -7,5 +7,14 @@
         "birthDate": "2022-10-23",
         "email": "ownerid@test.com",
         "password": "123456"
+    },
+    {
+        "ownerId": null,
+        "lastName": "nuevo owner",
+        "firstName": "hoy",
+        "cellPhone": "123123123123123",
+        "birthDate": "2022-10-24",
+        "email": "test@testing.com",
+        "password": "12312312121"
     }
 ]

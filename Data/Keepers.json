@@ -9,5 +9,38 @@
         "password": "123456",
         "availabilityDays": "2022-10-23",
         "animalSize": "Grande"
+    },
+    {
+        "keeperId": null,
+        "lastName": "Jose",
+        "firstName": "Carlos",
+        "cellPhone": "12312321312",
+        "birthDate": "2017-01-03",
+        "email": "josecarlos@pepe.com",
+        "password": "123456",
+        "availabilityDays": "2022-10-23",
+        "animalSize": "Grande"
+    },
+    {
+        "keeperId": null,
+        "lastName": "test",
+        "firstName": "nuevo keeper",
+        "cellPhone": "25252525",
+        "birthDate": "2022-10-24",
+        "email": "test@test.com",
+        "password": "1234567",
+        "availabilityDays": "2022-10-27",
+        "animalSize": "Grande"
+    },
+    {
+        "keeperId": null,
+        "lastName": "test",
+        "firstName": "test",
+        "cellPhone": "12312",
+        "birthDate": "2022-10-24",
+        "email": "asdasd@asd.com",
+        "password": "123123",
+        "availabilityDays": "2022-10-24",
+        "animalSize": "jose"
     }
 ]

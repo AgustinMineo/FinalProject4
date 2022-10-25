@@ -18,6 +18,12 @@ class UserController{
     public function addKeeperView(){
         require_once(VIEWS_PATH."keeper-add.php");
     }
+    public function goIndex(){
+        require_once(VIEWS_PATH."loginkeeper.php");
+    }
+    public function goLanding(){
+        require_once(VIEWS_PATH."landingPage.php");
+    }
 
     public function newOwner(/*$ownerId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password){
         $OwnerDAO = new OwnerDAO();
@@ -37,7 +43,7 @@ class UserController{
     public function newKeeper(/*$keeperId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$availabilityDays,$animalSize/*,$points,$reviews*/){
         $KeeperDAO = new KeeperDAO();
         $newKeeper = new Keeper();
-       // $newKeeper->setOwnerId($keeperId);
+       // $newKeeper->setkeeperId($keeperId);
         $newKeeper->setLastName($lastName);
         $newKeeper->setfirstName($firstName);
         $newKeeper->setCellPhone($cellPhone);
@@ -48,7 +54,24 @@ class UserController{
         $newKeeper->setAnimalSize($animalSize);
 
         $KeeperDAO->AddKeeper($newKeeper);
-        $this->addKeeperView();
+        $this->goIndex();
+    }
+
+    public function loginOwner($email,$password){
+        $OwnerDAO = new OwnerDAO();
+        $newOwner = new Owner();
+        $newOwner = $OwnerDAO->searchEmail($email);
+        if($newOwner){
+            if($newOwner->getPassword()==$password){
+                session_start(); // start the session
+                $loggedUser = $newOwner;
+                $_SESSION["loggedUser"] = $loggedUser;
+                $this->goLanding();
+            }
+        }else{
+            $this->goIndex();
+            echo "<h2>no entre</h2>";
+        }
     }
 }
 ?>

@@ -73,7 +73,6 @@ class KeeperDAO implements IKeeperDAO{
       }else{
           echo "The owners file doesn't exists";
       }
-
   }
 }
 ?>

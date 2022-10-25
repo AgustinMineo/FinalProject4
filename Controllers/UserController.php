@@ -18,8 +18,11 @@ class UserController{
     public function addKeeperView(){
         require_once(VIEWS_PATH."keeper-add.php");
     }
-    public function goIndex(){
+    public function goLoginKeeper(){
         require_once(VIEWS_PATH."loginkeeper.php");
+    }
+    public function goLoginOwner(){
+        require_once(VIEWS_PATH."loginOwner.php");
     }
     public function goLanding(){
         require_once(VIEWS_PATH."landingPage.php");
@@ -37,7 +40,7 @@ class UserController{
         $newOwner->setPassword($password);
         //$newOwner->setPetAmount('0');
         $OwnerDAO->AddOwner($newOwner);
-        $this->addOwnerView();
+        $this->goLoginOwner();
     }
 
     public function newKeeper(/*$keeperId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$availabilityDays,$animalSize/*,$points,$reviews*/){
@@ -54,7 +57,7 @@ class UserController{
         $newKeeper->setAnimalSize($animalSize);
 
         $KeeperDAO->AddKeeper($newKeeper);
-        $this->goIndex();
+        $this->goLoginKeeper();
     }
 
     public function loginOwner($email,$password){

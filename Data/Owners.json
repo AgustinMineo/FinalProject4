@@ -16,5 +16,14 @@
         "birthDate": "2022-10-24",
         "email": "test@testing.com",
         "password": "12312312121"
+    },
+    {
+        "ownerId": null,
+        "lastName": "Nuevo",
+        "firstName": "owner",
+        "cellPhone": "2131231231231",
+        "birthDate": "2022-10-24",
+        "email": "testowner@testowner.com",
+        "password": "123456"
     }
 ]

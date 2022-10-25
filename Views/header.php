@@ -22,7 +22,7 @@
             <a href="<?php echo FRONT_ROOT?>User/addKeeperView">Sign-up Keeper</a>
         </button>
         <button type="button" class="btn ">
-            <a href="#">LOGOUT</a>
+            <a href="Views/loginKeeper.php">Login as keeper</a>
         </button>
       </div>
     </header>

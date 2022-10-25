@@ -73,5 +73,20 @@ class UserController{
             echo "<h2>no entre</h2>";
         }
     }
+
+    public function loginKeeper($email,$password){
+        $KeeperDAO = new KeeperDAO();
+        $newKeeper = new Keeper();
+        $newKeeper = $KeeperDAO->searchEmail($email);
+        if($newKeeper->getPassword()==$password){
+            session_start(); // start the session
+            $loggedUser = $newKeeper;
+            $_SESSION["loggedUser"] = $loggedUser;
+            $this->goLanding();
+            }else{
+            $this->goIndex();
+            echo "<h2>no entre</h2>";
+            }
+    }
 }
 ?>

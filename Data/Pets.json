@@ -64,27 +64,5 @@
         "petVideo": "https:\/\/www.youtube.com\/watch?v=R3XN_xtM3bA",
         "petWeight": "21",
         "petOwner": "testowner@testowner.com"
-    },
-    {
-        "petName": "test",
-        "petImage": "test",
-        "breed": "test",
-        "petSize": "test",
-        "vaccinationPlan": "test",
-        "petDetails": "test",
-        "petVideo": "test",
-        "petWeight": "test",
-        "petOwner": "testowner@testowner.com"
-    },
-    {
-        "petName": "test",
-        "petImage": "test",
-        "breed": "test",
-        "petSize": "test",
-        "vaccinationPlan": "test",
-        "petDetails": "test",
-        "petVideo": "test",
-        "petWeight": "test",
-        "petOwner": "testowner@testowner.com"
     }
 ]

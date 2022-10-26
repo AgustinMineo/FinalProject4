@@ -3,44 +3,30 @@
         "keeperId": null,
         "lastName": "Agustin",
         "firstName": "Mineo",
-        "cellPhone": "123124123123",
-        "birthDate": "2022-10-23",
-        "email": "agustin@mineo.com",
-        "password": "123456",
-        "availabilityDays": "2022-10-23",
-        "animalSize": "Grande"
-    },
-    {
-        "keeperId": null,
-        "lastName": "Jose",
-        "firstName": "Carlos",
-        "cellPhone": "12312321312",
-        "birthDate": "2017-01-03",
-        "email": "josecarlos@pepe.com",
-        "password": "123456",
-        "availabilityDays": "2022-10-23",
-        "animalSize": "Grande"
-    },
-    {
-        "keeperId": null,
-        "lastName": "test",
-        "firstName": "nuevo keeper",
-        "cellPhone": "25252525",
-        "birthDate": "2022-10-24",
+        "cellPhone": "23123123123123123",
+        "birthDate": "1999-03-29",
         "email": "test@test.com",
-        "password": "1234567",
-        "availabilityDays": "2022-10-27",
-        "animalSize": "Grande"
+        "password": "123456",
+        "availabilityDays": [
+            "2022-10-26",
+            "2022-10-27"
+        ],
+        "animalSize": "Grande",
+        "price": "200"
     },
     {
         "keeperId": null,
-        "lastName": "test",
-        "firstName": "test",
-        "cellPhone": "12312",
-        "birthDate": "2022-10-24",
-        "email": "asdasd@asd.com",
-        "password": "123123",
-        "availabilityDays": "2022-10-24",
-        "animalSize": "jose"
+        "lastName": "Tincho",
+        "firstName": "Miranda",
+        "cellPhone": "312321321312312",
+        "birthDate": "2022-10-26",
+        "email": "testtincho@test.com",
+        "password": "123456",
+        "availabilityDays": [
+            "2022-10-26",
+            "2022-10-27"
+        ],
+        "animalSize": "Grande",
+        "price": "300"
     }
 ]

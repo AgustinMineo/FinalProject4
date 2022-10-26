@@ -5,7 +5,7 @@ use DAO\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 use DAO\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
-
+session_start();
 class UserController{
     private $OwnerDAO;
 
@@ -24,8 +24,8 @@ class UserController{
     public function goLoginOwner(){
         require_once(VIEWS_PATH."loginOwner.php");
     }
-    public function goLanding(){
-        require_once(VIEWS_PATH."landingPage.php");
+    public function goLandingKeeper(){
+        require_once(VIEWS_PATH."keeperNav.php");
     }
     public function goLandingOwner(){
         require_once(VIEWS_PATH."ownerNav.php");
@@ -46,7 +46,7 @@ class UserController{
         $this->goLoginOwner();
     }
 
-    public function newKeeper(/*$keeperId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$availabilityDays,$animalSize/*,$points,$reviews*/){
+    public function newKeeper(/*$keeperId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$availabilityDays,$animalSize/*,$points,$reviews*/,$price){
         $KeeperDAO = new KeeperDAO();
         $newKeeper = new Keeper();
        // $newKeeper->setkeeperId($keeperId);
@@ -58,6 +58,7 @@ class UserController{
         $newKeeper->setPassword($password);
         $newKeeper->setAvailabilityDays($availabilityDays);
         $newKeeper->setAnimalSize($animalSize);
+        $newKeeper->setPrice($price);
 
         $KeeperDAO->AddKeeper($newKeeper);
         $this->goLoginKeeper();
@@ -69,7 +70,7 @@ class UserController{
         $newOwner = $OwnerDAO->searchEmail($email);
         if($newOwner){
             if($newOwner->getPassword()==$password){
-                session_start(); // start the session
+              //  session_start(); // start the session
                 $loggedUser = $newOwner;
                 $_SESSION["loggedUser"] = $loggedUser;
                 $this->goLandingOwner();
@@ -84,10 +85,10 @@ class UserController{
         $newKeeper = new Keeper();
         $newKeeper = $KeeperDAO->searchEmail($email);
         if($newKeeper->getPassword()==$password){
-            session_start(); // start the session
+           // session_start(); // start the session
             $loggedUser = $newKeeper;
             $_SESSION["loggedUser"] = $loggedUser;
-            $this->goLanding();
+            $this->goLandingKeeper();
             }else{
             $this->goIndex();
             echo "<h2>no entre</h2>";
@@ -101,8 +102,15 @@ class UserController{
         require_once(VIEWS_PATH. "showKeeper.php");
     }
 
-    public function updateAvailabilityDays(){
-        
+    public function updateAvailabilityDays($date1,$date2){
+        $KeeperDAO = new KeeperDAO();
+        $value=$KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getEmail(),$date1,$date2);
+        if($value){
+            echo"<h1>Los cambios fueron realizados correctamente</h1>";
+        }else{
+            echo"<h1>Error al realizar los cambios</h1>";
+        }
+        $this->goLandingKeeper();
     }
 }
 ?>

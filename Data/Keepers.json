@@ -1,0 +1,74 @@
+[
+    {
+        "keeperId": null,
+        "lastName": "Miranda",
+        "firstName": "Tincho",
+        "cellPhone": "2235061631",
+        "birthDate": "2003-10-30",
+        "email": "tincho@gmail.com",
+        "password": "123",
+        "availabilityDays": [
+            "2022-10-27",
+            "2022-11-04"
+        ],
+        "animalSize": "Medium",
+        "price": "300"
+    },
+    {
+        "keeperId": null,
+        "lastName": "Dominguez",
+        "firstName": "Franco",
+        "cellPhone": "22354723423",
+        "birthDate": "2002-11-28",
+        "email": "frankito@gmail.com",
+        "password": "123",
+        "availabilityDays": [
+            "2022-12-24",
+            "2023-01-01"
+        ],
+        "animalSize": "Small",
+        "price": "50"
+    },
+    {
+        "keeperId": null,
+        "lastName": "Garcia",
+        "firstName": "Jorge",
+        "cellPhone": "1123456445",
+        "birthDate": "1958-11-20",
+        "email": "jorgemail@gmail.com",
+        "password": "123",
+        "availabilityDays": [
+            "2022-10-26",
+            "2022-10-29"
+        ],
+        "animalSize": "Small",
+        "price": "10"
+    },
+    {
+        "keeperId": null,
+        "lastName": "Sainz",
+        "firstName": "Carlos",
+        "cellPhone": "1213312312",
+        "birthDate": "2005-11-26",
+        "email": "carlossainz@gmail.com",
+        "password": "123",
+        "availabilityDays": null,
+        "animalSize": "Big",
+        "price": "500"
+    },
+    {
+        "keeperId": null,
+        "lastName": "Rodriguez",
+        "firstName": "Rodrigo",
+        "cellPhone": "12132546",
+        "birthDate": "1998-09-23",
+        "email": "rrodriguez@gmail.com",
+        "password": "123",
+        "availabilityDays": [
+            "2022-10-24",
+            "2022-11-01"
+        ],
+        "animalSize": "Big",
+        "price": "315"
+    }
+]

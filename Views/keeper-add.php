@@ -47,15 +47,14 @@
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
-                                   <label for="">Dias disponibles</label>
-                                   <input type="date" name="availabilityDays" placeholcer="availabilityDays" value="" class="form-control" Required >
-                                   <input type="date" name="availabilityDays" placeholcer="availabilityDays" value="" class="form-control" Required >
+                                   <label for="">Tamaño del animal</label>
+                                   <input type="text" name="animalSize" placeholder="animalSize" value="" class="form-control" Required >
                               </div>
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
-                                   <label for="">Tamaño del animal</label>
-                                   <input type="text" name="animalSize" placeholder="animalSize" value="" class="form-control" Required >
+                                   <label for="">Precio</label>
+                                   <input type="number" name="price" placeholder="Price" value="" class="form-control" Required >
                               </div>
                          </div>
 

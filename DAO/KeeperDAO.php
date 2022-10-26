@@ -40,6 +40,7 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
          // $keeperValue["points"] = $Keeper->getPoints();
          // $keeperValue["reviews"] = $Keeper->getReviews();
+         $keeperValue["price"] = $Keeper->getPrice();
           
           array_push($keeperArrayEncode, $keeperValue);
       }
@@ -68,6 +69,7 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
            //   $keeper->setPoints($KeeperDecode["points"]);
              // $keeper->setReviews($KeeperDecode["reviews"]);
+              $keeper->setPrice($KeeperDecode["price"]);
               array_push($this->keeperList, $keeper);
           }
       }else{
@@ -83,8 +85,19 @@ class KeeperDAO implements IKeeperDAO{
         }
         return null;
   }
-  public function changeAvailabilityDays(searchEmail($email),$value1, $value2){
-    
+  public function changeAvailabilityDays($email,$value1, $value2){
+    $newValues = array();
+    $value = $this->searchEmail($email);
+    if($value1<$value2 && isset($value)){
+        array_push($newValues, $value1);
+        array_push($newValues, $value2);
+        $value->setAvailabilityDays($newValues);
+        $this->SaveData();
+        return true;
+    }else{
+        echo"The date $value1 cant be less to $value2";
+        return false;
+    }
   }
 }
 ?>

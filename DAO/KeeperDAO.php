@@ -83,5 +83,8 @@ class KeeperDAO implements IKeeperDAO{
         }
         return null;
   }
+  public function changeAvailabilityDays(searchEmail($email),$value1, $value2){
+    
+  }
 }
 ?>

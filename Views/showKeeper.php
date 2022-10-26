@@ -10,16 +10,24 @@ namespace Views;
                          <th>Last Name</th>
                          <th>First Name</th>
                          <th>Cellphone</th>
+                         <th>birthDate</th>
+                         <th>email</th>
+                         <th>availabilityDays</th>
+                         <th>animalSize</th>
                     </thead>
                     <tbody>
                          <?php
-                              foreach($keeperList as $keeper)
+                              foreach($listKeepers as $keeper)
                               {
                                    ?>
                                         <tr>
                                              <td><?php echo $keeper->getLastName() ?></td>
                                              <td><?php echo $keeper->getfirstName() ?></td>
                                              <td><?php echo $keeper->getCellPhone() ?></td>
+                                             <td><?php echo $keeper->getbirthDate() ?></td>
+                                             <td><?php echo $keeper->getEmail() ?></td>
+                                             <td><?php echo $keeper->getAvailabilityDays() ?></td>
+                                             <td><?php echo $keeper->getAnimalSize() ?></td>
                                         </tr>
                                    <?php
                               }

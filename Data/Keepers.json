@@ -28,5 +28,20 @@
         ],
         "animalSize": "Grande",
         "price": "300"
+    },
+    {
+        "keeperId": null,
+        "lastName": "test",
+        "firstName": "test",
+        "cellPhone": "213213213",
+        "birthDate": "2022-10-26",
+        "email": "keeper@keeper.com",
+        "password": "123456",
+        "availabilityDays": [
+            "2022-10-26",
+            "2022-10-31"
+        ],
+        "animalSize": "Grande",
+        "price": "200"
     }
 ]

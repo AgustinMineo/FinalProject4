@@ -27,7 +27,7 @@ namespace Views;
                                              <td><?php echo $keeper->getCellPhone() ?></td>
                                              <td><?php echo $keeper->getbirthDate() ?></td>
                                              <td><?php echo $keeper->getEmail() ?></td>
-                                             <td><?php if($keeper->getAvailabilityDays()){echo $keeper->getAvailabilityDays();}else{echo "No disponible";} ?></td>
+                                             <td><?php if($keeper->getAvailabilityDays()){foreach($keeper->getAvailabilityDays() as $value){echo $value; echo" <br>";} ;}else{echo "No disponible";} ?></td>
                                              <td><?php echo $keeper->getAnimalSize() ?></td>
                                              <td>$<?php echo $keeper->getPrice() ?></td>
                                         </tr>

@@ -7,6 +7,11 @@ Use Controllers\UserController as UserController;
 session_start();
 class PetController{
     private $petDAO;
+
+    public function goLandingOwner(){
+        require_once(VIEWS_PATH."ownerNav.php");
+    }
+    
     public function newPet(/*$petId,*/$petName,$petImage,$breed,$petSize,$vaccinationPlan,$petDetails,$petVideo,$petWeight){
         if(isset($_SESSION["loggedUser"])){
             
@@ -24,7 +29,7 @@ class PetController{
             $pet->setPetWeight($petWeight);
             $pet->setPetOwner($_SESSION["loggedUser"]->getEmail());
             $this->petDAO->AddPet($pet);
-            $this->
+            $this->goLandingOwner();
         }else{
             echo"Usuario no logeado";
             }

@@ -100,5 +100,9 @@ class UserController{
         $listKeepers = $KeeperDAO->getAllKeeper();
         require_once(VIEWS_PATH. "showKeeper.php");
     }
+
+    public function updateAvailabilityDays(){
+        
+    }
 }
 ?>

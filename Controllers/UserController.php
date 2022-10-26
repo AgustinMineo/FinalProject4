@@ -27,6 +27,9 @@ class UserController{
     public function goLanding(){
         require_once(VIEWS_PATH."landingPage.php");
     }
+    public function goLandingOwner(){
+        require_once(VIEWS_PATH."ownerNav.php");
+    }
 
     public function newOwner(/*$ownerId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password){
         $OwnerDAO = new OwnerDAO();
@@ -69,11 +72,10 @@ class UserController{
                 session_start(); // start the session
                 $loggedUser = $newOwner;
                 $_SESSION["loggedUser"] = $loggedUser;
-                $this->goLanding();
+                $this->goLandingOwner();
             }
         }else{
             $this->goIndex();
-            echo "<h2>no entre</h2>";
         }
     }
 
@@ -90,6 +92,17 @@ class UserController{
             $this->goIndex();
             echo "<h2>no entre</h2>";
             }
+    }
+
+    public function showKeepers(){
+        $KeeperDAO = new KeeperDAO();
+        $listKeepers = array();
+        $listKeepers = $KeeperDAO->getAllKeeper();
+        require_once(VIEWS_PATH. "showKeeper.php");
+    }
+
+    public function updateAvailabilityDays(){
+        
     }
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 namespace Views;
-
+include ("ownerNav.php");
 ?>
 <main class="py-5">
      <style>

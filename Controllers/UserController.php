@@ -93,5 +93,12 @@ class UserController{
             echo "<h2>no entre</h2>";
             }
     }
+
+    public function showKeepers(){
+        $KeeperDAO = new KeeperDAO();
+        $listKeepers = array();
+        $listKeepers = $KeeperDAO->getAllKeeper();
+        require_once(VIEWS_PATH. "showKeeper.php");
+    }
 }
 ?>

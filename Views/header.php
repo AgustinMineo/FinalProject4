@@ -14,7 +14,7 @@
       </ul>
 
       <div class="col-md-3 text-end">
-        <input type="button" class="btn btn-outline-primary me-2" onclick="location.href='Views/loginOwner.php'"> Login</button>
+        <input type="button" class="btn btn-outline-primary me-2" onclick="location.href='/FinalProject4/Views/loginOwner.php'"> Login</button>
         <button type="button" class="btn">
             <a href="<?php echo FRONT_ROOT?>User/addOwnerView">Sign-up owner</a>
         </button>
@@ -22,7 +22,7 @@
             <a href="<?php echo FRONT_ROOT?>User/addKeeperView">Sign-up Keeper</a>
         </button>
         <button type="button" class="btn ">
-            <a href="Views/loginKeeper.php">Login as keeper</a>
+            <a href="/FinalProject4/Views/loginKeeper.php">Login as keeper</a>
         </button>
       </div>
     </header>

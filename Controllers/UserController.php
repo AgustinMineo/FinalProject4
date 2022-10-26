@@ -46,7 +46,7 @@ class UserController{
         $this->goLoginOwner();
     }
 
-    public function newKeeper(/*$keeperId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$availabilityDays,$animalSize/*,$points,$reviews*/,$price){
+    public function newKeeper(/*$keeperId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*,$points,$reviews*/,$price){
         $KeeperDAO = new KeeperDAO();
         $newKeeper = new Keeper();
        // $newKeeper->setkeeperId($keeperId);
@@ -56,7 +56,7 @@ class UserController{
         $newKeeper->setbirthDate($birthDate);
         $newKeeper->setEmail($email);
         $newKeeper->setPassword($password);
-        $newKeeper->setAvailabilityDays($availabilityDays);
+       // $newKeeper->setAvailabilityDays($availabilityDays);
         $newKeeper->setAnimalSize($animalSize);
         $newKeeper->setPrice($price);
 

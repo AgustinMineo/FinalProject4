@@ -24,6 +24,7 @@ class PetController{
             $pet->setPetWeight($petWeight);
             $pet->setPetOwner($_SESSION["loggedUser"]->getEmail());
             $this->petDAO->AddPet($pet);
+            $this->
         }else{
             echo"Usuario no logeado";
             }

@@ -1,8 +1,9 @@
 <?php
 namespace Models;
 
-class Pet(){
-    private $petId;
+class Pet{
+    //private $petId;
+    private $petName;
     private $petImage; //Imagen de la mascota
     private $breed; // Raza de la mascota (selector)??
     private $petSize; // int
@@ -12,11 +13,18 @@ class Pet(){
     private $petWeight; // peso del pet
     private $petOwner; // dueño del perro (objeto)
 
-    public function getPetId(){
+  /*  public function getPetId(){
         return $this->petId;
     }
     public function setPetId($petId){
         $this->petId= $petId;
+    }*/
+
+    public function getPetName(){
+        return $this->petName;
+    }
+    public function setPetName($petName){
+        $this->petName=$petName;
     }
 
     public function getPetImage(){
@@ -74,6 +82,7 @@ class Pet(){
     public function setPetOwner($petOwner){
         $this->petOwner=$petOwner;
     }
+
 
 }
 ?>

@@ -1,4 +1,5 @@
-<?php namespace Views;?>
+<?php namespace Views;
+?>
 
 <section class="vh-100">
     

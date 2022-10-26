@@ -9,6 +9,7 @@ class Keeper extends User{
     private $animalSize; // not null
    // private $points; // shortint (1 - 5 ) 
    // private $reviews; // object array with the object review
+   private $price;
 
     public function getKeeperId(){
         return $this->keeperId;
@@ -44,6 +45,12 @@ class Keeper extends User{
     public function setReviews($Reviews){
          $this->reviews = $Reviews;
     }*/
+    public function getPrice(){
+        return $this->price;
+    }
+    public function setPrice($price){
+         $this->price = $price;
+    }
 
 }
 ?>

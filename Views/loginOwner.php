@@ -10,7 +10,7 @@
           class="img-fluid" alt="Person with dog image">
       </div>
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-        <form action="<?php echo '/FinalProject4/' ?>User/loginOwner" method="post">
+        <form action="<?php echo '/FinalProject4/' ?>Owner/loginOwner" method="post">
           <!-- Email input -->
           <div class="form-outline mb-4">
             <input type="email" name="email" class="form-control form-control-lg" />

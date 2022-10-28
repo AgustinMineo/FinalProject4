@@ -22,7 +22,7 @@ include("nav.php");
                <a class="nav-link" href="<?php echo FRONT_ROOT ?>Pet/showPets">Show my pet</a>
           </li>
           <li class="nav-item">
-               <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/showKeepers">Show Keepers</a>
+               <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/showKeepers">Show Keepers</a>
           </li> 
       </header>
       

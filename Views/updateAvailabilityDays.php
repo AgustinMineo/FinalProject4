@@ -2,7 +2,7 @@
 namespace Views;
 ?>
 
-<form class="row g-3" action="<?php echo '/FinalProject4/' ?>User/updateAvailabilityDays" method="post">
+<form class="row g-3" action="<?php echo '/FinalProject4/' ?>Keeper/updateAvailabilityDays" method="post">
   <div class="col-auto">
     <label for="" class="visually-hidden">From</label>
     <input type="date" name="value1" class="form-control-plaintext" >

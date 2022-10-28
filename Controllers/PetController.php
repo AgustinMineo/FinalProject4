@@ -3,8 +3,8 @@ namespace Controllers;
 
 use Models\Pet as Pet;
 use DAO\PetDAO as PetDAO;
-Use Controllers\UserController as UserController;
-session_start();
+
+
 class PetController{
     private $petDAO;
 

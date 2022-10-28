@@ -31,5 +31,16 @@
         "petVideo": "https:\/\/www.youtube.com\/watch?v=5PR4vCJJRnA",
         "petWeight": "4kg",
         "petOwner": "tinchomirandda@gmail.com"
+    },
+    {
+        "petName": "Carlitos",
+        "petImage": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?w=450&t=st=1666813104~exp=1666813704~hmac=dd0c58f93e9a70a62796cf4df251851b5721b0de7694de73fc912109399fe5cc",
+        "breed": "perrin",
+        "petSize": "peque",
+        "vaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
+        "petDetails": "Bites a little bit ",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=5PR4vCJJRnA",
+        "petWeight": "5kg",
+        "petOwner": "tinchomirandda@gmail.com"
     }
 ]

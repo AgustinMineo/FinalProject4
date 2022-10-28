@@ -16,5 +16,23 @@
         "birthDate": "1991-03-26",
         "email": "marceadams99@gmail.com",
         "password": "123"
+    },
+    {
+        "ownerId": null,
+        "lastName": "Mineo",
+        "firstName": "Agustin",
+        "cellPhone": "12456",
+        "birthDate": "2010-06-27",
+        "email": "amineo@amineo.com",
+        "password": "123"
+    },
+    {
+        "ownerId": null,
+        "lastName": "Mineo",
+        "firstName": "Agustin",
+        "cellPhone": "12456",
+        "birthDate": "2010-06-27",
+        "email": "amineo@amineo.com",
+        "password": "123"
     }
 ]

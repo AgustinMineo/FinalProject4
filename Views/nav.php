@@ -5,13 +5,13 @@
      </span>
      <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-               <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/addOwner">Agregar owner</a>
+               <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/addOwnerView">Agregar owner</a>
           </li>
           <li class="nav-item">
-               <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/addKeeper">Agregar keeper</a>
+               <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/addKeeperView">Agregar keeper</a>
           </li>  
           <li class="nav-item">
-               <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/loginOwner">Login keeper</a>
+               <a class="nav-link" href="<?php echo FRONT_ROOT ?>Owner/loginOwner">Login keeper</a>
           </li>          
      </ul>
 </nav>

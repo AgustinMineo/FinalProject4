@@ -70,5 +70,20 @@
         ],
         "animalSize": "Big",
         "price": "315"
+    },
+    {
+        "keeperId": null,
+        "lastName": "Dominguez",
+        "firstName": "Domingo",
+        "cellPhone": "12546",
+        "birthDate": "2022-10-06",
+        "email": "dominguez@gmail.com",
+        "password": "123",
+        "availabilityDays": [
+            "2022-10-04",
+            "2022-10-14"
+        ],
+        "animalSize": "chiquito",
+        "price": "20"
     }
 ]

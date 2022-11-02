@@ -2,11 +2,12 @@
 namespace Views;
 include ("ownerNav.php");
 ?>
-<main class="py-5">
+<main class="py-2">
      <style>
           .table >td{
-               height:10px; 
-               width:10px;
+               height:5px; 
+               width:5px;
+               background-color:gray;
           }
      </style>
 <section id="listado" class="mb-5">

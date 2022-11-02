@@ -23,8 +23,8 @@
         "email": "frankito@gmail.com",
         "password": "123",
         "availabilityDays": [
-            "2022-12-24",
-            "2023-01-01"
+            "2022-11-01",
+            "2022-11-24"
         ],
         "animalSize": "Small",
         "price": "50"

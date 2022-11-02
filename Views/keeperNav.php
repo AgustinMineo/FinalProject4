@@ -14,9 +14,11 @@ namespace Views;
     
     <header>
         <span>Bienvenido <strong><?php echo $_SESSION["loggedUser"]->getEmail() ?></strong> </span>
-        <li class="nav-item">
-               <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/updateAvailabilityDays.php">Update Availability Days</a>
-          </li>   
+        <div style="width: 10%; background:gray; color:gray;">
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/updateAvailabilityDays.php">Update Availability Days</a>
+            </li>   
+        </div>
       </header>
       
   </body>

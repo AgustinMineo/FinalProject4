@@ -30,15 +30,17 @@ class KeeperDAO implements IKeeperDAO{
       foreach($this->keeperList as $Keeper){
           $keeperValue = array();
           $keeperValue["keeperId"] = $Keeper->getKeeperId();
+          $keeperValue["keeperImg"] = $Keeper->getKeeperImg();
           $keeperValue["lastName"] = $Keeper->getLastName();
           $keeperValue["firstName"] = $Keeper->getfirstName();
           $keeperValue["cellPhone"] = $Keeper->getCellPhone();
           $keeperValue["birthDate"] = $Keeper->getbirthDate();
           $keeperValue["email"] = $Keeper->getEmail();
           $keeperValue["password"] = $Keeper->getPassword();
-          $keeperValue["availabilityDays"] = $Keeper->getAvailabilityDays();
+          $keeperValue["firstAvailabilityDays"] = $Keeper->getFirstAvailabilityDays();// cambiar a 2 variables
+          $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
-         // $keeperValue["points"] = $Keeper->getPoints();
+          $keeperValue["points"] = $Keeper->getPoints();
          // $keeperValue["reviews"] = $Keeper->getReviews();
          $keeperValue["price"] = $Keeper->getPrice();
           
@@ -59,15 +61,17 @@ class KeeperDAO implements IKeeperDAO{
           foreach($keeperFileDecode as $KeeperDecode){
               $keeper = new Keeper();
               $keeper->setKeeperId($KeeperDecode["keeperId"]);
+              $keeper->setKeeperImg($KeeperDecode["keeperImg"]);
               $keeper->setLastName($KeeperDecode["lastName"]);
               $keeper->setfirstName($KeeperDecode["firstName"]);
               $keeper->setCellPhone($KeeperDecode["cellPhone"]);
               $keeper->setbirthDate($KeeperDecode["birthDate"]);
               $keeper->setEmail($KeeperDecode["email"]);
               $keeper->setPassword($KeeperDecode["password"]);
-              $keeper->setAvailabilityDays($KeeperDecode["availabilityDays"]);
+              $keeper->setFirstAvailabilityDays($KeeperDecode["firstAvailabilityDays"]);
+              $keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
-           //   $keeper->setPoints($KeeperDecode["points"]);
+              $keeper->setPoints($KeeperDecode["points"]);
              // $keeper->setReviews($KeeperDecode["reviews"]);
               $keeper->setPrice($KeeperDecode["price"]);
               array_push($this->keeperList, $keeper);
@@ -89,9 +93,8 @@ class KeeperDAO implements IKeeperDAO{
     $newValues = array();
     $value = $this->searchEmail($email);
     if($value1<$value2 && isset($value)){
-        array_push($newValues, $value1);
-        array_push($newValues, $value2);
-        $value->setAvailabilityDays($newValues);
+       $value->setFirstAvailabilityDays($value1);
+        $value->setLastAvailabilityDays($value2);
         $this->SaveData();
         return true;
     }else{
@@ -99,5 +102,21 @@ class KeeperDAO implements IKeeperDAO{
         return false;
     }
   }
+  public function getKeeperByDisponibility($date1,$date2){
+    $keeperList = array();
+    $keeperList = $this->getAllKeeper();
+    if($keeperList){
+    $keeperListDisponibility= array();
+    foreach($keeperList as $value){
+        if($value->getFirstAvailabilityDays()>=$date1 && $value->getLastAvailabilityDays()<=$date2){
+            array_push($keeperListDisponibility,$value);
+        }
+    }
+}else{
+    echo "<h1>No existen keepers </h1>";
+    return null;
+}
+    return $keeperListDisponibility;
+}
 }
 ?>

@@ -31,17 +31,18 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
      
-    public function newKeeper(/*$keeperId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*,$points,$reviews*/,$price){
+    public function newKeeper(/*$keeperId,*/$keeperImg,$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price){
          $newKeeper = new Keeper();
         // $newKeeper->setkeeperId($keeperId);
+         $newKeeper->setKeeperImg($keeperImg);
          $newKeeper->setLastName($lastName);
          $newKeeper->setfirstName($firstName);
          $newKeeper->setCellPhone($cellPhone);
          $newKeeper->setbirthDate($birthDate);
          $newKeeper->setEmail($email);
          $newKeeper->setPassword($password);
-        // $newKeeper->setAvailabilityDays($availabilityDays);
          $newKeeper->setAnimalSize($animalSize);
+         $newKeeper->setPoints('0');
          $newKeeper->setPrice($price);
          $this->KeeperDAO->AddKeeper($newKeeper);
          $this->goLoginKeeper();
@@ -64,6 +65,15 @@
         $listKeepers = $this->KeeperDAO->getAllKeeper();
         require_once(VIEWS_PATH. "showKeeper.php");
     }
+    public function showKeepersByAvailability($value1,$value2){
+        $listKeepers = array();
+        $listKeepers = $this->KeeperDAO->getKeeperByDisponibility($value1,$value2);
+        if($listKeepers){
+            require_once(VIEWS_PATH. "keeperCard.php");
+        }else{
+            echo "<h1>No existen keepers con disponibilidad de entre $value1 y $value2</h1>";
+        }
+    }
 
     public function updateAvailabilityDays($date1,$date2){
         $value=$this->KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getEmail(),$date1,$date2);
@@ -74,7 +84,6 @@
         }
         $this->goLandingKeeper();
     }
-
      
  }
 ?>

@@ -43,7 +43,7 @@ class BookingDAO implements IBookingDAO{
         if(file_exists('Data/Booking.json')){
             $bookingFile = file_get_contents(ROOT.'Data/Booking.json');
             // Si el file tiene datos hace un decode de la info y la guarda en el arreglo, sino devuelve un arreglo vacio.
-            $bookingFileDecode = ($bookingList) ? json_decode($bookingFile, true) : array();
+            $bookingFileDecode =($bookingFile) ? json_decode($bookingFile, true) : array();
   
             foreach($bookingFileDecode as $BookingDecode){
                 $booking = new Booking();
@@ -53,7 +53,7 @@ class BookingDAO implements IBookingDAO{
                 $booking->setFirstDate($BookingDecode["firstDate"]);
                 $booking->setLastDate($BookingDecode["lastDate"]);
                 $booking->setKeeperID($BookingDecode["keeperID"]);
-                array_push($this->bookingFile, $booking);
+                array_push($this->bookingList, $booking);
             }
         }else{
             echo "The booking file doesn't exists";

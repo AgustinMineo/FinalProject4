@@ -1,6 +1,6 @@
 [
     {
-        "keeperId": null,
+        "keeperId": 1,
         "keeperImg": "",
         "lastName": "Mineo",
         "firstName": "Agustin",
@@ -15,7 +15,7 @@
         "price": "200"
     },
     {
-        "keeperId": null,
+        "keeperId": 2,
         "keeperImg": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?w=450&t=st=1666813104~exp=1666813704~hmac=dd0c58f93e9a70a62796cf4df251851b5721b0de7694de73fc912109399fe5cc",
         "lastName": "Martin",
         "firstName": "Miranda",
@@ -28,5 +28,20 @@
         "animalSize": "Grande",
         "points": "0",
         "price": "120"
+    },
+    {
+        "keeperId": 3,
+        "keeperImg": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
+        "lastName": "Jose",
+        "firstName": "El keeper",
+        "cellPhone": "1231231231231231",
+        "birthDate": "2006-01-03",
+        "email": "elkeeper@elkeeper.com",
+        "password": "123",
+        "firstAvailabilityDays": "2022-11-04",
+        "lastAvailabilityDays": "2022-11-30",
+        "animalSize": "Medium",
+        "points": "0",
+        "price": "200"
     }
 ]

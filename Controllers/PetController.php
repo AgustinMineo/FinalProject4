@@ -18,7 +18,7 @@ class PetController{
             $this->petDAO = new PetDAO();
             $pet = new Pet();
 
-            //$pet->setPetId($petId);
+            $pet->setPetId(1);
             $pet->setPetName($petName);
             $pet->setPetImage($petImage);
             $pet->setBreed($breed);

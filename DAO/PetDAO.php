@@ -78,5 +78,23 @@ class PetDAO implements IPetDAO{
         }
         return $petListSearch;
     }
+    public function searchPetsBySize($email,$size){
+        $petListBySize = array(); // create pet array
+        $petListBySize = $this->searchPets($email); // search all pets by owner, cambiar a id
+        if($petListBySize){ /// if the list is not empty we filter for the size of the pet
+            foreach($petListBySize as $petSize){
+                if($petSize->getPetSize()==$size){
+                    array_push($petListBySize,$petSize);
+                }
+            }
+        }else{
+            echo "<h1>El owner no tiene pets</h1>";
+            return null;
+        }
+
+        return $petListBySize;
+    }
+    
+    //public function selectPetByID() /// devuelve el id del pet a reservar
 }
 ?>

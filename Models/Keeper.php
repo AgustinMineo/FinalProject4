@@ -11,7 +11,6 @@ class Keeper extends User{
     private $animalSize; // not null
     private $points; // shortint (1 - 5 ) 
     //private $reviews; // object array with the object review
-    //private Reservations $reservations;
    private $price;
 
     public function getKeeperId(){

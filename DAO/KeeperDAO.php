@@ -108,8 +108,10 @@ class KeeperDAO implements IKeeperDAO{
     if($keeperList){
     $keeperListDisponibility= array();
     foreach($keeperList as $value){
-        if($value->getFirstAvailabilityDays()>=$date1 && $value->getLastAvailabilityDays()<=$date2){
-            array_push($keeperListDisponibility,$value);
+        if($value->getFirstAvailabilityDays()<=$date1 || $value->getLastAvailabilityDays()>=$date1){
+            if($value->getFirstAvailabilityDays()<=$date2 && $value->getLastAvailabilityDays()>=$date2){
+                array_push($keeperListDisponibility,$value);
+            }
         }
     }
 }else{

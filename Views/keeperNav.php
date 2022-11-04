@@ -18,6 +18,9 @@ namespace Views;
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/updateAvailabilityDays.php">Update Availability Days</a>
             </li>   
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>Booking/showBookings">Shop reservations</a>
+            </li>  
         </div>
       </header>
       

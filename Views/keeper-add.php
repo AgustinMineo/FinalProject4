@@ -52,9 +52,13 @@
                               </div>
                          </div>
                          <div class="col-lg-4">
-                              <div class="form-group">
+                              <div class="form-group h-75">
                                    <label for="">Tamaño del animal</label>
-                                   <input type="text" name="animalSize" placeholder="animalSize" value="" class="form-control" Required >
+                                   <select name="animalSize" class="w-100 h-75" Required>
+                                        <option value="Small">Small</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Big">Big</option>
+                                   </select>
                               </div>
                          </div>
                          <div class="col-lg-4">

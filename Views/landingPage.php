@@ -1,6 +1,5 @@
 <?php
-require_once(VIEWS_PATH."header.php");
-echo "<h1>ESTOY EN LA LANDING</h1>";
+require_once(VIEWS_PATH."ownerNav.php");
 ?>
 <!doctype html>
 <html lang="en">
@@ -36,13 +35,6 @@ echo "<h1>ESTOY EN LA LANDING</h1>";
 <body>
     
     <header>
-        <span>Bienvenido <strong><?php echo $_SESSION["loggedUser"]->getEmail() ?></strong> </span>
-        <li class="nav-item">
-               <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/pet-add.php">New pet</a>
-          </li>   
-          <li class="nav-item">
-               <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/showPets.php">Show my pet</a>
-          </li>   
         <div class="collapse bg-dark" id="navbarHeader">
             <div class="container">
                 <div class="row">

@@ -3,7 +3,7 @@ namespace Models;
 
 class Booking {
     private $bookingID;  /// booking ID
-    private $status;   /// 1 pending - 2 rejected -- 3 accepted -- 4 Waiting for pay -- 5 confirmed
+    private $status;   /// 1 pending - 2 rejected -- 3 accepted -- 4 Confirmed -- 5 Finish
     private $petID;    /// id pet and owner from petOwner
     private $firstDate; // start date
     private $lastDate; /// finish date

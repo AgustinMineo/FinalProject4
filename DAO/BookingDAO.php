@@ -59,5 +59,25 @@ class BookingDAO implements IBookingDAO{
             echo "The booking file doesn't exists";
         }
     }
+
+    public function showBookingByKeeperID(){
+        $this->RetriveData();
+        $bookingListKeeper = array();
+        if($this->bookingList){
+            foreach($this->bookingList as $booking){
+                if($booking->getKeeperID() == $_SESSION["loggedUser"]->getKeeperId()){
+                    array_push($bookingListKeeper,$booking);
+                }
+            }
+        }else{
+            echo "<h1>No existen reservas</h1>";
+        }
+
+        if($bookingListKeeper){
+         return $bookingListKeeper;
+        }else{
+            return array();
+        }
+    }
 }
 ?>

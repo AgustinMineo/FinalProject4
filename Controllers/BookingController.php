@@ -13,7 +13,7 @@ class BookingController{
 
     public function GoBooking()
      {
-         require_once(VIEWS_PATH."showPetBooking.php");
+         require_once(VIEWS_PATH."showBookingKeeper.php");
      }
      public function goIndexOwner()
      {
@@ -62,8 +62,12 @@ class BookingController{
             //require_once(VIEWS_PATH. "showPetBooking.php");
             $newBooking->setPetID($petID);
             $this->BookingDAO->addBooking($newBooking);
-            require_once()
-
+            //require_once()
+    }
+    public function showBookings(){
+        $bookingListKeeper = array();
+        $bookingListKeeper=$this->BookingDAO->showBookingByKeeperID();
+        require_once(VIEWS_PATH."showBookingKeeper.php");
     }
 }
 ?>

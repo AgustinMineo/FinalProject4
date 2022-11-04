@@ -9,7 +9,7 @@
         "email": "test@test.com",
         "password": "123",
         "firstAvailabilityDays": "2022-11-03",
-        "lastAvailabilityDays": "2022-12-03",
+        "lastAvailabilityDays": "2022-11-03",
         "animalSize": "Grande",
         "points": "0",
         "price": "200"
@@ -24,7 +24,7 @@
         "email": "tincho@tincho.com",
         "password": "123",
         "firstAvailabilityDays": "2022-11-02",
-        "lastAvailabilityDays": "2022-11-17",
+        "lastAvailabilityDays": "2022-11-10",
         "animalSize": "Grande",
         "points": "0",
         "price": "120"

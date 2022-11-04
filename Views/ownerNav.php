@@ -27,6 +27,9 @@ namespace Views;
             <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                 <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/searchAvailabilityDays.php">Show Keepers By Availability</a>
             </li> 
+            <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/searchByDateBooking.php">Booking with a Keepers</a>
+            </li> 
         </div>
       </header>
       

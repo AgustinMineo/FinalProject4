@@ -15,6 +15,10 @@ class BookingController{
      {
          require_once(VIEWS_PATH."showPetBooking.php");
      }
+     public function goIndexOwner()
+     {
+         require_once(VIEWS_PATH."showPetBooking.php");
+     }
     
     public function __construct(){
         $this->BookingDAO = new BookingDAO();
@@ -22,8 +26,29 @@ class BookingController{
         $this->keeperDAO = new KeeperDAO();
     }
 
+    public function bookingBuild($value1,$value2){
+        $keeperDAO = new KeeperDAO();
+        $listKeepers = array();
+        $listKeepers = $keeperDAO->getKeeperByDisponibility($value1,$value2);
+        if($listKeepers){
+                if($_SESSION['loggedUser']){
+                 $petList = array(); /// create a pet array
+                 foreach($listKeepers as $keeperInfo){
+                 $petList=$this->petDAO->searchPetsBySize($_SESSION['loggedUser']->getEmail(),$keeperInfo->getAnimalSize());
+                }
+                 if($petList)
+                 {
+                }else{
+                    echo "<h1>No tiene mascotas que concuerden con el tamaño</h1>";
+                }
+                require_once(VIEWS_PATH. "BookingViews.php");
+            }else{
+                echo "<h1>No existen keepers con disponibilidad de entre $value1 y $value2</h1>";
+            }
+        }
+    }
 
-    public function newBooking($email){
+    public function newBooking($email,$petID){
         $newBooking = new Booking();
         $keeperInfo = new Keeper();
         $keeperInfo=$this->keeperDAO->searchEmail($email);
@@ -34,25 +59,11 @@ class BookingController{
        $newBooking->setKeeperID($keeperInfo->getKeeperId());
        $newBooking->setTotalValue($keeperInfo->getPrice()); /// calcular el valor de la noche, $value*cantDias.
        //$newBooking->setAmountReservation(); /// value*cantDias * 0.5;
-       if($_SESSION['loggedUser']){
-        $petList = array(); /// create a pet array
-        $petList=$this->petDAO->searchPetsBySize($_SESSION['loggedUser']->getEmail(),$keeperInfo->getAnimalSize());
-        if($petList)
-        {
-            require_once(VIEWS_PATH. "showPetBooking.php");
-            $pet=1;
-            var_dump($pet);
-            $newBooking->setPetID(1);
+            //require_once(VIEWS_PATH. "showPetBooking.php");
+            $newBooking->setPetID($petID);
             $this->BookingDAO->addBooking($newBooking);
-        }else{
-            echo "<h1>No tiene mascotas que concuerden con el tamaño</h1>";
-        }
-        
-        
-        
-       }
+            require_once()
 
     }
-    
 }
 ?>

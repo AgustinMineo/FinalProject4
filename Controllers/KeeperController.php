@@ -84,6 +84,5 @@
         }
         $this->goLandingKeeper();
     }
-     
  }
 ?>

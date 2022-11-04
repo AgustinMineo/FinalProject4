@@ -24,7 +24,7 @@ class PetDAO implements IPetDAO{
         // recorremos la lista y guardamos la info del los owners.
         foreach($this->petList as $pet){
             $petValue = array();
-           // $petValue["petId"] = $pet->getPetId();
+            $petValue["petId"] = $pet->getPetId();
            $petValue["petName"] = $pet->getPetName();
             $petValue["petImage"] = $pet->getPetImage();
             $petValue["breed"] = $pet->getBreed();
@@ -51,6 +51,7 @@ class PetDAO implements IPetDAO{
 
             foreach($petFileDecode as $petDecode){
                 $petValue = new pet();
+                $petValue->setPetId($petDecode["petId"]);
                 $petValue->setPetName($petDecode["petName"]);
                 $petValue->setPetImage($petDecode["petImage"]);
                 $petValue->setBreed($petDecode["breed"]);
@@ -81,20 +82,27 @@ class PetDAO implements IPetDAO{
     public function searchPetsBySize($email,$size){
         $petListBySize = array(); // create pet array
         $petListBySize = $this->searchPets($email); // search all pets by owner, cambiar a id
+        $petListFilter =array();
         if($petListBySize){ /// if the list is not empty we filter for the size of the pet
             foreach($petListBySize as $petSize){
-                if($petSize->getPetSize()==$size){
-                    array_push($petListBySize,$petSize);
+                if(strcmp($petSize->getPetSize(),$size)==0){
+                    array_push($petListFilter,$petSize);
                 }
             }
         }else{
             echo "<h1>El owner no tiene pets</h1>";
             return null;
         }
-
-        return $petListBySize;
+        return $petListFilter;
     }
     
-    //public function selectPetByID() /// devuelve el id del pet a reservar
+    public function selectPetByID($petID,$petList){
+        $petSelect = new Pet();
+        foreach($petList as $pet){
+            if($pet->getPetId()==$petID){
+                return $pet->getPetId();
+            }
+        }
+    } 
 }
 ?>

@@ -17,16 +17,11 @@ use Models\Owner as Owner;
         require_once(VIEWS_PATH."loginOwner.php");
     }
     public function goLandingOwner(){
-        require_once(VIEWS_PATH."ownerNav.php");
+        require_once(VIEWS_PATH."landingPage.php");
     }
     public function addOwnerView(){
         require_once(VIEWS_PATH."owner-add.php");
     }
-
-     public function Index($message = "")
-     {
-         require_once(VIEWS_PATH."ownerNav.php");
-     }
 
      public function newOwner(/*$ownerId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password){
           $newOwner = new Owner();

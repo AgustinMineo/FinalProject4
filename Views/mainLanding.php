@@ -1,7 +1,7 @@
 <?php
 namespace Views;
+include("header.php");
 
-include ("mainNav.php");
 include("footer.php");
 ?>
 

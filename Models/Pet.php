@@ -2,7 +2,7 @@
 namespace Models;
 
 class Pet{
-    //private $petId;
+    private $petId;
     private $petName;
     private $petImage; //Imagen de la mascota
     private $breed; // Raza de la mascota (selector)??
@@ -13,12 +13,12 @@ class Pet{
     private $petWeight; // peso del pet
     private $petOwner; // dueño del perro (objeto)
 
-  /*  public function getPetId(){
+    public function getPetId(){
         return $this->petId;
     }
     public function setPetId($petId){
         $this->petId= $petId;
-    }*/
+    }
 
     public function getPetName(){
         return $this->petName;

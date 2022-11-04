@@ -57,7 +57,7 @@ namespace Views;
     foreach($petList as $petSize)
     {
         ?>
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 18rem;"> <!-- cambiar el value del width para que sea un row cada 4 pets.-->
        <!-- <img src="//<//?///php echo IMG_PATH ?><//?php if($keeper->getKeeperImg()){echo "<h1>imagen del keeper</h1>";}else{src="keeperDog.svg"}?>" class="card-img-top" alt="KEEPER IMG">-->
         <img src=" <?php echo IMG_PATH ?>keeperDog.svg" class="card-img-top" alt="KEEPER IMG">
         <div class="card-body">

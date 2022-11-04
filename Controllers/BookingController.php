@@ -52,7 +52,7 @@ class BookingController{
         $newBooking = new Booking();
         $keeperInfo = new Keeper();
         $keeperInfo=$this->keeperDAO->searchEmail($email);
-       // $newBooking->getLastBookingID(); connected with the database
+        $newBooking->setBookingID($this->BookingDAO->getLastBookingID()); //connected with the database
        $newBooking->setStatus('1');
        $newBooking->setFirstDate($keeperInfo->getFirstAvailabilityDays());
        $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());
@@ -68,6 +68,14 @@ class BookingController{
         $bookingListKeeper = array();
         $bookingListKeeper=$this->BookingDAO->showBookingByKeeperID();
         require_once(VIEWS_PATH."showBookingKeeper.php");
+    }
+    public function updateBookingStatus($idBooking, $status){
+        $value = $this->BookingDAO->updateByID($idBooking,$status);
+        if($value){
+            echo "<h1>Update correcta.</h1>";
+        }else{
+            echo "<h4>Error al actualizar el status</h4>";
+        }
     }
 }
 ?>

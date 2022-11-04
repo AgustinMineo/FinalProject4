@@ -46,13 +46,14 @@ namespace Views;
                 <input type="hidden" name="email" value="<?php echo $keeper->getEmail()?>"> <!--/// Cambiar el email por el keeperID-->
             </ul>
             <div class="card-body d-flex m-2">
-                <button type="submit" class="btn btn-primary d-flex justify-content-center align-content-center w-100">Reservation</button>    
+               <!-- <button type="submit" class="btn btn-primary d-flex justify-content-center align-content-center w-100">Reservation</button> -->   
             </div>
         </form>
     </div>
     <?php
     }
     ?>
+    
     </div>
 </body>
 </html>

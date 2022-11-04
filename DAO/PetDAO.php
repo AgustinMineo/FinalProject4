@@ -51,6 +51,7 @@ class PetDAO implements IPetDAO{
 
             foreach($petFileDecode as $petDecode){
                 $petValue = new pet();
+                $petValue->setPetId($petDecode["petId"]);
                 $petValue->setPetName($petDecode["petName"]);
                 $petValue->setPetImage($petDecode["petImage"]);
                 $petValue->setBreed($petDecode["breed"]);

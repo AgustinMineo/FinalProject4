@@ -1,7 +1,8 @@
 <?php
  namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 
  class OwnerController
@@ -23,9 +24,8 @@ use Models\Owner as Owner;
         require_once(VIEWS_PATH."owner-add.php");
     }
 
-     public function newOwner(/*$ownerId*/$lastName,$firstName,$cellPhone,$birthDate,$email,$password){
+     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password){
           $newOwner = new Owner();
-        //$newOwner->setOwnerId($ownerId);
           $newOwner->setLastName($lastName);
           $newOwner->setfirstName($firstName);
           $newOwner->setCellPhone($cellPhone);
@@ -34,6 +34,7 @@ use Models\Owner as Owner;
           $newOwner->setPassword($password);
           //$newOwner->setPetAmount('0');
           $this->OwnerDAO->AddOwner($newOwner);
+          //$this->OwnerDAODB->AddOwner($newOwner);
           $this->goLoginOwner();
     }
     

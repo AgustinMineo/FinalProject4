@@ -2,11 +2,12 @@
 namespace Views;
 include ("ownerNav.php");
 ?>
-<main class="py-5">
+<main class="py-2">
      <style>
           .table >td{
-               height:10px; 
-               width:10px;
+               height:5px; 
+               width:5px;
+               background-color:gray;
           }
      </style>
 <section id="listado" class="mb-5">
@@ -17,6 +18,8 @@ include ("ownerNav.php");
                     <th>Name</th>
                     <th>Pet Image</th>
                     <th>Breed</th>
+                    <th>Size</th>
+                    <th>Weight</th>
                     <th>Vaccination Plan</th>
                     <th>Pet Details</th>
                     <th>Pet video</th>
@@ -34,6 +37,8 @@ include ("ownerNav.php");
                                         $imageData = base64_encode(file_get_contents($image));
                                         echo '<img src="data:image/jpeg;base64,'.$imageData.'">';?></td>
                                         <td ><?php echo $pets->getBreed() ?></td>
+                                        <td ><?php echo $pets->getPetSize() ?></td>
+                                        <td ><?php echo $pets->getPetWeight() ?></td>
                                         <td><?php 
                                         $VaccinationPlan = $pets->getVaccinationPlan();
                                         $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));

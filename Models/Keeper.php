@@ -5,10 +5,12 @@ use Models\User as User;
 
 class Keeper extends User{
     private $keeperId; // not null
-    private $availabilityDays; // ARRAY DAYS WITH THE FIRST DAY AND LAST DAY OF THE RESERVATION.
+    private $keeperImg; // img 
+    private $firstAvailabilityDays; /// Change for the database
+    private $lastAvailabilityDays; ///Change for the database
     private $animalSize; // not null
-   // private $points; // shortint (1 - 5 ) 
-   // private $reviews; // object array with the object review
+    private $points; // shortint (1 - 5 ) 
+    //private $reviews; // object array with the object review
    private $price;
 
     public function getKeeperId(){
@@ -18,11 +20,25 @@ class Keeper extends User{
          $this->keeperId = $keeperId;
     }
 
-    public function getAvailabilityDays(){
-        return $this->availabilityDays;
+    public function getKeeperImg(){
+        return $this->keeperImg;
     }
-    public function setAvailabilityDays($availabilityDays){
-         $this->availabilityDays = $availabilityDays;
+    public function setKeeperImg($keeperImg){
+         $this->keeperImg = $keeperImg;
+    }
+
+    public function getFirstAvailabilityDays(){
+        return $this->firstAvailabilityDays;
+    }
+    public function setFirstAvailabilityDays($firstAvailabilityDays){
+         $this->firstAvailabilityDays = $firstAvailabilityDays;
+    }
+
+    public function getLastAvailabilityDays(){
+        return $this->lastAvailabilityDays;
+    }
+    public function setLastAvailabilityDays($lastAvailabilityDays){
+         $this->lastAvailabilityDays = $lastAvailabilityDays;
     }
 
     public function getAnimalSize(){
@@ -32,19 +48,20 @@ class Keeper extends User{
          $this->animalSize = $AnimalSize;
     }
 
-  /*  public function getPoints(){
+    public function getPoints(){
         return $this->points;
     }
     public function setPoints($points){
          $this->points = $points;
     }
-
+/*
     public function getReviews(){
         return $this->reviews;
     }
     public function setReviews($Reviews){
          $this->reviews = $Reviews;
     }*/
+
     public function getPrice(){
         return $this->price;
     }

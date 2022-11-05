@@ -30,7 +30,11 @@
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">Pet Size</label>
-                                   <input type="text" name="petSize" placeholder="Size" value="" class="form-control" Required >
+                                   <select name="petSize" class="w-100 h-50" Required>
+                                        <option value="Small">Small</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Big">Big</option>
+                                   </select>
                               </div>
                          </div>
                          <div class="col-lg-4">
@@ -54,7 +58,11 @@
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">Pet Weight</label>
-                                   <input type="text" name="petWeight" placeholder="Weight" value="" class="form-control" Required >
+                                   <select name="petWeight" class="w-100 h-50" Required>
+                                        <option value="Light">0-15 kg</option>
+                                        <option value="Medium">15-30kg</option>
+                                        <option value="Heavy weight">30>kg</option>
+                                   </select>
                               </div>
                          </div>
                          

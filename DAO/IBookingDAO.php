@@ -1,6 +1,7 @@
 <?php
 namespace DAO;
 use Models\Booking as Booking;
+use DAODB\Connect as Connect;
 
 
 interface IBookingDAO{

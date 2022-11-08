@@ -8,11 +8,12 @@ use Models\Owner as Owner;
 
 class OwnerDAO{
    private $connection;
-   private $tableName = 'user';
+   private $userTable = 'user';
+   private $ownerTable = 'owner';
 
     public function AddOwner (Owner $owner){
         try {
-           $query = "INSERT INTO ".$this->tableName."(userID,firstName, lastName, email, cellphone, birthdate, password)
+           $query = "INSERT INTO ".$this->userTable."(userID,firstName, lastName, email, cellphone, birthdate, password)
         VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password);";
                      $parameters["userID"] = NULL;
                      $parameters["firstName"] = $owner->getfirstName();
@@ -23,7 +24,20 @@ class OwnerDAO{
                      $parameters["password"] = $owner->getPassword();
 
                      $this->connection = Connection::GetInstance();
-                     $this->connection->ExecuteNonQuery($query, $parameters);
+                     if($this->connection->ExecuteNonQuery($query, $parameters)){
+                        $id = $this->bringUserID($owner->getEmail());
+                        $queryOwner = "INSERT INTO ".$this->ownerTable."(ownerId, userID, petAmount)
+                                       VALUES (:ownerId, :userID, :petAmount);
+                        ";
+
+                        $parametersOwner["ownerId"] = NULL;
+                        $parametersOwner["userID"] = $id;
+                        $parametersOwner["petAmount"] = '0';
+
+                        $this->connection->ExecuteNonQuery($queryOwner, $parametersOwner);
+
+                     };
+            
 
         } catch (Exception $ex) {
             throw $ex;
@@ -58,5 +72,59 @@ class OwnerDAO{
             throw $ex;
         }
     }
+
+    public function loginOwner($email, $password){
+
+        try {
+            $query = "SELECT firstName, lastName, email, cellphone, birthdate, password FROM ".$this->userTable." WHERE email = '$email' AND password = $password;";
+            
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            
+            if($resultSet)
+            {
+                foreach($resultSet as $row){
+                $owner = new Owner();
+                $owner->setfirstName($row["firstName"]);
+                $owner->setLastName($row["lastName"]);
+                $owner->setEmail($row["email"]);
+                $owner->setCellPhone($row["cellphone"]);
+                $owner->setbirthDate($row["birthdate"]);
+                $owner->setPassword($row["password"]);
+                return $owner;
+
+            }
+        }
+        else{
+                echo "El email ingresado no existe";
+            }
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+
+    }
+    public function bringUserID($email){
+        try {
+            $query = "SELECT userID FROM ".$this->userTable." WHERE email = '$email';";
+            
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            var_dump($resultSet);
+            var_dump($resultSet);
+
+            foreach($resultSet as $row){
+                $id = $row['userID'];
+            }
+            return $id;
+    }
+    catch (Exception $ex) {
+        throw $ex;
+    }
+ }
 }
+
 ?>

@@ -39,17 +39,15 @@ use Models\Owner as Owner;
     }
     
       public function loginOwner($email,$password){
-        $newOwner = $this->OwnerDAO->searchEmail($email);
+        $newOwner = $this->OwnerDAO->loginOwner($email,$password);
         if($newOwner){
-            if($newOwner->getPassword()==$password){
-              //  session_start(); // start the session
+                 //  session_start(); // start the session
                 $loggedUser = $newOwner;
                 $_SESSION["loggedUser"] = $loggedUser;
                 $this->goLandingOwner();
+            }else{
+                $this->goIndex();
             }
-        }else{
-            $this->goIndex();
-        }
     }
  }
 ?>

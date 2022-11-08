@@ -13,3 +13,11 @@ CREATE TABLE `user` (
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE `owner` (
+  `ownerId` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) DEFAULT NULL,
+  `petAmount` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ownerId`),
+  KEY `fk_userID` (`userID`)
+) ENGINE=InnoDB;

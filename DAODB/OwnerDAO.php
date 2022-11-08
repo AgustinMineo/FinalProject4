@@ -35,7 +35,6 @@ class OwnerDAO{
                         $parametersOwner["petAmount"] = '0';
 
                         $this->connection->ExecuteNonQuery($queryOwner, $parametersOwner);
-
                      };
             
 
@@ -94,7 +93,6 @@ class OwnerDAO{
                 $owner->setbirthDate($row["birthdate"]);
                 $owner->setPassword($row["password"]);
                 return $owner;
-
             }
         }
         else{

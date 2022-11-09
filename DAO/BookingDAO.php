@@ -31,6 +31,7 @@ class BookingDAO implements IBookingDAO{
             $bookingValue["firstDate"] = $Booking->getFirstDate();
             $bookingValue["lastDate"] = $Booking->getLastDate();
             $bookingValue["keeperID"] = $Booking->getKeeperID();
+            $bookingValue["totalValue"] = $Booking->getTotalValue();
             array_push($bookingList, $bookingValue);
         }
         $bookingFile = json_encode($bookingList, JSON_PRETTY_PRINT);
@@ -53,6 +54,7 @@ class BookingDAO implements IBookingDAO{
                 $booking->setFirstDate($BookingDecode["firstDate"]);
                 $booking->setLastDate($BookingDecode["lastDate"]);
                 $booking->setKeeperID($BookingDecode["keeperID"]);
+                $booking->setTotalValue($BookingDecode["totalValue"]);
                 array_push($this->bookingList, $booking);
             }
         }else{

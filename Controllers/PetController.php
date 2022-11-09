@@ -3,7 +3,7 @@ namespace Controllers;
 
 use Models\Pet as Pet;
 use DAO\PetDAO as PetDAO;
-
+//use DAODB\PetDAO as PetDAO;
 
 class PetController{
     private $petDAO;
@@ -12,22 +12,23 @@ class PetController{
         require_once(VIEWS_PATH."ownerNav.php");
     }
     
-    public function newPet(/*$petId,*/$petName,$petImage,$breed,$petSize,$vaccinationPlan,$petDetails,$petVideo,$petWeight){
+    public function newPet(/*$petID,*/$petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
         if(isset($_SESSION["loggedUser"])){
             
             $this->petDAO = new PetDAO();
             $pet = new Pet();
 
-            $pet->setPetId(1);
+            $pet->setPetID(1);
             $pet->setPetName($petName);
             $pet->setPetImage($petImage);
-            $pet->setBreed($breed);
+            $pet->setBreedID($breedID);
             $pet->setPetSize($petSize);
-            $pet->setVaccinationPlan($vaccinationPlan);
+            $pet->setPetVaccinationPlan($petVaccinationPlan);
             $pet->setPetDetails($petDetails);
             $pet->setPetVideo($petVideo);
             $pet->setPetWeight($petWeight);
-            $pet->setPetOwner($_SESSION["loggedUser"]->getEmail());
+            $pet->setOwnerID($_SESSION["loggedUser"]->getEmail());
+            $pet->setPetAge($petAge);
             $this->petDAO->AddPet($pet);
             $this->goLandingOwner();
         }else{

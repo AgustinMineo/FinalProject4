@@ -20,12 +20,15 @@ include ("ownerNav.php");
                     <th>Breed</th>
                     <th>Size</th>
                     <th>Weight</th>
-                    <th>Vaccination Plan</th>
+                    <th>Pet Vaccination Plan</th>
                     <th>Pet Details</th>
-                    <th>Pet video</th>
+                    <th>Pet Video</th>
+                    <th>Pet Age</th>
                </thead>
-               <tbody>
-                    <?php
+               <div class="container">
+
+                    <tbody>
+                         <?php
                          foreach($petList as $pets)
                          {
                               ?>
@@ -36,21 +39,23 @@ include ("ownerNav.php");
                                         $image = $pets->getPetImage();
                                         $imageData = base64_encode(file_get_contents($image));
                                         echo '<img src="data:image/jpeg;base64,'.$imageData.'">';?></td>
-                                        <td ><?php echo $pets->getBreed() ?></td>
+                                        <td ><?php echo $pets->getBreedID() ?></td>
                                         <td ><?php echo $pets->getPetSize() ?></td>
                                         <td ><?php echo $pets->getPetWeight() ?></td>
                                         <td><?php 
-                                        $VaccinationPlan = $pets->getVaccinationPlan();
+                                        $VaccinationPlan = $pets->getPetVaccinationPlan();
                                         $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));
                                         echo '<img src="data:image/jpeg;base64,'.$VaccinationPlanData.'">';?></td>
                                         <td><?php echo $pets->getPetDetails()?></td>
                                         <td><object width="425" height="350" data="http://www.youtube.com/v/<?php echo substr($pets->getPetVideo(),-11)?>" type="application/x-shockwave-flash"></object></td>
-                                     </tr>
-                              <?php
+                                        <td><?php echo $pets->getPetAge()?></td>
+                                   </tr>
+                                   <?php
                          }
-                    ?>
+                         ?>
                     </tr>
                </tbody>
+          </div>
           </table>
      </div>
 </section>

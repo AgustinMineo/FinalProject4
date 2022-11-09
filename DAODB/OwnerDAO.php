@@ -117,8 +117,6 @@ class OwnerDAO{
 
             $resultSet = $this->connection->Execute($query);
 
-            var_dump($resultSet);
-            var_dump($resultSet);
 
             foreach($resultSet as $row){
                 $id = $row['userID'];

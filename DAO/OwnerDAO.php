@@ -36,6 +36,8 @@ class OwnerDAO implements IOwnerDAO {
             $ownerValue["birthDate"] = $Owner->getbirthDate();
             $ownerValue["email"] = $Owner->getEmail();
             $ownerValue["password"] = $Owner->getPassword();
+            $ownerValue["userImage"] = $Owner->getImage();
+            $ownerValue["userDescription"] = $Owner->getDescription();
             //$ownerValue["petAmount"] = $Owner->getPetAmount();
             
             array_push($ownerArrayEncode, $ownerValue);
@@ -61,6 +63,8 @@ class OwnerDAO implements IOwnerDAO {
                 $owner->setbirthDate($OwnerDecode["birthDate"]);
                 $owner->setEmail($OwnerDecode["email"]);
                 $owner->setPassword($OwnerDecode["password"]);
+                $owner->setImage($OwnerDecode["userImage"]);
+                $owner->setDescription($OwnerDecode["userDescription"]);
                 //$owner->setPetAmount($OwnerDecode["petAmount"]);
 
                 array_push($this->ownerList, $owner);
@@ -81,7 +85,7 @@ class OwnerDAO implements IOwnerDAO {
         return null;
     }
 
-    public function loginOwner($email,$password){
+    public function searchOwner($email,$password){
         $newOwner =$this->searchEmail($email);
         if($newOwner){
             if($newOwner->getPassword()==$password){

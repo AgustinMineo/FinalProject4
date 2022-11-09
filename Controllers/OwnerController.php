@@ -24,7 +24,7 @@ use Models\Owner as Owner;
         require_once(VIEWS_PATH."owner-add.php");
     }
 
-     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password){
+     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$userImage,$userDescription){
           $newOwner = new Owner();
           $newOwner->setLastName($lastName);
           $newOwner->setfirstName($firstName);
@@ -32,6 +32,8 @@ use Models\Owner as Owner;
           $newOwner->setbirthDate($birthDate);
           $newOwner->setEmail($email);
           $newOwner->setPassword($password);
+          $newOwner->setImage($userImage);
+          $newOwner->setDescription($userDescription);
           //$newOwner->setPetAmount('0');
           $this->OwnerDAO->AddOwner($newOwner);
           //$this->OwnerDAODB->AddOwner($newOwner);
@@ -39,7 +41,7 @@ use Models\Owner as Owner;
     }
     
       public function loginOwner($email,$password){
-        $newOwner = $this->OwnerDAO->loginOwner($email,$password);
+        $newOwner = $this->OwnerDAO->searchOwner($email,$password);
         if($newOwner){
                  //  session_start(); // start the session
                 $loggedUser = $newOwner;

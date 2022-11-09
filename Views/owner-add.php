@@ -9,12 +9,6 @@
                <h2 class="mb-4">New Owner</h2>
                <form action="<?php echo FRONT_ROOT ?>Owner/newOwner" method="post" class="bg-light-alpha p-5">
                     <div class="row">                         
-                      <!--   <div class="col-lg-4">
-                              <div class="form-group">
-                                   <label for="">Owner id</label>
-                                   <input type="text" name="ownerId" value="" class="form-control" Required >
-                              </div>
-                         </div>-->
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">Last Name</label>
@@ -51,8 +45,22 @@
                                    <input type="password" name="password" placeholder="Password" value="" class="form-control" Required >
                               </div>
                          </div>
+                         <div class="col-lg-4">
+                              <div class="form-group">
+                                   <label for="">Image</label>
+                                   <input type="file" name="userImage" value="" class="form-control">
+                              </div>
+                         </div>
+                         <div class="col-lg-4">
+                              <div class="form-group">
+                                   <label for="">Description</label>
+                                   <textarea type="textarea" name="userDescription" rows = "1" cols ="10" class="form-control"></textarea>
+                              </div>
+                         </div>
                     </div>
-                    <button type="submit" class="btn btn-dark ml-auto d-block">Sign Up</button>
+                    <div class = "container d-flex justify-content-center mt-5">
+                         <button type="submit" class="btn btn-dark ml-auto d-block w-25">Sign Up</button>
+                    </div>
                </form>
           </div>
      </section>

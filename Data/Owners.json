@@ -34,5 +34,14 @@
         "birthDate": "2010-06-27",
         "email": "amineo@amineo.com",
         "password": "123"
+    },
+    {
+        "ownerId": null,
+        "lastName": "test",
+        "firstName": "test",
+        "cellPhone": "123123123123",
+        "birthDate": "2022-11-08",
+        "email": "test1@test1.com",
+        "password": "123"
     }
 ]

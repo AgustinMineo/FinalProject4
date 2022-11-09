@@ -41,8 +41,8 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
           $keeperValue["points"] = $Keeper->getPoints();
-         // $keeperValue["reviews"] = $Keeper->getReviews();
-         $keeperValue["price"] = $Keeper->getPrice();
+          // $keeperValue["reviews"] = $Keeper->getReviews();
+          $keeperValue["price"] = $Keeper->getPrice();
           
           array_push($keeperArrayEncode, $keeperValue);
       }

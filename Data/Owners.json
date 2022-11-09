@@ -1,38 +1,13 @@
 [
     {
         "ownerId": null,
-        "lastName": "Miranda",
-        "firstName": "Martin",
-        "cellPhone": "2235066075",
-        "birthDate": "1998-04-18",
-        "email": "tinchomirandda@gmail.com",
-        "password": "123"
-    },
-    {
-        "ownerId": null,
-        "lastName": "Adams",
-        "firstName": "Marcelo",
-        "cellPhone": "2165465321",
-        "birthDate": "1991-03-26",
-        "email": "marceadams99@gmail.com",
-        "password": "123"
-    },
-    {
-        "ownerId": null,
-        "lastName": "Mineo",
-        "firstName": "Agustin",
-        "cellPhone": "12456",
-        "birthDate": "2010-06-27",
-        "email": "amineo@amineo.com",
-        "password": "123"
-    },
-    {
-        "ownerId": null,
-        "lastName": "Mineo",
-        "firstName": "Agustin",
-        "cellPhone": "12456",
-        "birthDate": "2010-06-27",
-        "email": "amineo@amineo.com",
-        "password": "123"
+        "lastName": "Perez",
+        "firstName": "Pepito",
+        "cellPhone": "1235",
+        "birthDate": "1988-08-25",
+        "email": "pepe@gmail.com",
+        "password": "1234565",
+        "userImage": "descarga.jpg",
+        "userDescription": "Holis por 2!"
     }
 ]

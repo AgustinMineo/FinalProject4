@@ -13,17 +13,18 @@ class OwnerDAO{
 
     public function AddOwner (Owner $owner){
         try {
-           $query = "INSERT INTO ".$this->userTable."(userID,firstName, lastName, email, cellphone, birthdate, password)
-        VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password);";
-                     $parameters["userID"] = NULL;
-                     $parameters["firstName"] = $owner->getfirstName();
-                     $parameters["lastName"] = $owner->getLastName();
-                     $parameters["email"] = $owner->getEmail();
-                     $parameters["cellphone"] = $owner->getCellPhone();
-                     $parameters["birthdate"] = $owner->getbirthDate();
-                     $parameters["password"] = $owner->getPassword();
-
-                     $this->connection = Connection::GetInstance();
+           $query = "INSERT INTO ".$this->userTable."(userID, firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription)
+        VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, :userImage, :userDescription);";
+                    $parameters["userID"] = NULL;
+                    $parameters["firstName"] = $owner->getfirstName();
+                    $parameters["lastName"] = $owner->getLastName();
+                    $parameters["email"] = $owner->getEmail();
+                    $parameters["cellphone"] = $owner->getCellPhone();
+                    $parameters["birthdate"] = $owner->getbirthDate();
+                    $parameters["password"] = $owner->getPassword();
+                    $parameters["userImage"] = $owner->getImage();
+                    $parameters["userDescription"] = $owner->getDescription();
+                    $this->connection = Connection::GetInstance();
                      if($this->connection->ExecuteNonQuery($query, $parameters)){
                         $id = $this->bringUserID($owner->getEmail());
                         $queryOwner = "INSERT INTO ".$this->ownerTable."(ownerId, userID, petAmount)
@@ -49,7 +50,7 @@ class OwnerDAO{
         try {
             $ownerList = array();
 
-            $query = "SELECT * FROM ".$this->tableName;
+            $query = "SELECT * FROM ".$this->userTable;
 
             $this->connection = Connection::GetInstance();
 
@@ -63,6 +64,8 @@ class OwnerDAO{
                 $owner->setCellPhone($row["cellphone"]);
                 $owner->setbirthDate($row["birthdate"]);
                 $owner->setPassword($row["password"]);
+                $owner->setImage($row["userImage"]);
+                $owner->setDescription($row["userDescription"]);
 
                 array_push($ownerList, $owner);
             }
@@ -72,10 +75,10 @@ class OwnerDAO{
         }
     }
 
-    public function loginOwner($email, $password){
+    public function searchOwner($email, $password){
 
         try {
-            $query = "SELECT firstName, lastName, email, cellphone, birthdate, password FROM ".$this->userTable." WHERE email = '$email' AND password = $password;";
+            $query = "SELECT firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription FROM ".$this->userTable." WHERE email = '$email' AND password = $password;";
             
             $this->connection = Connection::GetInstance();
 
@@ -85,6 +88,7 @@ class OwnerDAO{
             if($resultSet)
             {
                 foreach($resultSet as $row){
+
                 $owner = new Owner();
                 $owner->setfirstName($row["firstName"]);
                 $owner->setLastName($row["lastName"]);
@@ -92,6 +96,8 @@ class OwnerDAO{
                 $owner->setCellPhone($row["cellphone"]);
                 $owner->setbirthDate($row["birthdate"]);
                 $owner->setPassword($row["password"]);
+                $owner->setImage($row["userImage"]);
+                $owner->setDescription($row["userDescription"]);
                 return $owner;
             }
         }

@@ -8,7 +8,9 @@ abstract class User {
     private $birthDate;
     private $email;
     private $password;
-
+    private $userImage;
+    private $userDescription;
+    
     // Getter and setters
     public function getLastName(){
         return $this->lastName;
@@ -51,5 +53,19 @@ abstract class User {
     public function setPassword($password){
          $this->password = $password;
     }
+    public function getImage(){
+        return $this->userImage;
+    }
+    public function setImage($image){
+        $this->userImage = $image;
+    }
+
+    public function getDescription(){
+        return $this->userDescription;
+    }
+    public function setDescription($userDescription){
+        $this->userDescription = $userDescription;
+    }
+
 }
 ?>

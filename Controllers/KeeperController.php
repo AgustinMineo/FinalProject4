@@ -31,9 +31,9 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
      
-    public function newKeeper(/*$keeperId,*/$keeperImg,$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price){
+    public function newKeeper($keeperImg,$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price){
          $newKeeper = new Keeper();
-        // $newKeeper->setkeeperId($keeperId);
+         //$newKeeper->setkeeperId($this->searchLastKeeperID());
          $newKeeper->setKeeperImg($keeperImg);
          $newKeeper->setLastName($lastName);
          $newKeeper->setfirstName($firstName);

@@ -32,7 +32,7 @@ include ("ownerNav.php");
             <!--<li class="list-group-item bg-secondary text-white"><//?//php echo $petSize->getPetImage() ?></li>-->
             <li class="list-group-item bg-light text-dark"><?php echo $petSize->getPetName() ?></li>
             <li class="list-group-item bg-secondary text-white"><?php echo $petSize->getPetSize() ?></li>
-            <li class="list-group-item bg-light text-dark"><?php echo $petSize->getPetOwner()?></li>
+            <li class="list-group-item bg-light text-dark"><?php echo $petSize->getOwnerId()?></li>
         </ul>
         <div class="card-body d-flex m-2">
             <a href="<?php //searchPetByID($petSize->getPetId());?>" class="btn btn-primary d-flex justify-content-center align-content-center w-100">Reservation</a>

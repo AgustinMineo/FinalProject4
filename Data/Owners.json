@@ -1,6 +1,6 @@
 [
     {
-        "ownerId": null,
+        "ownerId": 1,
         "lastName": "Perez",
         "firstName": "Pepito",
         "cellPhone": "1235",
@@ -9,5 +9,38 @@
         "password": "1234565",
         "userImage": "descarga.jpg",
         "userDescription": "Holis por 2!"
+    },
+    {
+        "ownerId": 2,
+        "lastName": "Miranda",
+        "firstName": "Martin",
+        "cellPhone": "12456",
+        "birthDate": "1998-04-09",
+        "email": "tinchomirandda@gmail.com",
+        "password": "123",
+        "userImage": "Foto 4x4.jpg",
+        "userDescription": "Tinchito"
+    },
+    {
+        "ownerId": 3,
+        "lastName": "Agus2",
+        "firstName": "Agus2",
+        "cellPhone": "1231",
+        "birthDate": "1999-05-18",
+        "email": "agus2@test.com",
+        "password": "123",
+        "userImage": "Foto 4x4.jpg",
+        "userDescription": "tampoco soy"
+    },
+    {
+        "ownerId": null,
+        "lastName": "jose",
+        "firstName": "jose",
+        "cellPhone": "1123",
+        "birthDate": "2000-06-14",
+        "email": "josesito@test.com",
+        "password": "123",
+        "userImage": "Foto 4x4.jpg",
+        "userDescription": "no soy jose"
     }
 ]

@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 
  class OwnerController
@@ -36,7 +36,6 @@ use Models\Owner as Owner;
           $newOwner->setDescription($userDescription);
           //$newOwner->setPetAmount('0');
           $this->OwnerDAO->AddOwner($newOwner);
-          //$this->OwnerDAODB->AddOwner($newOwner);
           $this->goLoginOwner();
     }
     

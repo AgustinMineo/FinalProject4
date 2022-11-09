@@ -2,22 +2,23 @@
 namespace Models;
 
 class Pet{
-    private $petId;
+    private $petID;
     private $petName;
     private $petImage; //Imagen de la mascota
-    private $breed; // Raza de la mascota (selector)??
+    private $breedID; // Raza de la mascota (selector)??
     private $petSize; // int
-    private $vaccinationPlan; // as image
+    private $petVaccinationPlan; // as image
     private $petDetails;
     private $petVideo;// video de la mascota (url por el momento)
     private $petWeight; // peso del pet
-    private $petOwner; // dueño del perro (objeto)
+    private $ownerID; // dueño del perro (objeto)
+    private $petAge; // edad del perro
 
-    public function getPetId(){
-        return $this->petId;
+    public function getPetID(){
+        return $this->petID;
     }
-    public function setPetId($petId){
-        $this->petId= $petId;
+    public function setPetID($petID){
+        $this->petID= $petID;
     }
 
     public function getPetName(){
@@ -34,11 +35,11 @@ class Pet{
         $this->petImage = $petImage;
     }
     
-    public function getBreed(){
-        return $this->breed;
+    public function getBreedID(){
+        return $this->breedID;
     }
-    public function setBreed($breed){
-        $this->breed= $breed;
+    public function setBreedID($breedID){
+        $this->breedID= $breedID;
     }
 
     public function getPetSize(){
@@ -48,11 +49,11 @@ class Pet{
         $this->petSize = $petSize;
     }
 
-    public function getVaccinationPlan(){
-        return $this->vaccinationPlan;
+    public function getPetVaccinationPlan(){
+        return $this->petVaccinationPlan;
     }
-    public function setVaccinationPlan($vaccinationPlan){
-        $this->vaccinationPlan=$vaccinationPlan;
+    public function setPetVaccinationPlan($petVaccinationPlan){
+        $this->petVaccinationPlan=$petVaccinationPlan;
     }
 
     public function getPetDetails(){
@@ -76,13 +77,19 @@ class Pet{
         $this->petWeight=$petWeight;
     }
 
-    public function getPetOwner(){
-        return $this->petOwner;
+    public function getOwnerID(){
+        return $this->ownerID;
     }
-    public function setPetOwner($petOwner){
-        $this->petOwner=$petOwner;
+    public function setOwnerID($ownerID){
+        $this->ownerID=$ownerID;
     }
 
+    public function getPetAge(){
+        return $this->petAge;
+    }
+    public function setPetAge($petAge){
+        $this->petAge=$petAge;
+    }
 
 }
 ?>

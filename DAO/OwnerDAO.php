@@ -80,5 +80,18 @@ class OwnerDAO implements IOwnerDAO {
         }
         return null;
     }
+
+    public function loginOwner($email,$password){
+        $newOwner =$this->searchEmail($email);
+        if($newOwner){
+            if($newOwner->getPassword()==$password){
+              //  session_start(); // start the session
+                return $newOwner;
+            }
+        }else{
+            return null;
+            
+        }
+    }
 }
 ?>

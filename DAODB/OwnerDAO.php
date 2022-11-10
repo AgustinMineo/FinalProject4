@@ -26,13 +26,12 @@ class OwnerDAO{
                     $parameters["userDescription"] = $owner->getDescription();
                     $this->connection = Connection::GetInstance();
                      if($this->connection->ExecuteNonQuery($query, $parameters)){
-                        $id = $this->bringUserID($owner->getEmail());
                         $queryOwner = "INSERT INTO ".$this->ownerTable."(ownerId, userID, petAmount)
                                        VALUES (:ownerId, :userID, :petAmount);
                         ";
-
                         $parametersOwner["ownerId"] = NULL;
-                        $parametersOwner["userID"] = $id;
+                        //Traemos el USER ID de la base y pasamos como parametro.
+                        $parametersOwner["userID"] = $this->bringUserID($owner->getEmail());
                         $parametersOwner["petAmount"] = $owner->getPetAmount();
 
                         $this->connection->ExecuteNonQuery($queryOwner, $parametersOwner);
@@ -80,8 +79,8 @@ class OwnerDAO{
     public function searchOwner($email, $password){
 
         try {
-            $query = "SELECT firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription, o.petAmount, o.ownerID FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = $password;";
-            
+            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription, o.petAmount FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = $password;";
+
             $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
@@ -92,6 +91,7 @@ class OwnerDAO{
                 foreach($resultSet as $row){
 
                 $owner = new Owner();
+                $owner->setOwnerId($row["ownerID"]);
                 $owner->setfirstName($row["firstName"]);
                 $owner->setLastName($row["lastName"]);
                 $owner->setEmail($row["email"]);
@@ -106,13 +106,15 @@ class OwnerDAO{
             }
         }
         else{
-                echo "El email ingresado no existe o no corresponde a un usuario Owner";
+                echo '<script>alert("El email ingresado no existe o no corresponde a un usuario Owner")</script>';
             }
         } catch (Exception $ex) {
             throw $ex;
         }
 
     }
+
+    //Buscamos el USER ID del usuario con el mail.
     public function bringUserID($email){
         try {
             $query = "SELECT userID FROM ".$this->userTable." WHERE email = '$email';";

@@ -29,7 +29,10 @@ namespace Views;
             </li> 
             <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                 <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/searchByDateBooking.php">Booking with a Keepers</a>
-            </li> 
+            </li>
+            <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
+                <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut">Log Out</a>
+            </li>  
         </div>
       </header>
       

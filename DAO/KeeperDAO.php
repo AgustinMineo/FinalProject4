@@ -61,17 +61,17 @@ class KeeperDAO implements IKeeperDAO{
           foreach($keeperFileDecode as $KeeperDecode){
               $keeper = new Keeper();
               $keeper->setKeeperId($KeeperDecode["keeperId"]);
-              $keeper->setKeeperImg($KeeperDecode["keeperImg"]);
+              //$keeper->setKeeperImg($KeeperDecode["keeperImg"]);
               $keeper->setLastName($KeeperDecode["lastName"]);
               $keeper->setfirstName($KeeperDecode["firstName"]);
               $keeper->setCellPhone($KeeperDecode["cellPhone"]);
               $keeper->setbirthDate($KeeperDecode["birthDate"]);
               $keeper->setEmail($KeeperDecode["email"]);
               $keeper->setPassword($KeeperDecode["password"]);
-              $keeper->setFirstAvailabilityDays($KeeperDecode["firstAvailabilityDays"]);
-              $keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
+              //$keeper->setFirstAvailabilityDays($KeeperDecode["firstAvailabilityDays"]);
+              //$keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
-              $keeper->setPoints($KeeperDecode["points"]);
+              //$keeper->setPoints($KeeperDecode["points"]);
              // $keeper->setReviews($KeeperDecode["reviews"]);
               $keeper->setPrice($KeeperDecode["price"]);
               array_push($this->keeperList, $keeper);

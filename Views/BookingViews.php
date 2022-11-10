@@ -108,10 +108,10 @@ namespace Views;
         <!--<li class="list-group-item bg-secondary text-white"><//?//php echo $petSize->getPetImage() ?></li>-->
         <li class="list-group-item bg-light text-dark"><?php echo $petSize->getPetName() ?></li>
         <li class="list-group-item bg-secondary text-white"><?php echo $petSize->getPetSize() ?></li>
-        <li class="list-group-item bg-light text-dark"><?php echo $petSize->getPetOwner()?></li>
+        <li class="list-group-item bg-light text-dark"><?php echo $petSize->getOwnerID()?></li>
     </ul>
     <div class="checkboxID actionCheck">
-    <label style=" width:100%; padding:0; margin:0;"> <input type="checkbox" name="petId" value="<?php echo $petSize->getPetId()?>"><span>Reservar con este pet</span></label>
+    <label style=" width:100%; padding:0; margin:0;"> <input type="checkbox" name="petID" value="<?php echo $petSize->getPetID()?>"><span>Reservar con este pet</span></label>
     </div>
 </div>
 <?php

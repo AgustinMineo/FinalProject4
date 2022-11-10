@@ -24,17 +24,18 @@ class PetDAO implements IPetDAO{
         // recorremos la lista y guardamos la info del los owners.
         foreach($this->petList as $pet){
             $petValue = array();
-            $petValue["petId"] = $pet->getPetId();
-           $petValue["petName"] = $pet->getPetName();
+            $petValue["petID"] = $pet->getPetID();
+            $petValue["petName"] = $pet->getPetName();
             $petValue["petImage"] = $pet->getPetImage();
-            $petValue["breed"] = $pet->getBreed();
+            $petValue["breedID"] = $pet->getBreedID();
             $petValue["petSize"] = $pet->getPetSize();
-            $petValue["vaccinationPlan"] = $pet->getVaccinationPlan();
+            $petValue["petVaccinationPlan"] = $pet->getPetVaccinationPlan();
             $petValue["petDetails"] = $pet->getPetDetails();
             $petValue["petVideo"] = $pet->getPetVideo();
             $petValue["petWeight"] = $pet->getPetWeight();
-            $petValue["petOwner"] = $pet->getPetOwner();
-            
+            $petValue["ownerID"] = $pet->getOwnerID();
+            $petValue["petAge"] = $pet->getPetAge();
+
             array_push($petArrayEncode, $petValue);
         }
         $petFile = json_encode($petArrayEncode, JSON_PRETTY_PRINT);
@@ -51,16 +52,17 @@ class PetDAO implements IPetDAO{
 
             foreach($petFileDecode as $petDecode){
                 $petValue = new pet();
-                $petValue->setPetId($petDecode["petId"]);
+                $petValue->setPetID($petDecode["petID"]);
                 $petValue->setPetName($petDecode["petName"]);
                 $petValue->setPetImage($petDecode["petImage"]);
-                $petValue->setBreed($petDecode["breed"]);
+                $petValue->setBreedID($petDecode["breedID"]);
                 $petValue->setPetSize($petDecode["petSize"]);
-                $petValue->setVaccinationPlan($petDecode["vaccinationPlan"]);
+                $petValue->setPetVaccinationPlan($petDecode["petVaccinationPlan"]);
                 $petValue->setPetDetails($petDecode["petDetails"]);
                 $petValue->setPetVideo($petDecode["petVideo"]);
                 $petValue->setPetWeight($petDecode["petWeight"]);
-                $petValue->setPetOwner($petDecode["petOwner"]);
+                $petValue->setOwnerID($petDecode["ownerID"]);
+                $petValue->setPetAge($petDecode["petAge"]);
 
                 array_push($this->petList, $petValue);
             }
@@ -73,7 +75,7 @@ class PetDAO implements IPetDAO{
         $this->RetriveData();
         $petListSearch = array();
         foreach($this->petList as $ownerPet){
-            if($ownerPet->getPetOwner() == $email){
+            if($ownerPet->getOwnerID() == $email){
                 array_push($petListSearch,$ownerPet);
             }
         }
@@ -99,8 +101,8 @@ class PetDAO implements IPetDAO{
     public function selectPetByID($petID,$petList){
         $petSelect = new Pet();
         foreach($petList as $pet){
-            if($pet->getPetId()==$petID){
-                return $pet->getPetId();
+            if($pet->getPetID()==$petID){
+                return $pet->getPetID();
             }
         }
     } 

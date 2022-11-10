@@ -34,7 +34,9 @@
      
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
          $newKeeper = new Keeper();
-         //$newKeeper->setkeeperId($this->searchLastKeeperID());
+
+         //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
+         $newKeeper->setKeeperImg($keeperImg);
          $newKeeper->setLastName($lastName);
          $newKeeper->setfirstName($firstName);
          $newKeeper->setCellPhone($cellPhone);

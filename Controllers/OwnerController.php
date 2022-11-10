@@ -36,7 +36,6 @@ use Models\Owner as Owner;
           $newOwner->setDescription($userDescription);
           $newOwner->setPetAmount('0');
           $this->OwnerDAO->AddOwner($newOwner);
-          //$this->OwnerDAODB->AddOwner($newOwner);
           $this->goLoginOwner();
     }
     

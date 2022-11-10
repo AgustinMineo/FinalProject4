@@ -48,19 +48,19 @@ class BookingController{
         }
     }
 
-    public function newBooking($email,$petID){
+    public function newBooking($email,$petId){
         $newBooking = new Booking();
-        $keeperInfo = new Keeper();
+        //$keeperInfo = new Keeper(); CHECK
         $keeperInfo=$this->keeperDAO->searchEmail($email);
         $newBooking->setBookingID($this->BookingDAO->getLastBookingID()); //connected with the database
        $newBooking->setStatus('1');
        $newBooking->setFirstDate($keeperInfo->getFirstAvailabilityDays());
        $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());
        $newBooking->setKeeperID($keeperInfo->getKeeperId());
-       $newBooking->setTotalValue($keeperInfo->getPrice()); /// calcular el valor de la noche, $value*cantDias.
-       //$newBooking->setAmountReservation(); /// value*cantDias * 0.5;
+       $newBooking->setTotalValue($this->priceCounter($keeperInfo->getFirstAvailabilityDays(), $keeperInfo->getLastAvailabilityDays(), $keeperInfo->getPrice()));
+       //$newBooking->setAmountReservation(); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
             //require_once(VIEWS_PATH. "showPetBooking.php");
-            $newBooking->setPetID($petID);
+            $newBooking->setPetID($petId);
             $this->BookingDAO->addBooking($newBooking);
             //require_once()
     }
@@ -76,6 +76,15 @@ class BookingController{
         }else{
             echo "<h4>Error al actualizar el status</h4>";
         }
+    }
+
+    public function priceCounter($first, $last, $price){
+        $firstDay = strtotime($first);
+        $lastDay = strtotime($last);
+        $timeDiff = abs($firstDay - $lastDay);
+        $numberDays = $timeDiff/86400;  // 86400 SEGUNDOS EN EL DIA
+        $numberDays = intval($numberDays); // PARA PASARLO A ENTERO
+        return $price * $numberDays;
     }
 }
 ?>

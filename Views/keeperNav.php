@@ -17,7 +17,7 @@ namespace Views;
     
     <header>
         <div class="container d-flex ">
-            <span>Bienvenido <strong><?php  echo $_SESSION["loggedUser"]->getEmail() ?></strong> </span>
+            <span>Bienvenido <strong><?php echo $_SESSION["loggedUser"]->getEmail() ?></strong> </span>
             <div class="container d-flex flex-nowrap align-content-center flex-nowrap h-1 p-1 w-auto ">
                     <li class="nav-item w-25 m-5 border border-dark">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/updateAvailabilityDays.php">Update Availability Days</a>

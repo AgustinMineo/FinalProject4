@@ -77,7 +77,7 @@ class BookingController{
             echo "<h4>Error al actualizar el status</h4>";
         }
     }
-
+//ARREGLAR TOTAL DE PRECIO.
     public function priceCounter($first, $last, $price){
         $firstDay = strtotime($first);
         $lastDay = strtotime($last);

@@ -105,9 +105,6 @@ class OwnerDAO{
                 return $owner;
             }
         }
-        else{
-                echo '<script>alert("El email ingresado no existe o no corresponde a un usuario Owner")</script>';
-            }
         } catch (Exception $ex) {
             throw $ex;
         }

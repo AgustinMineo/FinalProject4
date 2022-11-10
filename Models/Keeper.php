@@ -9,8 +9,8 @@ class Keeper extends User{
     private $price;
     //private $points; // shortint (1 - 5 ) 
     //private $reviews; // object array with the object review
-    //private $firstAvailabilityDays; /// Change for the database
-    //private $lastAvailabilityDays; ///Change for the database
+    private $firstAvailabilityDays; /// Change for the database
+    private $lastAvailabilityDays; ///Change for the database
 
     public function getKeeperId(){
         return $this->keeperId;
@@ -30,7 +30,7 @@ class Keeper extends User{
         public function setPrice($price){
              $this->price = $price;
         }
-/*
+//INICIO DE COMENTARIO-----------------------------------------------------
     public function getFirstAvailabilityDays(){
         return $this->firstAvailabilityDays;
     }
@@ -44,8 +44,7 @@ class Keeper extends User{
     public function setLastAvailabilityDays($lastAvailabilityDays){
          $this->lastAvailabilityDays = $lastAvailabilityDays;
     }
-*/
-
+//FIN DE COMENTARIO---------------------------------------------------------
 /*    public function getPoints(){
         return $this->points;
     }

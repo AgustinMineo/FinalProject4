@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
-//use DAO\OwnerDAO as OwnerDAO;
-use DAODB\OwnerDAO as OwnerDAO;
+use DAO\OwnerDAO as OwnerDAO;
+//use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 
  class OwnerController
@@ -47,8 +47,8 @@ use Models\Owner as Owner;
                 $_SESSION["loggedUser"] = $loggedUser;
                 $this->goLandingOwner();
             }else{
-                //$this->goIndex();
-                echo "<br> No entro ";
+                echo '<script>alert("Los datos ingresados son incorrectos")</script>';
+                require_once(VIEWS_PATH."mainLanding.php");
             }
     }
  }

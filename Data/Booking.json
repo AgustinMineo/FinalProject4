@@ -1,114 +1,47 @@
 [
     {
         "bookingID": 1,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
+        "status": "2",
+        "petID": "1",
+        "firstDate": "2022-11-02",
+        "lastDate": "2022-11-16",
+        "keeperID": 5,
+        "totalValue": 2800
     },
     {
         "bookingID": 1,
         "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
+        "petID": "1",
+        "firstDate": "2022-09-14",
+        "lastDate": "2023-01-05",
+        "keeperID": 3,
+        "totalValue": 22600
     },
     {
         "bookingID": 1,
         "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
+        "petID": "1",
+        "firstDate": "2022-11-17",
+        "lastDate": "2022-11-20",
+        "keeperID": 5,
+        "totalValue": 600
     },
     {
         "bookingID": 2,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
+        "status": "4",
+        "petID": "1",
+        "firstDate": "2022-11-22",
+        "lastDate": "2022-11-26",
+        "keeperID": 5,
+        "totalValue": 800
     },
     {
         "bookingID": 3,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
-    },
-    {
-        "bookingID": 4,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
-    },
-    {
-        "bookingID": 5,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
-    },
-    {
-        "bookingID": 6,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
-    },
-    {
-        "bookingID": 7,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
-    },
-    {
-        "bookingID": 8,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
-    },
-    {
-        "bookingID": 9,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
-    },
-    {
-        "bookingID": 10,
-        "status": "1",
-        "petID": "2",
-        "firstDate": "2022-11-04",
-        "lastDate": "2022-11-30",
-        "keeperID": 3
-    },
-    {
-        "bookingID": 11,
-        "status": "4",
-        "petID": "2",
-        "firstDate": "2022-11-02",
-        "lastDate": "2022-11-10",
-        "keeperID": 2
-    },
-    {
-        "bookingID": 12,
         "status": "2",
-        "petID": "2",
-        "firstDate": "2022-11-02",
-        "lastDate": "2022-11-10",
-        "keeperID": 2
+        "petID": "1",
+        "firstDate": "2022-11-22",
+        "lastDate": "2022-11-26",
+        "keeperID": 5,
+        "totalValue": 800
     }
 ]

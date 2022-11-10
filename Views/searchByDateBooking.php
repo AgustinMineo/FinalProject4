@@ -1,5 +1,4 @@
 <?php
-namespace Views;
 ?>
 <form class="row g-3" action="<?php echo '/FinalProject4/' ?>Booking/bookingBuild" method="post">
   <div class="col-auto">

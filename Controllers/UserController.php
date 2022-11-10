@@ -32,6 +32,11 @@ class UserController{
         require_once(VIEWS_PATH."ownerNav.php");
     }
 
+    public function logOut(){
+        session_destroy();
+        require_once(VIEWS_PATH."mainLanding.php");
+    }
+
     //CHECK OUT FOR USER FUNCTIONALITIES (CHANGES IN NAME, PASSWORD, ETC)
 }
 ?>

@@ -2,7 +2,16 @@
 ?>
 
 <section class="vh-100">
-    
+  <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+     <span class="navbar-text">
+          <strong>Pet Hero</strong>
+     </span>
+     <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+               <a class="nav-link" href="<?php echo '/FinalProject4/' ?>index.php">Home</a>
+          </li>          
+     </ul>
+  </nav>  
   <div class="container py-5 h-100">
     <div class="row d-flex align-items-center justify-content-center h-100">
       <div class="col-md-8 col-lg-7 col-xl-6">

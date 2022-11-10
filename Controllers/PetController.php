@@ -35,7 +35,7 @@ class PetController{
             echo"Usuario no logeado";
             }
     }
-
+//MIGRAR PET LIST Y SHOW PETS A DAO
     public function searchPetList(){
         $petListSearch= array();
         $this->petDAO = new PetDAO();
@@ -45,7 +45,7 @@ class PetController{
         }
         var_dump($petListSearch);
     }
-
+// MIGRAR A DAO
     public function showPets(){
             $petList = $this->searchPetList();
             require_once(VIEWS_PATH . "showPet.php");

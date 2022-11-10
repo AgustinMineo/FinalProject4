@@ -97,7 +97,7 @@ class KeeperDAO implements IKeeperDAO{
 
   public function searchEmail($email,$password){
     try {
-      $query = "SELECT firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID WHERE email = '$email' AND password = $password;";
+      $query = "SELECT k.keeperID, k.animalSize, k.price, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID WHERE email = '$email' AND password = $password;";
       $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
@@ -108,6 +108,9 @@ class KeeperDAO implements IKeeperDAO{
                 foreach($resultSet as $row){
 
                 $keeper = new Keeper();
+                $keeper->setKeeperID($row["keeperID"]);
+                $keeper->setAnimalSize($row["animalSize"]);
+                $keeper->setPrice($row["price"]);
                 $keeper->setfirstName($row["firstName"]);
                 $keeper->setLastName($row["lastName"]);
                 $keeper->setEmail($row["email"]);

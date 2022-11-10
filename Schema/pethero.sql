@@ -41,14 +41,14 @@ CREATE TABLE `Pet` (
   `petVideo` blob NOT NULL,
   `petImage` blob NOT NULL,
   `petVacunationPlan` blob NOT NULL,
-  `petWeight` float DEFAULT NULL,
+  `petWeight` varchar(20) DEFAULT NULL,
   `petAge` date DEFAULT NULL,
   PRIMARY KEY (`petID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `Breed` (
   `breedID` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL UNIQUE KEY,
   PRIMARY KEY (`breedID`)
 ) ENGINE=InnoDB;
 
@@ -78,3 +78,8 @@ CREATE TABLE `Review` (
   `points` tinyint(10),
   PRIMARY KEY (`reviewID`)
 ) ENGINE=InnoDB;
+
+--INSERT DE BREEDS EN TABLA BREED--
+INSERT INTO breed VALUES ("1","Beagle"), ("2", "Chihuahua"), ("3","Bulldog"),("4", "German Shepherd"),
+("5", "Shih-tzu"), ("6", "Dogo"), ("7", "Golden Retriever"), ("8","Fox Terrier"), ("9","Whippet"),
+("10","Pinscher"), ("11","Cocker"), ("12","Shiba Inu"), ("13","Doberman"), ("14","Border Collie"), ("15","Yorkshire");

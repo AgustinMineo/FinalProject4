@@ -57,6 +57,7 @@ class OwnerDAO{
 
             foreach($resultSet as $row){
                 $owner = new Owner();
+                
                 $owner->setfirstName($row["firstName"]);
                 $owner->setLastName($row["lastName"]);
                 $owner->setEmail($row["email"]);
@@ -65,7 +66,8 @@ class OwnerDAO{
                 $owner->setPassword($row["password"]);
                 $owner->setImage($row["userImage"]);
                 $owner->setDescription($row["userDescription"]);
-
+                $owner->setPetAmount($row["petAmount"]);
+                $owner->setOwnerId($row["ownerID"]);
                 array_push($ownerList, $owner);
             }
             return $ownerList;
@@ -78,7 +80,7 @@ class OwnerDAO{
 
         try {
             $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription, o.petAmount FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = $password;";
-            
+
             $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
@@ -99,6 +101,7 @@ class OwnerDAO{
                 $owner->setImage($row["userImage"]);
                 $owner->setDescription($row["userDescription"]);
                 $owner->setPetAmount($row["petAmount"]);
+                $owner->setOwnerId($row["ownerID"]);
                 return $owner;
             }
         }

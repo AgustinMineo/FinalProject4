@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
- //use DAO\KeeperDAO as KeeperDAO;
- use DAODB\KeeperDAO as KeeperDAO;
+ use DAO\KeeperDAO as KeeperDAO;
+ //use DAODB\KeeperDAO as KeeperDAO;
  use Models\Keeper as Keeper;
 
  class KeeperController
@@ -36,7 +36,7 @@
          $newKeeper = new Keeper();
 
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
-         $newKeeper->setKeeperImg($keeperImg);
+         //$newKeeper->setKeeperImg($keeperImg);
          $newKeeper->setLastName($lastName);
          $newKeeper->setfirstName($firstName);
          $newKeeper->setCellPhone($cellPhone);

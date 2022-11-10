@@ -30,7 +30,7 @@ class KeeperDAO implements IKeeperDAO{
       foreach($this->keeperList as $Keeper){
           $keeperValue = array();
           $keeperValue["keeperId"] = $Keeper->getKeeperId();
-          $keeperValue["keeperImg"] = $Keeper->getKeeperImg();
+          //$keeperValue["keeperImg"] = $Keeper->getKeeperImg();
           $keeperValue["lastName"] = $Keeper->getLastName();
           $keeperValue["firstName"] = $Keeper->getfirstName();
           $keeperValue["cellPhone"] = $Keeper->getCellPhone();
@@ -40,7 +40,7 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["firstAvailabilityDays"] = $Keeper->getFirstAvailabilityDays();// cambiar a 2 variables
           $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
-          $keeperValue["points"] = $Keeper->getPoints();
+          //$keeperValue["points"] = $Keeper->getPoints();
           // $keeperValue["reviews"] = $Keeper->getReviews();
           $keeperValue["price"] = $Keeper->getPrice();
           
@@ -68,8 +68,8 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setbirthDate($KeeperDecode["birthDate"]);
               $keeper->setEmail($KeeperDecode["email"]);
               $keeper->setPassword($KeeperDecode["password"]);
-              //$keeper->setFirstAvailabilityDays($KeeperDecode["firstAvailabilityDays"]);
-              //$keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
+              $keeper->setFirstAvailabilityDays($KeeperDecode["firstAvailabilityDays"]);
+              $keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
               //$keeper->setPoints($KeeperDecode["points"]);
              // $keeper->setReviews($KeeperDecode["reviews"]);
@@ -108,7 +108,7 @@ class KeeperDAO implements IKeeperDAO{
     if($keeperList){
     $keeperListDisponibility= array();
     foreach($keeperList as $value){
-        if($value->getFirstAvailabilityDays()<=$date1 || $value->getLastAvailabilityDays()>=$date1){
+        if($value->getFirstAvailabilityDays()<=$date1 && $value->getLastAvailabilityDays()>=$date1){
             if($value->getFirstAvailabilityDays()<=$date2 && $value->getLastAvailabilityDays()>=$date2){
                 array_push($keeperListDisponibility,$value);
             }

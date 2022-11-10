@@ -1,15 +1,15 @@
 [
     {
         "petID": 1,
-        "petName": "Marco Aurelio",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/beagles-puppies-looking-something_1150-18193.jpg?w=450&t=st=1667603811~exp=1667604411~hmac=8f9a2e6c678c57d699ed5d72f1578a84cb38ee4e0bf111058fa9f499ac9d63a5",
-        "breedID": "Beagle",
-        "petSize": "Small",
+        "petName": "Boby",
+        "petImage": "https:\/\/www.serargentino.com\/public\/images\/2021\/04\/16190169510-dogo-773x458.jpg",
+        "breedID": "6",
+        "petSize": "Big",
         "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
-        "petDetails": "Bites a little",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=W6ipRl4gE_Q",
-        "petWeight": "Light",
-        "ownerID": "tinchomirandda@gmail.com",
-        "petAge": "2022-09-01"
+        "petDetails": "Tiene cara de malo pero es muy bueno.",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=WrPQmq7U7g8&ab_channel=HikingDogoOutdoor",
+        "petWeight": "Medium",
+        "ownerID": "frann241297@gmail.com",
+        "petAge": "2021-11-10"
     }
 ]

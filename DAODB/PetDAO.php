@@ -10,6 +10,7 @@ class PetDAO implements IPetDAO{
     private $connection;
     private $petTable = 'pet';
     private $ownerTable = 'owner';
+    private $breedTable = 'breed';
     private $petList = array();
     
     public function AddPet(Pet $pet){
@@ -39,7 +40,9 @@ try{
         try {
             $petList = array();
 
-            $query = "SELECT * FROM ".$this->petTable." p LEFT JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID";
+            $query = "SELECT p.petID, p.petName, p.petImage, b.name, p.petSize, p.petVaccinationPlan, p.petDetails, p.petVideo, p.petWeight, p.ownerID, p.petAge
+            FROM ".$this->petTable." p  JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID
+            JOIN ".$this->breedTable." b ON p.breedID = b.breedID;";
 
             $this->connection = Connection::GetInstance();
 
@@ -51,7 +54,7 @@ try{
                 $pet->setPetID($row["petID"]);
                 $pet->setPetName($row["petName"]);
                 $pet->setPetImage($row["petImage"]);
-                $pet->setBreedID($row["breedID"]);
+                $pet->setBreedID($row["name"]);
                 $pet->setPetSize($row["petSize"]);
                 $pet->setPetVaccinationPlan($row["petVaccinationPlan"]);
                 $pet->setPetDetails($row["petDetails"]);

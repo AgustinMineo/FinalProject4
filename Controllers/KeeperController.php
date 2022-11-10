@@ -35,8 +35,6 @@
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
          $newKeeper = new Keeper();
 
-         //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
-         //$newKeeper->setKeeperImg($keeperImg);
          $newKeeper->setLastName($lastName);
          $newKeeper->setfirstName($firstName);
          $newKeeper->setCellPhone($cellPhone);
@@ -46,10 +44,12 @@
          $newKeeper->setImage($userImage);
          $newKeeper->setDescription($userDescription);
          $newKeeper->setAnimalSize($animalSize);
-         //$newKeeper->setPoints('0');
          $newKeeper->setPrice($price);
          $this->KeeperDAO->AddKeeper($newKeeper);
          $this->goLoginKeeper();
+         //$newKeeper->setPoints('0');
+         //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
+         //$newKeeper->setKeeperImg($keeperImg);
     }
 
     public function loginKeeper($email,$password){
@@ -59,8 +59,8 @@
             $_SESSION["loggedUser"] = $loggedUser;
             $this->goLandingKeeper();
             }else{
-            $this->goIndex();
-            echo "<h2>no entre</h2>";
+                echo '<script>alert("Los datos ingresados son incorrectos")</script>';
+                require_once(VIEWS_PATH."mainLanding.php");
             }
     }
 

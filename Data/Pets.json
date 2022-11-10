@@ -1,63 +1,15 @@
 [
     {
-        "petId": 1,
-        "petName": "Max",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "breed": "Sheepard",
-        "petSize": "Medium",
-        "vaccinationPlan": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "petDetails": "Un perro",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=5PR4vCJJRnA",
-        "petWeight": "Medium",
-        "petOwner": "amineo@amineo.com"
-    },
-    {
-        "petId": 2,
-        "petName": "jorge",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "breed": "Un caniche toy",
-        "petSize": "Medium",
-        "vaccinationPlan": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "petDetails": "test",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=vtOyydVZIF8",
+        "petID": 1,
+        "petName": "Marco Aurelio",
+        "petImage": "https:\/\/img.freepik.com\/free-photo\/beagles-puppies-looking-something_1150-18193.jpg?w=450&t=st=1667603811~exp=1667604411~hmac=8f9a2e6c678c57d699ed5d72f1578a84cb38ee4e0bf111058fa9f499ac9d63a5",
+        "breedID": "Beagle",
+        "petSize": "Small",
+        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
+        "petDetails": "Bites a little",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=W6ipRl4gE_Q",
         "petWeight": "Light",
-        "petOwner": "amineo@amineo.com"
-    },
-    {
-        "petId": 3,
-        "petName": "Max",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "breed": "Sheepard",
-        "petSize": "Medium",
-        "vaccinationPlan": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "petDetails": "Un perro",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=5PR4vCJJRnA",
-        "petWeight": "Medium",
-        "petOwner": "amineo@amineo.com"
-    },
-    {
-        "petId": 4,
-        "petName": "Max",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "breed": "Sheepard",
-        "petSize": "Medium",
-        "vaccinationPlan": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "petDetails": "Un perro",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=5PR4vCJJRnA",
-        "petWeight": "Medium",
-        "petOwner": "amineo@amineo.com"
-    },
-    {
-        "petId": 5,
-        "petName": "Max",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "breed": "Sheepard",
-        "petSize": "Medium",
-        "vaccinationPlan": "https:\/\/img.freepik.com\/free-photo\/pedigreed-puppy-collar-sitting-grass-park_651396-3781.jpg?",
-        "petDetails": "Un perro",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=5PR4vCJJRnA",
-        "petWeight": "Medium",
-        "petOwner": "amineo@amineo.com"
+        "ownerID": "tinchomirandda@gmail.com",
+        "petAge": "2022-09-01"
     }
-
 ]

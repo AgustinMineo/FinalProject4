@@ -53,22 +53,24 @@ class BookingController{
         //$keeperInfo = new Keeper(); CHECK
         $keeperInfo=$this->keeperDAO->searchEmail($email);
         $newBooking->setBookingID($this->BookingDAO->getLastBookingID()); //connected with the database
-       $newBooking->setStatus('1');
-       $newBooking->setFirstDate($keeperInfo->getFirstAvailabilityDays());
-       $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());
-       $newBooking->setKeeperID($keeperInfo->getKeeperId());
-       $newBooking->setTotalValue($this->priceCounter($keeperInfo->getFirstAvailabilityDays(), $keeperInfo->getLastAvailabilityDays(), $keeperInfo->getPrice()));
-       //$newBooking->setAmountReservation(); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
-            //require_once(VIEWS_PATH. "showPetBooking.php");
-            $newBooking->setPetID($petId);
-            $this->BookingDAO->addBooking($newBooking);
-            //require_once()
+        $newBooking->setStatus('1');
+        $newBooking->setFirstDate($keeperInfo->getFirstAvailabilityDays());
+        $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());
+        $newBooking->setKeeperID($keeperInfo->getKeeperId());
+        $newBooking->setTotalValue($this->priceCounter($keeperInfo->getFirstAvailabilityDays(), $keeperInfo->getLastAvailabilityDays(), $keeperInfo->getPrice()));
+        //$newBooking->setAmountReservation(); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
+        //require_once(VIEWS_PATH. "showPetBooking.php");
+        $newBooking->setPetID($petId);
+        $this->BookingDAO->addBooking($newBooking);
+        //require_once()
     }
+// MIGRAR A DAO
     public function showBookings(){
         $bookingListKeeper = array();
         $bookingListKeeper=$this->BookingDAO->showBookingByKeeperID();
         require_once(VIEWS_PATH."showBookingKeeper.php");
     }
+// MIGRAR A DAO
     public function updateBookingStatus($idBooking, $status){
         $value = $this->BookingDAO->updateByID($idBooking,$status);
         if($value){
@@ -77,7 +79,7 @@ class BookingController{
             echo "<h4>Error al actualizar el status</h4>";
         }
     }
-//ARREGLAR TOTAL DE PRECIO.
+//ARREGLAR TOTAL DE PRECIO Y MIGRARLO A DAO
     public function priceCounter($first, $last, $price){
         $firstDay = strtotime($first);
         $lastDay = strtotime($last);

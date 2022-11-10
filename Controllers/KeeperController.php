@@ -1,7 +1,8 @@
 <?php
  namespace Controllers;
 
- use DAO\KeeperDAO as KeeperDAO;
+ //use DAO\KeeperDAO as KeeperDAO;
+ use DAODB\KeeperDAO as KeeperDAO;
  use Models\Keeper as Keeper;
 
  class KeeperController
@@ -31,8 +32,9 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
      
-    public function newKeeper($keeperImg,$lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
          $newKeeper = new Keeper();
+
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
          $newKeeper->setKeeperImg($keeperImg);
          $newKeeper->setLastName($lastName);
@@ -41,16 +43,18 @@
          $newKeeper->setbirthDate($birthDate);
          $newKeeper->setEmail($email);
          $newKeeper->setPassword($password);
+         $newKeeper->setImage($userImage);
+         $newKeeper->setDescription($userDescription);
          $newKeeper->setAnimalSize($animalSize);
-         $newKeeper->setPoints('0');
+         //$newKeeper->setPoints('0');
          $newKeeper->setPrice($price);
          $this->KeeperDAO->AddKeeper($newKeeper);
          $this->goLoginKeeper();
     }
 
     public function loginKeeper($email,$password){
-        $newKeeper = $this->KeeperDAO->searchEmail($email);
-        if($newKeeper->getPassword()==$password){
+        $newKeeper = $this->KeeperDAO->searchEmail($email,$password);
+        if($newKeeper){
             $loggedUser = $newKeeper;
             $_SESSION["loggedUser"] = $loggedUser;
             $this->goLandingKeeper();

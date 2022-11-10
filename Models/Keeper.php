@@ -4,12 +4,11 @@ namespace Models;
 use Models\User as User;
 
 class Keeper extends User{
-    private $keeperId; // not null
-    private $keeperImg; // img 
-    private $firstAvailabilityDays; /// Change for the database
-    private $lastAvailabilityDays; ///Change for the database
+    //private $keeperId; // not null
+    //private $firstAvailabilityDays; /// Change for the database
+    //private $lastAvailabilityDays; ///Change for the database
     private $animalSize; // not null
-    private $points; // shortint (1 - 5 ) 
+    //private $points; // shortint (1 - 5 ) 
     //private $reviews; // object array with the object review
    private $price;
 
@@ -19,14 +18,7 @@ class Keeper extends User{
     public function setKeeperId($keeperId){
          $this->keeperId = $keeperId;
     }
-
-    public function getKeeperImg(){
-        return $this->keeperImg;
-    }
-    public function setKeeperImg($keeperImg){
-         $this->keeperImg = $keeperImg;
-    }
-
+/*
     public function getFirstAvailabilityDays(){
         return $this->firstAvailabilityDays;
     }
@@ -40,7 +32,7 @@ class Keeper extends User{
     public function setLastAvailabilityDays($lastAvailabilityDays){
          $this->lastAvailabilityDays = $lastAvailabilityDays;
     }
-
+*/
     public function getAnimalSize(){
         return $this->animalSize;
     }
@@ -48,13 +40,13 @@ class Keeper extends User{
          $this->animalSize = $AnimalSize;
     }
 
-    public function getPoints(){
+/*    public function getPoints(){
         return $this->points;
     }
     public function setPoints($points){
          $this->points = $points;
-    }
-/*
+   }
+
     public function getReviews(){
         return $this->reviews;
     }

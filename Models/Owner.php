@@ -5,7 +5,7 @@ use Models\User as User;
 
 class Owner extends User{
     private $ownerId;
-   // private $petAmount; 
+    private $petAmount; 
 
     public function getOwnerId(){
         return $this->ownerId;
@@ -14,12 +14,12 @@ class Owner extends User{
         $this->ownerId = $ownerId;
    }
 
-  /* public function getPetAmount(){
+     public function getPetAmount(){
     return $this->petAmount;
     }
     public function setPetAmount($petAmount){
     $this->petAmount = $petAmount;
-    }*/
+    }
 
 }
 ?>

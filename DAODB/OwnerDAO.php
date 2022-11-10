@@ -33,7 +33,7 @@ class OwnerDAO{
 
                         $parametersOwner["ownerId"] = NULL;
                         $parametersOwner["userID"] = $id;
-                        $parametersOwner["petAmount"] = '0';
+                        $parametersOwner["petAmount"] = $owner->getPetAmount();
 
                         $this->connection->ExecuteNonQuery($queryOwner, $parametersOwner);
                      };
@@ -50,7 +50,7 @@ class OwnerDAO{
         try {
             $ownerList = array();
 
-            $query = "SELECT * FROM ".$this->userTable;
+            $query = "SELECT * FROM ".$this->userTable." u LEFT JOIN ".$this->ownerTable." o ON o.userID = u.userID";
 
             $this->connection = Connection::GetInstance();
 
@@ -78,7 +78,7 @@ class OwnerDAO{
     public function searchOwner($email, $password){
 
         try {
-            $query = "SELECT firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription FROM ".$this->userTable." WHERE email = '$email' AND password = $password;";
+            $query = "SELECT firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = $password;";
             
             $this->connection = Connection::GetInstance();
 
@@ -102,7 +102,7 @@ class OwnerDAO{
             }
         }
         else{
-                echo "El email ingresado no existe";
+                echo "El email ingresado no existe o no corresponde a un usuario Owner";
             }
         } catch (Exception $ex) {
             throw $ex;
@@ -116,9 +116,6 @@ class OwnerDAO{
             $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
-
-            var_dump($resultSet);
-            var_dump($resultSet);
 
             foreach($resultSet as $row){
                 $id = $row['userID'];

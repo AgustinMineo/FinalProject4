@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 
  class OwnerController
@@ -34,7 +34,7 @@ use Models\Owner as Owner;
           $newOwner->setPassword($password);
           $newOwner->setImage($userImage);
           $newOwner->setDescription($userDescription);
-          //$newOwner->setPetAmount('0');
+          $newOwner->setPetAmount('0');
           $this->OwnerDAO->AddOwner($newOwner);
           //$this->OwnerDAODB->AddOwner($newOwner);
           $this->goLoginOwner();
@@ -48,7 +48,8 @@ use Models\Owner as Owner;
                 $_SESSION["loggedUser"] = $loggedUser;
                 $this->goLandingOwner();
             }else{
-                $this->goIndex();
+                //$this->goIndex();
+                echo "<br> No entro ";
             }
     }
  }

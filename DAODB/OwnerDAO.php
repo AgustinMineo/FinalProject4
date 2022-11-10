@@ -58,6 +58,7 @@ class OwnerDAO{
 
             foreach($resultSet as $row){
                 $owner = new Owner();
+                
                 $owner->setfirstName($row["firstName"]);
                 $owner->setLastName($row["lastName"]);
                 $owner->setEmail($row["email"]);
@@ -66,7 +67,8 @@ class OwnerDAO{
                 $owner->setPassword($row["password"]);
                 $owner->setImage($row["userImage"]);
                 $owner->setDescription($row["userDescription"]);
-
+                $owner->setPetAmount($row["petAmount"]);
+                $owner->setOwnerId($row["ownerID"]);
                 array_push($ownerList, $owner);
             }
             return $ownerList;
@@ -78,7 +80,7 @@ class OwnerDAO{
     public function searchOwner($email, $password){
 
         try {
-            $query = "SELECT firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = $password;";
+            $query = "SELECT firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription, o.petAmount, o.ownerID FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = $password;";
             
             $this->connection = Connection::GetInstance();
 
@@ -98,6 +100,8 @@ class OwnerDAO{
                 $owner->setPassword($row["password"]);
                 $owner->setImage($row["userImage"]);
                 $owner->setDescription($row["userDescription"]);
+                $owner->setPetAmount($row["petAmount"]);
+                $owner->setOwnerId($row["ownerID"]);
                 return $owner;
             }
         }

@@ -2,8 +2,8 @@
 namespace Controllers;
 
 use Models\Pet as Pet;
-use DAO\PetDAO as PetDAO;
-//use DAODB\PetDAO as PetDAO;
+//use DAO\PetDAO as PetDAO;
+use DAODB\PetDAO as PetDAO;
 
 class PetController{
     private $petDAO;
@@ -18,7 +18,7 @@ class PetController{
             $this->petDAO = new PetDAO();
             $pet = new Pet();
 
-            $pet->setPetID(1);
+            //$pet->setPetID(1);
             $pet->setPetName($petName);
             $pet->setPetImage($petImage);
             $pet->setBreedID($breedID);
@@ -27,7 +27,7 @@ class PetController{
             $pet->setPetDetails($petDetails);
             $pet->setPetVideo($petVideo);
             $pet->setPetWeight($petWeight);
-            $pet->setOwnerID($_SESSION["loggedUser"]->getEmail());
+            $pet->setOwnerID($_SESSION["loggedUser"]->getOwnerID());
             $pet->setPetAge($petAge);
             $this->petDAO->AddPet($pet);
             $this->goLandingOwner();
@@ -40,9 +40,10 @@ class PetController{
         $petListSearch= array();
         $this->petDAO = new PetDAO();
         if(isset($_SESSION["loggedUser"])){
-        $petListSearch = $this->petDAO->searchPets($_SESSION["loggedUser"]->getEmail()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
-        return $petListSearch; 
-    }
+            $petListSearch = $this->petDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+            return $petListSearch; 
+        }
+        var_dump($petListSearch);
     }
 
     public function showPets(){

@@ -19,12 +19,15 @@ namespace Views;
         <div class="container d-flex ">
             <span>Bienvenido <strong><?php echo $_SESSION["loggedUser"]->getEmail() ?></strong> </span>
             <div class="container d-flex flex-nowrap align-content-center flex-nowrap h-1 p-1 w-auto ">
-                    <li class="nav-item w-25 border border-dark">
+                    <li class="nav-item w-25 m-5 border border-dark">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>Views/updateAvailabilityDays.php">Update Availability Days</a>
                     </li>   
                     <li class="nav-item w-25 m-5 border border-dark">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>Booking/showBookings">Show reservations</a>
-                    </li>  
+                    </li>
+                    <li class="nav-item w-25 m-5 border border-dark">
+                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut">Log Out</a>
+                    </li>    
             </div>
         </div>
       </header>

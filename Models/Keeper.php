@@ -4,7 +4,7 @@ namespace Models;
 use Models\User as User;
 
 class Keeper extends User{
-    //private $keeperId; // not null
+    private $keeperId; // not null
     //private $firstAvailabilityDays; /// Change for the database
     //private $lastAvailabilityDays; ///Change for the database
     private $animalSize; // not null

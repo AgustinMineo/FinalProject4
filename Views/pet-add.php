@@ -24,7 +24,7 @@
                          <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
                               <div class="form-group w-50 m-2">
                                    <label for="">Breed</label>
-                                   <!--<select name="breedID" class="w-100 h-50" Required>
+                                  <select name="breedID" class="w-100 h-50" Required>
                                         <option value="1">Beagle</option>
                                         <option value="2">Chihuahua</option>
                                         <option value="3">Bulldog</option>
@@ -40,8 +40,8 @@
                                         <option value="13">Doberman</option>
                                         <option value="14">Border Collie</option>
                                         <option value="15">Yorkshire</option>
-                                   </select> !-->
-                                   <input type="text" name="breedID" placeholder="Breed" value="" class="form-control" Required >
+                                   </select>
+                                   <!--<input type="text" name="breedID" placeholder="Breed" value="" class="form-control" Required >!-->
                               </div>
                          </div>
                          <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">

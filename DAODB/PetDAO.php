@@ -9,6 +9,8 @@ use Models\Pet as Pet;
 class PetDAO implements IPetDAO{
     private $connection;
     private $petTable = 'pet';
+    private $ownerTable = 'owner';
+    private $petList = array();
     
     public function AddPet(Pet $pet){
 try{
@@ -31,25 +33,60 @@ try{
         throw $ex;
     }
 
-
     }
 
     public function GetAllPet(){
+        try {
+            $petList = array();
 
+            $query = "SELECT * FROM ".$this->petTable." p LEFT JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID";
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            foreach($resultSet as $row){
+                $pet = new Pet();
+
+                $pet->setPetID($row["petID"]);
+                $pet->setPetName($row["petName"]);
+                $pet->setPetImage($row["petImage"]);
+                $pet->setBreedID($row["breedID"]);
+                $pet->setPetSize($row["petSize"]);
+                $pet->setPetVaccinationPlan($row["petVaccinationPlan"]);
+                $pet->setPetDetails($row["petDetails"]);
+                $pet->setPetVideo($row["petVideo"]);
+                $pet->setPetWeight($row["petWeight"]);
+                $pet->setOwnerID($row["ownerID"]);
+                $pet->setPetAge($row["petAge"]);
+                array_push($petList, $pet);
+            }
+            return $petList;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
     }
 
     private function SaveData(){
 
     }
 
-    public function searchPets($email){
-
+    public function searchPets($ownerID){
+            $petList = $this->GetAllPet();
+            $petListSearch = array();
+            foreach($petList as $ownerPet){
+                if($ownerPet->getOwnerID() == $ownerID){
+                    array_push($petListSearch,$ownerPet);
+                }
+            }
+            return $petListSearch;
+        }
+        
+        public function searchPetsBySize($email,$size){
+        }
+        
+        public function selectPetByID($petID){
+            
+        }
     }
-    public function searchPetsBySize($email,$size){
-    }
-    
-    public function selectPetByID($petID){
-
-    }
-}
 ?>

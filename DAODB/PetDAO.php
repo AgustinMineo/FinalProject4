@@ -29,13 +29,12 @@ try{
     $parameters["ownerID"] = $_SESSION["loggedUser"]->getOwnerId();
     $parameters["petAge"] = $pet->getPetAge();
     $this->connection = Connection::GetInstance();
-    $this->connection->ExecuteNonQuery($query, $parameters)
+    //$this->connection->ExecuteNonQuery($query, $parameters)
         //Funcion para hacer el Update de PETAMOUNT en la Tabla de Owners. 
-        //Falta testearla.
-        // if($this->connection->ExecuteNonQuery($query, $parameters)){
-        //     $queryAmount = "update " .$this->ownerTable." o set petAmount = o.petAmount + 1 WHERE o.ownerID = ".$_SESSION["loggedUser"]->getOwnerId();
-        //     $this->connection->ExecuteNonQuery($queryAmount);
-        // }
+         if($this->connection->ExecuteNonQuery($query, $parameters)){
+                $queryAmount = "update " .$this->ownerTable." o set petAmount = ".$_SESSION["loggedUser"]->getPetAmount()." + 1 WHERE o.ownerID = ".$_SESSION["loggedUser"]->getOwnerId();
+                $this->connection->ExecuteNonQuery($queryAmount,array());
+         }
     } catch (Exception $ex) {
         throw $ex;
     }

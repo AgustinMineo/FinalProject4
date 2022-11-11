@@ -53,22 +53,28 @@
     }
 
     public function loginKeeper($email,$password){
-        $newKeeper = $this->KeeperDAO->searchEmail($email,$password);
+        $newKeeper = $this->KeeperDAO->searchKeeperToLogin($email,$password);
         if($newKeeper){
             $loggedUser = $newKeeper;
             $_SESSION["loggedUser"] = $loggedUser;
             $this->goLandingKeeper();
             }else{
-                echo '<script>alert("Los datos ingresados son incorrectos")</script>';
+                /*echo '<script>Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                    footer: '<a href="">Why do I have this issue?</a>'
+                  })</script>';*/
                 require_once(VIEWS_PATH."mainLanding.php");
             }
     }
-
+// MIGRAR A DAO
     public function showKeepers(){
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getAllKeeper();
         require_once(VIEWS_PATH. "showKeeper.php");
     }
+// MIGRAR A DAO
     public function showKeepersByAvailability($value1,$value2){
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getKeeperByDisponibility($value1,$value2);
@@ -78,7 +84,7 @@
             echo "<h1>No existen keepers con disponibilidad de entre $value1 y $value2</h1>";
         }
     }
-
+// MIGRAR A DAO
     public function updateAvailabilityDays($date1,$date2){
         $value=$this->KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getEmail(),$date1,$date2);
         if($value){

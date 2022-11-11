@@ -37,5 +37,18 @@
         "lastAvailabilityDays": null,
         "animalSize": "Small",
         "price": "250"
+    },
+    {
+        "keeperId": 4,
+        "lastName": "Dominguez",
+        "firstName": "Franco",
+        "cellPhone": "2323",
+        "birthDate": "1999-12-12",
+        "email": "test@gmail.com",
+        "password": "123456",
+        "firstAvailabilityDays": null,
+        "lastAvailabilityDays": null,
+        "animalSize": "Medium",
+        "price": "500"
     }
 ]

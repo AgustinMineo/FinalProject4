@@ -77,7 +77,7 @@ class OwnerDAO implements IOwnerDAO {
 
     }
 
-    public function searchEmail($email){ // Buscar un owner por el correo. (Tanto para login como para registro.)
+    public function searchOwnerByEmail($email){ // Buscar un owner por el correo. (Tanto para login como para registro.)
         $this->RetriveData();
         foreach($this->ownerList as $value){ /// Buscamos dentro del arreglo de owners
             if($value->getEmail()== $email){ /// Si el correo es el mismo, entonces devolvemos el owner, sino
@@ -88,7 +88,7 @@ class OwnerDAO implements IOwnerDAO {
     }
 
     public function searchOwnerToLogin($email,$password){
-        $newOwner =$this->searchEmail($email);
+        $newOwner =$this->searchOwnerByEmail($email);
         if($newOwner){
             if($newOwner->getPassword()==$password){
               //  session_start(); // start the session

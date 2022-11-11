@@ -40,7 +40,7 @@ use Models\Owner as Owner;
     }
     
       public function loginOwner($email,$password){
-        $newOwner = $this->OwnerDAO->searchOwner($email,$password);
+        $newOwner = $this->OwnerDAO->searchOwnerToLogin($email,$password);
         if($newOwner){
                  //  session_start(); // start the session
                 $loggedUser = $newOwner;

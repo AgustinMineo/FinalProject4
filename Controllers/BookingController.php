@@ -38,7 +38,7 @@ class BookingController{
                 if($_SESSION['loggedUser']){
                  $petList = array(); /// create a pet array
                  foreach($listKeepers as $keeperInfo){
-                 $petList=$this->petDAO->searchPetsBySize($_SESSION['loggedUser']->getEmail(),$keeperInfo->getAnimalSize());
+                 $petList=$this->petDAO->searchPetsBySize($_SESSION['loggedUser']->getOwnerID(),$keeperInfo->getAnimalSize());
                 }
                  if($petList)
                  {
@@ -56,8 +56,7 @@ class BookingController{
     public function newBooking($email,$petId){
         $newBooking = new Booking();
         //$keeperInfo = new Keeper(); CHECK
-        $keeperInfo=$this->keeperDAO->searchEmail($email);
-        $newBooking->setBookingID($this->BookingDAO->getLastBookingID()); //connected with the database
+        $keeperInfo=$this->keeperDAO->searchKeeperByEmail($email);
         $newBooking->setStatus('1');
         $newBooking->setFirstDate($keeperInfo->getFirstAvailabilityDays());
         $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());

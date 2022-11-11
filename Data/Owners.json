@@ -9,5 +9,38 @@
         "password": "1234",
         "userImage": "",
         "userDescription": "Prueba de JSON"
+    },
+    {
+        "ownerId": 2,
+        "lastName": "Miranda",
+        "firstName": "Martin",
+        "cellPhone": "223541269",
+        "birthDate": "1998-04-18",
+        "email": "martin@gmail.com",
+        "password": "1234",
+        "userImage": "",
+        "userDescription": "Martin Owner"
+    },
+    {
+        "ownerId": 3,
+        "lastName": "Miranda",
+        "firstName": "Martin",
+        "cellPhone": "223541269",
+        "birthDate": "1998-04-18",
+        "email": "martin@gmail.com",
+        "password": "123456",
+        "userImage": "",
+        "userDescription": "Martin Owner"
+    },
+    {
+        "ownerId": 4,
+        "lastName": "Dominguez",
+        "firstName": "Juan",
+        "cellPhone": "235646579",
+        "birthDate": "1990-04-30",
+        "email": "juan@mdq.com",
+        "password": "123456",
+        "userImage": "",
+        "userDescription": ""
     }
 ]

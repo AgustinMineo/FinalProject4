@@ -11,5 +11,31 @@
         "lastAvailabilityDays": "2022-11-26",
         "animalSize": "Big",
         "price": "500"
+    },
+    {
+        "keeperId": 2,
+        "lastName": "Mineo",
+        "firstName": "Agustin",
+        "cellPhone": "123456789",
+        "birthDate": "1998-12-04",
+        "email": "agustin@gmail.com",
+        "password": "1234",
+        "firstAvailabilityDays": "2022-11-17",
+        "lastAvailabilityDays": "2022-11-21",
+        "animalSize": "Medium",
+        "price": "500"
+    },
+    {
+        "keeperId": 3,
+        "lastName": "Dominguez",
+        "firstName": "Franco",
+        "cellPhone": "231346",
+        "birthDate": "1992-12-12",
+        "email": "frann241297@gmail.com",
+        "password": "123456",
+        "firstAvailabilityDays": null,
+        "lastAvailabilityDays": null,
+        "animalSize": "Small",
+        "price": "250"
     }
 ]

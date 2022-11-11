@@ -12,13 +12,12 @@ class PetController{
         require_once(VIEWS_PATH."ownerNav.php");
     }
     
-    public function newPet(/*$petID,*/$petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
+    public function newPet($petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
         if(isset($_SESSION["loggedUser"])){
             
             $this->petDAO = new PetDAO();
             $pet = new Pet();
 
-            //$pet->setPetID(1);
             $pet->setPetName($petName);
             $pet->setPetImage($petImage);
             $pet->setBreedID($breedID);

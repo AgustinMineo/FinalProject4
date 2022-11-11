@@ -10,6 +10,8 @@ class OwnerDAO implements IOwnerDAO {
     public function AddOwner(Owner $owner){
         // we bring the data of the json to add a new owner
         $this->RetriveData();
+        // we set the ID owner to add.
+        $owner->setOwnerID($this->getLastID());
         // we add the new owner at the list
         array_push($this->ownerList, $owner);
 
@@ -85,7 +87,7 @@ class OwnerDAO implements IOwnerDAO {
         return null;
     }
 
-    public function searchOwner($email,$password){
+    public function searchOwnerToLogin($email,$password){
         $newOwner =$this->searchEmail($email);
         if($newOwner){
             if($newOwner->getPassword()==$password){
@@ -97,5 +99,16 @@ class OwnerDAO implements IOwnerDAO {
             
         }
     }
+
+    public function getLastID(){
+        $this->RetriveData();
+        if($this->ownerList != NULL){
+            $owner = end($this->ownerList);
+            return $owner->getOwnerID() + 1;
+        }
+        else{
+            return 1;
+        }
+    } 
 }
 ?>

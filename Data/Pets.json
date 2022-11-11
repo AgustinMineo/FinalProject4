@@ -1,15 +1,80 @@
 [
     {
         "petID": 1,
-        "petName": "Boby",
-        "petImage": "https:\/\/www.serargentino.com\/public\/images\/2021\/04\/16190169510-dogo-773x458.jpg",
-        "breedID": "6",
-        "petSize": "Big",
+        "petName": "Doggy",
+        "petImage": "data:image\/jpeg;base64,\/9j\/4AAQSkZJRgABAQAAAQABAAD\/2wCEAAoHCBUWFRgWFhYYGBgaGhocHBwYGBgaGBocHB4ZGRocHBocIS4lHB4rIRgcJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP\/AABEIANgA6gMBIgACEQEDEQH\/xAAcAAABBQEBAQAAAAAAAAAAAAAEAQMFBgcCAAj\/xABBEAACAQIEAwMIBwcEAgMAAAABAhEAAwQSITEFQVEiYXEGBxMygZGhshQjQnOxwdFSU3KS4fDxJGKCojNjFTRD\/8QAGQEAAwEBAQAAAAAAAAAAAAAAAQIDAAQF\/8QAIhEAAgICAgIDAQEAAAAAAAAAAAECERIhAzEyURMiQWEE\/9oADAMBAAIRAxEAPwDZaxfztWC2OWP3CfPcraaynzjEfTVn9yvzXKnyOogZUMJh4ERRCWUmKJcgjSmEQb1z2MqHMSVVaBfFCIoh2BOtDYlBQyXQspLoZsYiDR5fMKCtIDRyJIgVsnYEM2mAO0mpGykjansFgl3NEXMg0FVvRRRpA4Ra5ZABQuMuwDG9Rz4s7TSZyJykyVW90pu5ihzqNt4sg0YbWYTzplyOjKVjN24Goc34511cWKDca0rk2K7HLl2hXcgzRaWKZu2CSR0\/Of0oX7FoIsYvSnDfJoBUie79Jp7NBj9KOXoKbO0cht6KW6etCRsdQILT3CP1ro3gB36dDvtsaNsLugm9iRFR7gGvPc\/vpXLtG1FTYMmSfBGCmrILyxVPt38sEc\/Cnm4iY0n\/AB\/iiuRjKWh7jyA6igOE4ZTfsnmL1s+51p0YguuvSn+FWovWfvbfzrSfJTFctn0RXqSlrrKiVknnN\/8Aur9yvzXK1ush857RjR9zb+e5UubxEn0V1HgU5ZuAmo30ppVc1ypiKaQbio5UyW0pgXCa7",
+        "breedID": "9",
+        "petSize": "Small",
         "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
         "petDetails": "Tiene cara de malo pero es muy bueno.",
         "petVideo": "https:\/\/www.youtube.com\/watch?v=WrPQmq7U7g8&ab_channel=HikingDogoOutdoor",
         "petWeight": "Medium",
-        "ownerID": "frann241297@gmail.com",
-        "petAge": "2021-11-10"
+        "ownerID": 1,
+        "petAge": "2021-08-12"
+    },
+    {
+        "petID": 2,
+        "petName": "Boby",
+        "petImage": "data:image\/jpeg;base64,\/9j\/4AAQSkZJRgABAQAAAQABAAD\/2wCEAAoHCBUWFRgWFhYYGBgaGhocHBwYGBgaGBocHB4ZGRocHBocIS4lHB4rIRgcJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP\/AABEIANgA6gMBIgACEQEDEQH\/xAAcAAABBQEBAQAAAAAAAAAAAAAEAQMFBgcCAAj\/xABBEAACAQIEAwMIBwcEAgMAAAABAhEAAwQSITEFQVEiYXEGBxMygZGhshQjQnOxwdFSU3KS4fDxJGKCojNjFTRD\/8QAGQEAAwEBAQAAAAAAAAAAAAAAAQIDAAQF\/8QAIhEAAgICAgIDAQEAAAAAAAAAAAECERIhAzEyURMiQWEE\/9oADAMBAAIRAxEAPwDZaxfztWC2OWP3CfPcraaynzjEfTVn9yvzXKnyOogZUMJh4ERRCWUmKJcgjSmEQb1z2MqHMSVVaBfFCIoh2BOtDYlBQyXQspLoZsYiDR5fMKCtIDRyJIgVsnYEM2mAO0mpGykjansFgl3NEXMg0FVvRRRpA4Ra5ZABQuMuwDG9Rz4s7TSZyJykyVW90pu5ihzqNt4sg0YbWYTzplyOjKVjN24Goc34511cWKDca0rk2K7HLl2hXcgzRaWKZu2CSR0\/Of0oX7FoIsYvSnDfJoBUie79Jp7NBj9KOXoKbO0cht6KW6etCRsdQILT3CP1ro3gB36dDvtsaNsLugm9iRFR7gGvPc\/vpXLtG1FTYMmSfBGCmrILyxVPt38sEc\/Cnm4iY0n\/AB\/iiuRjKWh7jyA6igOE4ZTfsnmL1s+51p0YguuvSn+FWovWfvbfzrSfJTFctn0RXqSlrrKiVknnN\/8Aur9yvzXK1ush857RjR9zb+e5UubxEn0V1HgU5ZuAmo30ppVc1ypiKaQbio5UyW0pgXCa7",
+        "breedID": "2",
+        "petSize": "Big",
+        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
+        "petDetails": "Tiene cara de malo pero es muy bueno.",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=CUGOZ-ef-lY&ab_channel=Shibarada",
+        "petWeight": "Light",
+        "ownerID": 3,
+        "petAge": "2022-09-12"
+    },
+    {
+        "petID": 3,
+        "petName": "Boby",
+        "petImage": "data:image\/jpeg;base64,\/9j\/4AAQSkZJRgABAQAAAQABAAD\/2wCEAAoHCBUWFRgWFhYYGBgaGhocHBwYGBgaGBocHB4ZGRocHBocIS4lHB4rIRgcJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP\/AABEIANgA6gMBIgACEQEDEQH\/xAAcAAABBQEBAQAAAAAAAAAAAAAEAQMFBgcCAAj\/xABBEAACAQIEAwMIBwcEAgMAAAABAhEAAwQSITEFQVEiYXEGBxMygZGhshQjQnOxwdFSU3KS4fDxJGKCojNjFTRD\/8QAGQEAAwEBAQAAAAAAAAAAAAAAAQIDAAQF\/8QAIhEAAgICAgIDAQEAAAAAAAAAAAECERIhAzEyURMiQWEE\/9oADAMBAAIRAxEAPwDZaxfztWC2OWP3CfPcraaynzjEfTVn9yvzXKnyOogZUMJh4ERRCWUmKJcgjSmEQb1z2MqHMSVVaBfFCIoh2BOtDYlBQyXQspLoZsYiDR5fMKCtIDRyJIgVsnYEM2mAO0mpGykjansFgl3NEXMg0FVvRRRpA4Ra5ZABQuMuwDG9Rz4s7TSZyJykyVW90pu5ihzqNt4sg0YbWYTzplyOjKVjN24Goc34511cWKDca0rk2K7HLl2hXcgzRaWKZu2CSR0\/Of0oX7FoIsYvSnDfJoBUie79Jp7NBj9KOXoKbO0cht6KW6etCRsdQILT3CP1ro3gB36dDvtsaNsLugm9iRFR7gGvPc\/vpXLtG1FTYMmSfBGCmrILyxVPt38sEc\/Cnm4iY0n\/AB\/iiuRjKWh7jyA6igOE4ZTfsnmL1s+51p0YguuvSn+FWovWfvbfzrSfJTFctn0RXqSlrrKiVknnN\/8Aur9yvzXK1ush857RjR9zb+e5UubxEn0V1HgU5ZuAmo30ppVc1ypiKaQbio5UyW0pgXCa7",
+        "breedID": "2",
+        "petSize": "Big",
+        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
+        "petDetails": "Tiene cara de malo pero es muy bueno.",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=CUGOZ-ef-lY&ab_channel=Shibarada",
+        "petWeight": "Light",
+        "ownerID": 3,
+        "petAge": "2022-09-12"
+    },
+    {
+        "petID": 4,
+        "petName": "Boby",
+        "petImage": "data:image\/jpeg;base64,\/9j\/4AAQSkZJRgABAQAAAQABAAD\/2wCEAAoHCBUWFRgWFhYYGBgaGhocHBwYGBgaGBocHB4ZGRocHBocIS4lHB4rIRgcJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP\/AABEIANgA6gMBIgACEQEDEQH\/xAAcAAABBQEBAQAAAAAAAAAAAAAEAQMFBgcCAAj\/xABBEAACAQIEAwMIBwcEAgMAAAABAhEAAwQSITEFQVEiYXEGBxMygZGhshQjQnOxwdFSU3KS4fDxJGKCojNjFTRD\/8QAGQEAAwEBAQAAAAAAAAAAAAAAAQIDAAQF\/8QAIhEAAgICAgIDAQEAAAAAAAAAAAECERIhAzEyURMiQWEE\/9oADAMBAAIRAxEAPwDZaxfztWC2OWP3CfPcraaynzjEfTVn9yvzXKnyOogZUMJh4ERRCWUmKJcgjSmEQb1z2MqHMSVVaBfFCIoh2BOtDYlBQyXQspLoZsYiDR5fMKCtIDRyJIgVsnYEM2mAO0mpGykjansFgl3NEXMg0FVvRRRpA4Ra5ZABQuMuwDG9Rz4s7TSZyJykyVW90pu5ihzqNt4sg0YbWYTzplyOjKVjN24Goc34511cWKDca0rk2K7HLl2hXcgzRaWKZu2CSR0\/Of0oX7FoIsYvSnDfJoBUie79Jp7NBj9KOXoKbO0cht6KW6etCRsdQILT3CP1ro3gB36dDvtsaNsLugm9iRFR7gGvPc\/vpXLtG1FTYMmSfBGCmrILyxVPt38sEc\/Cnm4iY0n\/AB\/iiuRjKWh7jyA6igOE4ZTfsnmL1s+51p0YguuvSn+FWovWfvbfzrSfJTFctn0RXqSlrrKiVknnN\/8Aur9yvzXK1ush857RjR9zb+e5UubxEn0V1HgU5ZuAmo30ppVc1ypiKaQbio5UyW0pgXCa7",
+        "breedID": "2",
+        "petSize": "Big",
+        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
+        "petDetails": "Tiene cara de malo pero es muy bueno.",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=CUGOZ-ef-lY&ab_channel=Shibarada",
+        "petWeight": "Light",
+        "ownerID": 3,
+        "petAge": "2022-09-12"
+    },
+    {
+        "petID": 5,
+        "petName": "Haku",
+        "petImage": "data:image\/jpeg;base64,\/9j\/4AAQSkZJRgABAQAAAQABAAD\/2wCEAAoHCBUWFRgWFhYYGBgaGhocHBwYGBgaGBocHB4ZGRocHBocIS4lHB4rIRgcJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP\/AABEIANgA6gMBIgACEQEDEQH\/xAAcAAABBQEBAQAAAAAAAAAAAAAEAQMFBgcCAAj\/xABBEAACAQIEAwMIBwcEAgMAAAABAhEAAwQSITEFQVEiYXEGBxMygZGhshQjQnOxwdFSU3KS4fDxJGKCojNjFTRD\/8QAGQEAAwEBAQAAAAAAAAAAAAAAAQIDAAQF\/8QAIhEAAgICAgIDAQEAAAAAAAAAAAECERIhAzEyURMiQWEE\/9oADAMBAAIRAxEAPwDZaxfztWC2OWP3CfPcraaynzjEfTVn9yvzXKnyOogZUMJh4ERRCWUmKJcgjSmEQb1z2MqHMSVVaBfFCIoh2BOtDYlBQyXQspLoZsYiDR5fMKCtIDRyJIgVsnYEM2mAO0mpGykjansFgl3NEXMg0FVvRRRpA4Ra5ZABQuMuwDG9Rz4s7TSZyJykyVW90pu5ihzqNt4sg0YbWYTzplyOjKVjN24Goc34511cWKDca0rk2K7HLl2hXcgzRaWKZu2CSR0\/Of0oX7FoIsYvSnDfJoBUie79Jp7NBj9KOXoKbO0cht6KW6etCRsdQILT3CP1ro3gB36dDvtsaNsLugm9iRFR7gGvPc\/vpXLtG1FTYMmSfBGCmrILyxVPt38sEc\/Cnm4iY0n\/AB\/iiuRjKWh7jyA6igOE4ZTfsnmL1s+51p0YguuvSn+FWovWfvbfzrSfJTFctn0RXqSlrrKiVknnN\/8Aur9yvzXK1ush857RjR9zb+e5UubxEn0V1HgU5ZuAmo30ppVc1ypiKaQbio5UyW0pgXCa7",
+        "breedID": "12",
+        "petSize": "Medium",
+        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
+        "petDetails": "Tiene cara de malo pero es muy bueno.",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=WrPQmq7U7g8&ab_channel=HikingDogoOutdoor",
+        "petWeight": "Light",
+        "ownerID": 3,
+        "petAge": "1998-12-12"
+    },
+    {
+        "petID": 6,
+        "petName": "Lily",
+        "petImage": "data:image\/jpeg;base64,\/9j\/4AAQSkZJRgABAQAAAQABAAD\/2wCEAAoHCBUWFRgWFhYYGBgaGhocHBwYGBgaGBocHB4ZGRocHBocIS4lHB4rIRgcJjgmKy8xNTU1GiQ7QDs0Py40NTEBDAwMEA8QHhISHzQrJCs0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NP\/AABEIANgA6gMBIgACEQEDEQH\/xAAcAAABBQEBAQAAAAAAAAAAAAAEAQMFBgcCAAj\/xABBEAACAQIEAwMIBwcEAgMAAAABAhEAAwQSITEFQVEiYXEGBxMygZGhshQjQnOxwdFSU3KS4fDxJGKCojNjFTRD\/8QAGQEAAwEBAQAAAAAAAAAAAAAAAQIDAAQF\/8QAIhEAAgICAgIDAQEAAAAAAAAAAAECERIhAzEyURMiQWEE\/9oADAMBAAIRAxEAPwDZaxfztWC2OWP3CfPcraaynzjEfTVn9yvzXKnyOogZUMJh4ERRCWUmKJcgjSmEQb1z2MqHMSVVaBfFCIoh2BOtDYlBQyXQspLoZsYiDR5fMKCtIDRyJIgVsnYEM2mAO0mpGykjansFgl3NEXMg0FVvRRRpA4Ra5ZABQuMuwDG9Rz4s7TSZyJykyVW90pu5ihzqNt4sg0YbWYTzplyOjKVjN24Goc34511cWKDca0rk2K7HLl2hXcgzRaWKZu2CSR0\/Of0oX7FoIsYvSnDfJoBUie79Jp7NBj9KOXoKbO0cht6KW6etCRsdQILT3CP1ro3gB36dDvtsaNsLugm9iRFR7gGvPc\/vpXLtG1FTYMmSfBGCmrILyxVPt38sEc\/Cnm4iY0n\/AB\/iiuRjKWh7jyA6igOE4ZTfsnmL1s+51p0YguuvSn+FWovWfvbfzrSfJTFctn0RXqSlrrKiVknnN\/8Aur9yvzXK1ush857RjR9zb+e5UubxEn0V1HgU5ZuAmo30ppVc1ypiKaQbio5UyW0pgXCa7",
+        "breedID": "3",
+        "petSize": "Medium",
+        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
+        "petDetails": "Tiene cara de malo pero es muy bueno.",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=WrPQmq7U7g8&ab_channel=HikingDogoOutdoor",
+        "petWeight": "Medium",
+        "ownerID": 1,
+        "petAge": "2021-12-12"
     }
 ]

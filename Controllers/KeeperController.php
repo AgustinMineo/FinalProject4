@@ -33,20 +33,25 @@
     }
      
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
-         $newKeeper = new Keeper();
-
-         $newKeeper->setLastName($lastName);
-         $newKeeper->setfirstName($firstName);
-         $newKeeper->setCellPhone($cellPhone);
-         $newKeeper->setbirthDate($birthDate);
-         $newKeeper->setEmail($email);
-         $newKeeper->setPassword($password);
-         $newKeeper->setImage($userImage);
-         $newKeeper->setDescription($userDescription);
-         $newKeeper->setAnimalSize($animalSize);
-         $newKeeper->setPrice($price);
-         $this->KeeperDAO->AddKeeper($newKeeper);
-         $this->goLoginKeeper();
+        if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
+            $newKeeper = new Keeper();
+            $newKeeper->setLastName($lastName);
+            $newKeeper->setfirstName($firstName);
+            $newKeeper->setCellPhone($cellPhone);
+            $newKeeper->setbirthDate($birthDate);
+            $newKeeper->setEmail($email);
+            $newKeeper->setPassword($password);
+            $newKeeper->setImage($userImage);
+            $newKeeper->setDescription($userDescription);
+            $newKeeper->setAnimalSize($animalSize);
+            $newKeeper->setPrice($price);
+            $this->KeeperDAO->AddKeeper($newKeeper);
+            $this->goLoginKeeper();
+        }        
+        else{
+            echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+            $this->addKeeperView();
+        }
          //$newKeeper->setPoints('0');
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
          //$newKeeper->setKeeperImg($keeperImg);
@@ -59,12 +64,7 @@
             $_SESSION["loggedUser"] = $loggedUser;
             $this->goLandingKeeper();
             }else{
-                /*echo '<script>Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong!',
-                    footer: '<a href="">Why do I have this issue?</a>'
-                  })</script>';*/
+                
                 require_once(VIEWS_PATH."mainLanding.php");
             }
     }
@@ -85,7 +85,7 @@
         }
     }
 // MIGRAR A DAO
-    public function updateAvailabilityDays($date1,$date2){
+   /* public function updateAvailabilityDays($date1,$date2){
         $value=$this->KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getEmail(),$date1,$date2);
         if($value){
             echo"<h1>Los cambios fueron realizados correctamente</h1>";
@@ -93,6 +93,6 @@
             echo"<h1>Error al realizar los cambios</h1>";
         }
         $this->goLandingKeeper();
-    }
+    }*/
  }
 ?>

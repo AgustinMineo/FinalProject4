@@ -19,6 +19,10 @@ class BookingController{
      {
          require_once(VIEWS_PATH."showPetBooking.php");
      }
+     public function goBookingView(){
+        require_once(VIEWS_PATH."ownerNav.php");
+        require_once(VIEWS_PATH. "BookingViews.php");
+     }
     
     public function __construct(){
         $this->BookingDAO = new BookingDAO();
@@ -41,7 +45,8 @@ class BookingController{
                 }else{
                     echo "<h1>No tiene mascotas que concuerden con el tamaño</h1>";
                 }
-                require_once(VIEWS_PATH. "BookingViews.php");
+                $this->goBookingView();
+                //require_once(VIEWS_PATH. "BookingViews.php");
             }else{
                 echo "<h1>No existen keepers con disponibilidad de entre $value1 y $value2</h1>";
             }

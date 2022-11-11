@@ -10,6 +10,8 @@ class KeeperDAO implements IKeeperDAO{
   public function AddKeeper(Keeper $keeper){
       // we bring the data of the json to add a new keeper
       $this->RetriveData();
+      //We sett KEEPER ID for Save in the Json
+      $keeper->setKeeperID($this->getLastID());
       // we add the new keeper at the list
       array_push($this->keeperList, $keeper);
 
@@ -30,7 +32,6 @@ class KeeperDAO implements IKeeperDAO{
       foreach($this->keeperList as $Keeper){
           $keeperValue = array();
           $keeperValue["keeperId"] = $Keeper->getKeeperId();
-          //$keeperValue["keeperImg"] = $Keeper->getKeeperImg();
           $keeperValue["lastName"] = $Keeper->getLastName();
           $keeperValue["firstName"] = $Keeper->getfirstName();
           $keeperValue["cellPhone"] = $Keeper->getCellPhone();
@@ -80,15 +81,26 @@ class KeeperDAO implements IKeeperDAO{
           echo "The owners file doesn't exists";
       }
   }
-  public function searchEmail($email){
+  public function searchKeeperByEmail($email){
     $this->RetriveData();
         foreach($this->keeperList as $value){ /// Buscamos dentro del arreglo de keeper
-            if($value->getEmail()== $email){ /// Si el correo es el mismo, entonces devolvemos el keeper, sino
+            if($value->getEmail() == $email){ /// Si el correo es el mismo, entonces devolvemos el keeper, sino
                     return $value;
             }
         }
         return null;
   }
+
+  public function searchKeeperToLogin($email,$password){
+    $newKeeper =$this->searchKeeperByEmail($email);
+    if($newKeeper){
+        if($newKeeper->getPassword()==$password){
+            return $newKeeper;
+        }
+    }else{
+        return null;
+    }
+}
   public function changeAvailabilityDays($email,$value1, $value2){
     $newValues = array();
     $value = $this->searchEmail($email);
@@ -120,5 +132,15 @@ class KeeperDAO implements IKeeperDAO{
 }
     return $keeperListDisponibility;
 }
+public function getLastID(){
+    $this->RetriveData();
+    if($this->keeperList != NULL){
+        $keeper = end($this->keeperList);
+        return $keeper->getKeeperID() + 1;
+    }
+    else{
+        return 1;
+    }
+} 
 }
 ?>

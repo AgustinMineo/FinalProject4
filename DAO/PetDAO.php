@@ -7,6 +7,7 @@ class PetDAO implements IPetDAO{
     
     public function AddPet($pet){
         $this->RetriveData();
+        $pet->setPetID($this->getLastID());
         array_push($this->petList,$pet);
         $this->SaveData();
     }
@@ -19,9 +20,9 @@ class PetDAO implements IPetDAO{
     }
 
     private function SaveData(){
-        // creamos un arreglo de owners
+        // creamos un arreglo de pets
         $petArrayEncode= array();
-        // recorremos la lista y guardamos la info del los owners.
+        // recorremos la lista y guardamos la info del los pets.
         foreach($this->petList as $pet){
             $petValue = array();
             $petValue["petID"] = $pet->getPetID();
@@ -104,6 +105,16 @@ class PetDAO implements IPetDAO{
             if($pet->getPetID()==$petID){
                 return $pet->getPetID();
             }
+        }
+    }
+    public function getLastID(){
+        $this->RetriveData();
+        if($this->petList != NULL){
+            $pet = end($this->petList);
+            return $pet->getPetID() + 1;
+        }
+        else{
+            return 1;
         }
     } 
 }

@@ -9,6 +9,7 @@ class BookingDAO implements IBookingDAO{
 
     public function addBooking(Booking $booking){
         $this->RetriveData();
+        $booking->setBookingID($this->getLastID());
        array_push($this->bookingList,$booking);
        $this->SaveData();
     }
@@ -102,16 +103,15 @@ class BookingDAO implements IBookingDAO{
             return null;
         }
     }
-    public function getLastBookingID(){
-        $listValues = array();
+    public function getLastID(){
         $this->RetriveData();
-         $listValues = $this->bookingList;
-        end($listValues);
-        if(key ($listValues) !=null){
-            return key($listValues);
-        }else{
+        if($this->bookingList != NULL){
+            $booking = end($this->bookingList);
+            return $booking->getBookingID() + 1;
+        }
+        else{
             return 1;
         }
-    }
+    } 
 }
 ?>

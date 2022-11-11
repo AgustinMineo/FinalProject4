@@ -21,7 +21,7 @@ class KeeperDAO implements IKeeperDAO{
                   $parameters["email"] = $keeper->getEmail();
                   $parameters["cellphone"] = $keeper->getCellPhone();
                   $parameters["birthdate"] = $keeper->getbirthDate();
-                  $parameters["password"] = $keeper->getPassword();
+                  $parameters["password"] = MD5($keeper->getPassword());
                   $parameters["userImage"] = $keeper->getImage();
                   $parameters["userDescription"] = $keeper->getDescription();
 
@@ -78,7 +78,7 @@ class KeeperDAO implements IKeeperDAO{
 }
 
 
-  public function bringUserID($email){
+  public function searchKeeperByEmail($email){
     try {
         $query = "SELECT userID FROM ".$this->userTable." WHERE email = '$email';";
         
@@ -95,9 +95,9 @@ class KeeperDAO implements IKeeperDAO{
     } 
   }
 
-  public function searchEmail($email,$password){
+  public function searchKeeperToLogin($email,$password){
     try {
-      $query = "SELECT k.keeperID, k.animalSize, k.price, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID WHERE email = '$email' AND password = $password;";
+      $query = "SELECT k.keeperID, k.animalSize, k.price, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID WHERE email = '$email' AND password = md5($password);";
       $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);

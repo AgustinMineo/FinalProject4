@@ -21,7 +21,7 @@ class OwnerDAO{
                     $parameters["email"] = $owner->getEmail();
                     $parameters["cellphone"] = $owner->getCellPhone();
                     $parameters["birthdate"] = $owner->getbirthDate();
-                    $parameters["password"] = $owner->getPassword();
+                    $parameters["password"] = MD5($owner->getPassword());
                     $parameters["userImage"] = $owner->getImage();
                     $parameters["userDescription"] = $owner->getDescription();
                     $this->connection = Connection::GetInstance();
@@ -75,11 +75,27 @@ class OwnerDAO{
             throw $ex;
         }
     }
-
-    public function searchOwner($email, $password){
-
+    public function searchOwnerByEmail($email){
         try {
-            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription, o.petAmount FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = $password;";
+                $query = "SELECT email FROM ".$this->userTable." WHERE email = '$email';";
+                $this->connection = Connection::GetInstance();
+
+                $resultSet = $this->connection->Execute($query);
+
+                if($resultSet){
+                    return $resultSet;
+                }
+                else{
+                    return null;
+                }
+
+        }  catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function searchOwnerToLogin($email, $password){
+        try {
+            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription, o.petAmount FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = md5($password);";
 
             $this->connection = Connection::GetInstance();
 

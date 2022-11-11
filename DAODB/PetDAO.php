@@ -30,6 +30,7 @@ try{
     $parameters["petAge"] = $pet->getPetAge();
     $this->connection = Connection::GetInstance();
     //$this->connection->ExecuteNonQuery($query, $parameters)
+
         //Funcion para hacer el Update de PETAMOUNT en la Tabla de Owners. 
          if($this->connection->ExecuteNonQuery($query, $parameters)){
                 $queryAmount = "update " .$this->ownerTable." o set petAmount = ".$_SESSION["loggedUser"]->getPetAmount()." + 1 WHERE o.ownerID = ".$_SESSION["loggedUser"]->getOwnerId();

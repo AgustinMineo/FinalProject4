@@ -40,7 +40,8 @@
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">BirthDate</label>
-                                   <input type="date" name="birthDate" value="" class="form-control" Required >
+                                   <input type="date" name="birthDate"  min="01-01-1925" max="2004-01-01" value ="01/01/2022"  class="form-control" Required > 
+                                   <!--Agregar funcion de js para tomar la fecha de hoy - 18 años (Caso max) Caso keeper y owner registro-->
                               </div>
                          </div>
                          <div class="col-lg-4">
@@ -53,6 +54,12 @@
                               <div class="form-group">
                                    <label for="">Password</label>
                                    <input type="password" name="password" placeholder="Password" value="" class="form-control" Required >
+                              </div>
+                         </div>
+                         <div class="col-lg-4">
+                              <div class="form-group">
+                                   <label for=""> Repeat password</label><!--Se tiene que validar con el password de arriba que sean iguales.-->
+                                   <input type="password" name="" placeholder="Repeat password" value="" class="form-control" Required >
                               </div>
                          </div>
                          <div class="col-lg-4">

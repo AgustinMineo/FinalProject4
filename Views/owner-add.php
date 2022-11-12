@@ -59,14 +59,20 @@
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for=""> Repeat password</label><!--Se tiene que validar con el password de arriba que sean iguales.-->
-                                   <input type="password" name="" placeholder="Repeat password" value="" class="form-control" Required >
+                                   <input type="password" name="confirmPassword" placeholder="Repeat password" value="" class="form-control" Required >
                               </div>
                          </div>
                          <div class="col-lg-4">
-                              <div class="form-group">
-                                   <label for="">Image</label>
-                                   <input type="file" name="userImage" value="" class="form-control">
+                         <form action="<?php echo FRONT_ROOT ?>Image/Upload" method="post" enctype="multipart/form-data" class="bg-light-alpha p-5">
+                              <div class="row">                         
+                                   <div class="col-lg-4">
+                                        <div class="form-group">
+                                             <label for="">Imagen:</label>
+                                             <input type="file" name="file" class="form-control-file">                                   
+                                        </div>
+                                   </div>                         
                               </div>
+                         </form>
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">

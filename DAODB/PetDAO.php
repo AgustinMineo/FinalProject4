@@ -8,21 +8,21 @@ use Models\Pet as Pet;
 
 class PetDAO implements IPetDAO{
     private $connection;
-    private $petTable = 'pet';
+    private $petTable = 'Pet';
     private $ownerTable = 'owner';
     private $breedTable = 'breed';
     private $petList = array();
     
     public function AddPet(Pet $pet){
 try{
-    $query = "INSERT INTO ".$this->petTable."(petID, petName, petImage, breedID, petSize, petVaccinationPlan, petDetails, petVideo, petWeight, ownerID, petAge)
-    VALUES (:petID, :petName, :petImage, :breedID, :petSize, :petVaccinationPlan, :petDetails, :petVideo, :petWeight, :ownerID, :petAge);";
+    $query = "INSERT INTO ".$this->petTable."(petID, petName, petImage, breedID, petSize, petVacunationPlan, petDetails, petVideo, petWeight, ownerID, petAge)
+    VALUES (:petID, :petName, :petImage, :breedID, :petSize, :petVacunationPlan, :petDetails, :petVideo, :petWeight, :ownerID, :petAge);";
     $parameters["petID"] = NULL;
     $parameters["petName"] = $pet->getPetName();
     $parameters["petImage"] = $pet->getPetImage();
     $parameters["breedID"] = $pet->getBreedID();
     $parameters["petSize"] = $pet->getPetSize();
-    $parameters["petVaccinationPlan"] = $pet->getPetVaccinationPlan();
+    $parameters["petVacunationPlan"] = $pet->getPetVaccinationPlan();
     $parameters["petDetails"] = $pet->getPetDetails();
     $parameters["petVideo"] = $pet->getPetVideo();
     $parameters["petWeight"] = $pet->getPetWeight();
@@ -46,7 +46,7 @@ try{
         try {
             $petList = array();
 
-            $query = "SELECT p.petID, p.petName, p.petImage, b.name, p.petSize, p.petVaccinationPlan, p.petDetails, p.petVideo, p.petWeight, p.ownerID, p.petAge
+            $query = "SELECT p.petID, p.petName, p.petImage, b.name, p.petSize, p.petVacunationPlan, p.petDetails, p.petVideo, p.petWeight, p.ownerID, p.petAge
             FROM ".$this->petTable." p  JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID
             JOIN ".$this->breedTable." b ON p.breedID = b.breedID;";
 
@@ -62,7 +62,7 @@ try{
                 $pet->setPetImage($row["petImage"]);
                 $pet->setBreedID($row["name"]);
                 $pet->setPetSize($row["petSize"]);
-                $pet->setPetVaccinationPlan($row["petVaccinationPlan"]);
+                $pet->setPetVaccinationPlan($row["petVacunationPlan"]);
                 $pet->setPetDetails($row["petDetails"]);
                 $pet->setPetVideo($row["petVideo"]);
                 $pet->setPetWeight($row["petWeight"]);
@@ -92,6 +92,22 @@ try{
         }
         
         public function searchPetsBySize($email,$size){
+            $petList = array();
+            $petList = $this->searchPets($email);
+            var_dump($petList);
+                if($petList){
+                    $petListFilter =array();
+                    foreach($petList as $pet){
+                        if(strcmp($pet->getPetSize(),$size) ==0){
+                            array_push($petListFilter,$petSize);
+                        }
+                }
+                return $petListFilter;
+            }else{
+                //echo "<h1>El owner no tiene pets</h1>";
+                return array();
+            }
+            //query = "SELECT * FROM ".$this->petTable. "p WHERE p.petSize = $size AND p.ownerID = "
         }
         
         public function selectPetByID($petID){

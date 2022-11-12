@@ -91,5 +91,52 @@ class Pet{
         $this->petAge=$petAge;
     }
 
+    public function getPetBreedByText(){
+        if($this->breedID==1){
+            return "Beagle";
+        }
+            else if($this->breedID==2){
+                return "Chihuahua";
+            }
+            else if($this->breedID==3){
+                return "Bulldog";
+            }
+            else if($this->breedID==4){
+                return "German Shepherd";
+            }
+            else if($this->breedID==5){
+                return "Shih-tzu";
+            }
+            else if($this->breedID==6){
+                return "Dogo";
+            }
+            else if($this->breedID==7){
+                return "Golden Retriever";
+            }
+            else if($this->breedID==8){
+                return "Fox Terrier";
+            }
+            else if($this->breedID==9){
+                return "Whippet";
+            }
+            else if($this->breedID==11){
+                return "Pinscher";
+            }
+            else if($this->breedID==11){
+                return "Cocker";
+            }
+            else if($this->breedID==12){
+                return "Shiba Inu";
+            }
+            else if($this->breedID==13){
+                return "Doberman";
+            }
+            else if($this->breedID==14){
+                return "Border Collie";
+            }
+            else{
+                return "Yorkshire";
+            }
+        }
 }
 ?>

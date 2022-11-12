@@ -103,7 +103,7 @@ class KeeperDAO implements IKeeperDAO{
 }
   public function changeAvailabilityDays($email,$value1, $value2){
     $newValues = array();
-    $value = $this->searchEmail($email);
+    $value = $this->searchKeeperByEmail($email);
     if($value1<$value2 && isset($value)){
        $value->setFirstAvailabilityDays($value1);
         $value->setLastAvailabilityDays($value2);
@@ -132,6 +132,7 @@ class KeeperDAO implements IKeeperDAO{
 }
     return $keeperListDisponibility;
 }
+
 public function getLastID(){
     $this->RetriveData();
     if($this->keeperList != NULL){

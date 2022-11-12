@@ -16,5 +16,32 @@
         "lastDate": "2022-11-21",
         "keeperID": 2,
         "totalValue": 2000
+    },
+    {
+        "bookingID": 3,
+        "status": "4",
+        "petID": "2",
+        "firstDate": "2022-11-11",
+        "lastDate": "2022-11-12",
+        "keeperID": 1,
+        "totalValue": 500
+    },
+    {
+        "bookingID": 4,
+        "status": "1",
+        "petID": "3",
+        "firstDate": "2022-11-12",
+        "lastDate": "2022-11-26",
+        "keeperID": 1,
+        "totalValue": 7000
+    },
+    {
+        "bookingID": 5,
+        "status": "1",
+        "petID": "3",
+        "firstDate": "2022-11-12",
+        "lastDate": "2022-11-26",
+        "keeperID": 1,
+        "totalValue": 7000
     }
 ]

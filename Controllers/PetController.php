@@ -11,6 +11,9 @@ class PetController{
     public function goLandingOwner(){
         require_once(VIEWS_PATH."ownerNav.php");
     }
+    public function __construct(){
+        $this->PetDAO = new PetDAO();
+    }
     
     public function newPet($petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
         if(isset($_SESSION["loggedUser"])){
@@ -34,7 +37,6 @@ class PetController{
             echo"Usuario no logeado";
             }
     }
-//MIGRAR PET LIST Y SHOW PETS A DAO
     public function searchPetList(){
         $petListSearch= array();
         $this->petDAO = new PetDAO();
@@ -43,11 +45,11 @@ class PetController{
             return $petListSearch; 
         }
     }
-// MIGRAR A DAO
-    public function showPets(){
-            $petList = $this->searchPetList();
-            require_once(VIEWS_PATH . "showPet.php");
-    }
-}
 
+    public function showPets(){
+        $petList = $this->searchPetList();
+        require_once(VIEWS_PATH . "showPet.php");
+}
+}
+    
 ?>

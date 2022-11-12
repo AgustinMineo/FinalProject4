@@ -12,7 +12,7 @@ require_once(VIEWS_PATH."keeperNav.php");
                          <th>First date</th>
                          <th>Last Date</th>
                          <th>KeeperID</th>
-                         <th>Pet id</th>
+                         <th>Pet Name</th>
                          <th>Total value</th>
                          <th>Status</th>
                          <th>Aceptar</th>
@@ -26,9 +26,13 @@ require_once(VIEWS_PATH."keeperNav.php");
                                    ?>
                                         <tr class=" table table-info table-hover table align-middle" >
                                              <td><?php echo $booking->getBookingID(); $value=$booking->getBookingID();?></td>
-                                             <td><?php echo $booking->getFirstDate() ?></td>
-                                             <td><?php echo $booking->getLastDate() ?></td>
-                                             <td><?php echo $booking->getKeeperID() ?></td>
+                                             <td><?php if($booking->getFirstDate()){
+                                                  $date=date_create($booking->getFirstDate());
+                                                  echo date_format($date,"d/m/Y");}?></td>
+                                             <td><?php if($booking->getLastDate()){
+                                                  $date=date_create($booking->getLastDate());
+                                                  echo date_format($date,"d/m/Y");}?></td>
+                                             <td><?php echo $booking->getKeeperID() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
                                              <td><?php echo $booking->getPetID()?></td>
                                              <td><?php echo $booking->getTotalValue()?></td>
                                              <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>

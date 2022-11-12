@@ -20,8 +20,8 @@
         "birthDate": "1998-12-04",
         "email": "agustin@gmail.com",
         "password": "1234",
-        "firstAvailabilityDays": "2022-11-17",
-        "lastAvailabilityDays": "2022-11-21",
+        "firstAvailabilityDays": "2022-11-10",
+        "lastAvailabilityDays": "2022-12-21",
         "animalSize": "Medium",
         "price": "500"
     },

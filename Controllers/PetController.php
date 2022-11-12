@@ -44,7 +44,6 @@ class PetController{
             $petListSearch = $this->petDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
             return $petListSearch; 
         }
-        var_dump($petListSearch);
     }
 
     public function showPets(){

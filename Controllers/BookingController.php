@@ -1,10 +1,13 @@
 <?php
 namespace Controllers;
-use DAO\BookingDAO as BookingDAO;
+//use DAO\BookingDAO as BookingDAO;
 use Models\Booking as Booking;
-use DAO\PetDAO as PetDAO;
-use DAO\KeeperDAO as KeeperDAO;
+//use DAO\PetDAO as PetDAO;
+//use DAO\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
+use DAODB\PetDAO as PetDAO;
+use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\BookingDAO as BookingDAODB;
 
 class BookingController{
     private $BookingDAO;
@@ -25,7 +28,8 @@ class BookingController{
      }
     
     public function __construct(){
-        $this->BookingDAO = new BookingDAO();
+        //$this->BookingDAO = new BookingDAO();
+        $this->BookingDAO = new BookingDAODB;
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
     }
@@ -42,6 +46,7 @@ class BookingController{
                 }
                  if($petList)
                  {
+                     $this->goBookingView($listKeepers,$petList);
                 }else{
                     echo "<h1>No tiene mascotas que concuerden con el tamaño</h1>";
                 }

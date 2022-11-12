@@ -65,7 +65,8 @@
             $this->goLandingKeeper();
             }else{
                 
-                require_once(VIEWS_PATH."mainLanding.php");
+                $this->goLoginKeeper();
+                //require_once(VIEWS_PATH."mainLanding.php");
             }
     }
 // MIGRAR A DAO

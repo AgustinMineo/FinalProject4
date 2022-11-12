@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 
  class OwnerController
@@ -46,31 +46,6 @@ use Models\Owner as Owner;
         }
     }
     
-      public function loginOwner($email,$password){
-        if($email && $password){
-            try {
-                //code...
-                $newOwner = $this->OwnerDAO->searchOwnerToLogin($email,$password);
-                if($newOwner){
-                    //  session_start(); // start the session
-                    $loggedUser = $newOwner;
-                    $_SESSION["loggedUser"] = $loggedUser;
-                    echo '<div class="alert alert-success">Login successful!</div>';
-                    $this->goLandingOwner();
-                    
-                } else{
-                    echo '<div class="alert alert-danger">Incorrect Email or Password. Please try again!</div>';
-                    require_once(VIEWS_PATH."loginOwner.php");
-                }
-            } catch ( Exception $ex) {
-                //throw $th;
-                echo 'COLOCAR ALERTA';
-            }
-        }else{
-            echo '<div class="alert alert-danger">Incorrect Email or Password. Please try again!</div>';
-            require_once(VIEWS_PATH."loginOwner.php");
-        }
-    }
  }
 
 ?>

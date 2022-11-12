@@ -15,18 +15,15 @@
           <img src="<?php echo IMG_PATH?>logoOwner.svg" alt="Logo Pet">
         </div>
       </a>
-      <div class="col-lg-6 text-end d-flex justify-content-left w-75 p-5 ">
+      <div class=" container col-lg-6 d-flex justify-content-left w-75 p-5 ">
         <button type="button" class="btn border border-1 p-4">
           <a href="<?php echo FRONT_ROOT?>User/addOwnerView" class="text-decoration-none">Sign-up owner</a>
         </button>
         <button type="button" class="btn border border-1 p-4">
+          <a href="<?php echo FRONT_ROOT?>Views/loginUser.php" class="text-decoration-none">Login</a>
+        </button>
+        <button type="button" class="btn border border-1 p-4">
           <a href="<?php echo FRONT_ROOT?>User/addKeeperView" class="text-decoration-none">Sign-up Keeper</a>
-          </button>
-          <button type="button" class="btn border border-1 p-4">
-            <a href="<?php echo FRONT_ROOT?>Views/loginKeeper.php" class="text-decoration-none">Login as keeper</a>
-          </button>
-          <button type="button" class="btn border border-1 p-4">
-            <a href="<?php echo FRONT_ROOT?>Views/loginOwner.php" class="text-decoration-none">Login as Owner</a>
           </button>
         </div>
       </header>

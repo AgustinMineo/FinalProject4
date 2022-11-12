@@ -1,9 +1,10 @@
 <?php
  namespace Controllers;
 
-//use DAO\OwnerDAO as OwnerDAO;
-use DAODB\OwnerDAO as OwnerDAO;
+use DAO\OwnerDAO as OwnerDAO;
+//use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
+//use DAODB\ImageDAO as ImageDAO;
 
  class OwnerController
  {
@@ -12,6 +13,7 @@ use Models\Owner as Owner;
     
     public function __construct(){
         $this->OwnerDAO = new OwnerDAO();
+        
     }
 
     public function goLoginOwner(){
@@ -24,9 +26,9 @@ use Models\Owner as Owner;
         require_once(VIEWS_PATH."owner-add.php");
     }
 
-     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$userImage,$userDescription){
-
+     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userImage,$userDescription){ 
         if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
+            if(strcmp($password,$confirmPassword) == 0){
             $newOwner = new Owner();
             $newOwner->setLastName($lastName);
             $newOwner->setfirstName($firstName);
@@ -41,11 +43,15 @@ use Models\Owner as Owner;
             $this->goLoginOwner();
         }
         else{
-            //echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-            $this->addOwnerView();
+            echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
+            $this->addOwnerView();  
         }
     }
-    
- }
+    else{
+        echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+        $this->addOwnerView();
+    }
+  }
+}
 
 ?>

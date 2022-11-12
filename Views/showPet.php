@@ -48,10 +48,11 @@ include ("ownerNav.php");
                                         echo '<img src="data:image/jpeg;base64,'.$VaccinationPlanData.'">';?></td>
                                         <td><?php echo $pets->getPetDetails()?></td>
                                         <td><object width="425" height="350" data="http://www.youtube.com/v/<?php echo substr($pets->getPetVideo(),-11)?>" type="application/x-shockwave-flash"></object></td>
-                                        <td><?php echo $pets->getPetAge()?></td>
+                                        <td><?php echo $pets->getPetAge(); ?></td>
                                    </tr>
                                    <?php
                          }
+                    
                          ?>
                     </tr>
                </tbody>

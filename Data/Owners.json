@@ -13,10 +13,10 @@
     {
         "ownerId": 2,
         "lastName": "Miranda",
-        "firstName": "Martin",
+        "firstName": "Martin2",
         "cellPhone": "223541269",
         "birthDate": "1998-04-18",
-        "email": "martin@gmail.com",
+        "email": "martin2@gmail.com",
         "password": "1234",
         "userImage": "",
         "userDescription": "Martin Owner"

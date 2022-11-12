@@ -37,7 +37,6 @@ include ("ownerNav.php");
                                         <h5 class="card-title d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetName()?></h5>
                                         <span class="w-100"><hr></span>
                                         <p class="card-text d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetBreedByText()?></p>
-                                        
                                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $pets->getPetID()?>">Ver mas info de  <?php echo $pets->getPetName()?></button>
                                                          <div class="modal fade" id="exampleModal<?php echo $pets->getPetID()?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                               <div class="modal-dialog modal-lg">
@@ -110,4 +109,3 @@ include ("ownerNav.php");
      </div>
 </body>
 </html>
-

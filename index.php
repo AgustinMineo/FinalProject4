@@ -12,6 +12,8 @@
 		
 	Autoload::start();
 	session_start();
+
+
 	
 	//require(VIEWS_PATH."mainLanding.php");
 

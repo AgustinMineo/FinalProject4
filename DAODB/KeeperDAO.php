@@ -4,7 +4,6 @@ use \Exception as Exception;
 use DAODB\Connect as Connect;
 use DAO\IKeeperDAO as IKeeperDAO;
 use Models\Keeper as Keeper;
-
 class KeeperDAO implements IKeeperDAO{
     private $connection;
     private $userTable = 'user';
@@ -28,7 +27,7 @@ class KeeperDAO implements IKeeperDAO{
                   $this->connection = Connection::GetInstance();
 
                    if($this->connection->ExecuteNonQuery($query, $parameters)){
-                      $id = $this->bringUserID($keeper->getEmail());
+                      $id = $this->searchKeeperByEmail($keeper->getEmail());
                       $queryKeeper = "INSERT INTO ".$this->keeperTable."(keeperID, userID, animalSize, price)
                                      VALUES (:keeperID, :userID, :animalSize, :price);
                       ";
@@ -96,6 +95,7 @@ class KeeperDAO implements IKeeperDAO{
   }
 
   public function searchKeeperToLogin($email,$password){
+    if($email && $password){
     try {
       $query = "SELECT k.keeperID, k.animalSize, k.price, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID WHERE email = '$email' AND password = md5($password);";
       $this->connection = Connection::GetInstance();
@@ -123,11 +123,37 @@ class KeeperDAO implements IKeeperDAO{
             }
         }
         else{
-                echo "El email ingresado no existe";
+            echo '<div class="alert alert-danger">The user doesn´t exits . Please create an account!</div>';
             }
         } catch (Exception $ex) {
             throw $ex;
         }
+      }else if($password){
+        echo '<div class="alert alert-danger">Incorrect Email . Please try again!</div>';
+      } else if($email){
+        echo '<div class="alert alert-danger">Incorrect password . Please try again!</div>';
+      }else{
+        echo '<div class="alert alert-danger">Incorrect Email or password . Please try again!</div>';
+      }
   }
+
+  public function getKeeperByDisponibility($date1,$date2){
+    $keeperList = array();
+    $keeperList = $this->getAllKeeper();
+    if($keeperList){
+    $keeperListDisponibility= array();
+    foreach($keeperList as $value){
+        //if($value->getFirstAvailabilityDays()<=$date1 && $value->getLastAvailabilityDays()>=$date1){
+          //  if($value->getFirstAvailabilityDays()<=$date2 && $value->getLastAvailabilityDays()>=$date2){
+                array_push($keeperListDisponibility,$value);
+            //}
+       // }
+    }
+}else{
+    echo "<h1>No existen keepers </h1>";
+    return array();
+}
+    return $keeperListDisponibility;
+}
 }
 ?>

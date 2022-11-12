@@ -57,17 +57,7 @@
          //$newKeeper->setKeeperImg($keeperImg);
     }
 
-    public function loginKeeper($email,$password){
-        $newKeeper = $this->KeeperDAO->searchKeeperToLogin($email,$password);
-        if($newKeeper){
-            $loggedUser = $newKeeper;
-            $_SESSION["loggedUser"] = $loggedUser;
-            $this->goLandingKeeper();
-            }else{
-                
-                require_once(VIEWS_PATH."mainLanding.php");
-            }
-    }
+
 // MIGRAR A DAO
     public function showKeepers(){
         $listKeepers = array();
@@ -85,7 +75,7 @@
         }
     }
 // MIGRAR A DAO
-   /* public function updateAvailabilityDays($date1,$date2){
+    public function updateAvailabilityDays($date1,$date2){
         $value=$this->KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getEmail(),$date1,$date2);
         if($value){
             echo"<h1>Los cambios fueron realizados correctamente</h1>";
@@ -93,6 +83,6 @@
             echo"<h1>Error al realizar los cambios</h1>";
         }
         $this->goLandingKeeper();
-    }*/
+    }
  }
 ?>

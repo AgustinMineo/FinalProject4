@@ -128,7 +128,7 @@ class KeeperDAO implements IKeeperDAO{
     }
 }else{
     echo "<h1>No existen keepers </h1>";
-    return null;
+    return array();
 }
     return $keeperListDisponibility;
 }

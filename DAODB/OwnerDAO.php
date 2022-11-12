@@ -124,7 +124,6 @@ class OwnerDAO{
         } catch (Exception $ex) {
             throw $ex;
         }
-
     }
 
     //Buscamos el USER ID del usuario con el mail.

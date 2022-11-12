@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
- use DAO\KeeperDAO as KeeperDAO;
- //use DAODB\KeeperDAO as KeeperDAO;
+ //use DAO\KeeperDAO as KeeperDAO;
+ use DAODB\KeeperDAO as KeeperDAO;
  use Models\Keeper as Keeper;
 
  class KeeperController
@@ -57,18 +57,7 @@
          //$newKeeper->setKeeperImg($keeperImg);
     }
 
-    public function loginKeeper($email,$password){
-        $newKeeper = $this->KeeperDAO->searchKeeperToLogin($email,$password);
-        if($newKeeper){
-            $loggedUser = $newKeeper;
-            $_SESSION["loggedUser"] = $loggedUser;
-            $this->goLandingKeeper();
-            }else{
-                
-                $this->goLoginKeeper();
-                //require_once(VIEWS_PATH."mainLanding.php");
-            }
-    }
+
 // MIGRAR A DAO
     public function showKeepers(){
         $listKeepers = array();

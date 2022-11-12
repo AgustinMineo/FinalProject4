@@ -27,7 +27,10 @@ include ("ownerNav.php");
                <div class="container d-flex flex-wrap justify-content-center w-100">
                     <h2 class="mb-4 mt-5">Listado de Pets</h2>
                     <div class="container d-flex flex-wrap">
+                         
                               <?php
+                              if(!$petList)
+                              echo "<div class='d-flex flex-wrap justify-content-center w-100'> <h1>No tiene pets cargados!</h1> </div>";
                               foreach($petList as $pets)
                               {
                                    ?>

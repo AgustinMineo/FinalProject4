@@ -54,41 +54,47 @@ namespace Views;
     <div class="container d-flex p-5 flex-wrap flex-row w-100 bg-light">
 
         <?php
-    foreach($listKeepers as $keeper)
-    {
-        ?>
+        if($listKeepers){
+
+            foreach($listKeepers as $keeper)
+            {
+                ?>
         <form action="<?php echo '/FinalProject4/' ?>Booking/newBooking" method="get" class="w-100 d-flex flex-wrap"> <!--REVISAR PORQUE NO ME DEJA CON POST-->
-    <div class="card d-flex flex-wrap m-5" style="width: 25%; ">
-        <!-- <img src="//<//?///php echo IMG_PATH ?><//?php if($keeper->getKeeperImg()){echo "<h1>imagen del keeper</h1>";}else{src="keeperDog.svg"}?>" class="card-img-top" alt="KEEPER IMG">-->
-        <img src=" <?php echo IMG_PATH ?>keeperDog.svg" class="card-img-top" alt="KEEPER IMG">
-        <div class="card-body">
-            <h5 class="card-title">Keeper</h5>
-            <p class="card-text">Here you have a keeper</p>
-        </div>
-        <ul class="list-group list-group-flush text-center">
-            
-            
+        <div class="card d-flex flex-wrap m-5" style="width: 25%; ">
+            <!-- <img src="//<//?///php echo IMG_PATH ?><//?php if($keeper->getKeeperImg()){echo "<h1>imagen del keeper</h1>";}else{src="keeperDog.svg"}?>" class="card-img-top" alt="KEEPER IMG">-->
+            <img src=" <?php echo IMG_PATH ?>keeperDog.svg" class="card-img-top" alt="KEEPER IMG">
+            <div class="card-body">
+                <h5 class="card-title">Keeper</h5>
+                <p class="card-text">Here you have a keeper</p>
+            </div>
+            <ul class="list-group list-group-flush text-center">
+                
+                
             <li class="list-group-item bg-secondary text-white"><?php echo $keeper->getLastName() ?> <?php echo $keeper->getfirstName() ?></li>
             <li class="list-group-item bg-light text-dark"><?php echo $keeper->getCellPhone() ?></li>
-                <li class="list-group-item bg-secondary text-white">$<?php echo $keeper->getPrice() ?></li>
-                
-                
-                <li class="list-group-item bg-light text-dark"><?php echo $keeper->getAnimalSize()?></li>
-                
-                
-                <li class="list-group-item bg-secondary text-white">Del <?php echo $keeper->getFirstAvailabilityDays()?></li>
-                
-                
-                <li class="list-group-item bg-light text-dark">Al <?php echo $keeper->getLastAvailabilityDays()?></li>
-                
-                <input type="checkbox" name="email" value="<?php echo $keeper->getEmail()?>"> <label for="">Reservar</label><!--/// Cambiar el email por el keeperID-->
-            </ul>
+            <li class="list-group-item bg-secondary text-white">$<?php echo $keeper->getPrice() ?></li>
+            
+            
+            <li class="list-group-item bg-light text-dark"><?php echo $keeper->getAnimalSize()?></li>
+            
+            
+            <li class="list-group-item bg-secondary text-white">Del <?php echo $keeper->getFirstAvailabilityDays()?></li>
+            
+            
+            <li class="list-group-item bg-light text-dark">Al <?php echo $keeper->getLastAvailabilityDays()?></li>
+            
+            <input type="checkbox" name="email" value="<?php echo $keeper->getEmail()?>"> <label for="">Reservar</label><!--/// Cambiar el email por el keeperID-->
+        </ul>
     </div>
     <?php
     }
+}
+else{
+    echo "<h1>No hay keepers<h1>";
+}
     ?>
     <div class="container w-auto p-5"><h1>Tus pets disponibles</h1></div>
-
+    
     <div class="container d-flex col-md-4 w-auto p-5 flex-row flex-wrap w-100 bg-light">
         <div class="container d-flex col-md-4 w-auto p-5 flex-row flex-wrap w-100">
 

@@ -4,7 +4,7 @@ use Models\Pet as Pet;
 
 class PetDAO implements IPetDAO{
     private $petList= array();
-    
+
     public function AddPet($pet){
         $this->RetriveData();
         $pet->setPetID($this->getLastID());
@@ -77,6 +77,7 @@ class PetDAO implements IPetDAO{
         $petListSearch = array();
         foreach($this->petList as $ownerPet){
             if($ownerPet->getOwnerID() == $email){
+                $ownerPet->setPetAge($this->getAgeOfPet($ownerPet->getPetAge()));
                 array_push($petListSearch,$ownerPet);
             }
         }
@@ -116,6 +117,21 @@ class PetDAO implements IPetDAO{
         else{
             return 1;
         }
-    } 
+    }
+
+    public function getAgeOfPet($age){
+        $edad = 0;
+        if($age){
+            $fecha_nac = $age;
+            $fecha_nac = strtotime($fecha_nac);
+            $edad = date('Y', $fecha_nac);
+            if (($mes = (date('m') - date('m', $fecha_nac))) < 0) {
+                $edad++;
+            } elseif ($mes == 0 && date('d') - date('d', $fecha_nac) < 0) {
+                $edad++;
+            }
+            return date('Y') - $edad;
+        }
+    }
 }
 ?>

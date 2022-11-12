@@ -1,10 +1,13 @@
 <?php
 namespace Controllers;
-use DAO\BookingDAO as BookingDAO;
+//use DAO\BookingDAO as BookingDAO;
 use Models\Booking as Booking;
-use DAO\PetDAO as PetDAO;
-use DAO\KeeperDAO as KeeperDAO;
+//use DAO\PetDAO as PetDAO;
+//use DAO\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
+use DAODB\PetDAO as PetDAO;
+use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\BookingDAO as BookingDAODB;
 
 class BookingController{
     private $BookingDAO;
@@ -19,13 +22,14 @@ class BookingController{
      {
          require_once(VIEWS_PATH."showPetBooking.php");
      }
-     public function goBookingView(){
+     public function goBookingView($petList, $listKeepers){
         require_once(VIEWS_PATH."ownerNav.php");
-        require_once(VIEWS_PATH. "BookingViews.php");
+        require_once(VIEWS_PATH."BookingViews.php");
      }
     
     public function __construct(){
-        $this->BookingDAO = new BookingDAO();
+        //$this->BookingDAO = new BookingDAO();
+        $this->BookingDAO = new BookingDAODB;
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
     }
@@ -35,18 +39,18 @@ class BookingController{
         $listKeepers = array();
         $listKeepers = $keeperDAO->getKeeperByDisponibility($value1,$value2);
         if($listKeepers){
-                if($_SESSION['loggedUser']){
+            if($_SESSION['loggedUser']){
                  $petList = array(); /// create a pet array
                  foreach($listKeepers as $keeperInfo){
                  $petList=$this->petDAO->searchPetsBySize($_SESSION['loggedUser']->getOwnerID(),$keeperInfo->getAnimalSize());
                 }
                  if($petList)
                  {
+                     $this->goBookingView($listKeepers,$petList);
                 }else{
                     echo "<h1>No tiene mascotas que concuerden con el tamaño</h1>";
                 }
-                $this->goBookingView();
-                //require_once(VIEWS_PATH. "BookingViews.php");
+                $this->goBookingView($petList, $listKeepers);
             }else{
                 echo "<h1>No existen keepers con disponibilidad de entre $value1 y $value2</h1>";
             }
@@ -55,13 +59,13 @@ class BookingController{
 
     public function newBooking($email,$petId){
         $newBooking = new Booking();
-        //$keeperInfo = new Keeper(); CHECK
+        $keeperInfo = new Keeper(); //CHECK
         $keeperInfo=$this->keeperDAO->searchKeeperByEmail($email);
         $newBooking->setStatus('1');
-        $newBooking->setFirstDate($keeperInfo->getFirstAvailabilityDays());
-        $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());
+        $newBooking->setFirstDate($keeperInfo->getFirstAvailabilityDays());//cambiar a dias que pide el owner // tomar datos de form y pasarlos a array para tirarlos aca VER
+        $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());// cambiar a dias que pide el owner
         $newBooking->setKeeperID($keeperInfo->getKeeperId());
-        $newBooking->setTotalValue($this->priceCounter($keeperInfo->getFirstAvailabilityDays(), $keeperInfo->getLastAvailabilityDays(), $keeperInfo->getPrice()));
+        $newBooking->setTotalValue($this->priceCounter($newBooking->getFirstDate(), $newBooking->getLastDate(), $keeperInfo->getPrice()));
         //$newBooking->setAmountReservation(); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
         //require_once(VIEWS_PATH. "showPetBooking.php");
         $newBooking->setPetID($petId);

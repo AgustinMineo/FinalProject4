@@ -2,14 +2,17 @@
 namespace Controllers;
 
 use Models\Pet as Pet;
-use DAO\PetDAO as PetDAO;
-//use DAODB\PetDAO as PetDAO;
+//use DAO\PetDAO as PetDAO;
+use DAODB\PetDAO as PetDAO;
 
 class PetController{
     private $petDAO;
 
     public function goLandingOwner(){
         require_once(VIEWS_PATH."ownerNav.php");
+    }
+    public function __construct(){
+        $this->PetDAO = new PetDAO();
     }
     
     public function newPet($petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
@@ -34,7 +37,6 @@ class PetController{
             echo"Usuario no logeado";
             }
     }
-//MIGRAR PET LIST Y SHOW PETS A DAO
     public function searchPetList(){
         $petListSearch= array();
         $this->petDAO = new PetDAO();
@@ -42,13 +44,12 @@ class PetController{
             $petListSearch = $this->petDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
             return $petListSearch; 
         }
-        var_dump($petListSearch);
     }
-// MIGRAR A DAO
-    public function showPets(){
-            $petList = $this->searchPetList();
-            require_once(VIEWS_PATH . "showPet.php");
-    }
-}
 
+    public function showPets(){
+        $petList = $this->searchPetList();
+        require_once(VIEWS_PATH . "showPet.php");
+}
+}
+    
 ?>

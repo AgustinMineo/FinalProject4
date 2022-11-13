@@ -5,6 +5,7 @@ use DAO\OwnerDAO as OwnerDAO;
 //use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 use DAO\MailerDAO as MailerDAO;
+//use DAODB\ImageDAO as ImageDAO;
  class OwnerController
  {
     private $OwnerDAO;
@@ -26,9 +27,9 @@ use DAO\MailerDAO as MailerDAO;
         require_once(VIEWS_PATH."owner-add.php");
     }
 
-     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$userImage,$userDescription){
-
+     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userImage,$userDescription){ 
         if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
+            if(strcmp($password,$confirmPassword) == 0){
             $newOwner = new Owner();
             $newOwner->setLastName($lastName);
             $newOwner->setfirstName($firstName);
@@ -44,11 +45,15 @@ use DAO\MailerDAO as MailerDAO;
             $this->goLoginOwner();
         }
         else{
-            //echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-            $this->addOwnerView();
+            echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
+            $this->addOwnerView();  
         }
     }
-    
- }
+    else{
+        echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+        $this->addOwnerView();
+    }
+  }
+}
 
 ?>

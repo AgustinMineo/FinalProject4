@@ -113,5 +113,10 @@ class BookingDAO implements IBookingDAO{
             return 1;
         }
     } 
+    
+    /*public function showBookingOwner(){
+        $this->RetriveData();
+
+    }*/
 }
 ?>

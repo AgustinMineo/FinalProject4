@@ -25,8 +25,11 @@
             try
             {
                 $fileName = $file["name"];
+               // var_dump($fileName);
                 $tempFileName = $file["tmp_name"];
+               // var_dump($tempFileName);
                 $type = $file["type"];
+                //var_dump($type);
                 
                 $filePath = UPLOADS_PATH.basename($fileName);            
 
@@ -55,7 +58,7 @@
                 $message = $ex->getMessage();
             }
 
-            $this->ShowListView($message);
+            //$this->ShowListView($message);
         }    
     }
 ?>

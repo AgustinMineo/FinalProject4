@@ -4,20 +4,21 @@
 use DAO\OwnerDAO as OwnerDAO;
 //use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
+use DAO\MailerDAO as MailerDAO;
 //use DAODB\ImageDAO as ImageDAO;
-
  class OwnerController
  {
     private $OwnerDAO;
     private $newOwner;
+    private $newMailer;
     
-    public function __construct(){
+    public function  __construct(){
         $this->OwnerDAO = new OwnerDAO();
-        
+        $this->newMailerDAO = new MailerDAO();
     }
 
     public function goLoginOwner(){
-        require_once(VIEWS_PATH."loginOwner.php");
+        require_once(VIEWS_PATH."loginUser.php");
     }
     public function goLandingOwner(){
         require_once(VIEWS_PATH."landingPage.php");
@@ -40,6 +41,7 @@ use Models\Owner as Owner;
             $newOwner->setDescription($userDescription);
             $newOwner->setPetAmount('0');
             $this->OwnerDAO->AddOwner($newOwner);
+            $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
             $this->goLoginOwner();
         }
         else{

@@ -23,12 +23,12 @@
     },
     {
         "ownerId": 3,
-        "lastName": "Miranda",
-        "firstName": "Martin",
+        "lastName": "Agustin",
+        "firstName": "Mineo",
         "cellPhone": "223541269",
         "birthDate": "1998-04-18",
-        "email": "martin@gmail.com",
-        "password": "123456",
+        "email": "agustin@gmail.com",
+        "password": "123",
         "userImage": "",
         "userDescription": "Martin Owner"
     },

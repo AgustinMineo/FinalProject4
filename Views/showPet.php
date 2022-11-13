@@ -1,6 +1,7 @@
 <?php
 namespace Views;
 include ("ownerNav.php");
+require_once(VIEWS_PATH."validate-session.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +58,7 @@ include ("ownerNav.php");
                                                                                                <th scope="col">Weight</th>
                                                                                                <th scope="col">Size</th>
                                                                                                <th scope="col">Weight</th>
-                                                                                               <th scope="col">Age</th>
+                                                                                               <th scope="col">Age (Years)</th>
                                                                                           </tr>
                                                                                           </thead>
                                                                                           <tbody>

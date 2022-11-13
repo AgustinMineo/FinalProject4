@@ -1,6 +1,7 @@
 <?php
 namespace Views;
 require_once(VIEWS_PATH."keeperNav.php");
+require_once(VIEWS_PATH."validate-session.php");
 ?>
 <main class="py-5">
      <section id="listado" class="mb-5">

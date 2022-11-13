@@ -1,9 +1,9 @@
 <?php
-    namespace DAO;
+    namespace DAODB;
 
     use Models\Image as Image;
 
-    interface IImageDao
+    interface IImageDAO
     {
         function Add(Image $image);
         function GetAll();

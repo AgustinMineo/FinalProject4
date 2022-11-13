@@ -4,8 +4,8 @@
     use DAODB\IImageDAO as IImageDAO;
     use DAODB\QueryType as QueryType;
     use Models\Image as Image;
-
-    class ImageDao implements \DAODB\IImageDao
+    
+    class ImageDAO implements IImageDAO
     {
         private $tableName = "images";
 
@@ -13,7 +13,7 @@
         {
             try
             {
-                $query = "CALL images_add(?);";
+                $query = "INSERT INTO ".$this->tableName." (imageId,name) VALUES (:imageId,:name);";
                 
                 $parameters["name"] = $image->getName();
 

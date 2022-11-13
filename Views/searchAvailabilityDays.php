@@ -1,5 +1,6 @@
 <?php
 namespace Views;
+require_once(VIEWS_PATH."validate-session.php");
 ?>
 <form class="row g-3" action="<?php echo '/FinalProject4/' ?>Keeper/showKeepersByAvailability" method="post">
   <div class="col-auto">

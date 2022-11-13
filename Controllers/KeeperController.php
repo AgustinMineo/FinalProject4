@@ -4,14 +4,16 @@
  //use DAO\KeeperDAO as KeeperDAO;
  use DAODB\KeeperDAO as KeeperDAO;
  use Models\Keeper as Keeper;
-
+ use DAO\MailerDAO as MailerDAO;
  class KeeperController
  {
     private $KeeperDAO;
     private $newKeeper;
+    private $newMailer;
 
     public function __construct(){
         $this->KeeperDAO = new KeeperDAO();
+        $this->newMailer = new MailerDAO();
     }
 
     public function addKeeperView(){
@@ -19,7 +21,7 @@
     }
 
     public function goLoginKeeper(){
-        require_once(VIEWS_PATH."loginkeeper.php");
+        require_once(VIEWS_PATH."loginUser.php");
     }
 
     public function goLandingKeeper(){
@@ -34,6 +36,7 @@
      
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
+            
             $newKeeper = new Keeper();
             $newKeeper->setLastName($lastName);
             $newKeeper->setfirstName($firstName);
@@ -46,6 +49,7 @@
             $newKeeper->setAnimalSize($animalSize);
             $newKeeper->setPrice($price);
             $this->KeeperDAO->AddKeeper($newKeeper);
+            $this->newMailer->welcomeMail($lastName,$firstName,$email);
             $this->goLoginKeeper();
         }        
         else{

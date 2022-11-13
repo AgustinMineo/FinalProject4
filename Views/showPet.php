@@ -58,7 +58,7 @@ require_once(VIEWS_PATH."validate-session.php");
                                                                                                <th scope="col">Weight</th>
                                                                                                <th scope="col">Size</th>
                                                                                                <th scope="col">Weight</th>
-                                                                                               <th scope="col">Age</th>
+                                                                                               <th scope="col">Age (Years)</th>
                                                                                           </tr>
                                                                                           </thead>
                                                                                           <tbody>

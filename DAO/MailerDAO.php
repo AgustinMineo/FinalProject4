@@ -28,7 +28,7 @@ class MailerDAO implements IMailerDAO{
        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
     
         //Content
-        
+        $phpmailer->CharSet = 'UTF-8';
         $phpmailer->isHTML(true);                                  //Set email format to HTML
         $phpmailer->Subject = 'Welcome to PetHERO!';
         $phpmailer->Body    = '
@@ -199,7 +199,34 @@ a[x-apple-data-detectors] {
 
 //function forgotPassword($email,$name,$lastname){}
 
-function confirmBooking($file,$correo,$name,$lastname){}
+function newBooking($lastname,$name,$email){
+      $fullName = $lastname . " " . $name;
+      try{
+      $phpmailer = new PHPMailer();
+      $phpmailer->isSMTP();
+      $phpmailer->Host = 'smtp.mailtrap.io';
+      $phpmailer->SMTPAuth = true;
+      $phpmailer->Port = 2525;
+      $phpmailer->Username = 'c9dc2bf4f2e5fc';
+      $phpmailer->Password = '0c2723ee9361ed';
+      $phpmailer->setFrom('pethero@pethero.com', 'Mailer');
+      $phpmailer->addAddress($email,$fullName);    
+      $phpmailer->CharSet = 'UTF-8';
+      //Attachments
+      // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+      // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
 
-}
+      //Content
+
+      $phpmailer->isHTML(true);                                  //Set email format to HTML
+      $phpmailer->Subject = "PET HERO - ¡New booking request!";
+      $phpmailer->Body    = "Congratulations, $fullName ! You have a new booking request waiting to be accepted!";
+      $phpmailer->AltBody = 'This is the body in plain text for non-HTML mail clients';
+    
+        $phpmailer->send();
+    }catch (Exception $ex){ 
+        throw $ex;
+    }
+    }
+  }
 ?>

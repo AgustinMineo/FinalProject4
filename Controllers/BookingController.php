@@ -1,18 +1,21 @@
 <?php
 namespace Controllers;
-//use DAO\BookingDAO as BookingDAO;
+use DAO\MailerDAO as MailerDAO;
+use DAO\BookingDAO as BookingDAO;
 use Models\Booking as Booking;
-//use DAO\PetDAO as PetDAO;
-//use DAO\KeeperDAO as KeeperDAO;
+use DAO\PetDAO as PetDAO;
+use DAO\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
-use DAODB\PetDAO as PetDAO;
-use DAODB\KeeperDAO as KeeperDAO;
-use DAODB\BookingDAO as BookingDAODB;
+//use DAODB\PetDAO as PetDAO;
+//use DAODB\KeeperDAO as KeeperDAO;
+//use DAODB\BookingDAO as BookingDAODB;
+
 
 class BookingController{
     private $BookingDAO;
     private $petDAO;
     private $keeperDAO;
+    private $MailerDAO;
 
     public function GoBooking()
      {
@@ -22,16 +25,21 @@ class BookingController{
      {
          require_once(VIEWS_PATH."showPetBooking.php");
      }
-     public function goBookingView($petList, $listKeepers){
+     public function goBookingView($listKeepers,$petList){
         require_once(VIEWS_PATH."ownerNav.php");
         require_once(VIEWS_PATH."BookingViews.php");
      }
+
+     public function goIndex(){
+        require_once(VIEWS_PATH."landingPage.php");
+     }
     
     public function __construct(){
-        //$this->BookingDAO = new BookingDAO();
-        $this->BookingDAO = new BookingDAODB;
+        $this->BookingDAO = new BookingDAO();
+        //$this->BookingDAO = new BookingDAODB;
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
+        $this->MailerDAO = new MailerDAO();
     }
 
     public function bookingBuild($value1,$value2){
@@ -69,7 +77,10 @@ class BookingController{
         //$newBooking->setAmountReservation(); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
         //require_once(VIEWS_PATH. "showPetBooking.php");
         $newBooking->setPetID($petId);
+        $this->MailerDAO->newBooking($keeperInfo->getLastName(),$keeperInfo->getfirstName(),$keeperInfo->getEmail());
         $this->BookingDAO->addBooking($newBooking);
+        
+        $this->goIndex();
         //require_once()
     }
 // MIGRAR A DAO

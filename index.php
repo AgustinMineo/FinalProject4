@@ -11,10 +11,7 @@
 	use Config\Request 	as Request;
 	Autoload::start();
 	session_start();
-	
-	//require(VIEWS_PATH."mainLanding.php");
+
 
 	Router::Route(new Request());
-
-	require_once(VIEWS_PATH."footer.php");
 ?>

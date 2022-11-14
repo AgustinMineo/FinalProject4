@@ -37,14 +37,6 @@ class PetController{
             echo"Usuario no logeado";
             }
     }
-    public function searchPetList(){
-        $petListSearch= array();
-        $this->petDAO = new PetDAO();
-        if(isset($_SESSION["loggedUser"])){
-            $petListSearch = $this->petDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
-            return $petListSearch; 
-        }
-    }
 
     public function showPets(){
         $petList = $this->searchPetList();

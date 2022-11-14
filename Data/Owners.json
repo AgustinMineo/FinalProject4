@@ -1,46 +1,14 @@
 [
     {
         "ownerId": 1,
-        "lastName": "Dominguez",
-        "firstName": "Franco",
-        "cellPhone": "2235432067",
-        "birthDate": "1997-12-24",
-        "email": "frann241297@gmail.com",
-        "password": "1234",
-        "userImage": "",
-        "userDescription": "Prueba de JSON"
-    },
-    {
-        "ownerId": 2,
-        "lastName": "Miranda",
-        "firstName": "Martin2",
-        "cellPhone": "223541269",
-        "birthDate": "1998-04-18",
-        "email": "martin2@gmail.com",
-        "password": "1234",
-        "userImage": "",
-        "userDescription": "Martin Owner"
-    },
-    {
-        "ownerId": 3,
         "lastName": "Agustin",
         "firstName": "Mineo",
-        "cellPhone": "223541269",
-        "birthDate": "1998-04-18",
+        "cellPhone": "123123123123",
+        "birthDate": "2004-01-01",
         "email": "agustin@gmail.com",
         "password": "123",
         "userImage": "",
-        "userDescription": "Martin Owner"
-    },
-    {
-        "ownerId": 4,
-        "lastName": "Dominguez",
-        "firstName": "Juan",
-        "cellPhone": "235646579",
-        "birthDate": "1990-04-30",
-        "email": "juan@mdq.com",
-        "password": "123456",
-        "userImage": "",
-        "userDescription": ""
+        "userDescription": "agustin@gmail.com",
+        "petAmount": "0"
     }
 ]

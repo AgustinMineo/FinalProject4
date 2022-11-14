@@ -4,16 +4,19 @@
 use DAO\OwnerDAO as OwnerDAO;
 //use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
+use DAO\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;
  class OwnerController
  {
     private $OwnerDAO;
     private $newOwner;
     private $newMailer;
+    private $KeeperDAO;
     
     public function  __construct(){
         $this->OwnerDAO = new OwnerDAO();
         $this->newMailerDAO = new MailerDAO();
+        $this->KeeperDAO = new KeeperDAO();
     }
 
     public function goLoginOwner(){
@@ -29,6 +32,7 @@ use DAO\MailerDAO as MailerDAO;
      public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$userImage,$userDescription){
 
         if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
+            if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             $newOwner = new Owner();
             $newOwner->setLastName($lastName);
             $newOwner->setfirstName($firstName);
@@ -42,9 +46,13 @@ use DAO\MailerDAO as MailerDAO;
             $this->OwnerDAO->AddOwner($newOwner);
             $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
             $this->goLoginOwner();
+        }else{
+            echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+            $this->addOwnerView();
+        }
         }
         else{
-            //echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+            echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
             $this->addOwnerView();
         }
     }

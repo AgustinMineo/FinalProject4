@@ -35,36 +35,14 @@
               <label class="form-label" for="">Email address</label>
             </div>
   
-            <!-- Password input -->
             <div class="form-outline mb-4">
               <input type="password" name="password" class="form-control form-control-lg" />
               <label class="form-label" for="">Password</label>
             </div>
   
-            <div class="d-flex justify-content-around align-items-center mb-4">
-              <!-- Checkbox -->
-              <!--<div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
-                <label class="form-check-label" for="form1Example3"> Remember me </label>
-              </div>-->
-              <a href="#!">Forgot password?</a>
-            </div>
-  
-            <!-- Submit button -->
             <div class="container d-flex flex-wrap justify-content-center align-items-center">
-            <button type="submit" class="btn btn-primary btn-lg btn-block ">Sign in</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block ">Log in</button>
             </div>
-        <!--    <div class="divider d-flex align-items-center my-4">
-              <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
-            </div>
-  
-            <a class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" href="#!"
-              role="button">
-              <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
-            </a>
-            <a class="btn btn-primary btn-lg btn-block" style="background-color: #55acee" href="#!"
-              role="button">
-              <i class="fab fa-twitter me-2"></i>Continue with Twitter</a>-->
   
           </form>
         </div>

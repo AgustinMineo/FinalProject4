@@ -68,7 +68,7 @@ class PetDAO implements IPetDAO{
                 array_push($this->petList, $petValue);
             }
         }else{
-            echo "The pets file doesn't exists";
+            echo "<div class='alert alert-danger'>The pets file doesn't exists</div>";
         }
 
     }
@@ -80,24 +80,32 @@ class PetDAO implements IPetDAO{
                 $ownerPet->setPetAge($this->getAgeOfPet($ownerPet->getPetAge()));
                 array_push($petListSearch,$ownerPet);
             }
+            if($petListSearch){
+                return $petListSearch;
+            }else{
+                echo "<div class='alert alert-danger'>Usted no tiene pets disponibles</div>";
+            }
         }
-        return $petListSearch;
     }
     public function searchPetsBySize($email,$size){
         $petListBySize = array(); // create pet array
         $petListBySize = $this->searchPets($email); // search all pets by owner, cambiar a id
-        $petListFilter =array();
-        if($petListBySize){ /// if the list is not empty we filter for the size of the pet
-            foreach($petListBySize as $petSize){
-                if(strcmp($petSize->getPetSize(),$size)==0){
-                    array_push($petListFilter,$petSize);
+        if($petListBySize){
+            $petListFilter =array();
+            if($petListBySize){ /// if the list is not empty we filter for the size of the pet
+                foreach($petListBySize as $petSize){
+                    if(strcmp($petSize->getPetSize(),$size)==0){
+                        array_push($petListFilter,$petSize);
+                    }
                 }
+            }else{
+                echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
+                return array();
             }
+            return $petListFilter;
         }else{
-            echo "<h1>El owner no tiene pets</h1>";
-            return null;
+            return array();
         }
-        return $petListFilter;
     }
     
     public function selectPetByID($petID,$petList){
@@ -131,6 +139,14 @@ class PetDAO implements IPetDAO{
                 $edad++;
             }
             return date('Y') - $edad;
+        }
+    }
+
+    public function searchPetList(){
+        $petListSearch= array();
+        if(isset($_SESSION["loggedUser"])){
+            $petListSearch = $this->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+            return $petListSearch; 
         }
     }
 }

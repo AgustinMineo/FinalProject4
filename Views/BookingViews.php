@@ -100,6 +100,7 @@ else{
         <div class="container d-flex col-md-4 w-auto p-5 flex-row flex-wrap w-100">
 
             <?php
+            if($petList){
     foreach($petList as $petSize)
     {
         ?>
@@ -123,6 +124,9 @@ else{
 </div>
 <?php
     }
+}else {
+    echo "<h1>No tiene pets</h1>";
+}
     ?>
     <button type="submit" class="btn btn-info d-flex justify-content-center align-content-center w-100">Reservation</button>  
     </div>

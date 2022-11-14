@@ -56,11 +56,13 @@ class BookingController{
                  {
                      $this->goBookingView($listKeepers,$petList);
                 }else{
-                    echo "<h1>No tiene mascotas que concuerden con el tamaño</h1>";
+                    echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
+                    $this->goIndex();
                 }
-                $this->goBookingView($petList, $listKeepers);
+                //$this->goBookingView($petList, $listKeepers);
             }else{
-                echo "<h1>No existen keepers con disponibilidad de entre $value1 y $value2</h1>";
+                echo "<div class='alert alert-danger'>No existen keepers con disponibilidad de $value1 a $value2</div>";
+                $this->goIndex();
             }
         }
     }
@@ -74,7 +76,7 @@ class BookingController{
         $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());// cambiar a dias que pide el owner
         $newBooking->setKeeperID($keeperInfo->getKeeperId());
         $newBooking->setTotalValue($this->priceCounter($newBooking->getFirstDate(), $newBooking->getLastDate(), $keeperInfo->getPrice()));
-        //$newBooking->setAmountReservation(); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
+        $newBooking->setAmountReservation($newBooking->getTotalValue()*0.5); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
         //require_once(VIEWS_PATH. "showPetBooking.php");
         $newBooking->setPetID($petId);
         $this->MailerDAO->newBooking($keeperInfo->getLastName(),$keeperInfo->getfirstName(),$keeperInfo->getEmail());
@@ -88,6 +90,18 @@ class BookingController{
         $bookingListKeeper = array();
         $bookingListKeeper=$this->BookingDAO->showBookingByKeeperID();
         require_once(VIEWS_PATH."showBookingKeeper.php");
+    }
+    public function showBookingsOwner(){
+        $bookingListKeeper = array();
+        $petListByOwner = array();
+        $petListByOwner=$this->petDAO->searchPetList();
+        if($petListByOwner){
+            $bookingListKeeper=$this->BookingDAO->showBookingByOwnerID($petListByOwner);
+            if($bookingListKeeper){
+
+                require_once(VIEWS_PATH."BookingViewOwner.php");
+            }
+        }
     }
 // MIGRAR A DAO
     public function updateBookingStatus($idBooking, $status){

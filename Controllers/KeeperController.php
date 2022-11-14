@@ -5,15 +5,18 @@
  //use DAODB\KeeperDAO as KeeperDAO;
  use Models\Keeper as Keeper;
  use DAO\MailerDAO as MailerDAO;
+ use DAO\OwnerDAO as OwnerDAO;
  class KeeperController
  {
     private $KeeperDAO;
     private $newKeeper;
     private $newMailer;
+    private $OwnerDAO;
 
     public function __construct(){
         $this->KeeperDAO = new KeeperDAO();
         $this->newMailer = new MailerDAO();
+        $this->OwnerDAO = new OwnerDAO();
     }
 
     public function addKeeperView(){
@@ -36,7 +39,7 @@
      
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
-            
+            if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
             $newKeeper = new Keeper();
             $newKeeper->setLastName($lastName);
             $newKeeper->setfirstName($firstName);
@@ -51,6 +54,10 @@
             $this->KeeperDAO->AddKeeper($newKeeper);
             $this->newMailer->welcomeMail($lastName,$firstName,$email);
             $this->goLoginKeeper();
+        }else{
+            echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+            $this->addKeeperView();
+        }
         }        
         else{
             echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';

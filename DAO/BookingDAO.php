@@ -2,6 +2,7 @@
 namespace DAO;
 use DAO\IBookingDAO as IBookingDAO;
 use Models\Booking as Booking;
+use DAO\PetsDAO as PetDAO;
 
 
 class BookingDAO implements IBookingDAO{
@@ -33,6 +34,7 @@ class BookingDAO implements IBookingDAO{
             $bookingValue["lastDate"] = $Booking->getLastDate();
             $bookingValue["keeperID"] = $Booking->getKeeperID();
             $bookingValue["totalValue"] = $Booking->getTotalValue();
+            $bookingValue["amountReservation"] = $Booking->getAmountReservation();
             array_push($bookingList, $bookingValue);
         }
         $bookingFile = json_encode($bookingList, JSON_PRETTY_PRINT);
@@ -56,6 +58,7 @@ class BookingDAO implements IBookingDAO{
                 $booking->setLastDate($BookingDecode["lastDate"]);
                 $booking->setKeeperID($BookingDecode["keeperID"]);
                 $booking->setTotalValue($BookingDecode["totalValue"]);
+                $booking->setAmountReservation($BookingDecode["amountReservation"]);
                 array_push($this->bookingList, $booking);
             }
         }else{
@@ -114,9 +117,26 @@ class BookingDAO implements IBookingDAO{
         }
     } 
     
-    /*public function showBookingOwner(){
+    public function showBookingByOwnerID($petListByOwner){
         $this->RetriveData();
+        $bookingListOwner = array();
+        if($this->bookingList){
+            foreach($this->bookingList as $booking){
+                foreach($petListByOwner as $pet){
+                    if($booking->getPetID() == $pet->getPetID()){
+                        array_push($bookingListOwner,$booking);
+                    }
+                }
+            }
+        }else{
+            echo "<h1>No existen reservas</h1>";
+        }
+        if($bookingListOwner){
+         return $bookingListOwner;
+        }else{
+            return array();
+        }
+        }
 
-    }*/
-}
+    }
 ?>

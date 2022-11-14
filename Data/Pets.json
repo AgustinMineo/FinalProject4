@@ -1,41 +1,15 @@
 [
     {
         "petID": 1,
-        "petName": "Agustin",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/beagles-puppies-looking-something_1150-18193.jpg?w=450&t=st=1667603811~exp=1667604411~hmac=8f9a2e6c678c57d699ed5d72f1578a84cb38ee4e0bf111058fa9f499ac9d63a5",
-        "breedID": "1",
+        "petName": "Prueba",
+        "petImage": "Inked4_LI.jpg",
+        "breedID": "3",
         "petSize": "Small",
-        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
-        "petDetails": "muerte como la xuxa",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=GZ8bvTAcTFI",
-        "petWeight": "Light",
-        "ownerID": 3,
-        "petAge": "2012-11-08"
-    },
-    {
-        "petID": 2,
-        "petName": "pepito",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/shih-tzu-puppy-wearing-orange-bow-cute-doggy-pet-is-lying-isolated-yellow-background-chrysanthemum-dog-negative-space-insert-your-text-image_155003-34521.jpg?w=1380&t=st=1666809680~exp=1666810280~hmac=7f56f33190cc8ac0a59a131f359772cd30d5376bc5c5fb15f258591bed9e9fdb",
-        "breedID": "14",
-        "petSize": "Big",
-        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
-        "petDetails": "Bites a little bit ",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=5PR4vCJJRnA",
-        "petWeight": "Light",
-        "ownerID": 3,
-        "petAge": "2018-06-12"
-    },
-    {
-        "petID": 3,
-        "petName": "Jorge",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/close-up-beautiful-dachshund-dog_23-2149202576.jpg?w=450&t=st=1667603221~exp=1667603821~hmac=13685b05b746d0c824333222ccd05cf701382428768364bc4c5bf6afbd415ff7",
-        "breedID": "1",
-        "petSize": "Medium",
-        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
-        "petDetails": "Bites a little",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=GZ8bvTAcTFI",
-        "petWeight": "Light",
-        "ownerID": 3,
-        "petAge": "2014-07-12"
+        "petVaccinationPlan": "Inked4_LI.jpg",
+        "petDetails": "Prueba",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=4PP-jETn3bs",
+        "petWeight": "Medium",
+        "ownerID": 1,
+        "petAge": "2022-01-11"
     }
 ]

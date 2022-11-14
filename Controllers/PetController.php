@@ -39,9 +39,10 @@ class PetController{
     }
 
     public function showPets(){
-        $petList = $this->searchPetList();
+        $petList = $this->PetDAO->searchPetList();
         require_once(VIEWS_PATH . "showPet.php");
 }
+
 }
     
 ?>

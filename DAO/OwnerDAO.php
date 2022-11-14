@@ -40,7 +40,7 @@ class OwnerDAO implements IOwnerDAO {
             $ownerValue["password"] = $Owner->getPassword();
             $ownerValue["userImage"] = $Owner->getImage();
             $ownerValue["userDescription"] = $Owner->getDescription();
-            //$ownerValue["petAmount"] = $Owner->getPetAmount();
+            $ownerValue["petAmount"] = $Owner->getPetAmount();
             
             array_push($ownerArrayEncode, $ownerValue);
         }
@@ -67,7 +67,7 @@ class OwnerDAO implements IOwnerDAO {
                 $owner->setPassword($OwnerDecode["password"]);
                 $owner->setImage($OwnerDecode["userImage"]);
                 $owner->setDescription($OwnerDecode["userDescription"]);
-                //$owner->setPetAmount($OwnerDecode["petAmount"]);
+                $owner->setPetAmount($OwnerDecode["petAmount"]);
 
                 array_push($this->ownerList, $owner);
             }

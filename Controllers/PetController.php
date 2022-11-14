@@ -2,8 +2,8 @@
 namespace Controllers;
 
 use Models\Pet as Pet;
-//use DAO\PetDAO as PetDAO;
-use DAODB\PetDAO as PetDAO;
+use DAO\PetDAO as PetDAO;
+//use DAODB\PetDAO as PetDAO;
 
 class PetController{
     private $PetDAO;
@@ -40,15 +40,16 @@ class PetController{
     public function searchPetList(){
         $petListSearch= array();
         if(isset($_SESSION["loggedUser"])){
-            $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+            // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+            $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); 
             return $petListSearch; 
         }
     }
-
     public function showPets(){
-        $petList = $this->searchPetList();
+        $petList = $this->PetDAO->searchPetList();
         require_once(VIEWS_PATH . "showPet.php");
 }
+
 }
     
 ?>

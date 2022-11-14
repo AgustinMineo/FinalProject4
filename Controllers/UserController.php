@@ -1,11 +1,11 @@
 <?php
 namespace Controllers;
 
-//use DAO\OwnerDAO as OwnerDAO;
-use DAODB\OwnerDAO as OwnerDAO;
+use DAO\OwnerDAO as OwnerDAO;
+//use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
-//use DAO\KeeperDAO as KeeperDAO;
-use DAODB\KeeperDAO as KeeperDAO;
+use DAO\KeeperDAO as KeeperDAO;
+//use DAODB\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
 
 class UserController{
@@ -27,7 +27,7 @@ class UserController{
         require_once(VIEWS_PATH."keeperNav.php");
     }
     public function goLandingOwner(){
-        require_once(VIEWS_PATH."ownerNav.php");
+        require_once(VIEWS_PATH."landingPage.php");
     }
     public function gologinUser(){
         require_once(VIEWS_PATH."loginUser.php");

@@ -1,4 +1,6 @@
-<?php namespace Views;?>
+<?php namespace Views;
+
+?>
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <!-- CSS only -->
@@ -18,7 +20,7 @@
                          <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
                               <div class="form-group w-50">
                                    <label for="">Pet Image</label>
-                                   <input type="text" name="petImage" value="" placeholder="Image URL" class="form-control" Required >
+                                   <input type="file" name="petImage" value="" class="form-control-file" enctype="multipart/form-data" Required >
                               </div>
                          </div>
                          <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
@@ -57,7 +59,7 @@
                          <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
                               <div class="form-group w-50">
                                    <label for="">Vaccination Plan</label>
-                                   <input type="text" name="petVaccinationPlan" placeholder="Vaccination Plan URL" value="" class="form-control" Required >
+                                   <input type="file" name="petVaccinationPlan"  value="" class="form-control-file" enctype="multipart/form-data" Required >
                               </div>
                          </div>
                          <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
@@ -69,7 +71,7 @@
                          <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
                               <div class="form-group w-50">
                                    <label for="">Pet Video</label>
-                                   <input type="text" name="petVideo" placeholder="Video URL" value="" class="form-control" Required >
+                                   <input type="text" name="petVideo" placeholder="Video URL" value="" class="form-control" >
                               </div>
                          </div>
                          <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">

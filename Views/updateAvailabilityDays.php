@@ -1,5 +1,6 @@
 <?php
 namespace Views;
+//require_once(VIEWS_PATH."validate-session.php");
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 ?>
 

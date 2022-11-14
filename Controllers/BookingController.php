@@ -33,7 +33,6 @@ class BookingController{
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
     }
-
     public function bookingBuild($value1,$value2){
         $keeperDAO = new KeeperDAO();
         $listKeepers = array();
@@ -58,7 +57,6 @@ class BookingController{
     }
 
     public function newBooking($email,$petId){
-        echo $petId;
         $newBooking = new Booking();
         $keeperInfo = new Keeper(); //CHECK
         $keeperInfo=$this->keeperDAO->searchKeeperByEmail($email);

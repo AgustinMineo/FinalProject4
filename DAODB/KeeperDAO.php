@@ -46,6 +46,7 @@ class KeeperDAO implements IKeeperDAO{
           throw $ex;
       }   
 
+
     }
     public function GetAllKeeper(){
       try{
@@ -106,6 +107,7 @@ class KeeperDAO implements IKeeperDAO{
         } else { return NULL; } 
       } catch(Exception $ex){ throw $ex; } 
     }
+
     public function searchKeeperByEmail($email){
       try {
         $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email, k.keeperID, k.price, d.firstDate, d.lastDate

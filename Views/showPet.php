@@ -1,6 +1,7 @@
 <?php
 namespace Views;
 include ("ownerNav.php");
+require_once(VIEWS_PATH."validate-session.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,8 +30,8 @@ include ("ownerNav.php");
                     <div class="container d-flex flex-wrap">
                          
                               <?php
-                              if(!$petList)
-                              echo "<div class='d-flex flex-wrap justify-content-center w-100'> <h1>No tiene pets cargados!</h1> </div>";
+                              if(!$petList){
+                              echo "<div class='d-flex flex-wrap justify-content-center w-100'> <h1>No tiene pets cargados!</h1> </div>";}else{
                               foreach($petList as $pets)
                               {
                                    ?>
@@ -58,7 +59,7 @@ include ("ownerNav.php");
                                                                                                <th scope="col">Weight</th>
                                                                                                <th scope="col">Size</th>
                                                                                                <th scope="col">Weight</th>
-                                                                                               <th scope="col">Age</th>
+                                                                                               <th scope="col">Age (Years)</th>
                                                                                           </tr>
                                                                                           </thead>
                                                                                           <tbody>
@@ -81,9 +82,13 @@ include ("ownerNav.php");
                                                                                        <div><hr></div>
                                                                                          <div class=" d-flex flex-wrap justify-content-center w-100 mt-2"><h5>Vacunation Plan</h5></div>
                                                                                        <div class="d-flex flex-wrap justify-content-center w-100"> <?php 
+                                                                                       if(!$pets->getPetVaccinationPlan())
+                                                                                       {echo "<h1>Sin imagen</h1>";}else{
                                                                                             $VaccinationPlan = $pets->getPetVaccinationPlan();
                                                                                             $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));
-                                                                                            echo '<img src="data:image/jpeg;base64,'.$VaccinationPlanData.'">';?></div>
+                                                                                            echo '<img src="data:image/jpeg;base64,'.$VaccinationPlanData.'">'
+                                                                                            ;}?>
+                                                                                            </div>
                                                                                             <div><hr></div>
 
                                                                                             <div class=" d-flex flex-wrap justify-content-center w-100 mt-2"><h5>Details</h5></div>
@@ -91,7 +96,6 @@ include ("ownerNav.php");
                                                                                        <div><hr></div>
                                                                                        <div class="d-flex flex-wrap justify-content-center w-100"><h5>Video</h5></div>
                                                                                        <div class="d-flex flex-wrap justify-content-center w-100"> <object width="425" height="350" data="http://www.youtube.com/v/<?php echo substr($pets->getPetVideo(),-11)?>" type="application/x-shockwave-flash"></object></div>
-                                                                                       
                                                                                        </div>
                                                                              <div class="modal-footer d-flex flex-wrap justify-content-center">
                                                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -104,7 +108,7 @@ include ("ownerNav.php");
                                    
                                     
                                         <?php
-                              }
+                              }}
                               ?>
                </div>
           </div>

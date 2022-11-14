@@ -40,7 +40,7 @@
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">BirthDate</label>
-                                   <input type="date" name="birthDate" value="" class="form-control" Required >
+                                   <input type="date" name="birthDate"  min="01-01-1925" max="2004-01-01" value="" class="form-control" Required >
                               </div>
                          </div>
                          <div class="col-lg-4">
@@ -53,6 +53,12 @@
                               <div class="form-group">
                                    <label for="">Password</label>
                                    <input type="password" name="password" placeholder="Password" value="" class="form-control" Required >
+                              </div>
+                         </div>
+                         <div class="col-lg-4">
+                              <div class="form-group">
+                                   <label for="">Repeat Password</label>
+                                   <input type="password" name="password1" placeholder="Password" value="" class="form-control" Required >
                               </div>
                          </div>
                          <div class="col-lg-4">

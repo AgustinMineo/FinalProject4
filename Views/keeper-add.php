@@ -56,6 +56,12 @@
                               </div>
                          </div>
                          <div class="col-lg-4">
+                              <div class="form-group">
+                                   <label for="">Repeat Password</label>
+                                   <input type="password" name="password1" placeholder="Password" value="" class="form-control" Required >
+                              </div>
+                         </div>
+                         <div class="col-lg-4">
                               <div class="form-group h-75">
                                    <label for="">Tamaño del animal</label>
                                    <select name="animalSize" class="w-100 h-75" Required>

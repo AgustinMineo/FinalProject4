@@ -11,7 +11,7 @@ class Pet{
     private $petDetails;
     private $petVideo;// video de la mascota (url por el momento)
     private $petWeight; // peso del pet
-    private $ownerID; // dueño del perro (objeto)
+    private $ownerID; // 
     private $petAge; // edad del perro
 
     public function getPetID(){

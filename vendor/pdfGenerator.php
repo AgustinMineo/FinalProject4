@@ -2,11 +2,6 @@
 require 'autoload.php';
 
 $html ='
-
-<h1>HOLAAAA DESDE PDF desde php xd</h1>
-
-
-
 ';
 use Dompdf\Dompdf;
 $dompdf = new Dompdf();

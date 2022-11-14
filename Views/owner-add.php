@@ -76,7 +76,7 @@
                               </div>
                          </div>
                          <div class="col-lg-4">
-                         <form action="<?php echo FRONT_ROOT ?>Image/Upload" method="post" enctype="multipart/form-data" class="bg-light-alpha p-5">
+                         <!--<form action="<?php //    echo FRONT_ROOT ?>Image/Upload" method="post" enctype="multipart/form-data" class="bg-light-alpha p-5">
                               <div class="row">                         
                                    <div class="col-lg-4">
                                         <div class="form-group">
@@ -85,7 +85,7 @@
                                         </div>
                                    </div>                         
                               </div>
-                         </form>
+                         </form>-->
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
@@ -93,9 +93,8 @@
                                    <textarea type="textarea" name="userDescription" rows = "1" cols ="10" class="form-control"></textarea>
                               </div>
                          </div>
-                         <div class ="container d-flex justify-content-center mt-5">
-                              <button id="btnRegister" type="submit" class="btn btn-dark ml-auto d-block w-25">Sign Up</button>
-                              <script src='<?php echo JS_PATH ?>owner.js'></script>
+                         <div class = "container d-flex justify-content-center mt-5">
+                              <button type="submit" class="btn btn-dark ml-auto d-block w-25">Sign Up</button>
                          </div>
                     </form>
                </div>

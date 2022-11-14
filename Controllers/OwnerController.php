@@ -17,7 +17,7 @@ use Models\Owner as Owner;
     }
 
     public function goLoginOwner(){
-        require_once(VIEWS_PATH."loginOwner.php");
+        require_once(VIEWS_PATH."loginUser.php");
     }
     public function goLandingOwner(){
         require_once(VIEWS_PATH."landingPage.php");
@@ -26,8 +26,8 @@ use Models\Owner as Owner;
         require_once(VIEWS_PATH."owner-add.php");
     }
 
-     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userImage,$userDescription){ 
-        if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
+     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,/*$userImage,*/$userDescription){ 
+        if($this->OwnerDAO->searchOwnerByEmail($email) == false){
             if(strcmp($password,$confirmPassword) == 0){
             $newOwner = new Owner();
             $newOwner->setLastName($lastName);
@@ -36,7 +36,7 @@ use Models\Owner as Owner;
             $newOwner->setbirthDate($birthDate);
             $newOwner->setEmail($email);
             $newOwner->setPassword($password);
-            $newOwner->setImage($userImage);
+            //$newOwner->setImage($userImage);
             $newOwner->setDescription($userDescription);
             $newOwner->setPetAmount('0');
             $this->OwnerDAO->AddOwner($newOwner);

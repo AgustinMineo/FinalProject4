@@ -8,6 +8,7 @@ class KeeperDAO implements IKeeperDAO{
     private $connection;
     private $userTable = 'user';
     private $keeperTable = 'keeper';
+    private $keeperDaysTable = 'keeperdays';
 
 
     public function AddKeeper (Keeper $keeper){
@@ -45,56 +46,91 @@ class KeeperDAO implements IKeeperDAO{
           throw $ex;
       }   
 
-  }
-  public function GetAllKeeper(){
-
-    try {
-        $keeperList = array();
-
-        $query = "SELECT * FROM ".$this->userTable;
-
-        $this->connection = Connection::GetInstance();
-
-        $resultSet = $this->connection->Execute($query);
-
-        foreach($resultSet as $row){
-            $keeper = new Keeper();
-            $keeper->setfirstName($row["firstName"]);
-            $keeper->setLastName($row["lastName"]);
-            $keeper->setEmail($row["email"]);
-            $keeper->setCellPhone($row["cellphone"]);
-            $keeper->setbirthDate($row["birthdate"]);
-            $keeper->setPassword($row["password"]);
-            $keeper->setImage($row["userImage"]);
-            $keeper->setDescription($row["userDescription"]);
-
-            array_push($keeperList, $keeper);
-        }
-        return $keeperList;
-    } catch (Exception $ex) {
-        throw $ex;
     }
-}
-
-
-  public function searchKeeperByEmail($email){
-    try {
-        $query = "SELECT userID FROM ".$this->userTable." WHERE email = '$email';";
-        
+    public function GetAllKeeper(){
+      try{
+        $query = "SELECT  u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price, k.animalSize, d.firstDate, d.lastDate FROM "
+                .$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID JOIN ".$this->keeperDaysTable." d ON
+                k.keeperID = d.keeperID;";
         $this->connection = Connection::GetInstance();
-
         $resultSet = $this->connection->Execute($query);
+        if($resultSet){
+          $keeperList = array();
           foreach($resultSet as $row){
-            $id = $row['userID'];
+            $keeper = new Keeper();
+            $keeper->setKeeperId($row['keeperID']);
+            $keeper->setFirstName($row['firstName']);
+            $keeper->setLastName($row['lastName']);
+            $keeper->setEmail($row['email']);
+            $keeper->setCellPhone($row['cellphone']);
+            $keeper->setbirthDate($row['birthdate']);
+            $keeper->setFirstAvailabilityDays($row['firstDate']);
+            $keeper->setLastAvailabilityDays($row['lastDate']);
+            $keeper->setAnimalSize($row['animalSize']);
+            $keeper->setPrice($row['price']);
+            array_push($keeperList,$keeper);
           }
-          return $id;
+          return $keeperList;
+        } else {return NULL;}
+      } catch(Exception $ex){throw $ex;}
     }
-    catch (Exception $ex) {
-      throw $ex;
-    } 
-  }
-
-  public function searchKeeperToLogin($email,$password){
+    // public function GetKeeperByID($keeperID){
+    //   try{
+    //     $query = "SELECT k.keeperID, u.firstName, u.lastName, u.email, u.";
+    //   }
+    //}
+    public function getKeeperByDisponibility($date1,$date2){
+      try{
+        $query =  "SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, d.firstDate, d.lastDate  
+                FROM ".$this->userTable." u JOIN ".$this->keeperTable. " k ON k.userID = u.userID 
+                JOIN ".$this->keeperDaysTable." d ON d.keeperID = k.keeperID
+                WHERE firstDate >= '$date1' AND lastDate <= '$date2';";
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query);
+        if($resultSet){
+          foreach($resultSet as $row){
+            $keeperList = array();
+            $keeper = new Keeper();
+            $keeper->setKeeperId($row['keeperID']);
+            $keeper->setFirstName($row['firstName']);
+            $keeper->setLastName($row['lastName']);
+            $keeper->setEmail($row['email']);
+            $keeper->setCellPhone($row['cellphone']);
+            $keeper->setPrice($row['price']);
+            $keeper->setAnimalSize($row['animalSize']);
+            $keeper->setFirstAvailabilityDays($row['firstDate']);
+            $keeper->setLastAvailabilityDays($row['lastDate']);
+            array_push($keeperList, $keeper);
+            }
+          return $keeperList;
+        } else { return NULL; } 
+      } catch(Exception $ex){ throw $ex; } 
+    }
+    public function searchKeeperByEmail($email){
+      try {
+        $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email, k.keeperID, k.price, d.firstDate, d.lastDate
+        FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID
+        JOIN ".$this->keeperDaysTable." d ON d.keeperID = k.keeperID  
+        WHERE email = '$email';";
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query);
+        if($resultSet){
+          foreach($resultSet as $row){
+            $keeper = new Keeper();
+            $keeper->setKeeperId($row['keeperID']);
+            $keeper->setFirstName($row['firstName']);
+            $keeper->setLastName($row['lastName']);
+            $keeper->setCellPhone($row['cellphone']);
+            $keeper->setEmail($row['email']);
+            $keeper->setPrice($row['price']);
+            $keeper->setFirstAvailabilityDays($row['firstDate']);
+            $keeper->setLastAvailabilityDays($row['lastDate']);
+            return $keeper;
+          }
+        } else { return NULL; } }
+      catch (Exception $ex) { throw $ex; } 
+    }
+    public function searchKeeperToLogin($email,$password){
     if($email && $password){
     try {
       $query = "SELECT k.keeperID, k.animalSize, k.price, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID WHERE email = '$email' AND password = md5($password);";
@@ -135,25 +171,39 @@ class KeeperDAO implements IKeeperDAO{
       }else{
         echo '<div class="alert alert-danger">Incorrect Email or password . Please try again!</div>';
       }
-  }
-
-  public function getKeeperByDisponibility($date1,$date2){
-    $keeperList = array();
-    $keeperList = $this->getAllKeeper();
-    if($keeperList){
-    $keeperListDisponibility= array();
-    foreach($keeperList as $value){
-        //if($value->getFirstAvailabilityDays()<=$date1 && $value->getLastAvailabilityDays()>=$date1){
-          //  if($value->getFirstAvailabilityDays()<=$date2 && $value->getLastAvailabilityDays()>=$date2){
-                array_push($keeperListDisponibility,$value);
-            //}
-       // }
     }
-}else{
-    echo "<h1>No existen keepers </h1>";
-    return array();
-}
-    return $keeperListDisponibility;
-}
-}
-?>
+    public function changeAvailabilityDays($keeperID, $value1, $value2){
+      $exist = $this->searchDays($keeperID, $value1, $value2);
+      if(!$exist){
+        try {  
+          $query = "INSERT INTO ".$this->keeperDaysTable." (keeperDaysID, keeperID, firstDate, lastDate) 
+          VALUES (:keeperDaysID, :keeperID, :firstDate, :lastDate);";
+          $parameters['keeperDaysID'] = NULL;
+          $parameters['keeperID'] = $keeperID;
+          $parameters['firstDate'] = $value1;
+          $parameters['lastDate'] = $value2;
+          
+          $this->connection = Connection::GetInstance();
+          if($this->connection->ExecuteNonQuery($query, $parameters)){ return true; }
+          else{ return false; } 
+          
+        } catch (Exception $ex) {
+          throw $ex;
+        }
+      }
+    }
+    public function searchDays($keeperID, $value1, $value2){
+      try{
+        $query = "SELECT keeperDaysID FROM keeperdays WHERE firstDate = '$value1' AND lastDate = '$value2' AND keeperID = $keeperID;";
+
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query);
+
+        if($resultSet != NULL){ 
+          foreach($resultSet as $row){
+            $id = $row['keeperDaysID'];
+          }
+          return $id; 
+        } else { return false; } }
+      catch (Exception $ex) { throw $ex; } }
+}?>

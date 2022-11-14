@@ -6,7 +6,7 @@ use Models\Pet as Pet;
 use DAODB\PetDAO as PetDAO;
 
 class PetController{
-    private $petDAO;
+    private $PetDAO;
 
     public function goLandingOwner(){
         require_once(VIEWS_PATH."ownerNav.php");
@@ -39,9 +39,8 @@ class PetController{
     }
     public function searchPetList(){
         $petListSearch= array();
-        $this->petDAO = new PetDAO();
         if(isset($_SESSION["loggedUser"])){
-            $petListSearch = $this->petDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+            $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
             return $petListSearch; 
         }
     }

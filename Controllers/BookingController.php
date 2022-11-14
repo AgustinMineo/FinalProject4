@@ -46,11 +46,11 @@ class BookingController{
                 }
                  if($petList)
                  {
-                     $this->goBookingView($listKeepers,$petList);
+                     $this->goBookingView($petList,$listKeepers);
                 }else{
                     echo "<h1>No tiene mascotas que concuerden con el tamaño</h1>";
                 }
-                $this->goBookingView($petList, $listKeepers);
+                //$this->goBookingView($petList, $listKeepers);
             }else{
                 echo "<h1>No existen keepers con disponibilidad de entre $value1 y $value2</h1>";
             }
@@ -58,6 +58,7 @@ class BookingController{
     }
 
     public function newBooking($email,$petId){
+        echo $petId;
         $newBooking = new Booking();
         $keeperInfo = new Keeper(); //CHECK
         $keeperInfo=$this->keeperDAO->searchKeeperByEmail($email);
@@ -66,7 +67,7 @@ class BookingController{
         $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());// cambiar a dias que pide el owner
         $newBooking->setKeeperID($keeperInfo->getKeeperId());
         $newBooking->setTotalValue($this->priceCounter($newBooking->getFirstDate(), $newBooking->getLastDate(), $keeperInfo->getPrice()));
-        //$newBooking->setAmountReservation(); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
+        $newBooking->setAmountReservation(1000); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
         //require_once(VIEWS_PATH. "showPetBooking.php");
         $newBooking->setPetID($petId);
         $this->BookingDAO->addBooking($newBooking);

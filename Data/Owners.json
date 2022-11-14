@@ -42,5 +42,27 @@
         "password": "123456",
         "userImage": "",
         "userDescription": ""
+    },
+    {
+        "ownerId": 5,
+        "lastName": "Dominguez",
+        "firstName": "Franco",
+        "cellPhone": "02235432067",
+        "birthDate": "1998-09-24",
+        "email": "mineoagustin@gmail.com",
+        "password": "1234",
+        "userImage": null,
+        "userDescription": ""
+    },
+    {
+        "ownerId": 6,
+        "lastName": "Dominguez",
+        "firstName": "Franco",
+        "cellPhone": "02235432067",
+        "birthDate": "1998-04-18",
+        "email": "tinchomirandda@gmail.com",
+        "password": "1234",
+        "userImage": null,
+        "userDescription": ""
     }
 ]

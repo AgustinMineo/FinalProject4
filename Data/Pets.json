@@ -1,10 +1,19 @@
 [
     {
         "petID": 1,
-        "petName": "Agustin",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/beagles-puppies-looking-something_1150-18193.jpg?w=450&t=st=1667603811~exp=1667604411~hmac=8f9a2e6c678c57d699ed5d72f1578a84cb38ee4e0bf111058fa9f499ac9d63a5",
-        "breedID": "1",
+        "petName": "Prueba",
+        "petImage": "Inked4_LI.jpg",
+        "breedID": "3",
         "petSize": "Small",
+<<<<<<< HEAD
+        "petVaccinationPlan": "Inked4_LI.jpg",
+        "petDetails": "Prueba",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=4PP-jETn3bs",
+        "petWeight": "Medium",
+        "ownerID": 1,
+        "petAge": "2022-01-11"
+    }
+=======
         "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
         "petDetails": "muerte como la xuxa",
         "petVideo": "https:\/\/www.youtube.com\/watch?v=GZ8bvTAcTFI",
@@ -104,4 +113,5 @@
         "ownerID": 4,
         "petAge": "1999-12-21"
 
+>>>>>>> e7dbc1c500f17e25ab4443dfff88c51c1b045d53
 ]

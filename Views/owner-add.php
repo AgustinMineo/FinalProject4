@@ -68,7 +68,6 @@
                                    </div>
                               </div>
 
-                         </div>
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for=""> Repeat password</label><!--Se tiene que validar con el password de arriba que sean iguales.-->
@@ -76,22 +75,17 @@
                               </div>
                          </div>
                          <div class="col-lg-4">
-                         <form action="<?php echo FRONT_ROOT ?>Image/Upload" method="post" enctype="multipart/form-data" class="bg-light-alpha p-5">
-                              <div class="row">                         
-                                   <div class="col-lg-4">
-                                        <div class="form-group">
-                                             <label for="">Imagen:</label>
-                                             <input type="file" name="file" class="form-control-file">                                   
-                                        </div>
-                                   </div>                         
-                              </div>
-                         </form>
+                                   <div class="form-group">
+                                        <label for="">Image</label>
+                                        <input type="file" name="userImage" id="userImage" value="" class="form-control">
+                                   </div>
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">Description</label>
                                    <textarea type="textarea" name="userDescription" rows = "1" cols ="10" class="form-control"></textarea>
                               </div>
+                         </div>
                          </div>
                          <div class ="container d-flex justify-content-center mt-5">
                               <button id="btnRegister" type="submit" class="btn btn-dark ml-auto d-block w-25">Sign Up</button>

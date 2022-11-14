@@ -37,9 +37,10 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
      
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
+                if(strcmp($password,$confirmPassword) == 0){
             $newKeeper = new Keeper();
             $newKeeper->setLastName($lastName);
             $newKeeper->setfirstName($firstName);
@@ -54,15 +55,20 @@
             $this->KeeperDAO->AddKeeper($newKeeper);
             $this->newMailer->welcomeMail($lastName,$firstName,$email);
             $this->goLoginKeeper();
-        }else{
-            echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-            $this->addKeeperView();
+            }else{
+                echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
+                    $this->addKeeperView();
+            }
         }
-        }        
         else{
-            echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-            $this->addKeeperView();
-        }
+                echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+                $this->addKeeperView();
+            }
+                }        
+                else{
+                    echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+                    $this->addKeeperView();
+                }
          //$newKeeper->setPoints('0');
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
          //$newKeeper->setKeeperImg($keeperImg);

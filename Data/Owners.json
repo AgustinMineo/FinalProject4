@@ -10,5 +10,17 @@
         "userImage": "",
         "userDescription": "agustin@gmail.com",
         "petAmount": "0"
+    },
+    {
+        "ownerId": 2,
+        "lastName": "Pruba2",
+        "firstName": "Pruba2",
+        "cellPhone": "123",
+        "birthDate": "2004-01-01",
+        "email": "Pruba2@Pruba2.com",
+        "password": "123",
+        "userImage": "",
+        "userDescription": "Pruba2",
+        "petAmount": "0"
     }
 ]

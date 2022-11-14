@@ -30,46 +30,38 @@ use DAO\MailerDAO as MailerDAO;
         require_once(VIEWS_PATH."owner-add.php");
     }
 
-     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userImage,$userDescription){ 
+    public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userImage,$userDescription){ 
         if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
-<<<<<<< HEAD
             if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
-=======
-            if(strcmp($password,$confirmPassword) == 0){
->>>>>>> e7dbc1c500f17e25ab4443dfff88c51c1b045d53
-            $newOwner = new Owner();
-            $newOwner->setLastName($lastName);
-            $newOwner->setfirstName($firstName);
-            $newOwner->setCellPhone($cellPhone);
-            $newOwner->setbirthDate($birthDate);
-            $newOwner->setEmail($email);
-            $newOwner->setPassword($password);
-            $newOwner->setImage($userImage);
-            $newOwner->setDescription($userDescription);
-            $newOwner->setPetAmount('0');
-            $this->OwnerDAO->AddOwner($newOwner);
-            $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
-            $this->goLoginOwner();
-        }else{
-            echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-            $this->addOwnerView();
-        }
-        }
-        else{
-<<<<<<< HEAD
-            echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-            $this->addOwnerView();
-=======
-            echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
-            $this->addOwnerView();  
->>>>>>> e7dbc1c500f17e25ab4443dfff88c51c1b045d53
-        }
-    }
-    else{
-        echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-        $this->addOwnerView();
-    }
+                if(strcmp($password,$confirmPassword) == 0){
+                $newOwner = new Owner();
+                $newOwner->setLastName($lastName);
+                $newOwner->setfirstName($firstName);
+                $newOwner->setCellPhone($cellPhone);
+                $newOwner->setbirthDate($birthDate);
+                $newOwner->setEmail($email);
+                $newOwner->setPassword($password);
+                $newOwner->setImage($userImage);
+                $newOwner->setDescription($userDescription);
+                $newOwner->setPetAmount('0');
+                $this->OwnerDAO->AddOwner($newOwner);
+                $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
+                $this->goLoginOwner();
+                }else{
+                    echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
+                    $this->addOwnerView();  
+                }
+            }
+                else{
+                    echo '<div class="alert alert-danger">Email already exist! Please try again with another email/div>';
+                    $this->addOwnerView();  
+                }
+            }
+            else{
+                echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+                $this->addOwnerView();
+            }
   }
-}
 
+ }
 ?>

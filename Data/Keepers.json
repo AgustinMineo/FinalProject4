@@ -11,5 +11,18 @@
         "lastAvailabilityDays": "2022-11-30",
         "animalSize": "Small",
         "price": "250"
+    },
+    {
+        "keeperId": 2,
+        "lastName": "Test",
+        "firstName": "prueba",
+        "cellPhone": "123",
+        "birthDate": "2004-01-01",
+        "email": "tincho1@tincho.com",
+        "password": "123",
+        "firstAvailabilityDays": null,
+        "lastAvailabilityDays": null,
+        "animalSize": "Big",
+        "price": "250"
     }
 ]

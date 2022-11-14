@@ -41,7 +41,6 @@ class BookingController{
         $this->keeperDAO = new KeeperDAO();
         $this->MailerDAO = new MailerDAO();
     }
-
     public function bookingBuild($value1,$value2){
         $keeperDAO = new KeeperDAO();
         $listKeepers = array();
@@ -54,7 +53,7 @@ class BookingController{
                 }
                  if($petList)
                  {
-                     $this->goBookingView($listKeepers,$petList);
+                     $this->goBookingView($petList,$listKeepers);
                 }else{
                     echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
                     $this->goIndex();

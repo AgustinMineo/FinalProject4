@@ -36,7 +36,8 @@ require_once(VIEWS_PATH."validate-session.php");
                               {
                                    ?>
                                    <div class="card m-3" style="width: 18rem;">
-                                   <?php $image = $pets->getPetImage();$imageData = base64_encode(file_get_contents($image));echo '<img src="data:image/jpeg;base64,'.$imageData.'">';?>
+                                   <?php //$image = $pets->getPetImage();$imageData = base64_encode(file_get_contents($image));echo '<img src="data:image/jpeg;base64,'.$imageData.'">';
+                                   echo "Imagen del Pet";?>
                                         <div class="card-body d-flex flex-wrap justify-content-center align-items-center w-100">
                                         <h5 class="card-title d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetName()?></h5>
                                         <span class="w-100"><hr></span>

@@ -109,6 +109,6 @@ class OwnerDAO implements IOwnerDAO {
         else{
             return 1;
         }
-    } 
+    }
 }
 ?>

@@ -25,7 +25,8 @@ class BookingController{
      {
          require_once(VIEWS_PATH."showPetBooking.php");
      }
-     public function goBookingView($petList, $listKeepers){
+     public function goBookingView($petList,$listKeepers){
+
         require_once(VIEWS_PATH."ownerNav.php");
         require_once(VIEWS_PATH."BookingViews.php");
      }
@@ -104,6 +105,9 @@ class BookingController{
                 echo "<div class='alert alert-danger'>You have no reservations available!</div>";
                 $this->goIndex();
             }
+        }else{
+            echo "<div class='alert alert-danger'>You have no pets!!</div>";
+                $this->goIndex();
         }
     }
 // MIGRAR A DAO

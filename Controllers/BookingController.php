@@ -104,6 +104,9 @@ class BookingController{
                 echo "<div class='alert alert-danger'>You have no reservations available!</div>";
                 $this->goIndex();
             }
+        }else{
+            echo "<div class='alert alert-danger'>You have no pets!!</div>";
+                $this->goIndex();
         }
     }
 // MIGRAR A DAO

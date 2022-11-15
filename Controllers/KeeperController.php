@@ -98,7 +98,6 @@
         if($value){
             echo '<div class="alert alert-success">The new dates were set correctly</div>';
         }else{
-
             echo '<div class="alert alert-danger">Error saving the days! Please try again later</div>';
         }
         $this->goLandingKeeper();

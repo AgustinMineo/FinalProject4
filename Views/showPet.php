@@ -36,7 +36,7 @@ require_once(VIEWS_PATH."validate-session.php");
                               {
                                    ?>
                                    <div class="card m-3" style="width: 18rem;">
-                                   <?php $image = $pets->getPetImage();$imageData = base64_encode(file_get_contents($image));echo '<img src="data:image/jpeg;base64,'.$imageData.'">';?>
+                                   <?php if($image = $pets->getPetImage()){$imageData = base64_encode(file_get_contents($image));echo '<img src="data:image/jpeg;base64,'.$imageData.'">';}else{ echo'<?php echo IMG_PATH. ?>';}?>
                                         <div class="card-body d-flex flex-wrap justify-content-center align-items-center w-100">
                                         <h5 class="card-title d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetName()?></h5>
                                         <span class="w-100"><hr></span>
@@ -74,9 +74,9 @@ require_once(VIEWS_PATH."validate-session.php");
                                                                                      <div class=" d-flex flex-wrap justify-content-center w-100 mt-2"><h5>Pet Image</h5></div>
                                                                                      <div class=" d-flex flex-wrap justify-content-center w-100">
                                                                                          <?php
-                                                                                            $image = $pets->getPetImage();
+                                                                                            if($image = $pets->getPetImage()){
                                                                                             $imageData = base64_encode(file_get_contents($image));
-                                                                                            echo '<img src="data:image/jpeg;base64,'.$imageData.'">';?>
+                                                                                            echo '<img src="data:image/jpeg;base64,'.$imageData.'">';}else{echo "<h3>No tiene imagen</h3>";}?>
                                                                                        </div>
                                                                                        <div><hr></div>
                                                                                          <div class=" d-flex flex-wrap justify-content-center w-100 mt-2"><h5>Vacunation Plan</h5></div>

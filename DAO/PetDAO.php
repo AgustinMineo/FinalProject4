@@ -50,7 +50,7 @@ class PetDAO implements IPetDAO{
             $petFile = file_get_contents(ROOT.'Data/Pets.json');
             // Si el file tiene datos hace un decode de la info y la guarda en el arreglo, sino devuelve un arreglo vacio.
             $petFileDecode = ($petFile) ? json_decode($petFile, true) : array();
-
+            
             foreach($petFileDecode as $petDecode){
                 $petValue = new pet();
                 $petValue->setPetID($petDecode["petID"]);
@@ -72,19 +72,19 @@ class PetDAO implements IPetDAO{
         }
 
     }
-    public function searchPets($email){
+    public function searchPets($id){
         $this->RetriveData();
         $petListSearch = array();
         foreach($this->petList as $ownerPet){
-            if($ownerPet->getOwnerID() == $email){
+            if($ownerPet->getOwnerID() == $id){
                 $ownerPet->setPetAge($this->getAgeOfPet($ownerPet->getPetAge()));
                 array_push($petListSearch,$ownerPet);
             }
-            if($petListSearch){
-                return $petListSearch;
+        }
+        if($petListSearch){
+            return $petListSearch;
             }else{
-                echo "<div class='alert alert-danger'>Usted no tiene pets disponibles</div>";
-            }
+            echo "<div class='alert alert-danger'>Usted no tiene pets disponibles</div>";
         }
     }
     public function searchPetsBySize($email,$size){

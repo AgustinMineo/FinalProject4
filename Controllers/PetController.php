@@ -7,8 +7,9 @@ use DAO\PetDAO as PetDAO;
 use DAO\OwnerDAO as OwnerDAO;
 
 class PetController{
-    private $petDAO;
+
     private $OwnerDAO;
+    private $PetDAO;
 
     public function goLandingOwner(){
         require_once(VIEWS_PATH."ownerNav.php");
@@ -42,7 +43,14 @@ class PetController{
             echo"Usuario no logeado";
             }
     }
-
+    public function searchPetList(){
+        $petListSearch= array();
+        if(isset($_SESSION["loggedUser"])){
+            // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+            $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); 
+            return $petListSearch; 
+        }
+    }
     public function showPets(){
         $petList = $this->PetDAO->searchPetList();
         require_once(VIEWS_PATH . "showPet.php");

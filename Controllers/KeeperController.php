@@ -94,10 +94,11 @@
     }
 // MIGRAR A DAO
     public function updateAvailabilityDays($date1,$date2){
-        $value=$this->KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getEmail(),$date1,$date2);
+        $value = $this->KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getKeeperID(),$date1,$date2);
         if($value){
             echo '<div class="alert alert-success">The new dates were set correctly</div>';
         }else{
+
             echo '<div class="alert alert-danger">Error saving the days! Please try again later</div>';
         }
         $this->goLandingKeeper();

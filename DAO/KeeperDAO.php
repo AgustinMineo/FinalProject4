@@ -91,6 +91,16 @@ class KeeperDAO implements IKeeperDAO{
         return null;
   }
 
+  public function searchKeeperByID($id){
+    $this->RetriveData();
+        foreach($this->keeperList as $value){ /// Buscamos dentro del arreglo de keeper
+            if($value->getKeeperId() == $id){ /// Si el id es el mismo, entonces devolvemos el keeper, sino
+                    return $value;
+            }
+        }
+        return null;
+  }
+
   public function searchKeeperToLogin($email,$password){
     $newKeeper =$this->searchKeeperByEmail($email);
     if($newKeeper){
@@ -101,9 +111,9 @@ class KeeperDAO implements IKeeperDAO{
         return null;
     }
 }
-  public function changeAvailabilityDays($email,$value1, $value2){
+  public function changeAvailabilityDays($id,$value1, $value2){
     $newValues = array();
-    $value = $this->searchKeeperByEmail($email);
+    $value = $this->searchKeeperByID($id);
     if($value1<$value2 && isset($value)){
        $value->setFirstAvailabilityDays($value1);
         $value->setLastAvailabilityDays($value2);

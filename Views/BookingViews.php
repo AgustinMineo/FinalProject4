@@ -84,7 +84,7 @@ require_once(VIEWS_PATH."validate-session.php");
             
             <li class="list-group-item bg-light text-dark">Al <?php echo $keeper->getLastAvailabilityDays();?></li>
             
-            <input type="checkbox" name="email" value="<?php echo $keeper->getEmail()?>"> <label for="">Reservar</label><!--/// Cambiar el email por el keeperID-->
+            <input type="checkbox" name="email" value="<?php echo $keeper->getEmail();?>"> <label for="">Reservar</label><!--/// Cambiar el email por el keeperID-->
         </ul>
     </div>
     <?php

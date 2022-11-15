@@ -1,6 +1,7 @@
 <?php
 namespace DAO;
 use Models\Pet as Pet;
+use Helper\SessionHelper as SessionHelper;
 
 class PetDAO implements IPetDAO{
     private $petList= array();
@@ -144,8 +145,8 @@ class PetDAO implements IPetDAO{
 
     public function searchPetList(){
         $petListSearch= array();
-        if(isset($_SESSION["loggedUser"])){
-            $petListSearch = $this->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+        if(SessionHelper::getCurrentUser()){
+            $petListSearch = $this->searchPets(SessionHelper::getCurrentOwnerID()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
             return $petListSearch; 
         }
     }

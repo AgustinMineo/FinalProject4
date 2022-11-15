@@ -30,6 +30,9 @@ class SessionHelper{
     public static function getCurrentOwnerID(){
         return $_SESSION["loggedUser"]->getOwnerId();
     }
+    public static function getCurrentPetAmount(){
+        return $_SESSION["loggedUser"]->getPetAmount();
+    }
 
 }
 

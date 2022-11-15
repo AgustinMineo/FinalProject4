@@ -6,6 +6,7 @@
  use Models\Keeper as Keeper;
  use DAO\MailerDAO as MailerDAO;
  use DAO\OwnerDAO as OwnerDAO;
+ use Helper\SessionHelper as SessionHelper;
  class KeeperController
  {
     private $KeeperDAO;
@@ -94,7 +95,7 @@
     }
 // MIGRAR A DAO
     public function updateAvailabilityDays($date1,$date2){
-        $value = $this->KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getKeeperID(),$date1,$date2);
+        $value = $this->KeeperDAO->changeAvailabilityDays(SessionHelper::getCurrentKeeperID(),$date1,$date2);
         if($value){
             echo '<div class="alert alert-success">The new dates were set correctly</div>';
         }else{

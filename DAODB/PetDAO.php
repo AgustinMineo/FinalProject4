@@ -5,6 +5,7 @@ use \Exception as Exception;
 use DAODB\Connect as Connect;
 use DAO\IPetDAO as IPetDAO;
 use Models\Pet as Pet;
+use Helper\SessionHelper as SessionHelper;
 
 class PetDAO implements IPetDAO{
     private $connection;
@@ -15,23 +16,23 @@ class PetDAO implements IPetDAO{
     
     public function AddPet(Pet $pet){
         try{
-            $query = "INSERT INTO ".$this->petTable."(petID, petName, petImage, breedID, petSize, petVacunationPlan, petDetails, petVideo, petWeight, ownerID, petAge)
-                      VALUES (:petID, :petName, :petImage, :breedID, :petSize, :petVacunationPlan, :petDetails, :petVideo, :petWeight, :ownerID, :petAge);";
+            $query = "INSERT INTO ".$this->petTable."(petID, petName, petImage, breedID, petSize, petVaccinationPlan, petDetails, petVideo, petWeight, ownerID, petAge)
+                      VALUES (:petID, :petName, :petImage, :breedID, :petSize, :petVaccinationPlan, :petDetails, :petVideo, :petWeight, :ownerID, :petAge);";
             $parameters["petID"] = NULL;
             $parameters["petName"] = $pet->getPetName();
             $parameters["petImage"] = $pet->getPetImage();
             $parameters["breedID"] = $pet->getBreedID();
             $parameters["petSize"] = $pet->getPetSize();
-            $parameters["petVacunationPlan"] = $pet->getPetVaccinationPlan();
+            $parameters["petVaccinationPlan"] = $pet->getPetVaccinationPlan();
             $parameters["petDetails"] = $pet->getPetDetails();
             $parameters["petVideo"] = $pet->getPetVideo();
             $parameters["petWeight"] = $pet->getPetWeight();
-            $parameters["ownerID"] = $_SESSION["loggedUser"]->getOwnerId();
+            $parameters["ownerID"] = SessionHelper::getCurrentOwnerID();
             $parameters["petAge"] = $pet->getPetAge();
             $this->connection = Connection::GetInstance();
             //Funcion para hacer el Update de PETAMOUNT en la Tabla de Owners. 
             if($this->connection->ExecuteNonQuery($query, $parameters)){
-                $queryAmount = "update " .$this->ownerTable." o set petAmount = ".$_SESSION["loggedUser"]->getPetAmount()." + 1 WHERE o.ownerID = ".$_SESSION["loggedUser"]->getOwnerId();
+                $queryAmount = "update " .$this->ownerTable." o set petAmount = ".SessionHelper::getCurrentPetAmount()." + 1 WHERE o.ownerID = ".SessionHelper::getCurrentOwnerID();
                 $this->connection->ExecuteNonQuery($queryAmount,array());
             }
         } catch (Exception $ex) { throw $ex; } 
@@ -40,7 +41,7 @@ class PetDAO implements IPetDAO{
     public function GetAllPet(){
         try {
 
-            $query = "SELECT p.petID, p.petName, p.petImage, b.name, p.petSize, p.petVacunationPlan, p.petDetails, p.petVideo, p.petWeight, p.ownerID, p.petAge
+            $query = "SELECT p.petID, p.petName, p.petImage, b.name, p.petSize, p.petVaccinationPlan, p.petDetails, p.petVideo, p.petWeight, p.ownerID, p.petAge
             FROM ".$this->petTable." p  JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID
             JOIN ".$this->breedTable." b ON p.breedID = b.breedID;";
             $this->connection = Connection::GetInstance();
@@ -54,7 +55,7 @@ class PetDAO implements IPetDAO{
                     $pet->setPetImage($row["petImage"]);
                     $pet->setBreedID($row["name"]);
                     $pet->setPetSize($row["petSize"]);
-                    $pet->setPetVaccinationPlan($row["petVacunationPlan"]);
+                    $pet->setPetVaccinationPlan($row["petVaccinationPlan"]);
                     $pet->setPetDetails($row["petDetails"]);
                     $pet->setPetVideo($row["petVideo"]);
                     $pet->setPetWeight($row["petWeight"]);
@@ -67,7 +68,7 @@ class PetDAO implements IPetDAO{
         } catch (Exception $ex) { throw $ex; }
     }
     public function searchPets($ownerID){
-        $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVacunationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, b.name
+        $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVaccinationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, b.name
                   FROM ".$this->petTable." p JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID 
                   JOIN ".$this->breedTable." b ON p.breedID = b.breedID
                   WHERE p.ownerID = $ownerID;";
@@ -84,7 +85,7 @@ class PetDAO implements IPetDAO{
                 $pet->setPetWeight($row['petWeight']);
                 $pet->setPetAge($row['petAge']);
                 $pet->setPetImage($row['petImage']);
-                $pet->setPetVaccinationPlan($row['petVacunationPlan']);
+                $pet->setPetVaccinationPlan($row['petVaccinationPlan']);
                 $pet->setPetDetails($row['petDetails']);
                 $pet->setPetVideo($row['petVideo']);
                 array_push($petList, $pet);
@@ -93,7 +94,7 @@ class PetDAO implements IPetDAO{
         } else {return NULL;}
     }
     public function searchPetsBySize($ownerID,$size){
-        $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVacunationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, b.name
+        $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVaccinationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, b.name
         FROM ".$this->petTable." p JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID 
         JOIN ".$this->breedTable." b ON p.breedID = b.breedID
         WHERE p.ownerID = $ownerID AND p.petSize = '$size';";
@@ -111,7 +112,7 @@ class PetDAO implements IPetDAO{
                 $pet->setPetWeight($row['petWeight']);
                 $pet->setPetAge($row['petAge']);
                 $pet->setPetImage($row['petImage']);
-                $pet->setPetVaccinationPlan($row['petVacunationPlan']);
+                $pet->setPetVaccinationPlan($row['petVaccinationPlan']);
                 $pet->setPetDetails($row['petDetails']);
                 $pet->setPetVideo($row['petVideo']);
                 array_push($petList, $pet);

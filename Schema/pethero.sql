@@ -28,6 +28,7 @@ CREATE TABLE `Keeper` (
   `userID` int(11) NOT NULL references User(userID),
   `animalSize` varchar(30) DEFAULT NULL,
   `price` float DEFAULT NULL,
+  `KeeperCUIT` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`keeperID`)
 ) ENGINE=InnoDB;
 
@@ -40,7 +41,7 @@ CREATE TABLE `Pet` (
   `petSize` varchar(20) NOT NULL,
   `petVideo` blob NOT NULL,
   `petImage` blob NOT NULL,
-  `petVacunationPlan` blob NOT NULL,
+  `petVaccinationPlan` blob NOT NULL,
   `petWeight` varchar(20) DEFAULT NULL,
   `petAge` date DEFAULT NULL,
   PRIMARY KEY (`petID`)

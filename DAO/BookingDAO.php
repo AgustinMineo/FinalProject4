@@ -21,7 +21,6 @@ class BookingDAO implements IBookingDAO{
         // return the keeper list
         return $this->bookingList;
     }
-
     private function SaveData(){
         // creamos un arreglo de keepers
         $bookingList= array();
@@ -40,8 +39,7 @@ class BookingDAO implements IBookingDAO{
         }
         $bookingFile = json_encode($bookingList, JSON_PRETTY_PRINT);
         file_put_contents('Data/Booking.json',$bookingFile);
-    }
-  
+    } 
     private function RetriveData(){
         $this->bookingList = array();
         //Tenemos que tener el file creado
@@ -66,7 +64,6 @@ class BookingDAO implements IBookingDAO{
             echo "<div class='alert alert-danger'>The booking file doesn't exists!</div>";
         }
     }
-
     public function showBookingByKeeperID(){
         $this->RetriveData();
         $bookingListKeeper = array();
@@ -114,7 +111,6 @@ class BookingDAO implements IBookingDAO{
             return 1;
         }
     } 
-    
     public function showBookingByOwnerID($petListByOwner){
         $this->RetriveData();
         $bookingListOwner = array();
@@ -134,5 +130,4 @@ class BookingDAO implements IBookingDAO{
         }
         }
 
-    }
-?>
+}?>

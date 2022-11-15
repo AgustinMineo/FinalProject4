@@ -18,21 +18,18 @@ class Booking {
     public function setBookingID($bookingID){
         $this->bookingID = $bookingID;
     }
-
     public function getStatus(){
         return $this->status;
     }
     public function setStatus($status){
         $this->status = $status;
     }
-
     public function getPetID(){
         return $this->petID;
     }
     public function setPetID($petID){
         $this->petID = $petID;
     }
-
     public function getFirstDate(){
         return $this->firstDate;
     }
@@ -40,7 +37,6 @@ class Booking {
         $date=date_create($firstDate);
         $this->firstDate = date_format($date,"d/m/Y");
     }
-
     public function getLastDate(){
         return $this->lastDate;
     }
@@ -48,21 +44,18 @@ class Booking {
         $date=date_create($lastDate);
         $this->lastDate = date_format($date,"d/m/Y");
     }
-
     public function getKeeperID(){
         return $this->keeperID;
     }
     public function setKeeperID($keeperID){
         $this->keeperID = $keeperID;
     }
-
     public function getTotalValue(){
         return $this->totalValue;
     }
     public function setTotalValue($totalValue){
         $this->totalValue = $totalValue;
     }
-
     public function getAmountReservation(){
         return $this->amountReservation;
     }

@@ -2,10 +2,11 @@
 namespace Controllers;
 
 use Models\Pet as Pet;
-use DAO\PetDAO as PetDAO;
-//use DAODB\PetDAO as PetDAO;
+//use DAO\PetDAO as PetDAO;
+use DAODB\PetDAO as PetDAO;
 use DAO\OwnerDAO as OwnerDAO;
 use Helper\SessionHelper as SessionHelper;
+
 class PetController{
 
     private $OwnerDAO;
@@ -16,8 +17,7 @@ class PetController{
     }
     public function __construct(){
         $this->PetDAO = new PetDAO();
-        $this->OwnerDAO = new OwnerDAO();
-       
+        $this->OwnerDAO = new OwnerDAO();       
     }
     
     public function newPet($petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
@@ -47,6 +47,13 @@ class PetController{
         $petListSearch= array();
         if(SessionHelper::getCurrentUser()){
             // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+
+           // $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId());
+           // if($petListSearch){
+           //     return $petListSearch; 
+           // } else { echo "<div class='alert alert-danger'>You have no pets!!</div>";
+           //         $this->goIndex();}
+           //
             $petListSearch = $this->PetDAO->searchPets(SessionHelper::getCurrentOwnerID()); 
             return $petListSearch; 
         }
@@ -54,8 +61,5 @@ class PetController{
     public function showPets(){
         $petList = $this->PetDAO->searchPetList();
         require_once(VIEWS_PATH . "showPet.php");
-}
-
-}
-    
-?>
+    }
+}?>

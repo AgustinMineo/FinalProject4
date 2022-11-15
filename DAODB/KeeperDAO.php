@@ -40,13 +40,7 @@ class KeeperDAO implements IKeeperDAO{
 
                       $this->connection->ExecuteNonQuery($queryKeeper, $parametersKeeper);
                    };
-          
-
-      } catch (Exception $ex) {
-          throw $ex;
-      }   
-
-
+      } catch (Exception $ex) { throw $ex; }   
     }
     public function GetAllKeeper(){
       try{
@@ -75,17 +69,12 @@ class KeeperDAO implements IKeeperDAO{
         } else {return NULL;}
       } catch(Exception $ex){throw $ex;}
     }
-    // public function GetKeeperByID($keeperID){
-    //   try{
-    //     $query = "SELECT k.keeperID, u.firstName, u.lastName, u.email, u.";
-    //   }
-    //}
     public function getKeeperByDisponibility($date1,$date2){
       try{
         $query =  "SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, d.firstDate, d.lastDate  
                 FROM ".$this->userTable." u JOIN ".$this->keeperTable. " k ON k.userID = u.userID 
                 JOIN ".$this->keeperDaysTable." d ON d.keeperID = k.keeperID
-                WHERE firstDate >= '$date1' AND lastDate <= '$date2';";
+                WHERE firstDate >= '$date1' AND '$date1' > lastDate <= '$date2';";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
         if($resultSet){
@@ -107,7 +96,6 @@ class KeeperDAO implements IKeeperDAO{
         } else { return NULL; } 
       } catch(Exception $ex){ throw $ex; } 
     }
-
     public function searchKeeperByEmail($email){
       try {
         $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email, k.keeperID, k.price, d.firstDate, d.lastDate
@@ -176,7 +164,7 @@ class KeeperDAO implements IKeeperDAO{
     }
     public function changeAvailabilityDays($keeperID, $value1, $value2){
       $exist = $this->searchDays($keeperID, $value1, $value2);
-      if(!$exist){
+      if($exist === NULL){
         try {  
           $query = "INSERT INTO ".$this->keeperDaysTable." (keeperDaysID, keeperID, firstDate, lastDate) 
           VALUES (:keeperDaysID, :keeperID, :firstDate, :lastDate);";
@@ -189,23 +177,22 @@ class KeeperDAO implements IKeeperDAO{
           if($this->connection->ExecuteNonQuery($query, $parameters)){ return true; }
           else{ return false; } 
           
-        } catch (Exception $ex) {
-          throw $ex;
-        }
+        } catch (Exception $ex) { throw $ex; }
       }
     }
     public function searchDays($keeperID, $value1, $value2){
       try{
-        $query = "SELECT keeperDaysID FROM keeperdays WHERE firstDate = '$value1' AND lastDate = '$value2' AND keeperID = $keeperID;";
-
+        $query = "SELECT keeperDaysID FROM ".$this->keeperDaysTable."  
+                  WHERE firstDate >= '$value1' OR lastDate <= '$value2' AND keeperID = $keeperID;";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
-
-        if($resultSet != NULL){ 
+        var_dump($resultSet);
+        if($resultSet){ 
           foreach($resultSet as $row){
             $id = $row['keeperDaysID'];
           }
           return $id; 
-        } else { return false; } }
-      catch (Exception $ex) { throw $ex; } }
+        } else { return NULL; } }
+      catch (Exception $ex) { throw $ex; } 
+    }
 }?>

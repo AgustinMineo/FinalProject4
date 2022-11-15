@@ -71,18 +71,18 @@ require_once(VIEWS_PATH."validate-session.php");
             <ul class="list-group list-group-flush text-center">
                 
                 
-            <li class="list-group-item bg-secondary text-white"><?php echo $keeper->getLastName() ?> <?php echo $keeper->getfirstName() ?></li>
-            <li class="list-group-item bg-light text-dark"><?php echo $keeper->getCellPhone() ?></li>
-            <li class="list-group-item bg-secondary text-white">$<?php echo $keeper->getPrice() ?></li>
+            <li class="list-group-item bg-secondary text-white"><?php echo $keeper->getLastName(); ?> <?php echo $keeper->getfirstName(); ?></li>
+            <li class="list-group-item bg-light text-dark"><?php echo $keeper->getCellPhone(); ?></li>
+            <li class="list-group-item bg-secondary text-white">$<?php echo $keeper->getPrice(); ?></li>
             
             
             <li class="list-group-item bg-light text-dark"><?php echo $keeper->getAnimalSize()?></li>
             
             
-            <li class="list-group-item bg-secondary text-white">Del <?php echo $keeper->getFirstAvailabilityDays()?></li>
+            <li class="list-group-item bg-secondary text-white">Del <?php echo $keeper->getFirstAvailabilityDays();?></li>
             
             
-            <li class="list-group-item bg-light text-dark">Al <?php echo $keeper->getLastAvailabilityDays()?></li>
+            <li class="list-group-item bg-light text-dark">Al <?php echo $keeper->getLastAvailabilityDays();?></li>
             
             <input type="checkbox" name="email" value="<?php echo $keeper->getEmail()?>"> <label for="">Reservar</label><!--/// Cambiar el email por el keeperID-->
         </ul>
@@ -114,12 +114,12 @@ else{
     
     <ul class="list-group list-group-flush text-center">
         <!--<li class="list-group-item bg-secondary text-white"><//?//php echo $petSize->getPetImage() ?></li>-->
-        <li class="list-group-item bg-light text-dark"><?php echo $petSize->getPetName() ?></li>
-        <li class="list-group-item bg-secondary text-white"><?php echo $petSize->getPetSize() ?></li>
-        <li class="list-group-item bg-light text-dark"><?php echo $petSize->getOwnerID()?></li>
+        <li class="list-group-item bg-light text-dark"><?php echo $petSize->getPetName(); ?></li>
+        <li class="list-group-item bg-secondary text-white"><?php echo $petSize->getPetSize(); ?></li>
+        <li class="list-group-item bg-light text-dark"><?php echo $petSize->getOwnerID();?></li>
     </ul>
     <div class="checkboxID actionCheck">
-    <label style=" width:100%; padding:0; margin:0;"> <input type="checkbox" name="petID" value="<?php echo $petSize->getPetID()?>"><span>Reservar con este pet</span></label>
+    <label style=" width:100%; padding:0; margin:0;"> <input type="checkbox" name="petID" value="<?php echo $petSize->getPetID();?>"><span>Reservar con este pet</span></label>
     </div>
 </div>
 <?php

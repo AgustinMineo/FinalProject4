@@ -4,11 +4,21 @@
         "lastName": "Agustin",
         "firstName": "Mineo",
         "cellPhone": "123123123123",
-        "birthDate": "",
+        "birthDate": "15\/11\/2022",
         "email": "agustin@gmail.com",
         "password": "123",
-        "userImage": "",
         "userDescription": "text",
+        "petAmount": "0"
+    },
+    {
+        "ownerId": 2,
+        "lastName": "Miranda",
+        "firstName": "Martin",
+        "cellPhone": "2235066075",
+        "birthDate": "18\/04\/1998",
+        "email": "tincho@gmail.com",
+        "password": "123",
+        "userDescription": "test",
         "petAmount": "0"
     }
 ]

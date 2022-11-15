@@ -45,7 +45,7 @@
                               <div class="col-lg-4">
                                    <div class="form-group">
                                         <label for="">CellPhone</label>
-                                        <input type="text" name="cellPhone" id="cellPhone" placeholder="Cellphone" value="" class="form-control" Required >
+                                        <input type="number" name="cellPhone" id="cellPhone" placeholder="Cellphone" value="" class="form-control" Required >
                                    </div>
                               </div>
                               <div class="col-lg-4">
@@ -77,7 +77,7 @@
                          <div class="col-lg-4">
                                    <div class="form-group">
                                         <label for="">Image</label>
-                                        <input type="file" name="userImage" id="userImage" value="" class="form-control">
+                                        <input type="text" name="userImage" id="userImage" value="" class="form-control">
                                    </div>
                          </div>
                          <div class="col-lg-4">

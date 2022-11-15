@@ -2,14 +2,14 @@
     {
         "petID": 1,
         "petName": "test",
-        "petImage": "Inked4_LI.jpg",
-        "breedID": "6",
+        "petImage": "",
+        "breedID": "3",
         "petSize": "Medium",
-        "petVaccinationPlan": "Inked4_LI.jpg",
+        "petVaccinationPlan": "",
         "petDetails": "test",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=4PP-jETn3bs",
+        "petVideo": "",
         "petWeight": "Medium",
         "ownerID": 1,
-        "petAge": "2021-10-13"
+        "petAge": "2021-05-14"
     }
 ]

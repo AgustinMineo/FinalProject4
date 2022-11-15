@@ -41,9 +41,10 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["firstAvailabilityDays"] = $Keeper->getFirstAvailabilityDays();// cambiar a 2 variables
           $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
-          //$keeperValue["points"] = $Keeper->getPoints();
-          // $keeperValue["reviews"] = $Keeper->getReviews();
+          $keeperValue["points"] = $Keeper->getPoints();
           $keeperValue["price"] = $Keeper->getPrice();
+          $keeperValue["KeeperCUIT"] = $Keeper->getKeeperCUIT();
+          
           
           array_push($keeperArrayEncode, $keeperValue);
       }
@@ -72,10 +73,12 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
               $keeper->setPrice($KeeperDecode["price"]);
+              $keeper->setPoints($KeeperDecode["points"]);
+              $keeper->setKeeperCUIT($KeeperDecode["KeeperCUIT"]);
               array_push($this->keeperList, $keeper);
           }
       }else{
-          echo "The owners file doesn't exists";
+        echo '<div class="alert alert-danger">The keepers file doesnt exists!</div>';
       }
   }
   public function searchKeeperByEmail($email){
@@ -107,7 +110,7 @@ class KeeperDAO implements IKeeperDAO{
         $this->SaveData();
         return true;
     }else{
-        echo"The date $value1 cant be less to $value2";
+        echo '<div class="alert alert-danger">The date first date cant be less that the second date</div>';
         return false;
     }
   }
@@ -124,7 +127,7 @@ class KeeperDAO implements IKeeperDAO{
         }
     }
 }else{
-    echo "<h1>No existen keepers </h1>";
+    echo '<div class="alert alert-danger">There are no keepers </div>';
     return array();
 }
     return $keeperListDisponibility;

@@ -62,7 +62,7 @@ class BookingDAO implements IBookingDAO{
                 array_push($this->bookingList, $booking);
             }
         }else{
-            echo "The booking file doesn't exists";
+            echo "<div class='alert alert-danger'>The booking file doesn't exists!</div>";
         }
     }
 
@@ -75,10 +75,7 @@ class BookingDAO implements IBookingDAO{
                     array_push($bookingListKeeper,$booking);
                 }
             }
-        }else{
-            echo "<h1>No existen reservas</h1>";
         }
-
         if($bookingListKeeper){
          return $bookingListKeeper;
         }else{
@@ -128,8 +125,6 @@ class BookingDAO implements IBookingDAO{
                     }
                 }
             }
-        }else{
-            echo "<h1>No existen reservas</h1>";
         }
         if($bookingListOwner){
          return $bookingListOwner;

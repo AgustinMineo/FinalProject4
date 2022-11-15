@@ -10,6 +10,7 @@ class Booking {
     private $keeperID; /// keeper id
     private $totalValue; /// Total value from the reservation
     private $amountReservation; /// amount reservation
+    
 
     public function getBookingID(){
         return $this->bookingID;

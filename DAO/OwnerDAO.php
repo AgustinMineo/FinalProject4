@@ -110,5 +110,16 @@ class OwnerDAO implements IOwnerDAO {
             return 1;
         }
     }
+    // No funciona
+    public function incrementPetAmount($id){
+        $this->RetriveData();
+        if($this->ownerList!= NULL){
+            foreach($this->ownerList as $owner){
+                if($owner->getOwnerId() == $id){
+                    return $owner->getPetAmount()+1;
+                }
+            }
+        }
+    }
 }
 ?>

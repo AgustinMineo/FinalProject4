@@ -42,9 +42,8 @@ class BookingController{
         $this->MailerDAO = new MailerDAO();
     }
     public function bookingBuild($value1,$value2){
-        $keeperDAO = new KeeperDAO();
         $listKeepers = array();
-        $listKeepers = $keeperDAO->getKeeperByDisponibility($value1,$value2);
+        $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
         if($listKeepers){
             if($_SESSION['loggedUser']){
                  $petList = array(); /// create a pet array
@@ -63,7 +62,10 @@ class BookingController{
                 echo "<div class='alert alert-danger'>No existen keepers con disponibilidad de $value1 a $value2</div>";
                 $this->goIndex();
             }
-        }
+        }else{
+            echo "<div class='alert alert-danger'>No existen keepers disponibles entre esas fechas</div>";
+            $this->goIndex();
+    }
     }
 
     public function newBooking($email,$petId){
@@ -97,8 +99,10 @@ class BookingController{
         if($petListByOwner){
             $bookingListKeeper=$this->BookingDAO->showBookingByOwnerID($petListByOwner);
             if($bookingListKeeper){
-
                 require_once(VIEWS_PATH."BookingViewOwner.php");
+            }else{
+                echo "<div class='alert alert-danger'>You have no reservations available!</div>";
+                $this->goIndex();
             }
         }
     }
@@ -106,9 +110,11 @@ class BookingController{
     public function updateBookingStatus($idBooking, $status){
         $value = $this->BookingDAO->updateByID($idBooking,$status);
         if($value){
-            echo "<h1>Update correcta.</h1>";
+            echo "<div class='alert alert-success'>Fechas actualizadas correctamente!</div>";
+            $this->goIndex();
         }else{
-            echo "<h4>Error al actualizar el status</h4>";
+            echo "<div class='alert alert-danger'>Error al actualizar las fechas!</div>";
+            $this->goIndex();
         }
     }
 //ARREGLAR TOTAL DE PRECIO Y MIGRARLO A DAO

@@ -130,7 +130,7 @@ class BookingDAO implements IBookingDAO{
         if($bookingListOwner){
          return $bookingListOwner;
         }else{
-            return array();
+            return null;
         }
         }
 

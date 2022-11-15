@@ -1,6 +1,7 @@
 <?php
 namespace DAO;
 use Models\Pet as Pet;
+use Helper\SessionHelper as SessionHelper;
 
 class PetDAO implements IPetDAO{
     private $petList= array();
@@ -50,7 +51,7 @@ class PetDAO implements IPetDAO{
             $petFile = file_get_contents(ROOT.'Data/Pets.json');
             // Si el file tiene datos hace un decode de la info y la guarda en el arreglo, sino devuelve un arreglo vacio.
             $petFileDecode = ($petFile) ? json_decode($petFile, true) : array();
-
+            
             foreach($petFileDecode as $petDecode){
                 $petValue = new pet();
                 $petValue->setPetID($petDecode["petID"]);
@@ -72,19 +73,20 @@ class PetDAO implements IPetDAO{
         }
 
     }
-    public function searchPets($email){
+    public function searchPets($id){
         $this->RetriveData();
         $petListSearch = array();
         foreach($this->petList as $ownerPet){
-            if($ownerPet->getOwnerID() == $email){
+            if($ownerPet->getOwnerID() == $id){
                 $ownerPet->setPetAge($this->getAgeOfPet($ownerPet->getPetAge()));
                 array_push($petListSearch,$ownerPet);
             }
-            if($petListSearch){
-                return $petListSearch;
+        }
+        if($petListSearch){
+            return $petListSearch;
             }else{
-                echo "<div class='alert alert-danger'>Usted no tiene pets disponibles</div>";
-            }
+                return array();
+            echo "<div class='alert alert-danger'>Usted no tiene pets disponibles</div>";
         }
     }
     public function searchPetsBySize($email,$size){
@@ -144,9 +146,9 @@ class PetDAO implements IPetDAO{
 
     public function searchPetList(){
         $petListSearch= array();
-        if(isset($_SESSION["loggedUser"])){
-            $petListSearch = $this->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
-            return $petListSearch; 
+        if(SessionHelper::getCurrentUser()){
+            $petListSearch = $this->searchPets(SessionHelper::getCurrentOwnerID()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+            return $petListSearch;
         }
     }
 }

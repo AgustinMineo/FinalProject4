@@ -8,11 +8,12 @@ use DAO\MailerDAO as MailerDAO;
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;
+
         // DAO WITH DATA BASE
 use DAODB\PetDAO as PetDAO;
 use DAODB\KeeperDAO as KeeperDAO;
 use DAODB\BookingDAO as BookingDAO;
-
+use Helper\SessionHelper as SessionHelper;
 
 class BookingController{
     private $BookingDAO;
@@ -27,6 +28,7 @@ class BookingController{
          require_once(VIEWS_PATH."showPetBooking.php");
     }
      public function goBookingView($petList,$listKeepers){
+
         require_once(VIEWS_PATH."ownerNav.php");
         require_once(VIEWS_PATH."BookingViews.php");
     }
@@ -40,16 +42,14 @@ class BookingController{
         $this->MailerDAO = new MailerDAO();
     }
     public function bookingBuild($value1,$value2){
-        var_dump($value1);
-        var_dump($value2);
         $keeperDAO = new KeeperDAO();
         $listKeepers = array();
-        $listKeepers = $keeperDAO->getKeeperByDisponibility($value1,$value2);
+        $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
         if($listKeepers){
-            if($_SESSION['loggedUser']){
+            if(SessionHelper::getCurrentUser()){
                  $petList = array(); /// create a pet array
                  foreach($listKeepers as $keeperInfo){
-                 $petList=$this->petDAO->searchPetsBySize($_SESSION['loggedUser']->getOwnerID(),$keeperInfo->getAnimalSize());
+                 $petList=$this->petDAO->searchPetsBySize(SessionHelper::getCurrentOwnerID(),$keeperInfo->getAnimalSize());
                 }
                  if($petList)
                  {
@@ -58,12 +58,19 @@ class BookingController{
                     echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
                     $this->goIndex();
                 }
-                //$this->goBookingView($petList, $listKeepers);
+     
             }
             }else{
                 echo "<div class='alert alert-danger'>No existen keepers con disponibilidad de $value1 a $value2</div>";
                 $this->goIndex();
+
         }
+
+            }
+        }else{
+            echo "<div class='alert alert-danger'>No existen keepers disponibles entre esas fechas</div>";
+            $this->goIndex();
+    }
     }
     public function newBooking($email,$petId){
         $newBooking = new Booking();
@@ -97,21 +104,26 @@ class BookingController{
         if($petListByOwner){
             $bookingListKeeper=$this->BookingDAO->showBookingByOwnerID($petListByOwner);
             if($bookingListKeeper){
-
                 require_once(VIEWS_PATH."BookingViewOwner.php");
+            }else{
+                echo "<div class='alert alert-danger'>You have no reservations available!</div>";
+                $this->goIndex();
             }
-        } else { 
+
+        }else{
             echo "<div class='alert alert-danger'>You have no pets!!</div>";
-            $this->goIndex();}
+                $this->goIndex();
+        }
     }
 // MIGRAR A DAO
     public function updateBookingStatus($idBooking){
         $value = $this->BookingDAO->updateByID($idBooking);
         if($value){
-            echo "<h1>Update correcta.</h1>";
-            require_once(VIEWS_PATH."keeperNav.php");
+            echo "<div class='alert alert-success'>Fechas actualizadas correctamente!</div>";
+            $this->goIndex();
         }else{
-            echo "<h4>Error al actualizar el status</h4>";
+            echo "<div class='alert alert-danger'>Error al actualizar las fechas!</div>";
+            $this->goIndex();
         }
     }
 //ARREGLAR TOTAL DE PRECIO Y MIGRARLO A DAO

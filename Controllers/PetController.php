@@ -4,8 +4,12 @@ namespace Controllers;
 use Models\Pet as Pet;
 //use DAO\PetDAO as PetDAO;
 use DAODB\PetDAO as PetDAO;
+use DAO\OwnerDAO as OwnerDAO;
+use Helper\SessionHelper as SessionHelper;
 
 class PetController{
+
+    private $OwnerDAO;
     private $PetDAO;
 
     public function goLandingOwner(){
@@ -13,11 +17,13 @@ class PetController{
     }
     public function __construct(){
         $this->PetDAO = new PetDAO();
-    }  
+        $this->OwnerDAO = new OwnerDAO();       
+    }
+    
     public function newPet($petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
-        if(isset($_SESSION["loggedUser"])){
+        if(SessionHelper::getCurrentUser()){
             
-            $this->petDAO = new PetDAO();
+            //$this->petDAO = new PetDAO();
             $pet = new Pet();
 
             $pet->setPetName($petName);
@@ -28,9 +34,10 @@ class PetController{
             $pet->setPetDetails($petDetails);
             $pet->setPetVideo($petVideo);
             $pet->setPetWeight($petWeight);
-            $pet->setOwnerID($_SESSION["loggedUser"]->getOwnerID());
+            $pet->setOwnerID(SessionHelper::getCurrentOwnerID());
             $pet->setPetAge($petAge);
-            $this->petDAO->AddPet($pet);
+            $this->OwnerDAO->incrementPetAmount(SessionHelper::getCurrentOwnerID());
+            $this->PetDAO->AddPet($pet);
             $this->goLandingOwner();
         }else{
             echo"Usuario no logeado";
@@ -38,13 +45,17 @@ class PetController{
     }
     public function searchPetList(){
         $petListSearch= array();
-        if(isset($_SESSION["loggedUser"])){
+        if(SessionHelper::getCurrentUser()){
             // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
-            $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId());
-            if($petListSearch){
-                return $petListSearch; 
-            } else { echo "<div class='alert alert-danger'>You have no pets!!</div>";
-                    $this->goIndex();}
+
+           // $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId());
+           // if($petListSearch){
+           //     return $petListSearch; 
+           // } else { echo "<div class='alert alert-danger'>You have no pets!!</div>";
+           //         $this->goIndex();}
+           //
+            $petListSearch = $this->PetDAO->searchPets(SessionHelper::getCurrentOwnerID()); 
+            return $petListSearch; 
         }
     }
     public function showPets(){

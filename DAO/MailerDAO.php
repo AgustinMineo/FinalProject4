@@ -24,7 +24,9 @@ class MailerDAO implements IMailerDAO{
         $phpmailer->addAddress($email,$fullName);    
     
         //Attachments
-       // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+        //../Vendor/dompdf/dompdf/output/documento.pdf tiene que ser una variable con el pdf.
+
+       // $phpmailer->addStringAttachment('../Vendor/dompdf/dompdf/output/documento.pdf',"documento.pdf");         //Add attachments
        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
     
         //Content

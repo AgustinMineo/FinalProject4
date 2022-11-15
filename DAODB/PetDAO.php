@@ -36,7 +36,6 @@ class PetDAO implements IPetDAO{
             }
         } catch (Exception $ex) { throw $ex; } 
     }
-
     public function GetAllPet(){
         try {
 
@@ -132,5 +131,13 @@ class PetDAO implements IPetDAO{
                 return $size;
             } else { return NULL; }
         } catch(Exception $ex) { throw $ex; }
+    }
+    public function searchPetList(){
+        if(isset($_SESSION["loggedUser"])){
+        $ownerID = $_SESSION["loggedUser"]->getOwnerId();
+        $petListSearch= array();
+        $petListSearch = $this->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+        return $petListSearch; 
+        }
     }
 }?>

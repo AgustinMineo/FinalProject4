@@ -4,23 +4,21 @@
         "lastName": "Agustin",
         "firstName": "Mineo",
         "cellPhone": "123123123123",
-        "birthDate": "2004-01-01",
+        "birthDate": "15\/11\/2022",
         "email": "agustin@gmail.com",
         "password": "123",
-        "userImage": "",
-        "userDescription": "agustin@gmail.com",
+        "userDescription": "text",
         "petAmount": "0"
     },
     {
         "ownerId": 2,
-        "lastName": "Pruba2",
-        "firstName": "Pruba2",
-        "cellPhone": "123",
-        "birthDate": "2004-01-01",
-        "email": "Pruba2@Pruba2.com",
+        "lastName": "Miranda",
+        "firstName": "Martin",
+        "cellPhone": "2235066075",
+        "birthDate": "18\/04\/1998",
+        "email": "tincho@gmail.com",
         "password": "123",
-        "userImage": "",
-        "userDescription": "Pruba2",
+        "userDescription": "test",
         "petAmount": "0"
     }
 ]

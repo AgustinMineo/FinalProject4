@@ -41,8 +41,8 @@ require_once(VIEWS_PATH."validate-session.php");
                                                   <td><?php echo $keeper->getCellPhone() ?></td>
                                                   <td><?php echo $keeper->getbirthDate() ?></td>
                                                   <td><?php echo $keeper->getEmail() ?></td>
-                                                  <td>Del <?php if($keeper->getFirstAvailabilityDays()){echo $keeper->getFirstAvailabilityDays();}else{echo "No disponible";}?></td>
-                                                  <td>Al <?php if($keeper->getLastAvailabilityDays()){echo $keeper->getLastAvailabilityDays();}else{echo "No disponible";} ?></td>
+                                                  <td> <?php  if($keeper->getFirstAvailabilityDays()){echo $keeper->getFirstAvailabilityDays();}else{echo "No disponible";}?></td>
+                                                  <td> <?php if($keeper->getLastAvailabilityDays()){echo $keeper->getLastAvailabilityDays();}else{echo "No disponible";}?></td>
                                                   <td><?php echo $keeper->getAnimalSize() ?></td>
                                                   <td>$<?php echo $keeper->getPrice() ?></td>
                                              </tr>

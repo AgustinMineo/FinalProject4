@@ -1,28 +1,17 @@
 [
     {
         "keeperId": 1,
-        "lastName": "Tincho",
-        "firstName": "Tincho",
-        "cellPhone": "123",
+        "lastName": "Keeper",
+        "firstName": "Keeper",
+        "cellPhone": "12312312312",
         "birthDate": "2004-01-01",
-        "email": "tincho@tincho.com",
+        "email": "keeper@keeper.com",
         "password": "123",
-        "firstAvailabilityDays": "2022-11-13",
-        "lastAvailabilityDays": "2022-11-30",
-        "animalSize": "Small",
-        "price": "250"
-    },
-    {
-        "keeperId": 2,
-        "lastName": "Test",
-        "firstName": "prueba",
-        "cellPhone": "123",
-        "birthDate": "2004-01-01",
-        "email": "tincho1@tincho.com",
-        "password": "123",
-        "firstAvailabilityDays": null,
-        "lastAvailabilityDays": null,
-        "animalSize": "Big",
-        "price": "250"
+        "firstAvailabilityDays": "2022-11-15",
+        "lastAvailabilityDays": "2022-11-16",
+        "animalSize": "Medium",
+        "points": null,
+        "price": "250",
+        "KeeperCUIT": "2525245582852585"
     }
 ]

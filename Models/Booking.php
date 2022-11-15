@@ -10,6 +10,7 @@ class Booking {
     private $keeperID; /// keeper id
     private $totalValue; /// Total value from the reservation
     private $amountReservation; /// amount reservation
+    
 
     public function getBookingID(){
         return $this->bookingID;
@@ -33,13 +34,15 @@ class Booking {
         return $this->firstDate;
     }
     public function setFirstDate($firstDate){
-        $this->firstDate = $firstDate;
+        $date=date_create($firstDate);
+        $this->firstDate = date_format($date,"d/m/Y");
     }
     public function getLastDate(){
         return $this->lastDate;
     }
     public function setLastDate($lastDate){
-        $this->lastDate = $lastDate;
+        $date=date_create($lastDate);
+        $this->lastDate = date_format($date,"d/m/Y");
     }
     public function getKeeperID(){
         return $this->keeperID;

@@ -30,18 +30,15 @@ require_once(VIEWS_PATH."validate-session.php");
                          </thead>
                          <tbody>
                               <?php
+                              if($bookingListKeeper){
                                    foreach($bookingListKeeper as $booking)
                                    {
                                         //$value=$booking->getBookingID();
                                         ?>
                                              <tr class=" table table-info table-hover table align-middle" >
                                                   <td><?php echo $booking->getBookingID(); $value=$booking->getBookingID();?></td>
-                                                  <td><?php if($booking->getFirstDate()){
-                                                       $date=date_create($booking->getFirstDate());
-                                                       echo date_format($date,"d/m/Y");}?></td>
-                                                  <td><?php if($booking->getLastDate()){
-                                                       $date=date_create($booking->getLastDate());
-                                                       echo date_format($date,"d/m/Y");}?></td>
+                                                  <td><?php echo $booking->getFirstDate(); ?></td>
+                                                  <td><?php echo $booking->getLastDate(); ?></td>
                                                   <td><?php echo $booking->getKeeperID() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
                                                   <td><?php echo $booking->getPetID()?></td>
                                                   <td><?php echo $booking->getTotalValue()?></td>
@@ -56,6 +53,8 @@ require_once(VIEWS_PATH."validate-session.php");
                                              </tr>
                                              
                                         <?php
+                                   }}else{
+                                        echo "<div class='alert alert-danger'>You don't have any booking for the moment!</div>";
                                    }
                               ?>
                               </tr>

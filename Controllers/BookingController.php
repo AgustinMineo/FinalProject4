@@ -1,14 +1,18 @@
 <?php
 namespace Controllers;
 use DAO\MailerDAO as MailerDAO;
-use DAO\BookingDAO as BookingDAO;
+        // DAO WITH JSON
+//use DAO\BookingDAO as BookingDAO;
+//use DAO\PetDAO as PetDAO;
+//use DAO\KeeperDAO as KeeperDAO;
+        // MODELS
 use Models\Booking as Booking;
-use DAO\PetDAO as PetDAO;
-use DAO\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
-//use DAODB\PetDAO as PetDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
-//use DAODB\BookingDAO as BookingDAODB;
+
+        // DAO WITH DATA BASE
+use DAODB\PetDAO as PetDAO;
+use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\BookingDAO as BookingDAO;
 use Helper\SessionHelper as SessionHelper;
 
 class BookingController{
@@ -17,32 +21,28 @@ class BookingController{
     private $keeperDAO;
     private $MailerDAO;
 
-    public function GoBooking()
-     {
+    public function GoBooking(){
          require_once(VIEWS_PATH."showBookingKeeper.php");
-     }
-     public function goIndexOwner()
-     {
+    }
+     public function goIndexOwner(){
          require_once(VIEWS_PATH."showPetBooking.php");
-     }
+    }
      public function goBookingView($petList,$listKeepers){
 
         require_once(VIEWS_PATH."ownerNav.php");
         require_once(VIEWS_PATH."BookingViews.php");
-     }
-
+    }
      public function goIndex(){
         require_once(VIEWS_PATH."landingPage.php");
-     }
-    
+    } 
     public function __construct(){
         $this->BookingDAO = new BookingDAO();
-        //$this->BookingDAO = new BookingDAODB;
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
         $this->MailerDAO = new MailerDAO();
     }
     public function bookingBuild($value1,$value2){
+        $keeperDAO = new KeeperDAO();
         $listKeepers = array();
         $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
         if($listKeepers){
@@ -58,17 +58,20 @@ class BookingController{
                     echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
                     $this->goIndex();
                 }
-                //$this->goBookingView($petList, $listKeepers);
+     
+            }
             }else{
                 echo "<div class='alert alert-danger'>No existen keepers con disponibilidad de $value1 a $value2</div>";
                 $this->goIndex();
+
+        }
+
             }
         }else{
             echo "<div class='alert alert-danger'>No existen keepers disponibles entre esas fechas</div>";
             $this->goIndex();
     }
     }
-
     public function newBooking($email,$petId){
         $newBooking = new Booking();
         $keeperInfo = new Keeper(); //CHECK
@@ -90,9 +93,10 @@ class BookingController{
 // MIGRAR A DAO
     public function showBookings(){
         $bookingListKeeper = array();
-        $bookingListKeeper=$this->BookingDAO->showBookingByKeeperID();
+        $bookingListKeeper= $this->BookingDAO->showBookingByKeeperID();
         require_once(VIEWS_PATH."showBookingKeeper.php");
     }
+//MIGRAR A DAO
     public function showBookingsOwner(){
         $bookingListKeeper = array();
         $petListByOwner = array();
@@ -105,14 +109,15 @@ class BookingController{
                 echo "<div class='alert alert-danger'>You have no reservations available!</div>";
                 $this->goIndex();
             }
+
         }else{
             echo "<div class='alert alert-danger'>You have no pets!!</div>";
                 $this->goIndex();
         }
     }
 // MIGRAR A DAO
-    public function updateBookingStatus($idBooking, $status){
-        $value = $this->BookingDAO->updateByID($idBooking,$status);
+    public function updateBookingStatus($idBooking){
+        $value = $this->BookingDAO->updateByID($idBooking);
         if($value){
             echo "<div class='alert alert-success'>Fechas actualizadas correctamente!</div>";
             $this->goIndex();
@@ -130,5 +135,4 @@ class BookingController{
         $numberDays = intval($numberDays); // PARA PASARLO A ENTERO
         return $price * $numberDays;
     }
-}
-?>
+} ?>

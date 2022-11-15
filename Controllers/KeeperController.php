@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
- use DAO\KeeperDAO as KeeperDAO;
- //use DAODB\KeeperDAO as KeeperDAO;
+ //use DAO\KeeperDAO as KeeperDAO;
+ use DAODB\KeeperDAO as KeeperDAO;
  use Models\Keeper as Keeper;
  use DAO\MailerDAO as MailerDAO;
  use DAO\OwnerDAO as OwnerDAO;
@@ -75,8 +75,6 @@
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
          //$newKeeper->setKeeperImg($keeperImg);
     }
-
-
 // MIGRAR A DAO
     public function showKeepers(){
         $listKeepers = array();

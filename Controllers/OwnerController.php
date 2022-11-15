@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 use DAO\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;
@@ -44,22 +44,14 @@ use DAO\MailerDAO as MailerDAO;
                 $newOwner->setPetAmount('0');
                 $this->OwnerDAO->AddOwner($newOwner);
                 $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
-                $this->goLoginOwner();
+                $this->landingPage();
                 }else{
                     echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
                     $this->addOwnerView();  
-                }
-            }
+                } }
                 else{
                     echo '<div class="alert alert-danger">Email already exist! Please try again with another email/div>';
                     $this->addOwnerView();  
                 }
-            }
-            else{
-                echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-                $this->addOwnerView();
-            }
-  }
-
- }
-?>
+    } 
+} ?>

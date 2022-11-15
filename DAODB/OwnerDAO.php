@@ -81,7 +81,6 @@ class OwnerDAO{
                 $resultSet = $this->connection->Execute($query);
                 if($resultSet){ return true; }
                 else{ return false; }
-
         }  catch (Exception $ex) { throw $ex; }
     }
     //Funcion para buscar Owner para iniciar seseion

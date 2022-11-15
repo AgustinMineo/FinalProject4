@@ -5,7 +5,7 @@ use Models\Pet as Pet;
 use DAO\PetDAO as PetDAO;
 //use DAODB\PetDAO as PetDAO;
 use DAO\OwnerDAO as OwnerDAO;
-
+use Helper\SessionHelper as SessionHelper;
 class PetController{
 
     private $OwnerDAO;
@@ -21,7 +21,7 @@ class PetController{
     }
     
     public function newPet($petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
-        if(isset($_SESSION["loggedUser"])){
+        if(SessionHelper::getCurrentUser()){
             
             //$this->petDAO = new PetDAO();
             $pet = new Pet();
@@ -34,9 +34,9 @@ class PetController{
             $pet->setPetDetails($petDetails);
             $pet->setPetVideo($petVideo);
             $pet->setPetWeight($petWeight);
-            $pet->setOwnerID($_SESSION["loggedUser"]->getOwnerID());
+            $pet->setOwnerID(SessionHelper::getCurrentOwnerID());
             $pet->setPetAge($petAge);
-            $this->OwnerDAO->incrementPetAmount($_SESSION["loggedUser"]->getOwnerID());
+            $this->OwnerDAO->incrementPetAmount(SessionHelper::getCurrentOwnerID());
             $this->PetDAO->AddPet($pet);
             $this->goLandingOwner();
         }else{
@@ -45,9 +45,9 @@ class PetController{
     }
     public function searchPetList(){
         $petListSearch= array();
-        if(isset($_SESSION["loggedUser"])){
+        if(SessionHelper::getCurrentUser()){
             // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
-            $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId()); 
+            $petListSearch = $this->PetDAO->searchPets(SessionHelper::getCurrentOwnerID()); 
             return $petListSearch; 
         }
     }

@@ -3,6 +3,7 @@ namespace DAO;
 use DAO\IBookingDAO as IBookingDAO;
 use Models\Booking as Booking;
 use DAO\PetsDAO as PetDAO;
+use Helper\SessionHelper as SessionHelper;
 
 
 class BookingDAO implements IBookingDAO{
@@ -71,7 +72,7 @@ class BookingDAO implements IBookingDAO{
         $bookingListKeeper = array();
         if($this->bookingList){
             foreach($this->bookingList as $booking){
-                if($booking->getKeeperID() == $_SESSION["loggedUser"]->getKeeperId()){
+                if($booking->getKeeperID() == SessionHelper::getCurrentKeeperID()){
                     array_push($bookingListKeeper,$booking);
                 }
             }

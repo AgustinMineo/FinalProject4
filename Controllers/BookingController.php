@@ -9,7 +9,7 @@ use Models\Keeper as Keeper;
 //use DAODB\PetDAO as PetDAO;
 //use DAODB\KeeperDAO as KeeperDAO;
 //use DAODB\BookingDAO as BookingDAODB;
-
+use Helper\SessionHelper as SessionHelper;
 
 class BookingController{
     private $BookingDAO;
@@ -25,7 +25,7 @@ class BookingController{
      {
          require_once(VIEWS_PATH."showPetBooking.php");
      }
-     public function goBookingView($listKeepers,$petList){
+     public function goBookingView($petList, $listKeepers){
         require_once(VIEWS_PATH."ownerNav.php");
         require_once(VIEWS_PATH."BookingViews.php");
      }
@@ -45,10 +45,10 @@ class BookingController{
         $listKeepers = array();
         $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
         if($listKeepers){
-            if($_SESSION['loggedUser']){
+            if(SessionHelper::getCurrentUser()){
                  $petList = array(); /// create a pet array
                  foreach($listKeepers as $keeperInfo){
-                 $petList=$this->petDAO->searchPetsBySize($_SESSION['loggedUser']->getOwnerID(),$keeperInfo->getAnimalSize());
+                 $petList=$this->petDAO->searchPetsBySize(SessionHelper::getCurrentOwnerID(),$keeperInfo->getAnimalSize());
                 }
                  if($petList)
                  {

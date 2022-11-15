@@ -34,14 +34,16 @@ class Keeper extends User{
             return $this->firstAvailabilityDays;
         }
         public function setFirstAvailabilityDays($firstAvailabilityDays){
-            $this->firstAvailabilityDays = $firstAvailabilityDays;
+            $date=date_create($firstAvailabilityDays);
+            $this->firstAvailabilityDays = date_format($date,"d/m/Y");
         }
 
         public function getLastAvailabilityDays(){
             return $this->lastAvailabilityDays;
         }
         public function setLastAvailabilityDays($lastAvailabilityDays){
-            $this->lastAvailabilityDays = $lastAvailabilityDays;
+            $date=date_create($lastAvailabilityDays);
+            $this->lastAvailabilityDays = date_format($date,"d/m/Y");
         }
 
         public function getPoints(){

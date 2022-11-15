@@ -25,7 +25,7 @@ class BookingController{
      {
          require_once(VIEWS_PATH."showPetBooking.php");
      }
-     public function goBookingView($listKeepers,$petList){
+     public function goBookingView($petList,$listKeepers){
         require_once(VIEWS_PATH."ownerNav.php");
         require_once(VIEWS_PATH."BookingViews.php");
      }

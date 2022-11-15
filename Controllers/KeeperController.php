@@ -37,7 +37,7 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
      
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize/*$points,/*$reviews*/,$price,$userImage,$userDescription){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userImage,$userDescription,$cuit){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -52,11 +52,12 @@
             $newKeeper->setDescription($userDescription);
             $newKeeper->setAnimalSize($animalSize);
             $newKeeper->setPrice($price);
+            $newKeeper->setKeeperCUIT($cuit);
             $this->KeeperDAO->AddKeeper($newKeeper);
             $this->newMailer->welcomeMail($lastName,$firstName,$email);
             $this->goLoginKeeper();
             }else{
-                echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
+                echo '<div class="alert alert-danger">Passwords are not the same. Please try again</div>';
                     $this->addKeeperView();
             }
         }
@@ -95,9 +96,10 @@
     public function updateAvailabilityDays($date1,$date2){
         $value = $this->KeeperDAO->changeAvailabilityDays($_SESSION["loggedUser"]->getKeeperID(),$date1,$date2);
         if($value){
-            echo"<h1>Los cambios fueron realizados correctamente</h1>";
+            echo '<div class="alert alert-success">The new dates were set correctly</div>';
         }else{
-            echo"<h1>Las fechas existen</h1>";
+
+            echo '<div class="alert alert-danger">Error saving the days! Please try again later</div>';
         }
         $this->goLandingKeeper();
     }

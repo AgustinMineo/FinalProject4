@@ -30,6 +30,7 @@ require_once(VIEWS_PATH."validate-session.php");
                          </thead>
                          <tbody>
                               <?php
+                              if($bookingListKeeper){
                                    foreach($bookingListKeeper as $booking)
                                    {
                                         //$value=$booking->getBookingID();
@@ -56,6 +57,8 @@ require_once(VIEWS_PATH."validate-session.php");
                                              </tr>
                                              
                                         <?php
+                                   }}else{
+                                        echo "<div class='alert alert-danger'>You don't have any booking for the moment!</div>";
                                    }
                               ?>
                               </tr>

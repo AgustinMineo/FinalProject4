@@ -38,7 +38,6 @@ class OwnerDAO implements IOwnerDAO {
             $ownerValue["birthDate"] = $Owner->getbirthDate();
             $ownerValue["email"] = $Owner->getEmail();
             $ownerValue["password"] = $Owner->getPassword();
-            $ownerValue["userImage"] = $Owner->getImage();
             $ownerValue["userDescription"] = $Owner->getDescription();
             $ownerValue["petAmount"] = $Owner->getPetAmount();
             
@@ -65,7 +64,6 @@ class OwnerDAO implements IOwnerDAO {
                 $owner->setbirthDate($OwnerDecode["birthDate"]);
                 $owner->setEmail($OwnerDecode["email"]);
                 $owner->setPassword($OwnerDecode["password"]);
-                $owner->setImage($OwnerDecode["userImage"]);
                 $owner->setDescription($OwnerDecode["userDescription"]);
                 $owner->setPetAmount($OwnerDecode["petAmount"]);
 

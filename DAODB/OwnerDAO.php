@@ -23,7 +23,6 @@ class OwnerDAO{
                     $parameters["cellphone"] = $owner->getCellPhone();
                     $parameters["birthdate"] = $owner->getbirthDate();
                     $parameters["password"] = MD5($owner->getPassword());
-                    //$parameters["userImage"] = $owner->getImage();
                     $parameters["userDescription"] = $owner->getDescription();
                     $this->connection = Connection::GetInstance();
                      if($this->connection->ExecuteNonQuery($query, $parameters)){

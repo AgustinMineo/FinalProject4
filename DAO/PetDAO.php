@@ -84,6 +84,7 @@ class PetDAO implements IPetDAO{
         if($petListSearch){
             return $petListSearch;
             }else{
+                return array();
             echo "<div class='alert alert-danger'>Usted no tiene pets disponibles</div>";
         }
     }
@@ -146,7 +147,7 @@ class PetDAO implements IPetDAO{
         $petListSearch= array();
         if(isset($_SESSION["loggedUser"])){
             $petListSearch = $this->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
-            return $petListSearch; 
+                return $petListSearch; 
         }
     }
 }

@@ -29,7 +29,7 @@ use DAO\MailerDAO as MailerDAO;
     public function addOwnerView(){
         require_once(VIEWS_PATH."owner-add.php");
     }
-    public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userImage,$userDescription){ 
+    public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userDescription){ 
         if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
             if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -40,7 +40,6 @@ use DAO\MailerDAO as MailerDAO;
                 $newOwner->setbirthDate($birthDate);
                 $newOwner->setEmail($email);
                 $newOwner->setPassword($password);
-                $newOwner->setImage($userImage);
                 $newOwner->setDescription($userDescription);
                 $newOwner->setPetAmount('0');
                 $this->OwnerDAO->AddOwner($newOwner);

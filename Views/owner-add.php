@@ -75,12 +75,6 @@
                               </div>
                          </div>
                          <div class="col-lg-4">
-                                   <div class="form-group">
-                                        <label for="">Image</label>
-                                        <input type="text" name="userImage" id="userImage" value="" class="form-control">
-                                   </div>
-                         </div>
-                         <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">Description</label>
                                    <textarea type="textarea" name="userDescription" rows = "1" cols ="10" class="form-control"></textarea>

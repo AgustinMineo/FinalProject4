@@ -151,5 +151,13 @@ class PetDAO implements IPetDAO{
             return $petListSearch;
         }
     }
+    public function searchPet($petSearch){
+        $this->RetriveData();
+        foreach($this->petList as $pet){
+            if($pet->getPetID() == $petSearch){
+                return $pet;
+            }
+        }
+    }
 }
 ?>

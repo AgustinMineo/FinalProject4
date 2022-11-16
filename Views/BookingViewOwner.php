@@ -42,75 +42,18 @@ require_once(VIEWS_PATH."ownerNav.php");
                                    
                                    ?>
                                         <tr class=" table bg-secondary table-hover table align-middle text-center text-white" >
-                                             <td><?php echo $booking->getBookingID(); $value=$booking->getBookingID();?></td>
+                                             <td><?php echo $value=$booking->getBookingID(); ?></td>
                                              <td><?php echo $booking->getFirstDate() ?></td>
                                              <td><?php echo $booking->getLastDate() ?></td>
                                              <td><?php echo $booking->getAmountReservation() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
                                              <td><?php echo $booking->getTotalValue()?></td>
                                              <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>
-                                             <td><form action='<?php echo FRONT_ROOT ?> Booking/' method='post'><?php if($booking->getStatus() == '3'){ echo "
-
-                                                       <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal'>
+                                             <td><form action='<?php echo FRONT_ROOT ?> Payment/generatePaymentBooking' method='post'>
+                                             <?php if($booking->getStatus() == '3'){ echo "
+                                                      <input type='hidden' name='booking' value='$value'>
+                                                      <button type='submit' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#'>
                                                        Realizar Pago
                                                        </button>
-
-                                                       <!-- Modal -->
-                                                       <div class='modal fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
-                                                       <div class='modal-dialog modal-xl'>
-                                                       <div class='modal-content '>
-                                                            <div class='modal-header'>
-                                                            <h5 class='modal-title' id='exampleModalLabel'>Modal title</h5>
-                                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                                            </div>
-                                                            <div class='modal-body'>
-                                                            <div class=''>
-                                                            <div class='wrapper'>
-                                                            <div class='container text-black'>
-                                                                 <article class='part card-details'>
-                                                                      <h1 style='color:black;'>
-                                                                           Credit Card Details
-                                                                      </h1>
-                                                                      <form action='' if='cc-form' autocomplete='off'>
-                                                                           <div class='group card-number'>
-                                                                                <label for='first'>Card Number</label>
-                                                                                <input type='text' id='first' class='cc-num' type='text' maxlength='4' placeholder='&#9679;&#9679;&#9679;&#9679;'>
-                                                                                <input type='text' id='second' class='cc-num' type='text' maxlength='4' placeholder='&#9679;&#9679;&#9679;&#9679;'>
-                                                                                <input type='text' id='third' class='cc-num' type='text' maxlength='4' placeholder='&#9679;&#9679;&#9679;&#9679;'>
-                                                                                <input type='text' id='fourth' class='cc-num' type='text' maxlength='4' placeholder='&#9679;&#9679;&#9679;&#9679;'>
-                                                                           </div>
-                                                                           <div class='group card-name'>
-                                                                                <label for='name'>Name On Card</label>
-                                                                                <input type='text' id='name' class='' type='text' maxlength='20' placeholder='Name Surname'>
-                                                                           </div>
-                                                                           <div class='group card-expiry'>
-                                                                                <div class='input-item expiry'>
-                                                                                <label for='expiry'>Expiry Date</label>
-                                                                                <input type='text' class='month' id='expiry' placeholder='02'>
-                                                                                <input type='text' class='year' id='' placeholder='2022'>
-                                                                                </div>
-                                                                                <div class='input-item csv'>
-                                                                                <label for='csv'>CSV No.</label><a href=''>?</a>
-                                                                                <input type='text' class='csv'>
-                                                                                </div>
-                                                                           </div>
-                                                                           <div class='grup submit-group'>
-                                                                                <span class='arrow'></span>
-                                                                                <input type='submit' class='submit' value='Continue to payment'>
-                                                                           </div>
-                                                                      </form>
-                                                                 </article>
-                                                                 <div class='part bg'></div>
-                                                            </div>
-                                                            </div></div>
-                                                            </div>
-                                                            <div class='modal-footer'>
-                                                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
-                                                            </div>
-                                                       </div>
-                                                       </div>
-                                                       </div>
-                                                  
-                                                  
                                                   ";}?></form></td>
                                         </tr>
                                         

@@ -20,5 +20,38 @@
         "password": "123",
         "userDescription": "test",
         "petAmount": "0"
+    },
+    {
+        "ownerId": 3,
+        "lastName": "test",
+        "firstName": "test",
+        "cellPhone": "123",
+        "birthDate": "2004-01-01",
+        "email": "test@test.com",
+        "password": "123",
+        "userDescription": "test",
+        "petAmount": "0"
+    },
+    {
+        "ownerId": 4,
+        "lastName": "test",
+        "firstName": "test",
+        "cellPhone": "212312",
+        "birthDate": "2004-01-01",
+        "email": "sadsadasdasddas@asdasads.com",
+        "password": "123",
+        "userDescription": "test",
+        "petAmount": "0"
+    },
+    {
+        "ownerId": 5,
+        "lastName": "test2",
+        "firstName": "test2",
+        "cellPhone": "123",
+        "birthDate": "2004-01-01",
+        "email": "test2test2@test2.com",
+        "password": "123",
+        "userDescription": "test2",
+        "petAmount": "0"
     }
 ]

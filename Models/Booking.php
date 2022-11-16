@@ -34,15 +34,14 @@ class Booking {
         return $this->firstDate;
     }
     public function setFirstDate($firstDate){
-        $date=date_create($firstDate);
-        $this->firstDate = date_format($date,"d/m/Y");
+   
+        $this->firstDate = $firstDate;
     }
     public function getLastDate(){
         return $this->lastDate;
     }
     public function setLastDate($lastDate){
-        $date=date_create($lastDate);
-        $this->lastDate = date_format($date,"d/m/Y");
+        $this->lastDate = $lastDate;
     }
     public function getKeeperID(){
         return $this->keeperID;

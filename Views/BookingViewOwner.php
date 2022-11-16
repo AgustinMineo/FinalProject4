@@ -48,7 +48,7 @@ require_once(VIEWS_PATH."ownerNav.php");
                                              <td><?php echo $booking->getAmountReservation() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
                                              <td><?php echo $booking->getTotalValue()?></td>
                                              <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>
-                                             <td><form action='<?php echo FRONT_ROOT ?> Booking/' method='post'><?php if($booking->getStatus() == '3'){ echo "
+                                             <td><form action='<?php echo FRONT_ROOT ?> Payment/generatePaymentBooking' method='post'><?php if($booking->getStatus() == '3'){ echo "
 
                                                        <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal'>
                                                        Realizar Pago
@@ -95,6 +95,7 @@ require_once(VIEWS_PATH."ownerNav.php");
                                                                            </div>
                                                                            <div class='grup submit-group'>
                                                                                 <span class='arrow'></span>
+                                                                                <input type='' 
                                                                                 <input type='submit' class='submit' value='Continue to payment'>
                                                                            </div>
                                                                       </form>

@@ -21,13 +21,7 @@ class MailerDAO implements IMailerDAO{
         $phpmailer->Username = 'c9dc2bf4f2e5fc';
         $phpmailer->Password = '0c2723ee9361ed';
         $phpmailer->setFrom('pethero@pethero.com', 'Mailer');
-        $phpmailer->addAddress($email,$fullName);    
-    
-        //Attachments
-        //../Vendor/dompdf/dompdf/output/documento.pdf tiene que ser una variable con el pdf.
-
-       // $phpmailer->addStringAttachment('../Vendor/dompdf/dompdf/output/documento.pdf',"documento.pdf");         //Add attachments
-       // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+        $phpmailer->addAddress($email,$fullName);  
     
         //Content
         $phpmailer->CharSet = 'UTF-8';
@@ -230,5 +224,41 @@ function newBooking($lastname,$name,$email){
         throw $ex;
     }
     }
+
+    public function bookingCupon($Keeperemail,$Keepername,$Keeperlastname,$cuit,$amountReservation,$firstDate,$lastDate,$petName){
+      //$fullNameOwner = $ownerLastName . " " . $ownerName;
+      $fullNameKeeper= $Keeperlastname . " ". $Keepername;
+
+      try{
+      $phpmailer = new PHPMailer();
+      $phpmailer->isSMTP();
+      $phpmailer->Host = 'smtp.mailtrap.io';
+      $phpmailer->SMTPAuth = true;
+      $phpmailer->Port = 2525;
+      $phpmailer->Username = 'c9dc2bf4f2e5fc';
+      $phpmailer->Password = '0c2723ee9361ed';
+      $phpmailer->setFrom('pethero@pethero.com', 'PET HERO');
+      $phpmailer->addAddress($Keeperemail,$fullNameKeeper);    
+  
+      //Content
+      $phpmailer->CharSet = 'UTF-8';
+      $phpmailer->isHTML(true);                                  //Set email format to HTML
+      $phpmailer->Subject = '$ PET HERO - ¡You just have received a payment!';
+      $phpmailer->Body    = "Estimado $fullNameKeeper, usted acaba de recibir un pago de $fullNameOwner, el nombre de la mascota correspondiente es es $petName, la cantidad de la reserva es $amountReservation,
+      a la cuenta con cuit $cuit.
+      La reserva es del $firstDate al $lastDate";
+      $phpmailer->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        
+      $phpmailer->send();
+      if($phpmailer->send() == true){
+        return true;
+      }else{
+        return false;
+      }
+  }catch (Exception $ex){ 
+      throw $ex;
   }
+  
+  }
+}
 ?>

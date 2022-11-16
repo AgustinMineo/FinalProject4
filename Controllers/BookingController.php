@@ -2,17 +2,17 @@
 namespace Controllers;
 use DAO\MailerDAO as MailerDAO;
         // DAO WITH JSON
-//use DAO\BookingDAO as BookingDAO;
-//use DAO\PetDAO as PetDAO;
-//use DAO\KeeperDAO as KeeperDAO;
+use DAO\BookingDAO as BookingDAO;
+use DAO\PetDAO as PetDAO;
+use DAO\KeeperDAO as KeeperDAO;
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;
 
         // DAO WITH DATA BASE
-use DAODB\PetDAO as PetDAO;
-use DAODB\KeeperDAO as KeeperDAO;
-use DAODB\BookingDAO as BookingDAO;
+//use DAODB\PetDAO as PetDAO;
+//use DAODB\KeeperDAO as KeeperDAO;
+//use DAODB\BookingDAO as BookingDAO;
 use Helper\SessionHelper as SessionHelper;
 
 class BookingController{
@@ -41,37 +41,34 @@ class BookingController{
         $this->keeperDAO = new KeeperDAO();
         $this->MailerDAO = new MailerDAO();
     }
+    
     public function bookingBuild($value1,$value2){
         $keeperDAO = new KeeperDAO();
         $listKeepers = array();
         $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
         if($listKeepers){
-            if(SessionHelper::getCurrentUser()){
-                 $petList = array(); /// create a pet array
-                 foreach($listKeepers as $keeperInfo){
-                 $petList=$this->petDAO->searchPetsBySize(SessionHelper::getCurrentOwnerID(),$keeperInfo->getAnimalSize());
-                }
-                 if($petList)
-                 {
-                     $this->goBookingView($petList,$listKeepers);
-                }else{
-                    echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
-                    $this->goIndex();
-                }
+                if(SessionHelper::getCurrentUser()){
+                    $petList = array(); /// create a pet array
+                        foreach($listKeepers as $keeperInfo){
+                        $petList=$this->petDAO->searchPetsBySize(SessionHelper::getCurrentOwnerID(),$keeperInfo->getAnimalSize());
+                        }
+                            if($petList)
+                            {
+                                $this->goBookingView($petList,$listKeepers);
+                            }else{
+                                echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
+                                $this->goIndex();
+                            }
      
-            }
-            }else{
+                }else{
                 echo "<div class='alert alert-danger'>No existen keepers con disponibilidad de $value1 a $value2</div>";
                 $this->goIndex();
-
-        }
-
-            }
+                }
         }else{
             echo "<div class='alert alert-danger'>No existen keepers disponibles entre esas fechas</div>";
-            $this->goIndex();
+        $this->goIndex();
     }
-    }
+}
     public function newBooking($email,$petId){
         $newBooking = new Booking();
         $keeperInfo = new Keeper(); //CHECK
@@ -135,4 +132,5 @@ class BookingController{
         $numberDays = intval($numberDays); // PARA PASARLO A ENTERO
         return $price * $numberDays;
     }
-} ?>
+} 
+?>

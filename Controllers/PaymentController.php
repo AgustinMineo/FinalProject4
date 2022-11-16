@@ -21,12 +21,14 @@ class PaymentController {
     private $newMailerDAO;
     private $KeeperDAO;
     private $PetDAO;
+    private $bookingDAO;
 
 
     public function  __construct(){
         $this->newMailerDAO = new MailerDAO();
         $this->KeeperDAO = new KeeperDAO();
         $this->PetDAO = new PetDAO();
+        $this->BookingDAO = new BookingDAO();
     }
 
     public function goLanding(){
@@ -34,13 +36,14 @@ class PaymentController {
     }
 
 
-    public function generatePaymentBooking($keeper,$amountReservation,$totalValue,$pet,$firstDate,$lastDate,$booking){
-        $keeper = $this->KeeperDAO->searchKeeperByID($keeper); 
-        $pet = $this->PetDAO->searchPet($pet);
-        $status = $this->newMailerDAO->bookingCupon($keeper->getEmail(),$keeper->getfirstName(),$keeper->getLastName(),$keeper->getKeeperCUIT(),$amountReservation,$firstDate,$lastDate,$pet->getName());
+    public function generatePaymentBooking($booking){
+        $Booking=$this->BookingDAO->searchBookingByKeeperID($booking);
+        $keeper = $this->KeeperDAO->searchKeeperByID($Booking->getKeeperId()); 
+        $pet = $this->PetDAO->searchPet($Booking->getPetID());
+        $status = $this->newMailerDAO->bookingCupon($keeper->getEmail(),$keeper->getfirstName(),$keeper->getLastName(),$keeper->getKeeperCUIT(),$Booking->getAmountReservation(),$Booking->getFirstDate(),$Booking->getLastDate(),$pet->getPetName());
         if($status){
             echo '<div class="alert alert-success">The payment was successful! Please wait until the keeper accepts your reservation. </div>';
-            $this->bookingDAO->updateByID($booking,'4');
+            $this->BookingDAO->updateByID($booking,"4");
             $this->goLanding();
         }else{
             echo '<div class="alert alert-danger">The payment could not be made..</div>';

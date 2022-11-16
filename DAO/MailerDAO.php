@@ -4,6 +4,7 @@ use DAO\IMailerDAO as IMailerDAO;
 use Services\PHPMailer as PHPMailer;
 use Services\SMTP as SMTP;
 use Services\Exception;
+use Helper\SessionHelper as SessionHelper;
 
 
 
@@ -193,7 +194,6 @@ a[x-apple-data-detectors] {
     }
     }
 
-//function forgotPassword($email,$name,$lastname){}
 
 function newBooking($lastname,$name,$email){
       $fullName = $lastname . " " . $name;
@@ -223,10 +223,13 @@ function newBooking($lastname,$name,$email){
     }catch (Exception $ex){ 
         throw $ex;
     }
-    }
+}
+
+
 
     public function bookingCupon($Keeperemail,$Keepername,$Keeperlastname,$cuit,$amountReservation,$firstDate,$lastDate,$petName){
-      //$fullNameOwner = $ownerLastName . " " . $ownerName;
+      $owner = SessionHelper::getCurrentUser();
+      $fullNameOwner = $owner->getfirstName() . " " . $owner->getLastName();
       $fullNameKeeper= $Keeperlastname . " ". $Keepername;
 
       try{
@@ -239,18 +242,19 @@ function newBooking($lastname,$name,$email){
       $phpmailer->Password = '0c2723ee9361ed';
       $phpmailer->setFrom('pethero@pethero.com', 'PET HERO');
       $phpmailer->addAddress($Keeperemail,$fullNameKeeper);    
+      $phpmailer->addCC($owner->getEmail(),$fullNameOwner);
   
       //Content
       $phpmailer->CharSet = 'UTF-8';
-      $phpmailer->isHTML(true);                                  //Set email format to HTML
+      $phpmailer->isHTML(true);                                
       $phpmailer->Subject = '$ PET HERO - ¡You just have received a payment!';
-      $phpmailer->Body    = "Estimado $fullNameKeeper, usted acaba de recibir un pago de $fullNameOwner, el nombre de la mascota correspondiente es es $petName, la cantidad de la reserva es $amountReservation,
+      $phpmailer->Body    = "Estimado $fullNameKeeper, usted acaba de recibir un pago de $fullNameOwner, el nombre de la mascota correspondiente es $petName, la cantidad de la reserva es $amountReservation,
       a la cuenta con cuit $cuit.
       La reserva es del $firstDate al $lastDate";
       $phpmailer->AltBody = 'This is the body in plain text for non-HTML mail clients';
         
-      $phpmailer->send();
-      if($phpmailer->send() == true){
+      $response = $phpmailer->send();
+      if($response == true){
         return true;
       }else{
         return false;

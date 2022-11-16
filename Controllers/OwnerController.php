@@ -44,7 +44,7 @@ use DAO\MailerDAO as MailerDAO;
                 $newOwner->setPetAmount('0');
                 $this->OwnerDAO->AddOwner($newOwner);
                 $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
-                $this->landingPage();
+                $this->goLandingOwner();
                 }else{
                     echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
                     $this->addOwnerView();  
@@ -52,6 +52,6 @@ use DAO\MailerDAO as MailerDAO;
                 else{
                     echo '<div class="alert alert-danger">Email already exist! Please try again with another email/div>';
                     $this->addOwnerView();  
-                }
+                        } }
     } 
 } ?>

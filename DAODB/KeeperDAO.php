@@ -74,9 +74,11 @@ class KeeperDAO implements IKeeperDAO{
         $query =  "SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, d.firstDate, d.lastDate  
                 FROM ".$this->userTable." u JOIN ".$this->keeperTable. " k ON k.userID = u.userID 
                 JOIN ".$this->keeperDaysTable." d ON d.keeperID = k.keeperID
+                JOIN booking b ON b.keeperdaysID != d.keeperdaysID
                 WHERE firstDate >= '$date1' AND '$date1' > lastDate <= '$date2';";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
+        var_dump($resultSet);
         if($resultSet){
           foreach($resultSet as $row){
             $keeperList = array();
@@ -164,7 +166,7 @@ class KeeperDAO implements IKeeperDAO{
     }
     public function changeAvailabilityDays($keeperID, $value1, $value2){
       $exist = $this->searchDays($keeperID, $value1, $value2);
-      if($exist === NULL){
+      if($exist == NULL){
         try {  
           $query = "INSERT INTO ".$this->keeperDaysTable." (keeperDaysID, keeperID, firstDate, lastDate) 
           VALUES (:keeperDaysID, :keeperID, :firstDate, :lastDate);";
@@ -183,10 +185,9 @@ class KeeperDAO implements IKeeperDAO{
     public function searchDays($keeperID, $value1, $value2){
       try{
         $query = "SELECT keeperDaysID FROM ".$this->keeperDaysTable."  
-                  WHERE firstDate >= '$value1' OR lastDate <= '$value2' AND keeperID = $keeperID;";
+                  WHERE firstDate >= '$value1' AND lastDate <= '$value2' AND keeperID = $keeperID;";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
-        var_dump($resultSet);
         if($resultSet){ 
           foreach($resultSet as $row){
             $id = $row['keeperDaysID'];

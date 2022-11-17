@@ -7,6 +7,7 @@ use Models\Owner as Owner;
 use DAO\KeeperDAO as KeeperDAO;
 //use DAODB\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
+use Helper\SessionHelper as SessionHelper;
 
 class UserController{
     private $OwnerDAO;
@@ -31,6 +32,9 @@ class UserController{
     }
     public function gologinUser(){
         require_once(VIEWS_PATH."loginUser.php");
+    }
+    public function goEditOwner($owner){
+        require_once(VIEWS_PATH."myProfileOwner.php");
     }
 
     public function logOut(){
@@ -73,6 +77,53 @@ class UserController{
         }else{
             echo '<div class="alert alert-danger">The Email and Password is requeried to login!</div>';
             $this->gologinUser();
+        }
+    }
+
+    public function updateLastName($newName){
+        $response=$this->OwnerDAO->updateName($newName,SessionHelper::getCurrentUser()->getEmail());
+        if($response){
+            echo '<div class="alert alert-success">You have successful update your Last Name!</div>';
+            $this->goEditOwner($response);
+        }else{
+            echo '<div class="alert alert-danger">First Name cannot be empty!!</div>';
+            $this->goEditOwner(SessionHelper::getCurrentUser());
+        }
+    }
+    public function updateFirstName($newFirstName){
+        if($newFirstName){
+            $response=$this->OwnerDAO->updateFirstName($newFirstName,SessionHelper::getCurrentUser()->getEmail());
+            if($response){
+                echo '<div class="alert alert-success">You have successful update your Last Name!</div>';
+                $this->goEditOwner($response);
+            }
+        }else{
+            echo '<div class="alert alert-danger">Last Name cannot be empty!!</div>';
+            $this->goEditOwner(SessionHelper::getCurrentUser());
+        }
+    }
+    public function UpdateUserCellphone($newCellphone){
+        if($newCellphone){
+            $response=$this->OwnerDAO->updateCellphone($newCellphone,SessionHelper::getCurrentUser()->getEmail());
+            if($response){
+                echo '<div class="alert alert-success">You have successful update your Cellphone!</div>';
+                $this->goEditOwner($response);
+            }
+        }else{
+            echo '<div class="alert alert-danger">The Cellphone cannot be empty!!</div>';
+            $this->goEditOwner(SessionHelper::getCurrentUser());
+        }
+    }
+    public function UpdateDescription($newDescription){
+        if($newDescription){
+            $response=$this->OwnerDAO->updateDescription($newDescription,SessionHelper::getCurrentUser()->getEmail());
+            if($response){
+                echo '<div class="alert alert-success">You have successful update your Last Name!</div>';
+                $this->goEditOwner($response);
+            }
+        }else{
+            echo '<div class="alert alert-danger">Last Name cannot be empty!!</div>';
+            $this->goEditOwner(SessionHelper::getCurrentUser());
         }
     }
 }

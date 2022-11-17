@@ -58,7 +58,7 @@ class UserController{
                                 echo '<div class="alert alert-danger">The user doesn´t  ERROR KEEPER NO EXISTE exist. Please register!</div>';
                             }
                     }else{
-                        
+                        echo '<div class="alert alert-danger">The user doesn´t exist. Please register!</div>';
                         $this->gologinUser();
                     }
                 }catch ( Exception $ex) {

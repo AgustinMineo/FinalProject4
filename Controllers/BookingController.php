@@ -62,9 +62,6 @@ class BookingController{
                                 echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
                                 $this->goIndex();
                             }
-     
-
-            
             }else{
                 echo "<div class='alert alert-danger'>No existen keepers con disponibilidad de $value1 a $value2</div>";
                 $this->goIndex();

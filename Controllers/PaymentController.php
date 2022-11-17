@@ -40,7 +40,7 @@ class PaymentController {
         $Booking=$this->BookingDAO->searchBookingByKeeperID($booking);
         $keeper = $this->KeeperDAO->searchKeeperByID($Booking->getKeeperId()); 
         $pet = $this->PetDAO->searchPet($Booking->getPetID());
-        $status = $this->newMailerDAO->bookingCupon($keeper->getEmail(),$keeper->getfirstName(),$keeper->getLastName(),$keeper->getKeeperCUIT(),$Booking->getAmountReservation(),$Booking->getFirstDate(),$Booking->getLastDate(),$pet->getPetName());
+        $status = $this->newMailerDAO->bookingCupon($keeper->getEmail(),$keeper->getfirstName(),$keeper->getLastName(),$keeper->getCBU(),$Booking->getAmountReservation(),$Booking->getFirstDate(),$Booking->getLastDate(),$pet->getPetName());
         if($status){
             echo '<div class="alert alert-success">The payment was successful! Please wait until the keeper accepts your reservation. </div>';
             $this->BookingDAO->updateByID($booking,"4");

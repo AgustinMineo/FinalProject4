@@ -86,7 +86,7 @@ class OwnerDAO{
     //Funcion para buscar Owner para iniciar seseion
     public function searchOwnerToLogin($email, $password){
         try {
-            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription, o.petAmount FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = md5($password);";
+            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userDescription, o.petAmount FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = md5($password);";
 
             $this->connection = Connection::GetInstance();
 
@@ -104,8 +104,7 @@ class OwnerDAO{
                 $owner->setEmail($row["email"]);
                 $owner->setCellPhone($row["cellphone"]);
                 $owner->setbirthDate($row["birthdate"]);
-                $owner->setPassword($row["password"]);
-                $owner->setImage($row["userImage"]);
+                $owner->setPassword($row["password"]);;
                 $owner->setDescription($row["userDescription"]);
                 $owner->setPetAmount($row["petAmount"]);
                 return $owner;

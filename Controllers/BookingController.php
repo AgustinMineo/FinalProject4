@@ -85,10 +85,14 @@ class BookingController{
         //require_once(VIEWS_PATH. "showPetBooking.php");
         $newBooking->setPetID($petId);
         $this->MailerDAO->newBooking($keeperInfo->getLastName(),$keeperInfo->getfirstName(),$keeperInfo->getEmail());
-        $this->BookingDAO->addBooking($newBooking);
-        
-        $this->goIndex();
-        //require_once()
+        $result =$this->BookingDAO->addBooking($newBooking);
+        if($result){
+            echo "<div class='alert alert-success'>You have successfully created a reservation</div>";
+            $this->goIndex(); 
+        }else{
+            echo "<div class='alert alert-danger'>Ops! Something happened when creating the reservation</div>";
+            $this->goIndex();
+        }
     }
 // MIGRAR A DAO
     public function showBookings(){

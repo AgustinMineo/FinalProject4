@@ -1,13 +1,1 @@
-[
-    {
-        "ownerId": 1,
-        "lastName": "Agustin",
-        "firstName": "Mineo",
-        "cellPhone": "2235673455",
-        "birthDate": "15\/11\/2022",
-        "email": "agustin@gmail.com",
-        "password": "123",
-        "userDescription": "Prueba",
-        "petAmount": "0"
-    }
-]
+[]

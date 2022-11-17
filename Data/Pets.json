@@ -24,6 +24,18 @@
         "petWeight": "Light",
         "ownerID": 1,
         "petAge": "2022-08-18"
+    },
+    {
+        "petID": 3,
+        "petName": "Prueba",
+        "petImage": "https:\/\/img.freepik.com\/premium-photo\/studio-shot-cute-black-lab-puppy-yellow-background_254268-2417.jpg?w=450",
+        "breedID": "3",
+        "petSize": "Medium",
+        "petVaccinationPlan": "https:\/\/img.freepik.com\/premium-photo\/studio-shot-cute-black-lab-puppy-yellow-background_254268-2417.jpg?w=450.",
+        "petDetails": "test",
+        "petVideo": "",
+        "petWeight": "Medium",
+        "ownerID": 1,
+        "petAge": "2022-10-01"
     }
 ]
-

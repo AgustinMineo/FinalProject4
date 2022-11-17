@@ -33,7 +33,6 @@ require_once(VIEWS_PATH."validate-session.php");
                               if($bookingListKeeper){
                                    foreach($bookingListKeeper as $booking)
                                    {
-                                        //$value=$booking->getBookingID();
                                         ?>
                                              <tr class=" table table-info table-hover table align-middle" >
                                                   <td><?php echo $booking->getBookingID(); $value=$booking->getBookingID();?></td>

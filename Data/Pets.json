@@ -11,31 +11,5 @@
         "petWeight": "Medium",
         "ownerID": 1,
         "petAge": "2021-05-14"
-    },
-    {
-        "petID": 2,
-        "petName": "Agustin",
-        "petImage": "https:\/\/img.freepik.com\/free-photo\/beagles-puppies-looking-something_1150-18193.jpg?w=450&t=st=1667603811~exp=1667604411~hmac=8f9a2e6c678c57d699ed5d72f1578a84cb38ee4e0bf111058fa9f499ac9d63a5",
-        "breedID": "1",
-        "petSize": "Small",
-        "petVaccinationPlan": "https:\/\/www.smartpractice.com\/Images\/Products\/PC\/PhotoLg\/IN06946_Blue.jpg",
-        "petDetails": "Bites a little",
-        "petVideo": "https:\/\/www.youtube.com\/watch?v=5PR4vCJJRnA",
-        "petWeight": "Light",
-        "ownerID": 1,
-        "petAge": "2022-08-18"
-    },
-    {
-        "petID": 3,
-        "petName": "Prueba",
-        "petImage": "https:\/\/img.freepik.com\/premium-photo\/studio-shot-cute-black-lab-puppy-yellow-background_254268-2417.jpg?w=450",
-        "breedID": "3",
-        "petSize": "Medium",
-        "petVaccinationPlan": "https:\/\/img.freepik.com\/premium-photo\/studio-shot-cute-black-lab-puppy-yellow-background_254268-2417.jpg?w=450.",
-        "petDetails": "test",
-        "petVideo": "",
-        "petWeight": "Medium",
-        "ownerID": 1,
-        "petAge": "2022-10-01"
     }
 ]

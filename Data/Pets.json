@@ -1,15 +1,1 @@
-[
-    {
-        "petID": 1,
-        "petName": "test",
-        "petImage": "",
-        "breedID": "3",
-        "petSize": "Medium",
-        "petVaccinationPlan": "",
-        "petDetails": "test",
-        "petVideo": "",
-        "petWeight": "Medium",
-        "ownerID": 1,
-        "petAge": "2021-05-14"
-    }
-]
+[]

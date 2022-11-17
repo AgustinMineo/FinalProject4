@@ -41,7 +41,8 @@ class BookingDAO implements IBookingDAO{
             $parameters["totalValue"] = $booking->getTotalValue();
             $parameters["amountReservation"] = $booking->getAmountReservation();
             $this->connection = Connection::GetInstance();
-            $this->connection->ExecuteNonQuery($query, $parameters);     
+            $this->connection->ExecuteNonQuery($query, $parameters); 
+            return true;    
 
       } catch (Exception $ex) { throw $ex; } 
     }
@@ -51,11 +52,13 @@ class BookingDAO implements IBookingDAO{
         // } catch (Exception $ex) { throw $ex; } 
     }
     public function updateByID($id, $status){
+        try{
         $query = "UPDATE ".$this->bookingTable." SET status = $status WHERE bookingID = $id;";
         $this->connection = Connection::GetInstance();
         if($this->connection->Execute($query)){
             return false;
-        } else { return true; }
+        } else { return true; } }
+        catch (Exception $ex) { throw $ex; }
     }
     public function searchByID($idBooking){
         $query = "SELECT d.firstDate, d.lastDate, d.keeperID, b.petID, b.totalValue, s.name FROM booking b 
@@ -137,10 +140,10 @@ class BookingDAO implements IBookingDAO{
         } catch (Exception $ex) { throw $ex; }
         }
     }
-    public function searchBookingByID($bookingID){
+    public function searchBookingByKeeperID($bookingID){
         try{
             $query = "SELECT b.bookingID, b.petID, b.status, b.totalValue, b.amountReservation, kd.firstDate, kd.lastDate, kd.keeperID
-                      FROM booking b INNER JOIN keeperDays kd ON b.keeperdaysID = kd.keeperdaysID
+                      FROM booking b INNER JOIN keeperdays kd ON b.keeperdaysID = kd.keeperdaysID
                       WHERE bookingID = $bookingID;";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);

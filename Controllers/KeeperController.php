@@ -1,12 +1,13 @@
 <?php
  namespace Controllers;
+ use Models\Keeper as Keeper;
+ use Helper\SessionHelper as SessionHelper;
 
  //use DAO\KeeperDAO as KeeperDAO;
- use DAODB\KeeperDAO as KeeperDAO;
- use Models\Keeper as Keeper;
  use DAO\MailerDAO as MailerDAO;
- use DAO\OwnerDAO as OwnerDAO;
- use Helper\SessionHelper as SessionHelper;
+ use DAODB\KeeperDAO as KeeperDAO;
+ //use DAO\OwnerDAO as OwnerDAO;
+ use DAODB\OwnerDAO as OwnerDAO;
  class KeeperController
  {
     private $KeeperDAO;
@@ -38,7 +39,7 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
      
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$cbu,$userDescription){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cbu){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -49,7 +50,6 @@
             $newKeeper->setbirthDate($birthDate);
             $newKeeper->setEmail($email);
             $newKeeper->setPassword($password);
-            $newKeeper->setImage($userImage);
             $newKeeper->setDescription($userDescription);
             $newKeeper->setAnimalSize($animalSize);
             $newKeeper->setPrice($price);

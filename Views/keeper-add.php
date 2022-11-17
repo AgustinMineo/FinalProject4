@@ -79,20 +79,14 @@
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
-                                   <label for="">Image</label>
-                                   <input type="text" name="userImage" value="" class="form-control">
-                              </div>
-                         </div>
-                         <div class="col-lg-4">
-                              <div class="form-group">
                                    <label for="">Description</label>
                                    <textarea type="textarea" name="userDescription" rows = "1" cols ="10" class="form-control"></textarea>
                               </div>
                          </div>
                          <div class="col-lg-4">
                               <div class="form-group">
-                                   <label for="">CUIT</label>
-                                   <input type="text" name="cuit" class="form-control" Required></input>
+                                   <label for="">CBU</label>
+                                   <input type="text" name="cbu" class="form-control" Required></input>
                               </div>
                          </div>
                     </div>

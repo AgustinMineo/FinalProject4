@@ -1,5 +1,6 @@
 <?php
 namespace Models;
+use Helper\DayFormatter as DayFormatter;
 
 abstract class User {
     private $lastName;
@@ -34,11 +35,10 @@ abstract class User {
     }
 
     public function getbirthDate(){
-        return $this->birthDate;
+        return DayFormatter::formatDate($this->birthDate);
     }
     public function setbirthDate($birthDate){
-        //$date=date_create($birthDate);
-        $this->birthDate = $birthDate; //date_format($date,"d/m/Y"); CHECK ERROR CUANDO LOG
+        $this->birthDate = $birthDate;
     }
 
     public function getEmail(){

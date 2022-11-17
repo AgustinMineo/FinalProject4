@@ -134,10 +134,10 @@ class PetDAO implements IPetDAO{
         } catch(Exception $ex) { throw $ex; }
     }
     public function searchPetList(){
-        if(isset($_SESSION["loggedUser"])){
-        $ownerID = $_SESSION["loggedUser"]->getOwnerId();
+        if(SessionHelper::getCurrentUser()){
+        $ownerID = SessionHelper::getCurrentOwnerID();
         $petListSearch= array();
-        $petListSearch = $this->searchPets($_SESSION["loggedUser"]->getOwnerId()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
+        $petListSearch = $this->searchPets(SessionHelper::getCurrentOwnerID()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
         return $petListSearch; 
         }
     }

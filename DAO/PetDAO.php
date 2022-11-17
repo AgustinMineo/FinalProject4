@@ -11,6 +11,7 @@ class PetDAO implements IPetDAO{
         $pet->setPetID($this->getLastID());
         array_push($this->petList,$pet);
         $this->SaveData();
+        return true;
     }
 
     public function GetAllPet(){

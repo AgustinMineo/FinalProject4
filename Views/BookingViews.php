@@ -123,7 +123,7 @@ else{
     echo "<div class='container w-100 text-center'><div class='alert alert-success'><h1>Tus pets disponibles</h1></div></div>";
 }
     ?>
-    <button type="submit" class="btn btn-info d-flex justify-content-center align-content-center w-100">Reservation</button>  
+        <button type="submit" class="btn btn-info d-flex justify-content-center align-content-center w-100">Reservation</button>  
     </div>
     </div>
     </form>

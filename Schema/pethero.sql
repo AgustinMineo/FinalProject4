@@ -27,7 +27,6 @@ CREATE TABLE `Keeper` (
   `userID` int(11) NOT NULL references User(userID),
   `animalSize` varchar(30) DEFAULT NULL,
   `price` float DEFAULT NULL,
-  `KeeperCUIT` varchar(15) DEFAULT NULL,
   `cbu` varchar (20) UNIQUE KEY, 
   PRIMARY KEY (`keeperID`)
 ) ENGINE=InnoDB;

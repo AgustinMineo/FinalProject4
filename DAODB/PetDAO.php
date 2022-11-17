@@ -140,4 +140,27 @@ class PetDAO implements IPetDAO{
         return $petListSearch; 
         }
     }
+    public function searchPet($petSearch){
+        try{
+            $query = "SELECT * FROM ".$this->petTable." WHERE petID = $petSearch;";
+            $this->conncetion = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if($resultSet){
+                foreach($resulteSet as $row){
+                    $pet = new Pet();
+                    $pet->setPetName($row['petName']);
+                    $pet->setBreedID($row['breedID']);
+                    $pet->setDetails($row['petDetails']);
+                    $pet->setPetImage($row['petImage']);
+                    $pet->setPetAge($row['petAge']);
+                    $pet->setOwnerID($row['ownerID']);
+                    $pet->setPetWeight($row['petWeight']);
+                    $pet->setPetVideo($row['petVideo']);
+                    $pet->setPetVaccinationPlan($row['petVaccinationPlan']);
+                    $pet->setPetSize($row['petSize']);
+                }
+                return $pet;
+            } else{ return null;}
+        } catch (Exception $ex) {throw $ex;}
+    }
 }?>

@@ -18,7 +18,6 @@ class KeeperDAO implements IKeeperDAO{
       // save the data
       $this->SaveData();
   }
-
   public function getAllKeeper(){
       // bring all of the keeper
       $this->RetriveData();
@@ -41,9 +40,8 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["firstAvailabilityDays"] = $Keeper->getFirstAvailabilityDays();// cambiar a 2 variables
           $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
-          $keeperValue["points"] = $Keeper->getPoints();
+          $keeperValue["cbu"] = $Keeper->getCBU();
           $keeperValue["price"] = $Keeper->getPrice();
-          $keeperValue["KeeperCUIT"] = $Keeper->getKeeperCUIT();
           
           
           array_push($keeperArrayEncode, $keeperValue);
@@ -51,7 +49,6 @@ class KeeperDAO implements IKeeperDAO{
       $keeperFile = json_encode($keeperArrayEncode, JSON_PRETTY_PRINT);
       file_put_contents('Data/Keepers.json',$keeperFile);
   }
-
   private function RetriveData(){
       $this->keeperList = array();
       //Tenemos que tener el file creado
@@ -73,8 +70,8 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
               $keeper->setPrice($KeeperDecode["price"]);
-              $keeper->setPoints($KeeperDecode["points"]);
-              $keeper->setKeeperCUIT($KeeperDecode["KeeperCUIT"]);
+              $keeper->setCBU($KeeperDecode["cbu"]);
+
               array_push($this->keeperList, $keeper);
           }
       }else{
@@ -90,7 +87,6 @@ class KeeperDAO implements IKeeperDAO{
         }
         return null;
   }
-
   public function searchKeeperByID($id){
     $this->RetriveData();
         foreach($this->keeperList as $value){ /// Buscamos dentro del arreglo de keeper
@@ -100,17 +96,16 @@ class KeeperDAO implements IKeeperDAO{
         }
         return null;
   }
-
   public function searchKeeperToLogin($email,$password){
     $newKeeper =$this->searchKeeperByEmail($email);
     if($newKeeper){
         if($newKeeper->getPassword()==$password){
             return $newKeeper;
         }
-    }else{
+        }else{
         return null;
-    }
-}
+        }
+  }
   public function changeAvailabilityDays($id,$value1, $value2){
     $newValues = array();
     $value = $this->searchKeeperByID($id);
@@ -136,14 +131,13 @@ class KeeperDAO implements IKeeperDAO{
             }
         }
     }
-}else{
-    echo '<div class="alert alert-danger">There are no keepers </div>';
-    return array();
-}
-    return $keeperListDisponibility;
-}
-
-public function getLastID(){
+        }else{
+         echo '<div class="alert alert-danger">There are no keepers </div>';
+         return array();
+        }
+        return $keeperListDisponibility;
+    }
+    public function getLastID(){
     $this->RetriveData();
     if($this->keeperList != NULL){
         $keeper = end($this->keeperList);
@@ -152,6 +146,6 @@ public function getLastID(){
     else{
         return 1;
     }
-} 
-}
-?>
+    }
+
+}?>

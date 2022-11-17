@@ -75,6 +75,5 @@ class UserController{
             $this->gologinUser();
         }
     }
-    //CHECK OUT FOR USER FUNCTIONALITIES (CHANGES IN NAME, PASSWORD, ETC)
 }
 ?>

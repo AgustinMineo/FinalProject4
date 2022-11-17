@@ -1,6 +1,5 @@
 <?php
 namespace Models;
-use Helper\DayFormatter as DayFormatter;
 
 abstract class User {
     private $lastName;
@@ -35,7 +34,7 @@ abstract class User {
     }
 
     public function getbirthDate(){
-        return DayFormatter::formatDate($this->birthDate);
+        return $this->birthDate;
     }
     public function setbirthDate($birthDate){
         $this->birthDate = $birthDate;

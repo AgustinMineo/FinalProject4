@@ -38,7 +38,7 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
      
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userImage,$userDescription,$cuit){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cuit){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -49,7 +49,6 @@
             $newKeeper->setbirthDate($birthDate);
             $newKeeper->setEmail($email);
             $newKeeper->setPassword($password);
-            $newKeeper->setImage($userImage);
             $newKeeper->setDescription($userDescription);
             $newKeeper->setAnimalSize($animalSize);
             $newKeeper->setPrice($price);

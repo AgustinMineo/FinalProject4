@@ -43,7 +43,7 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
           $keeperValue["points"] = $Keeper->getPoints();
           $keeperValue["price"] = $Keeper->getPrice();
-          $keeperValue["KeeperCUIT"] = $Keeper->getKeeperCUIT();
+          $keeperValue["CBU"] = $Keeper->getCBU();
           
           
           array_push($keeperArrayEncode, $keeperValue);
@@ -74,7 +74,7 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
               $keeper->setPrice($KeeperDecode["price"]);
               $keeper->setPoints($KeeperDecode["points"]);
-              $keeper->setKeeperCUIT($KeeperDecode["KeeperCUIT"]);
+              $keeper->setCBU($KeeperDecode["CBU"]);
               array_push($this->keeperList, $keeper);
           }
       }else{

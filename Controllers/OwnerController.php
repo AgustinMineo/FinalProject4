@@ -6,7 +6,6 @@ use DAO\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
 use DAO\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;
-//use DAODB\ImageDAO as ImageDAO;
 
 use Helper\SessionHelper as SessionHelper;
 
@@ -63,11 +62,11 @@ use Helper\SessionHelper as SessionHelper;
                     $this->addOwnerView();  
                 }
     }
+}
 
     public function showCurrentOwner(){
         $owner=$this->OwnerDAO->searchOwnerByEmail(SessionHelper::getCurrentUser()->getEmail());
         $this->goMyProfile($owner);
     }
-}
 } 
 ?>

@@ -11,6 +11,7 @@ class PetDAO implements IPetDAO{
         $pet->setPetID($this->getLastID());
         array_push($this->petList,$pet);
         $this->SaveData();
+        return true;
     }
 
     public function GetAllPet(){
@@ -149,6 +150,14 @@ class PetDAO implements IPetDAO{
         if(SessionHelper::getCurrentUser()){
             $petListSearch = $this->searchPets(SessionHelper::getCurrentOwnerID()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
             return $petListSearch;
+        }
+    }
+    public function searchPet($petSearch){
+        $this->RetriveData();
+        foreach($this->petList as $pet){
+            if($pet->getPetID() == $petSearch){
+                return $pet;
+            }
         }
     }
 }

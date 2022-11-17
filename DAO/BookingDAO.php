@@ -14,6 +14,7 @@ class BookingDAO implements IBookingDAO{
         $booking->setBookingID($this->getLastID());
        array_push($this->bookingList,$booking);
        $this->SaveData();
+       return true;
     }
     public function getAllBooking(){
         // bring all of the keeper
@@ -91,8 +92,19 @@ class BookingDAO implements IBookingDAO{
             }
         }
     }
-    public function updateByID($id, $status){
-        $bookingRecord = $this->searchByID($id);
+
+    public function searchBookingByKeeperID($idBooking){
+        $bookingListSearch = $this->getAllBooking();
+        if($bookingListSearch){
+            foreach($bookingListSearch as $booking){
+                if($booking->getBookingID()==$idBooking){
+                    return $booking;
+                }
+            }
+        }
+    }
+    public function updateByID($id,$status){
+        $bookingRecord = $this->searchBookingByKeeperID($id);
         if($bookingRecord){
             $bookingRecord->setStatus($status);
             $this->SaveData();

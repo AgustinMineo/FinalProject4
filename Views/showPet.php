@@ -53,21 +53,19 @@ require_once(VIEWS_PATH."validate-session.php");
                                                                                      <table class="table text-center">
                                                                                           <thead>
                                                                                           <tr>
+                                                                                               <th scope="col">Name</th>
                                                                                                <th scope="col">Breed</th>
-                                                                                               <th scope="col">Size</th>
                                                                                                <th scope="col">Weight</th>
                                                                                                <th scope="col">Size</th>
-                                                                                               <th scope="col">Weight</th>
                                                                                                <th scope="col">Age (Years)</th>
                                                                                           </tr>
                                                                                           </thead>
                                                                                           <tbody>
                                                                                           <tr>
-                                                                                               <td><div class=" d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetBreedByText()?></div></td>
-                                                                                               <td><div class=" d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetSize() ?></div></td>
+                                                                                               <td><div class=" d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetName()?></div></td>
+                                                                                               <td><div class=" d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetBreedByText() ?></div></td>
                                                                                                <td><div class="d-flex flex-wrap justify-content-center w-100"> <?php echo $pets->getPetWeight() ?></div></td>
                                                                                                <td> <div class=" d-flex flex-wrap justify-content-center w-100"> <?php echo $pets->getPetSize() ?></div></td>
-                                                                                               <td><div class="d-flex flex-wrap justify-content-center w-100"> <?php echo $pets->getPetWeight() ?></div></td>
                                                                                                <td><div class="d-flex flex-wrap justify-content-center w-100"> <?php echo $pets->getPetAge()?></div></td>
                                                                                           </tr>
                                                                                      </table>

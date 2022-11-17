@@ -10,7 +10,6 @@ CREATE TABLE `User` (
   `cellphone` varchar(20) DEFAULT NULL,
   `birthdate` date DEFAULT NULL,
   `password` varchar(32) NOT NULL,
-  `userImage` blob NOT NULL,
   `userDescription` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)
@@ -28,7 +27,7 @@ CREATE TABLE `Keeper` (
   `userID` int(11) NOT NULL references User(userID),
   `animalSize` varchar(30) DEFAULT NULL,
   `price` float DEFAULT NULL,
-  `KeeperCUIT` varchar(15) DEFAULT NULL,
+  `cbu` varchar (20) UNIQUE KEY, 
   PRIMARY KEY (`keeperID`)
 ) ENGINE=InnoDB;
 
@@ -64,22 +63,23 @@ CREATE TABLE `Booking` (
   PRIMARY KEY (`bookingID`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `DayBooking` (
-  `dayBookingID` int(11) NOT NULL AUTO_INCREMENT,
-  `bookingID` int(11) NOT NULL references Booking(bookingID),
+CREATE TABLE `KeeperDays` (
+  `keeperDaysID` int(11) NOT NULL AUTO_INCREMENT,
+  `keeperID` int(11) NOT NULL references Keeper(keeperID),
   `firstDate` date DEFAULT NULL,
   `lastDate` date DEFAULT NULL,
-  PRIMARY KEY (`dayBookingID`)
+  PRIMARY KEY (`keeperDaysID`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `Review` (
-  `reviewID` int(11) NOT NULL AUTO_INCREMENT,
-  `bookingID` int(11) NOT NULL references Booking(bookingID),
-  `description` varchar(255),
-  `points` tinyint(10),
-  PRIMARY KEY (`reviewID`)
+CREATE TABLE `Status`(
+	`statusID` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(20) NOT NULL UNIQUE KEY,
+    PRIMARY KEY (`statusID`)
 ) ENGINE=InnoDB;
 
+
+-- INSERT DE STATUS EN LA TABLA STATUS--
+INSERT INTO status VALUES ("1","Peding"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish");
 --INSERT DE BREEDS EN TABLA BREED--
 INSERT INTO breed VALUES ("1","Beagle"), ("2", "Chihuahua"), ("3","Bulldog"),("4", "German Shepherd"),
 ("5", "Shih-tzu"), ("6", "Dogo"), ("7", "Golden Retriever"), ("8","Fox Terrier"), ("9","Whippet"),

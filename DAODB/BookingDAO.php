@@ -45,13 +45,13 @@ class BookingDAO implements IBookingDAO{
 
       } catch (Exception $ex) { throw $ex; } 
     }
-     public function GetAllBooking(){ 
+    public function GetAllBooking(){ 
         // try{
         //     $query = "SELECT b.bookingID, "
         // } catch (Exception $ex) { throw $ex; } 
-     }
-    public function updateByID($id){
-        $query = "UPDATE ".$this->bookingTable." SET status = 3 WHERE bookingID = $id;";
+    }
+    public function updateByID($id, $status){
+        $query = "UPDATE ".$this->bookingTable." SET status = $status WHERE bookingID = $id;";
         $this->connection = Connection::GetInstance();
         if($this->connection->Execute($query)){
             return false;
@@ -136,5 +136,28 @@ class BookingDAO implements IBookingDAO{
             } else { return NULL; }
         } catch (Exception $ex) { throw $ex; }
         }
+    }
+    public function searchBookingByID($bookingID){
+        try{
+            $query = "SELECT b.bookingID, b.petID, b.status, b.totalValue, b.amountReservation, kd.firstDate, kd.lastDate, kd.keeperID
+                      FROM booking b INNER JOIN keeperDays kd ON b.keeperdaysID = kd.keeperdaysID
+                      WHERE bookingID = $bookingID;";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if($resultSet){
+                foreach($resultSet as $row){
+                    $booking = new Booking();
+                    $booking->setBookingID($row['bookingID']);
+                    $booking->setKeeperID($row['keeperID']);
+                    $booking->setPetID($row['petID']);
+                    $booking->setStatus($row['status']);
+                    $booking->setTotalValue($row['totalValue']);
+                    $booking->setAmountReservation($row['amountReservation']);
+                    $booking->setFirstDate($row['firstDate']);
+                    $booking->setLastDate($row['lastDate']);
+                }
+                return $booking;
+            } else {return Null;}
+        } catch(Exception $ex){ throw $ex;}
     }
 }?>

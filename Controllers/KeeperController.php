@@ -1,8 +1,8 @@
 <?php
  namespace Controllers;
 
- use DAO\KeeperDAO as KeeperDAO;
- //use DAODB\KeeperDAO as KeeperDAO;
+ //use DAO\KeeperDAO as KeeperDAO;
+ use DAODB\KeeperDAO as KeeperDAO;
  use Models\Keeper as Keeper;
  use DAO\MailerDAO as MailerDAO;
  use DAO\OwnerDAO as OwnerDAO;
@@ -38,7 +38,7 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
      
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userImage,$userDescription,$cuit){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$cbu,$userDescription){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -53,7 +53,7 @@
             $newKeeper->setDescription($userDescription);
             $newKeeper->setAnimalSize($animalSize);
             $newKeeper->setPrice($price);
-            $newKeeper->setKeeperCUIT($cuit);
+            $newKeeper->setCBU($cbu);
             $this->KeeperDAO->AddKeeper($newKeeper);
             $this->newMailer->welcomeMail($lastName,$firstName,$email);
             $this->goLoginKeeper();

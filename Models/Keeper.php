@@ -2,7 +2,6 @@
 namespace Models;
 
 use Models\User as User;
-use Helper\DayFormatter as DayFormatter;
 
 class Keeper extends User{
     private $keeperId; // not null
@@ -11,7 +10,7 @@ class Keeper extends User{
     private $points; // shortint (1 - 5 ) 
     private $firstAvailabilityDays; /// Change for the database
     private $lastAvailabilityDays; ///Change for the database
-    private $KeeperCUIT;
+    private $CBU;
 
         public function getKeeperId(){
             return $this->keeperId;
@@ -51,11 +50,11 @@ class Keeper extends User{
         public function setPoints($points){
             $this->points = $points;
         }
-        public function getKeeperCUIT(){
-            return $this->KeeperCUIT;
+        public function getCBU(){
+            return $this->CBU;
         }
-        public function setKeeperCUIT($KeeperCUIT){
-            $this->KeeperCUIT = $KeeperCUIT;
+        public function setCBU($CBU){
+            $this->CBU = $CBU;
     }
 }
 ?>

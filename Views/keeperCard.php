@@ -39,10 +39,10 @@ require_once(VIEWS_PATH."validate-session.php");
                 <li class="list-group-item bg-light text-dark"><?php echo $keeper->getAnimalSize()?></li>
                 
                 
-                <li class="list-group-item bg-secondary text-white">Del <?php echo $keeper->getFirstAvailabilityDays()?></li>
+                <li class="list-group-item bg-secondary text-white">Del <?php $date=date_create($keeper->getFirstAvailabilityDays()); echo date_format($date,"d/m/Y"); ?></li>
                 
                 
-                <li class="list-group-item bg-light text-dark">Al <?php echo $keeper->getLastAvailabilityDays()?></li>
+                <li class="list-group-item bg-light text-dark">Al <?php $date=date_create($keeper->getLastAvailabilityDays()); echo date_format($date,"d/m/Y");?></li>
                 
                 <form action="<?php echo '/FinalProject4/' ?>Booking/newBooking" method="get"> <!--REVISAR PORQUE NO ME DEJA CON POST-->
                 <input type="hidden" name="email" value="<?php echo $keeper->getEmail()?>"> <!--/// Cambiar el email por el keeperID-->

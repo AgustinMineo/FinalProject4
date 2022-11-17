@@ -1,6 +1,5 @@
 <?php
 namespace Models;
-use Helper\DayFormatter as DayFormatter;
 
 class Booking {
     private $bookingID;  /// booking ID
@@ -32,13 +31,13 @@ class Booking {
         $this->petID = $petID;
     }
     public function getFirstDate(){
-        return DayFormatter::formatDate($this->getFirstDate);
+        return $this->firstDate;
     }
     public function setFirstDate($firstDate){
         $this->firstDate = $firstDate;
     }
     public function getLastDate(){
-        return DayFormatter::formatDate($this->lastDate);
+        return $this->lastDate;
     }
     public function setLastDate($lastDate){
         $this->lastDate = $lastDate;

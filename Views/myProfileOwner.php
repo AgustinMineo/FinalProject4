@@ -121,7 +121,7 @@ include ("ownerNav.php");
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>BirthDate</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getbirthDate();?></p></h3></div>
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php $date=date_create($owner->getbirthDate()); echo date_format($date,"d/m/Y");?></p></h3></div>
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Email</h4></label>

@@ -13,8 +13,8 @@ class KeeperDAO implements IKeeperDAO{
 
     public function AddKeeper (Keeper $keeper){
       try {
-         $query = "INSERT INTO ".$this->userTable."(userID, firstName, lastName, email, cellphone, birthdate, password, userImage, userDescription)
-      VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, :userImage, :userDescription);";
+         $query = "INSERT INTO ".$this->userTable."(userID, firstName, lastName, email, cellphone, birthdate, password, userDescription)
+      VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, :userDescription);";
                   $parameters["userID"] = NULL;
                   $parameters["firstName"] = $keeper->getfirstName();
                   $parameters["lastName"] = $keeper->getLastName();
@@ -22,14 +22,13 @@ class KeeperDAO implements IKeeperDAO{
                   $parameters["cellphone"] = $keeper->getCellPhone();
                   $parameters["birthdate"] = $keeper->getbirthDate();
                   $parameters["password"] = MD5($keeper->getPassword());
-                  $parameters["userImage"] = $keeper->getImage();
                   $parameters["userDescription"] = $keeper->getDescription();
 
                   $this->connection = Connection::GetInstance();
 
                    if($this->connection->ExecuteNonQuery($query, $parameters)){
                       $id = $this->searchKeeperByEmail($keeper->getEmail());
-                      $queryKeeper = "INSERT INTO ".$this->keeperTable."(keeperID, userID, animalSize, price)
+                      $queryKeeper = "INSERT INTO ".$this->keeperTable."(keeperID, userID, animalSize, price, cbu)
                                      VALUES (:keeperID, :userID, :animalSize, :price);
                       ";
 
@@ -37,6 +36,7 @@ class KeeperDAO implements IKeeperDAO{
                       $parametersKeeper["userID"] = $id;
                       $parametersKeeper["animalSize"] = $keeper->getAnimalSize();
                       $parametersKeeper["price"] = $keeper->getPrice();
+                      $parametersKeeper["cbu"] = $keeper->getCBU();
 
                       $this->connection->ExecuteNonQuery($queryKeeper, $parametersKeeper);
                    };
@@ -125,7 +125,7 @@ class KeeperDAO implements IKeeperDAO{
     public function searchKeeperToLogin($email,$password){
     if($email && $password){
     try {
-      $query = "SELECT k.keeperID, k.animalSize, k.price, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID WHERE email = '$email' AND password = md5($password);";
+      $query = "SELECT k.keeperID, k.animalSize, k.price, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userDescription FROM ".$this->userTable." u RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID WHERE email = '$email' AND password = md5($password);";
       $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
@@ -145,7 +145,6 @@ class KeeperDAO implements IKeeperDAO{
                 $keeper->setCellPhone($row["cellphone"]);
                 $keeper->setbirthDate($row["birthdate"]);
                 $keeper->setPassword($row["password"]);
-                $keeper->setImage($row["userImage"]);
                 $keeper->setDescription($row["userDescription"]);
                 return $keeper;
             }

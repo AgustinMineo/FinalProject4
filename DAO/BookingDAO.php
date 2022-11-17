@@ -14,6 +14,7 @@ class BookingDAO implements IBookingDAO{
         $booking->setBookingID($this->getLastID());
        array_push($this->bookingList,$booking);
        $this->SaveData();
+       return true;
     }
     public function getAllBooking(){
         // bring all of the keeper

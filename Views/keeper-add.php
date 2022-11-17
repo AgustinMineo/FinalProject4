@@ -92,7 +92,7 @@
                          <div class="col-lg-4">
                               <div class="form-group">
                                    <label for="">CUIT</label>
-                                   <input type="text" name="cuit" rows = "1" cols ="10" class="form-control" Required></input>
+                                   <input type="text" name="cuit" class="form-control" Required></input>
                               </div>
                          </div>
                     </div>

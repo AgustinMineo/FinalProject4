@@ -15,7 +15,7 @@ class OwnerDAO{
     public function AddOwner (Owner $owner){
         try {
            $query = "INSERT INTO ".$this->userTable."(userID, firstName, lastName, email, cellphone, birthdate, password, userDescription)
-        VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, :userDescription);";
+           VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, :userDescription);";
                     $parameters["userID"] = NULL;
                     $parameters["firstName"] = $owner->getfirstName();
                     $parameters["lastName"] = $owner->getLastName();
@@ -74,13 +74,13 @@ class OwnerDAO{
         }
     }
     //Funcion para validar que no exista el mail
-    public function existEmail($email){
+    public function searchOwnerByEmail($email){
         try {
                 $query = "SELECT email FROM ".$this->userTable." WHERE email = '$email';";
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
-                if($resultSet){ return true; }
-                else{ return false; }
+                if($resultSet){ return $resultSet; }
+                else{ return NULL; }
         }  catch (Exception $ex) { throw $ex; }
     }
     //Funcion para buscar Owner para iniciar seseion

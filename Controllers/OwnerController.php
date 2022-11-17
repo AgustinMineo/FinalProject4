@@ -59,7 +59,5 @@ use DAO\MailerDAO as MailerDAO;
         $this->addOwnerView(); 
         }
     }
-
-
 }
 ?>

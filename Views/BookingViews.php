@@ -50,19 +50,17 @@ require_once(VIEWS_PATH."validate-session.php");
     </style>
 </head>
 <body>
-    <div class="container d-flex col-md-4 w-auto p-5  flex-wrap bg-light"><h1>Los keeper disponibles entre las fechas seleccionadas son </h1></div>
-    
     <div class="container d-flex p-5 flex-wrap flex-row w-100 bg-light">
-
+        
+        <div class="container d-flex col-md-4 w-auto p-5  flex-wrap bg-light text-center"><div class='alert alert-success'><h1>Los keeper disponibles entre las fechas seleccionadas son</h1></div></div>
         <?php
         if($listKeepers){
 
             foreach($listKeepers as $keeper)
             {
                 ?>
-        <form action="<?php echo '/FinalProject4/' ?>Booking/newBooking" method="get" class="w-100 d-flex flex-wrap"> <!--REVISAR PORQUE NO ME DEJA CON POST-->
+        <form action="<?php echo '/FinalProject4/' ?>Booking/newBooking" method="get" class="w-100 d-flex flex-wrap">
         <div class="card d-flex flex-wrap m-5" style="width: 25%; ">
-            <!-- <img src="//<//?///php echo IMG_PATH ?><//?php if($keeper->getKeeperImg()){echo "<h1>imagen del keeper</h1>";}else{src="keeperDog.svg"}?>" class="card-img-top" alt="KEEPER IMG">-->
             <img src=" <?php echo IMG_PATH ?>keeperDog.svg" class="card-img-top" alt="KEEPER IMG">
             <div class="card-body">
                 <h5 class="card-title">Keeper</h5>
@@ -72,64 +70,60 @@ require_once(VIEWS_PATH."validate-session.php");
                 
                 
             <li class="list-group-item bg-secondary text-white"><?php echo $keeper->getLastName(); ?> <?php echo $keeper->getfirstName(); ?></li>
-            <li class="list-group-item bg-light text-dark"><?php echo $keeper->getCellPhone(); ?></li>
-            <li class="list-group-item bg-secondary text-white">$<?php echo $keeper->getPrice(); ?></li>
+            <li class="list-group-item bg-light text-dark">Cellphone : <?php echo $keeper->getCellPhone(); ?></li>
+            <li class="list-group-item bg-secondary text-white">Price : $<?php echo $keeper->getPrice(); ?></li>
             
             
-            <li class="list-group-item bg-light text-dark"><?php echo $keeper->getAnimalSize()?></li>
+            <li class="list-group-item bg-light text-dark">Pet Size : <?php echo $keeper->getAnimalSize()?></li>
             
             
             <li class="list-group-item bg-secondary text-white">Del <?php echo $keeper->getFirstAvailabilityDays();?></li>
             
             
             <li class="list-group-item bg-light text-dark">Al <?php echo $keeper->getLastAvailabilityDays();?></li>
-            
-            <input type="checkbox" name="email" value="<?php echo $keeper->getEmail();?>"> <label for="">Reservar</label><!--/// Cambiar el email por el keeperID-->
+            <div class="checkboxID actionCheck">
+            <label style=" width:100%; padding:0; margin:0;"> <input type="radio" id="" name="email" value="<?php echo $keeper->getEmail();?>"><span>Reservar con este Keeper</span></label><!--/// Cambiar el email por el keeperID-->
+            </div>
         </ul>
     </div>
     <?php
     }
 }
 else{
-    echo "<h1>No hay keepers<h1>";
+    echo "<div class='alert alert-danger'>There is no keepers!!</div>";
 }
     ?>
-    <div class="container w-auto p-5"><h1>Tus pets disponibles</h1></div>
-    
-    <div class="container d-flex col-md-4 w-auto p-5 flex-row flex-wrap w-100 bg-light">
-        <div class="container d-flex col-md-4 w-auto p-5 flex-row flex-wrap w-100">
 
+<div class="container w-100 text-center">
+     <div class='alert alert-success'><h1>Tus pets disponibles</h1></div>   
+</div>
+    <div class="container d-flex col-md-4 w-auto p-5 flex-row flex-wrap w-100">
             <?php
             if($petList){
     foreach($petList as $petSize)
     {
         ?>
-    <div class="card d-flex flex-wrap m-5" style="width: 18rem;"> <!-- cambiar el value del width para que sea un row cada 4 pets.-->
-    <!-- <img src="//<//?///php echo IMG_PATH ?><//?php if($keeper->getKeeperImg()){echo "<h1>imagen del keeper</h1>";}else{src="keeperDog.svg"}?>" class="card-img-top" alt="KEEPER IMG">-->
+    <div class="card d-flex flex-wrap m-5" style="width: 18rem;"> 
     <img src=" <?php echo IMG_PATH ?>keeperDog.svg" class="card-img-top" alt="KEEPER IMG">
     <div class="card-body">
         <h5 class="card-title">Pet</h5>
         <p class="card-text">Here you have your pets!</p>
     </div>
-    
     <ul class="list-group list-group-flush text-center">
-        <!--<li class="list-group-item bg-secondary text-white"><//?//php echo $petSize->getPetImage() ?></li>-->
-        <li class="list-group-item bg-light text-dark"><?php echo $petSize->getPetName(); ?></li>
-        <li class="list-group-item bg-secondary text-white"><?php echo $petSize->getPetSize(); ?></li>
-        <li class="list-group-item bg-light text-dark"><?php echo $petSize->getOwnerID();?></li>
+        <li class="list-group-item bg-light text-dark">Pet Name : <strong><?php echo $petSize->getPetName(); ?></strong></li>
+        <li class="list-group-item bg-secondary text-white">Pet Size : <strong><?php echo $petSize->getPetSize(); ?></strong></li>
     </ul>
     <div class="checkboxID actionCheck">
-    <label style=" width:100%; padding:0; margin:0;"> <input type="checkbox" name="petID" value="<?php echo $petSize->getPetID();?>"><span>Reservar con este pet</span></label>
+    <label style=" width:100%; padding:0; margin:0;"> <input type="radio" name="petID" value="<?php echo $petSize->getPetID();?>"><span>Reservar con este pet</span></label>
     </div>
 </div>
 <?php
     }
 }else {
-    echo "<h1>No tiene pets</h1>";
+    echo "<div class='alert alert-danger'>You have no pets!!</div>";
 }
     ?>
     <button type="submit" class="btn btn-info d-flex justify-content-center align-content-center w-100">Reservation</button>  
-    </div>
     </div>
     </div>
     </form>

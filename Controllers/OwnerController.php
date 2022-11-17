@@ -3,6 +3,7 @@
 
 use DAO\OwnerDAO as OwnerDAO;
 //use DAODB\OwnerDAO as OwnerDAO;
+//use DAODB\KeeperDAO as KeeperDAO;
 use Models\Owner as Owner;
 use DAO\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;

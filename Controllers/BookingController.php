@@ -59,19 +59,20 @@ class BookingController{
                     $this->goIndex();
                 }
      
-            }
+            
             }else{
                 echo "<div class='alert alert-danger'>No existen keepers con disponibilidad de $value1 a $value2</div>";
                 $this->goIndex();
-
-        }
-
             }
-        }else{
+        }
+        
+        else{
             echo "<div class='alert alert-danger'>No existen keepers disponibles entre esas fechas</div>";
             $this->goIndex();
-    }
-    }
+            }
+        }
+
+
     public function newBooking($email,$petId){
         $newBooking = new Booking();
         $keeperInfo = new Keeper(); //CHECK

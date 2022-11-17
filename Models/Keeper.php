@@ -2,6 +2,7 @@
 namespace Models;
 
 use Models\User as User;
+use Helper\DayFormatter as DayFormatter;
 
 class Keeper extends User{
     private $keeperId; // not null
@@ -30,20 +31,19 @@ class Keeper extends User{
         public function setPrice($price){
              $this->price = $price;
         }
+
         public function getFirstAvailabilityDays(){
-            return $this->firstAvailabilityDays;
+            return DayFormatter::formatDate($this->firstAvailabilityDays);
         }
         public function setFirstAvailabilityDays($firstAvailabilityDays){
-            $date=date_create($firstAvailabilityDays);
-            $this->firstAvailabilityDays = date_format($date,"d/m/Y");
+            $this->firstAvailabilityDays = $firstAvailabilityDays;
         }
 
         public function getLastAvailabilityDays(){
-            return $this->lastAvailabilityDays;
+            return DayFormatter::formatDate($this->lastAvailabilityDays);
         }
         public function setLastAvailabilityDays($lastAvailabilityDays){
-            $date=date_create($lastAvailabilityDays);
-            $this->lastAvailabilityDays = date_format($date,"d/m/Y");
+            $this->lastAvailabilityDays = $lastAvailabilityDays;
         }
 
         public function getPoints(){
@@ -58,6 +58,5 @@ class Keeper extends User{
         public function setKeeperCUIT($KeeperCUIT){
             $this->KeeperCUIT = $KeeperCUIT;
     }
-    
 }
 ?>

@@ -53,5 +53,7 @@ use DAO\MailerDAO as MailerDAO;
                     echo '<div class="alert alert-danger">Email already exist! Please try again with another email/div>';
                     $this->addOwnerView();  
                 }
-    } 
-} ?>
+    }
+}
+} 
+ ?>

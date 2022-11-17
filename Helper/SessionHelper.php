@@ -33,6 +33,9 @@ class SessionHelper{
     public static function getCurrentPetAmount(){
         return $_SESSION["loggedUser"]->getPetAmount();
     }
+    public static function sessionEnd(){
+        return session_destroy();
+    }
 
 }
 

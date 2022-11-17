@@ -123,10 +123,18 @@ class BookingController{
     public function updateBookingStatus($idBooking,$status){
         $value = $this->BookingDAO->updateByID($idBooking,$status);
         if($value){
-            echo "<div class='alert alert-success'>Fechas actualizadas correctamente!</div>";
-            $this->goIndexKeeper();
+            if($status == 2){
+                echo "<div class='alert alert-success'>You have rejected the reservation!</div>";
+                $this->goIndexKeeper();
+            }else if($status == 3){
+                echo "<div class='alert alert-success'>You have accepted the reservation!</div>";
+                $this->goIndexKeeper();
+            }else if($status == 5){
+                echo "<div class='alert alert-success'>You have confirmed the reservation!</div>";
+                $this->goIndexKeeper();
+            }
         }else{
-            echo "<div class='alert alert-danger'>Error al actualizar las fechas!</div>";
+            echo "<div class='alert alert-danger'>Oops! Something was wrong</div>";
             $this->goIndexKeeper();
         }
     }

@@ -119,5 +119,32 @@ class OwnerDAO implements IOwnerDAO {
             }
         }
     }
+
+    public function updateName($newName,$emailUser){
+        $owner = $this->searchOwnerByEmail($emailUser);
+        $owner->setLastName($newName);
+        $this->SaveData();
+        return $owner;
+    }
+
+    public function updateFirstName($newFirstName,$emailUser){
+        $owner = $this->searchOwnerByEmail($emailUser);
+        $owner->setFirstName($newFirstName);
+        $this->SaveData();
+        return $owner;
+    }
+
+    public function updateCellphone($newCellphone,$emailUser){
+        $owner = $this->searchOwnerByEmail($emailUser);
+        $owner->setCellPhone($newCellphone);
+        $this->SaveData();
+        return $owner;
+    }
+    public function updateDescription($newDescription,$emailUser){
+        $owner = $this->searchOwnerByEmail($emailUser);
+        $owner->setDescription($newDescription);
+        $this->SaveData();
+        return $owner;
+    }
 }
 ?>

@@ -1,7 +1,5 @@
 <?php
 namespace Views;
-
-//require_once(VIEWS_PATH ."ownerNav.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,20 +12,26 @@ namespace Views;
   <title>PET HERO</title>
 </head>
 <body>
-  <main class="bg-secondary">
-    <div class="container w-100 d-flex justify-content-center align-items-center flex-column">
-      <form class="row g-3 h-100 d-flex " action="<?php echo '/FinalProject4/' ?>Booking/bookingBuild" method="post">
-        <label for="" class="">From</label>
-        <div class="col-auto d-flex">
-          <input type="date" value="01/01/2022" name="value1" class="form-control-plaintext" >
+  <main style="background:#E0dfff;">
+    <div class="container w-100 d-flex text-center ">
+      <div style="margin-left:190px" class="w-50">
+
+        <form class="row g-3 h-100 d-flex w-auto" action="<?php echo '/FinalProject4/' ?>Booking/bookingBuild" method="post">
+          <div style="margin:125px;" class="container w-100 shadow-lg p-3  bg-body rounded">
+            
+            <label for="" class="text-uppercase mt-3 fs-2">From</label>
+        <div class="col-auto border ">
+          <input type="date" value="01/01/2022" name="value1" class="form-control" >
         </div>
-        <label for="" class="">To</label>
+        <label for="" class="text-uppercase mt-3 fs-2">To</label>
         <div class="col-auto d-flex">
           <input type="date" value ="01/01/2022" name="value2" class="form-control" >
         </div>
-        <div class="col-auto d-flex flex-wrap">
-          <button type="submit" class="btn btn-primary mb-3">Confirm new date</button>
+        <div class="col-auto d-flex flex-wrap justify-content-center align-items-end pt-5">
+          <button type="submit" class="btn btn-primary mb-3">Search keepers!</button>
         </div>
+      </div>
+    </div>
       </form>
 
     </div>

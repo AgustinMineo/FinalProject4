@@ -18,6 +18,9 @@ require_once(VIEWS_PATH."validate-session.php");
       <div class="container d-flex flex-nowrap justify-content-center mt-3">
         <ul style="list-style-type: none; box-shadow: 5px 6px 6px 2px #e9ecef;transform: scale(1.1);" class="d-flex flex-nowrap py-2">
               <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
+                  <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Owner/showCurrentOwner">My profile</a>
+              </li>
+              <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                   <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Views/pet-add.php">New pet</a>
               </li>   
               <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">

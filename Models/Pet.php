@@ -134,9 +134,9 @@ class Pet{
             else if($this->breedID==14){
                 return "Border Collie";
             }
-            else{
+            else if ($this->breedID==15){
                 return "Yorkshire";
-            }
+            }else{ return "La raza no se encuentra en la base de datos.";}
         }
 }
 ?>

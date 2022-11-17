@@ -33,14 +33,13 @@ class Keeper extends User{
         }
 
         public function getFirstAvailabilityDays(){
-            return DayFormatter::formatDate($this->firstAvailabilityDays);
+            return $this->firstAvailabilityDays;
         }
         public function setFirstAvailabilityDays($firstAvailabilityDays){
             $this->firstAvailabilityDays = $firstAvailabilityDays;
         }
-
         public function getLastAvailabilityDays(){
-            return DayFormatter::formatDate($this->lastAvailabilityDays);
+            return $this->lastAvailabilityDays;
         }
         public function setLastAvailabilityDays($lastAvailabilityDays){
             $this->lastAvailabilityDays = $lastAvailabilityDays;

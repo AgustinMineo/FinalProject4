@@ -1,17 +1,17 @@
 [
     {
         "keeperId": 1,
-        "lastName": "Keeper",
-        "firstName": "Keeper",
-        "cellPhone": "12312312312",
-        "birthDate": "2004-01-01",
-        "email": "keeper@keeper.com",
+        "lastName": "Jose",
+        "firstName": "Carlos",
+        "cellPhone": "2312312321312",
+        "birthDate": "2003-12-31",
+        "email": "josecarlos@gmail.com",
         "password": "123",
-        "firstAvailabilityDays": "2022-11-15",
-        "lastAvailabilityDays": "2022-11-16",
+        "firstAvailabilityDays": "2022-11-16",
+        "lastAvailabilityDays": "2022-11-19",
         "animalSize": "Medium",
         "points": null,
         "price": "250",
-        "KeeperCUIT": "2525245582852585"
+        "KeeperCUIT": "12312312312312312312"
     }
 ]

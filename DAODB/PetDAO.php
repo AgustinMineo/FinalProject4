@@ -67,9 +67,8 @@ class PetDAO implements IPetDAO{
         } catch (Exception $ex) { throw $ex; }
     }
     public function searchPets($ownerID){
-        $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVaccinationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, b.name
+        $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVaccinationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, p.breedID
                   FROM ".$this->petTable." p JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID 
-                  JOIN ".$this->breedTable." b ON p.breedID = b.breedID
                   WHERE p.ownerID = $ownerID;";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
@@ -79,7 +78,7 @@ class PetDAO implements IPetDAO{
                 $pet = new Pet();
                 $pet->setPetID($row['petID']);
                 $pet->setPetName($row['petName']);
-                $pet->setBreedID($row['name']);
+                $pet->setBreedID($row['breedID']);
                 $pet->setPetSize($row['petSize']);
                 $pet->setPetWeight($row['petWeight']);
                 $pet->setPetAge($row['petAge']);

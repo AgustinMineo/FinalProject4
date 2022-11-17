@@ -82,13 +82,11 @@ class BookingController{
         $newBooking->setKeeperID($keeperInfo->getKeeperId());
         $newBooking->setTotalValue($this->priceCounter($newBooking->getFirstDate(), $newBooking->getLastDate(), $keeperInfo->getPrice()));
         $newBooking->setAmountReservation($newBooking->getTotalValue()*0.5); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
-        //require_once(VIEWS_PATH. "showPetBooking.php");
         $newBooking->setPetID($petId);
         $this->MailerDAO->newBooking($keeperInfo->getLastName(),$keeperInfo->getfirstName(),$keeperInfo->getEmail());
-        $this->BookingDAO->addBooking($newBooking);
-        
+        $this->BookingDAO->addBooking($newBooking);       
         $this->goIndex();
-        //require_once()
+
     }
 // MIGRAR A DAO
     public function showBookings(){
@@ -125,6 +123,15 @@ class BookingController{
             echo "<div class='alert alert-danger'>Error al actualizar las fechas!</div>";
             $this->goIndexKeeper();
         }
+    }
+    public function petWithBooking($petID){
+        try{
+            $query = "SELECT petID FROM ".$this->bookingTable." WHERE petID = $petID;";
+
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if($resultSet){ return $resultSet; } else { return NULL; } 
+        } catch( Exception $ex ){ throw $ex; }
     }
 //ARREGLAR TOTAL DE PRECIO Y MIGRARLO A DAO
     public function priceCounter($first, $last, $price){

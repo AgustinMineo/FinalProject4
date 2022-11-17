@@ -91,8 +91,19 @@ class BookingDAO implements IBookingDAO{
             }
         }
     }
-    public function updateByID($id, $status){
-        $bookingRecord = $this->searchByID($id);
+
+    public function searchBookingByKeeperID($idBooking){
+        $bookingListSearch = $this->getAllBooking();
+        if($bookingListSearch){
+            foreach($bookingListSearch as $booking){
+                if($booking->getBookingID()==$idBooking){
+                    return $booking;
+                }
+            }
+        }
+    }
+    public function updateByID($id,$status){
+        $bookingRecord = $this->searchBookingByKeeperID($id);
         if($bookingRecord){
             $bookingRecord->setStatus($status);
             $this->SaveData();

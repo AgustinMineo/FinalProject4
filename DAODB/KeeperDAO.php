@@ -29,9 +29,9 @@ class KeeperDAO implements IKeeperDAO{
                   $this->connection = Connection::GetInstance();
 
                    if($this->connection->ExecuteNonQuery($query, $parameters)){
-                      $id = $this->searchKeeperByEmail($keeper->getEmail());
-                      $queryKeeper = "INSERT INTO ".$this->keeperTable."(keeperID, userID, animalSize, price,cbu)
-                                     VALUES (:keeperID, :userID, :animalSize, :price,:cbu);
+                      $id = $this->searchKeeperID($keeper->getEmail());
+                      $queryKeeper = "INSERT INTO ".$this->keeperTable."(keeperID, userID, animalSize, price, cbu)
+                                     VALUES (:keeperID, :userID, :animalSize, :price, :cbu);
                       ";
 
                       $parametersKeeper["keeperID"] = NULL;
@@ -46,7 +46,7 @@ class KeeperDAO implements IKeeperDAO{
     }
     public function GetAllKeeper(){
       try{
-        $query = "SELECT  u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price, k.animalSize,k.cbu, d.firstDate, d.lastDate 
+        $query = "SELECT  u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price, k.animalSize, k.cbu, d.firstDate, d.lastDate 
                 FROM ".$this->userTable." u 
                 JOIN ".$this->keeperTable." k ON u.userID = k.userID 
                 JOIN ".$this->daysTable." d ON k.keeperID = d.keeperID;";
@@ -74,13 +74,17 @@ class KeeperDAO implements IKeeperDAO{
       } catch(Exception $ex){throw $ex;}
     }
     public function getKeeperByDisponibility($date1,$date2){
+      var_dump($date1);
+      var_dump($date2);
       try{
-        $query =  "SELECT u.email, kd.firstDate, kd.lastDate from".$this->userTable." u join ".$this->keeperTable." k on u.userID = k.userID 
-				           left join ".$this->daysTable." kd on kd.keeperID = k.keeperID
-                   left join ".$this->bookingTable." b on b.keeperDaysID = kd.keeperDaysID
-                   where b.keeperDaysID is null and firstDate >= '$date1' and lastDate <= '$date2';";
+        $query = "SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, d.firstDate, d.lastDate  
+        FROM USER u JOIN keeper k ON k.userID = u.userID 
+        JOIN keeperdays d ON d.keeperID = k.keeperID
+        left join booking b on b.keeperDaysID = d.keeperDaysID
+        WHERE b.keeperDaysID is null and firstDate >= '$date1' AND lastDate <= '$date2';";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
+        var_dump($resultSet);
         if($resultSet){
           foreach($resultSet as $row){
             $keeperList = array();
@@ -91,6 +95,7 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setEmail($row['email']);
             $keeper->setCellPhone($row['cellphone']);
             $keeper->setPrice($row['price']);
+            $keeper->setCBU($row['cbu']);
             $keeper->setAnimalSize($row['animalSize']);
             $keeper->setFirstAvailabilityDays($row['firstDate']);
             $keeper->setLastAvailabilityDays($row['lastDate']);
@@ -102,7 +107,7 @@ class KeeperDAO implements IKeeperDAO{
     }
     public function searchKeeperByEmail($email){
       try {
-        $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email, k.keeperID, k.price,k.cbu, d.firstDate, d.lastDate
+        $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email, k.keeperID, k.price, k.cbu, d.firstDate, d.lastDate
                   FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID
                   JOIN ".$this->daysTable." d ON d.keeperID = k.keeperID  
                   WHERE email = '$email';";
@@ -128,7 +133,7 @@ class KeeperDAO implements IKeeperDAO{
     public function searchKeeperToLogin($email,$password){
     if($email && $password){
     try {
-      $query = "SELECT k.keeperID, k.animalSize, k.price,k.cbu, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userImage, u.userDescription 
+      $query = "SELECT k.keeperID, k.animalSize, k.price, k.cbu, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userDescription 
                 FROM ".$this->userTable." u 
                 RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID 
                 WHERE email = '$email' AND password = md5($password);";
@@ -152,7 +157,6 @@ class KeeperDAO implements IKeeperDAO{
                 $keeper->setCellPhone($row["cellphone"]);
                 $keeper->setbirthDate($row["birthdate"]);
                 $keeper->setPassword($row["password"]);
-                $keeper->setImage($row["userImage"]);
                 $keeper->setDescription($row["userDescription"]);
                 return $keeper;
             }
@@ -205,17 +209,17 @@ class KeeperDAO implements IKeeperDAO{
     }
     public function searchKeeperByID($keeperID){
       try {
-        $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price,k.cbu, k.animalSize, d.firstDate, d.lastDate 
+        $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price,k.cbu, k.animalSize, kd.firstDate, kd.lastDate 
                   FROM ".$this->userTable." u 
                   INNER JOIN ".$this->keeperTable." k ON u.userID = k.userID
-                  LEFT JOIN ".$this->daysTable." kd ON kd.keeperID = k.keeperID 
+                  INNER JOIN ".$this->daysTable." kd ON kd.keeperID = k.keeperID 
                   WHERE k.keeperID = $keeperID;";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
         if($resultSet){
           foreach($resultSet as $row){
             $keeper = new Keeper();
-            $keeper-setKeeperID($row['keeperID']);
+            $keeper->setKeeperId($row['keeperID']);
             $keeper->setFirstName($row['firstName']);
             $keeper->setLastName($row['lastName']);
             $keeper->setEmail($row['email']);
@@ -232,5 +236,17 @@ class KeeperDAO implements IKeeperDAO{
       } catch (Exception $th) {
         throw $th;
       }
+    }
+    public function searchKeeperID($email){
+      $query = "SELECT userID FROM ".$this->userTable." Where email = '$email';";
+
+      $this->connection = Connection::GetInstance();
+      $resultSet = $this->connection->Execute($query);
+      if($resultSet){
+        foreach($resultSet as $row){
+          $id = $row['userID'];
+        }
+        return $id;
+      } else { return 1; }
     }
 }?>

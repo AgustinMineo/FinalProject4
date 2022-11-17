@@ -14,7 +14,6 @@ include ("ownerNav.php");
   <title>PET HERO</title>
 </head>
 <body>
-  
     <div class="container w-100 d-flex justify-content-center align-items-center flex-column">
       <h3 class="fw-nromal my-5">Here your profile!</h3>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">

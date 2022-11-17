@@ -1,7 +1,7 @@
 [
     {
         "bookingID": 1,
-        "status": "4",
+        "status": "5",
         "petID": "1",
         "firstDate": "2022-11-16",
         "lastDate": "2022-11-19",

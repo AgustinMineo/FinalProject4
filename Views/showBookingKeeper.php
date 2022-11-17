@@ -42,10 +42,12 @@ require_once(VIEWS_PATH."validate-session.php");
                                                   <td><?php echo $booking->getKeeperID() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
                                                   <td><?php echo $booking->getPetID()?></td>
                                                   <td><?php echo $booking->getTotalValue()?></td>
-                                                  <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>
-                                                  <td><form action='<?php echo FRONT_ROOT ?> Booking/updateBookingStatus' method='post'><?php if($booking->getStatus() == '1'){ echo "<div class='d-flex'><input type='hidden' name='id' value='$value'><input type='hidden' name='status' value='4'>
+                                                  <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Waiting for confirmation</h6>";}elseif($booking->getStatus() == 5){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>
+                                                  <td><form action='<?php echo FRONT_ROOT ?> Booking/updateBookingStatus' method='post'><?php if($booking->getStatus() == '1'){ echo "<div class='d-flex'><input type='hidden' name='id' value='$value'><input type='hidden' name='status' value='3'>
                                                        <button type='submit' class='btn btn-outline-primary w-auto p-1 m-1'>Aceptar</button>
-                                                       </div>";}?></form></td>
+                                                       </div>";}elseif($booking->getStatus() == '4'){echo "<div class='d-flex'><input type='hidden' name='id' value='$value'><input type='hidden' name='status' value='5'>
+                                                            <button type='submit' class='btn btn-outline-primary w-auto p-1 m-1'>Confirmar</button>";}?>
+                                                       </form></td>
                                                        <td>
                                                        <form action='<?php echo FRONT_ROOT ?> Booking/updateBookingStatus' method='post'><?php if($booking->getStatus() == '1'){ echo "<div class='d-flex'>
                                                             <input type='hidden' name='id' value='$value'><input type='hidden' name='status' value='2'>

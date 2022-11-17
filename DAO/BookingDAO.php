@@ -91,7 +91,6 @@ class BookingDAO implements IBookingDAO{
             }
         }
     }
-
     public function searchBookingByKeeperID($idBooking){
         $bookingListSearch = $this->getAllBooking();
         if($bookingListSearch){

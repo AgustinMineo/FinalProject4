@@ -53,5 +53,16 @@
         "password": "123",
         "userDescription": "test2",
         "petAmount": "0"
+    },
+    {
+        "ownerId": 6,
+        "lastName": "Agustin",
+        "firstName": "Mineo",
+        "cellPhone": "1231231231",
+        "birthDate": "2004-01-01",
+        "email": "mineoagustin@gmail.com",
+        "password": "123",
+        "userDescription": "123",
+        "petAmount": "0"
     }
 ]

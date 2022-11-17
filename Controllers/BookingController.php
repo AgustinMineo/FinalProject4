@@ -27,6 +27,9 @@ class BookingController{
      public function goIndexOwner(){
          require_once(VIEWS_PATH."showPetBooking.php");
     }
+    public function goIndexKeeper(){
+        require_once(VIEWS_PATH."keeperNav.php");
+    }
      public function goBookingView($petList,$listKeepers){
 
         require_once(VIEWS_PATH."ownerNav.php");
@@ -42,13 +45,14 @@ class BookingController{
         $this->MailerDAO = new MailerDAO();
     }
     public function bookingBuild($value1,$value2){
-        if($value1 > $value2){
-            echo "<div class='alert alert-danger'>Las fechas no son correctas</div>";
-            $this->goIndex(); }
-        else {
+        // if($value1 > $value2){
+        //     echo "<div class='alert alert-danger'>Las fechas no son correctas</div>";
+        //     $this->goIndex(); }
+        // else {
             $keeperDAO = new KeeperDAO();
             $listKeepers = array();
             $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
+            var_dump($listKeepers);
             if($listKeepers){
                 if(SessionHelper::getCurrentUser()){
                     $petList = array(); /// create a pet array
@@ -60,10 +64,11 @@ class BookingController{
                     }else{
                         echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
                         $this->goIndex(); }
-                    } else{
+                    }  }else{
                         echo "<div class='alert alert-danger'>No existen keepers con disponibilidad de $value1 a $value2</div>";
-                        $this->goIndex(); } }
-        } 
+                        $this->goIndex(); }
+            
+        
     }
     public function newBooking($email,$petId){
         $newBooking = new Booking();

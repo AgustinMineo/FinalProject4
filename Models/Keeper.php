@@ -43,7 +43,6 @@ class Keeper extends User{
         public function setLastAvailabilityDays($lastAvailabilityDays){
             $this->lastAvailabilityDays =$lastAvailabilityDays;
         }
-
         // public function getPoints(){
         //     return $this->points;
         // }

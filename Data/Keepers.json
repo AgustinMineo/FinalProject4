@@ -1,17 +1,1 @@
-[
-    {
-        "keeperId": 1,
-        "lastName": "Jose",
-        "firstName": "Carlos",
-        "cellPhone": "2312312321312",
-        "birthDate": "2003-12-31",
-        "email": "josecarlos@gmail.com",
-        "password": "123",
-        "firstAvailabilityDays": "2022-11-17",
-        "lastAvailabilityDays": "2022-11-30",
-        "animalSize": "Medium",
-        "points": null,
-        "price": "250",
-        "KeeperCUIT": "12312312312312312312"
-    }
-]
+[  ]

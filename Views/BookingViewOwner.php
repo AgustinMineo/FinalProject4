@@ -14,9 +14,6 @@ require_once(VIEWS_PATH."ownerNav.php");
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
     <title>Booking Owner</title>
-    <style>
-     
-    </style>
 </head>
 <body>
 <main class="py-5">
@@ -47,7 +44,7 @@ require_once(VIEWS_PATH."ownerNav.php");
                                              <td><?php echo $booking->getLastDate() ?></td>
                                              <td><?php echo $booking->getAmountReservation() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
                                              <td><?php echo $booking->getTotalValue()?></td>
-                                             <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>
+                                             <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Waiting for confirmation</h6>";}elseif($booking->getStatus() == 5){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>
                                              <td><form action='<?php echo FRONT_ROOT ?> Payment/generatePaymentBooking' method='post'>
                                              <?php if($booking->getStatus() == '3'){ echo "
                                                       <input type='hidden' name='booking' value='$value'>

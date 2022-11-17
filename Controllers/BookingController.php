@@ -35,6 +35,9 @@ class BookingController{
      public function goIndex(){
         require_once(VIEWS_PATH."landingPage.php");
     } 
+    public function goIndexKeeper(){
+        require_once(VIEWS_PATH."keeperNav.php");
+    } 
     public function __construct(){
         $this->BookingDAO = new BookingDAO();
         $this->petDAO = new PetDAO();
@@ -113,14 +116,14 @@ class BookingController{
         }
     }
 // MIGRAR A DAO
-    public function updateBookingStatus($idBooking){
-        $value = $this->BookingDAO->updateByID($idBooking);
+    public function updateBookingStatus($idBooking,$status){
+        $value = $this->BookingDAO->updateByID($idBooking,$status);
         if($value){
             echo "<div class='alert alert-success'>Fechas actualizadas correctamente!</div>";
-            $this->goIndex();
+            $this->goIndexKeeper();
         }else{
             echo "<div class='alert alert-danger'>Error al actualizar las fechas!</div>";
-            $this->goIndex();
+            $this->goIndexKeeper();
         }
     }
 //ARREGLAR TOTAL DE PRECIO Y MIGRARLO A DAO

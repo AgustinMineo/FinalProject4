@@ -34,7 +34,6 @@ class Booking {
         return $this->firstDate;
     }
     public function setFirstDate($firstDate){
-   
         $this->firstDate = $firstDate;
     }
     public function getLastDate(){

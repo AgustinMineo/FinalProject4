@@ -71,14 +71,12 @@ class KeeperDAO implements IKeeperDAO{
     }
     public function getKeeperByDisponibility($date1,$date2){
       try{
-        $query =  "SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, d.firstDate, d.lastDate  
-                FROM ".$this->userTable." u JOIN ".$this->keeperTable. " k ON k.userID = u.userID 
-                JOIN ".$this->keeperDaysTable." d ON d.keeperID = k.keeperID
-                JOIN booking b ON b.keeperdaysID != d.keeperdaysID
-                WHERE firstDate >= '$date1' AND '$date1' > lastDate <= '$date2';";
+        $query =  "SELECT u.email, kd.firstDate, kd.lastDate from user u join keeper k on u.userID = k.userID 
+				           left join keeperdays kd on kd.keeperID = k.keeperID
+                   left join booking b on b.keeperDaysID = kd.keeperDaysID
+                   where b.keeperDaysID is null and firstDate >= '$date1' and lastDate <= '$date2';";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
-        var_dump($resultSet);
         if($resultSet){
           foreach($resultSet as $row){
             $keeperList = array();
@@ -195,5 +193,33 @@ class KeeperDAO implements IKeeperDAO{
           return $id; 
         } else { return NULL; } }
       catch (Exception $ex) { throw $ex; } 
+    }
+    public function searchKeeperByID($keeperID){
+      try {
+        $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price, k.animalSize, d.firstDate, d.lastDate 
+                  FROM user u INNER JOIN keeper k ON u.userID = k.userID
+                  LEFT JOIN keeperDays kd ON kd.keeperID = k.keeperID 
+                  WHERE k.keeperID = $keeperID;";
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query);
+        if($resultSet){
+          foreach($resultSet as $row){
+            $keeper = new Keeper();
+            $keeper-setKeeperID($row['keeperID']);
+            $keeper->setFirstName($row['firstName']);
+            $keeper->setLastName($row['lastName']);
+            $keeper->setEmail($row['email']);
+            $keeper->setCellPhone($row['cellphone']);
+            $keeper->setBirthdate($row['birthdate']);
+            $keeper->setAnimalSize($row['animalSize']);
+            $keeper->setPrice($row['price']);
+            $keeper->setFirstAvailabilityDays($row['firstDate']);
+            $keeper->setLastAvailabilityDays($row['lastDate']);
+          }
+          return $keeper;
+        }
+      } catch (Exception $th) {
+        throw $th;
+      }
     }
 }?>

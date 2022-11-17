@@ -29,7 +29,7 @@ include ("ownerNav.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="<?php echo FRONT_ROOT ?>User/updateLastName" method="post" class="bg-light-alpha p-5">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Last name right now :<hr></label>
                         <div class="container">
@@ -39,14 +39,14 @@ include ("ownerNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New last name</label>
-                        <input type="text" class="form-control" id="newDescription"></input>
+                        <input type="text" class="form-control" name="newName" id="newName"></input>
                     </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Update last name</button>
+                    <button type="submit" class="btn btn-primary">Update last name</button>
                 </div>
+            </form>
                 </div>
             </div>
         </div> 
@@ -63,7 +63,7 @@ include ("ownerNav.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="<?php echo FRONT_ROOT ?>User/updateFirstName" method="post" class="bg-light-alpha p-5">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100"> First Name now :<hr></label>
                         <div class="container">
@@ -73,15 +73,15 @@ include ("ownerNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New first Name</label>
-                        <input type="text" class="form-control" id="newFirstName"></input>
+                        <input type="text" class="form-control" name="newFirstName" id="newFirstName"></input>
                     </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Update first Name</button>
+                    <button type="submit" class="btn btn-primary">Update first Name</button>
                 </div>
-                </div>
+            </div>
+        </form>
             </div>
         </div> 
     </div>
@@ -97,7 +97,7 @@ include ("ownerNav.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="<?php echo FRONT_ROOT ?>User/UpdateUserCellphone" method="post" class="bg-light-alpha p-5"> 
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Cellphone now :<hr></label>
                         <div class="container">
@@ -107,15 +107,15 @@ include ("ownerNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New cellphone</label>
-                        <input type="number" class="form-control" id="newCellphone"></input>
+                        <input type="number" class="form-control" name="newCellphone" id="newCellphone"></input>
                     </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Update cellphone</button>
+                    <button type="submit" class="btn btn-primary">Update cellphone</button>
                 </div>
-                </div>
+            </div>
+        </form>
             </div>
         </div> 
     </div>
@@ -139,7 +139,7 @@ include ("ownerNav.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="<?php echo FRONT_ROOT ?>User/updateDescription" method="post" class="bg-light-alpha p-5">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Description now :<hr></label>
                         <div class="container">
@@ -149,15 +149,15 @@ include ("ownerNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New description</label>
-                        <textarea class="form-control" id="newDescription"></textarea>
+                        <textarea class="form-control" name="newDescription" id="newDescription"></textarea>
                     </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Update description</button>
+                    <button type="submit" class="btn btn-primary">Update description</button>
                 </div>
-                </div>
+            </div>
+        </form>
             </div>
         </div>       
     </div>

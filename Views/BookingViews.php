@@ -90,7 +90,7 @@ require_once(VIEWS_PATH."validate-session.php");
     }
 }
 else{
-    echo "<div class='alert alert-danger'>There is no keepers!!</div>";
+    echo "<div class='container d-flex col-md-4 w-auto p-5  flex-wrap bg-light text-center'><div class='alert alert-danger'><h1>there is no keepers availables!!</h1></div></div>";
 }
     ?>
 
@@ -120,7 +120,7 @@ else{
 <?php
     }
 }else {
-    echo "<div class='alert alert-danger'>You have no pets!!</div>";
+    echo "<div class='container w-100 text-center'><div class='alert alert-success'><h1>Tus pets disponibles</h1></div></div>";
 }
     ?>
     <button type="submit" class="btn btn-info d-flex justify-content-center align-content-center w-100">Reservation</button>  

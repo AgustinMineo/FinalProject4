@@ -77,9 +77,14 @@ class BookingController{
         $newBooking->setAmountReservation($newBooking->getTotalValue()*0.5); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
         $newBooking->setPetID($petId);
         $this->MailerDAO->newBooking($keeperInfo->getLastName(),$keeperInfo->getfirstName(),$keeperInfo->getEmail());
-        $this->BookingDAO->addBooking($newBooking);       
-        $this->goIndex();
-
+        $result =$this->BookingDAO->addBooking($newBooking);
+        if($result){
+            echo "<div class='alert alert-success'>You have successfully created a reservation</div>";
+            $this->goIndex(); 
+        }else{
+            echo "<div class='alert alert-danger'>Ops! Something happened when creating the reservation</div>";
+            $this->goIndex();
+        }
     }
 // MIGRAR A DAO
     public function showBookings(){
@@ -110,11 +115,19 @@ class BookingController{
     public function updateBookingStatus($idBooking,$status){
         $value = $this->BookingDAO->updateByID($idBooking,$status);
         if($value){
-            echo "<div class='alert alert-success'>Fechas actualizadas correctamente!</div>";
-            $this->goIndex();
+            if($status == 2){
+                echo "<div class='alert alert-success'>You have rejected the reservation!</div>";
+                $this->goIndexKeeper();
+            }else if($status == 3){
+                echo "<div class='alert alert-success'>You have accepted the reservation!</div>";
+                $this->goIndexKeeper();
+            }else if($status == 5){
+                echo "<div class='alert alert-success'>You have confirmed the reservation!</div>";
+                $this->goIndexKeeper();
+            }
         }else{
-            echo "<div class='alert alert-danger'>Error al actualizar las fechas!</div>";
-            $this->goIndex();
+            echo "<div class='alert alert-danger'>Oops! Something was wrong</div>";
+            $this->goIndexKeeper();
         }
     }
     public function petWithBooking($petID){

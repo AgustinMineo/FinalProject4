@@ -2,8 +2,8 @@
 namespace Controllers;
 
 use Models\Pet as Pet;
-//use DAO\PetDAO as PetDAO;
-use DAODB\PetDAO as PetDAO;
+use DAO\PetDAO as PetDAO;
+//use DAODB\PetDAO as PetDAO;
 use DAO\OwnerDAO as OwnerDAO;
 use Helper\SessionHelper as SessionHelper;
 
@@ -37,10 +37,16 @@ class PetController{
             $pet->setOwnerID(SessionHelper::getCurrentOwnerID());
             $pet->setPetAge($petAge);
             $this->OwnerDAO->incrementPetAmount(SessionHelper::getCurrentOwnerID());
-            $this->PetDAO->AddPet($pet);
-            $this->goLandingOwner();
+            $result=$this->PetDAO->AddPet($pet);
+            if($result){
+                echo "<div class='alert alert-success'>$petName was create successfully!</div>";
+                $this->goLandingOwner();
+            }else{
+                echo "<div class='alert alert-danger'>Ups!Error registering the pet!</div>";
+                $this->goLandingOwner();
+            }
         }else{
-            echo"Usuario no logeado";
+            echo "<div class='alert alert-danger'>Ups!You are not register</div>";
             }
     }
     public function searchPetList(){

@@ -29,7 +29,7 @@ namespace Views;
                               <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
                                    <div class="form-group w-50">
                                         <label for="">Pet Image</label>
-                                        <input type="text" name="petImage" value="" class="form-control" Required >
+                                        <input type="text" name="petImage" placeholder="Pet Image" value="" class="form-control" Required >
                                    </div>
                               </div>
                               <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
@@ -52,7 +52,6 @@ namespace Views;
                                              <option value="14">Border Collie</option>
                                              <option value="15">Yorkshire</option>
                                         </select>
-                                        <!--<input type="text" name="breedID" placeholder="Breed" value="" class="form-control" Required >!-->
                                    </div>
                               </div>
                               <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
@@ -68,7 +67,7 @@ namespace Views;
                               <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
                                    <div class="form-group w-50">
                                         <label for="">Vaccination Plan</label>
-                                        <input type="text" name="petVaccinationPlan"  value="" class="form-control" Required >
+                                        <input type="text" name="petVaccinationPlan" placeholder="Vaccination Plan" value="" class="form-control" Required >
                                    </div>
                               </div>
                               <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
@@ -102,14 +101,10 @@ namespace Views;
                          </div>
                          <div class="container d-flex justify-content-center align-content-center mt-5 w-50">
                               <button type="submit" class="btn bg-success ml-auto d-block w-50 mr-3">Save</button>
-                              <button class="btn btn-danger ml-auto d-block w-50">
-                              <a style="text-decoration:none; color:black;"href="<?php echo '/FinalProject4/'?>Views/landingPage.php">Go back</a>
-                              </button>
-                         </div>
-                    </form>
+                              </div>
+                         </form>
                </div>
           </section>
      </main>
-     
 </body>
 </html>

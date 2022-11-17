@@ -7,6 +7,9 @@ use Models\Owner as Owner;
 use DAO\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;
 //use DAODB\ImageDAO as ImageDAO;
+
+use Helper\SessionHelper as SessionHelper;
+
  class OwnerController
  {
     private $OwnerDAO;
@@ -28,6 +31,10 @@ use DAO\MailerDAO as MailerDAO;
     }
     public function addOwnerView(){
         require_once(VIEWS_PATH."owner-add.php");
+    }
+
+    public function goMyProfile($owner){
+        require_once(VIEWS_PATH."myProfileOwner.php");
     }
 
     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userDescription){ 
@@ -58,6 +65,11 @@ use DAO\MailerDAO as MailerDAO;
         echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
         $this->addOwnerView(); 
         }
+    }
+
+    public function showCurrentOwner(){
+        $owner=$this->OwnerDAO->searchOwnerByEmail(SessionHelper::getCurrentUser()->getEmail());
+        $this->goMyProfile($owner);
     }
 }
 ?>

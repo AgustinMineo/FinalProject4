@@ -77,10 +77,10 @@ require_once(VIEWS_PATH."validate-session.php");
             <li class="list-group-item bg-light text-dark">Pet Size : <?php echo $keeper->getAnimalSize()?></li>
             
             
-            <li class="list-group-item bg-secondary text-white">Del <?php echo $keeper->getFirstAvailabilityDays();?></li>
+            <li class="list-group-item bg-secondary text-white">Del <?php $date=date_create($keeper->getFirstAvailabilityDays()); echo date_format($date,"d/m/Y");?></li>
             
             
-            <li class="list-group-item bg-light text-dark">Al <?php echo $keeper->getLastAvailabilityDays();?></li>
+            <li class="list-group-item bg-light text-dark">Al <?php $date=date_create($keeper->getLastAvailabilityDays()); echo date_format($date,"d/m/Y");?></li>
             <div class="checkboxID actionCheck">
             <label style=" width:100%; padding:0; margin:0;"> <input type="radio" id="" name="email" value="<?php echo $keeper->getEmail();?>"><span>Reservar con este Keeper</span></label><!--/// Cambiar el email por el keeperID-->
             </div>

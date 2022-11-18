@@ -8,6 +8,7 @@
  use DAODB\KeeperDAO as KeeperDAO;
  //use DAO\OwnerDAO as OwnerDAO;
  use DAODB\OwnerDAO as OwnerDAO;
+ 
  class KeeperController{
     private $KeeperDAO;
     private $newKeeper;
@@ -31,6 +32,7 @@
     public function Index($message = ""){
          require_once(VIEWS_PATH."keeperNav.php");
     }
+
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cbu){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){

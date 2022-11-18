@@ -18,7 +18,7 @@ CREATE TABLE `User` (
 CREATE TABLE `Owner` (
   `ownerID` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL references User(userID),
-  `petAmount` tinyint(30) DEFAULT NULL,
+  `petAmount` int(30) DEFAULT NULL,
   PRIMARY KEY (`ownerID`)
 ) ENGINE=InnoDB;
 
@@ -29,6 +29,12 @@ CREATE TABLE `Keeper` (
   `price` float DEFAULT NULL,
   `cbu` varchar (20) UNIQUE KEY, 
   PRIMARY KEY (`keeperID`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `Breed` (
+  `breedID` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL UNIQUE KEY,
+  PRIMARY KEY (`breedID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `Pet` (
@@ -42,14 +48,8 @@ CREATE TABLE `Pet` (
   `petImage` blob NOT NULL,
   `petVaccinationPlan` blob NOT NULL,
   `petWeight` varchar(20) DEFAULT NULL,
-  `petAge` date DEFAULT NULL,
+  `petAge` int DEFAULT NULL,
   PRIMARY KEY (`petID`)
-) ENGINE=InnoDB;
-
-CREATE TABLE `Breed` (
-  `breedID` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL UNIQUE KEY,
-  PRIMARY KEY (`breedID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `Booking` (
@@ -76,7 +76,6 @@ CREATE TABLE `Status`(
     `name` varchar(20) NOT NULL UNIQUE KEY,
     PRIMARY KEY (`statusID`)
 ) ENGINE=InnoDB;
-
 
 -- INSERT DE STATUS EN LA TABLA STATUS--
 INSERT INTO status VALUES ("1","Peding"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish");

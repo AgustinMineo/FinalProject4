@@ -39,10 +39,10 @@ require_once(VIEWS_PATH."validate-session.php");
                                                   <td><?php echo $keeper->getLastName() ?></td>
                                                   <td><?php echo $keeper->getfirstName() ?></td>
                                                   <td><?php echo $keeper->getCellPhone() ?></td>
-                                                  <td><?php echo $keeper->getbirthDate() ?></td>
+                                                  <td><?php $date=date_create($keeper->getbirthDate()); echo date_format($date,"d/m/Y"); ?></td>
                                                   <td><?php echo $keeper->getEmail() ?></td>
-                                                  <td> <?php  if($keeper->getFirstAvailabilityDays()){echo $keeper->getFirstAvailabilityDays();}else{echo "No disponible";}?></td>
-                                                  <td> <?php if($keeper->getLastAvailabilityDays()){echo $keeper->getLastAvailabilityDays();}else{echo "No disponible";}?></td>
+                                                  <td> <?php if($keeper->getFirstAvailabilityDays()){$date=date_create($keeper->getFirstAvailabilityDays()); echo date_format($date,"d/m/Y"); }else{echo "No disponible";}?></td>
+                                                  <td> <?php if($keeper->getLastAvailabilityDays()){$date=date_create($keeper->getLastAvailabilityDays()); echo date_format($date,"d/m/Y");}else{echo "No disponible";}?></td>
                                                   <td><?php echo $keeper->getAnimalSize() ?></td>
                                                   <td>$<?php echo $keeper->getPrice() ?></td>
                                              </tr>

@@ -1,15 +1,15 @@
 <?php
  namespace Controllers;
-
- use DAO\KeeperDAO as KeeperDAO;
- //use DAODB\KeeperDAO as KeeperDAO;
  use Models\Keeper as Keeper;
- use DAO\MailerDAO as MailerDAO;
- use DAO\OwnerDAO as OwnerDAO;
- //use DAODB\OwnerDAO as OwnerDAO;
  use Helper\SessionHelper as SessionHelper;
- class KeeperController
- {
+
+ //use DAO\KeeperDAO as KeeperDAO;
+ use DAO\MailerDAO as MailerDAO;
+ use DAODB\KeeperDAO as KeeperDAO;
+ //use DAO\OwnerDAO as OwnerDAO;
+ use DAODB\OwnerDAO as OwnerDAO;
+ 
+ class KeeperController{
     private $KeeperDAO;
     private $newKeeper;
     private $newMailer;
@@ -20,25 +20,19 @@
         $this->newMailer = new MailerDAO();
         $this->OwnerDAO = new OwnerDAO();
     }
-
     public function addKeeperView(){
         require_once(VIEWS_PATH."keeper-add.php");
     }
-
     public function goLoginKeeper(){
         require_once(VIEWS_PATH."loginUser.php");
     }
-
     public function goLandingKeeper(){
         require_once(VIEWS_PATH."keeperNav.php");
     }
-
-
-    public function Index($message = "")
-    {
+    public function Index($message = ""){
          require_once(VIEWS_PATH."keeperNav.php");
     }
-     
+
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cbu){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){

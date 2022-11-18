@@ -7,7 +7,6 @@ class Keeper extends User{
     private $keeperId; // not null
     private $animalSize; // not null
     private $price;
-    private $points; // shortint (1 - 5 ) 
     private $firstAvailabilityDays; /// Change for the database
     private $lastAvailabilityDays; ///Change for the database
     private $CBU;
@@ -42,13 +41,6 @@ class Keeper extends User{
         }
         public function setLastAvailabilityDays($lastAvailabilityDays){
             $this->lastAvailabilityDays = $lastAvailabilityDays;
-        }
-
-        public function getPoints(){
-            return $this->points;
-        }
-        public function setPoints($points){
-            $this->points = $points;
         }
         public function getCBU(){
             return $this->CBU;

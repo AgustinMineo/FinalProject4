@@ -1,11 +1,11 @@
 <?php
 namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
-use DAO\KeeperDAO as KeeperDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
+// use DAO\KeeperDAO as KeeperDAO;
+use DAODB\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
 use Helper\SessionHelper as SessionHelper;
 
@@ -82,6 +82,7 @@ class UserController{
 
     public function updateLastName($newName){
         $response=$this->OwnerDAO->updateName($newName,SessionHelper::getCurrentUser()->getEmail());
+        var_dump($response);
         if($response){
             echo '<div class="alert alert-success">You have successful update your Last Name!</div>';
             $this->goEditOwner($response);

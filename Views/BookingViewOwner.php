@@ -23,6 +23,8 @@ require_once(VIEWS_PATH."ownerNav.php");
                <table class="table bg-light-alpha text-center">
                     <thead>
                     <th>Booking id</th>
+                         <th>Keeper Name</th>
+                         <th>Pet Name</th>
                          <th>First date</th>
                          <th>Last Date</th>
                          <th>Reserva a pagar</th>
@@ -42,6 +44,8 @@ require_once(VIEWS_PATH."ownerNav.php");
                                              <td><?php echo $value=$booking->getBookingID(); ?></td>
                                              <td><?php $date=date_create($booking->getFirstDate()); echo date_format($date,"d/m/Y");  ?></td>
                                              <td><?php $date=date_create($booking->getLastDate()); echo date_format($date,"d/m/Y");  ?></td>
+                                             <td><?php echo $booking->getKeeperID() ?></td>
+                                             <td><?php echo $booking->getPetID() ?></td>
                                              <td><?php echo $booking->getAmountReservation() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
                                              <td><?php echo $booking->getTotalValue()?></td>
                                              <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Waiting for confirmation</h6>";}elseif($booking->getStatus() == 5){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>

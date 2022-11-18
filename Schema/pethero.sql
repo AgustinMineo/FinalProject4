@@ -27,7 +27,7 @@ CREATE TABLE `Keeper` (
   `userID` int(11) NOT NULL references User(userID),
   `animalSize` varchar(30) DEFAULT NULL,
   `price` float DEFAULT NULL,
-  `KeeperCBU` varchar(15) DEFAULT NULL,
+  `cbu` varchar (20) UNIQUE KEY, 
   PRIMARY KEY (`keeperID`)
 ) ENGINE=InnoDB;
 
@@ -62,7 +62,6 @@ CREATE TABLE `Booking` (
   `amountReservation` float,
   PRIMARY KEY (`bookingID`)
 ) ENGINE=InnoDB;
-
 
 CREATE TABLE `KeeperDays` (
   `keeperDaysID` int(11) NOT NULL AUTO_INCREMENT,

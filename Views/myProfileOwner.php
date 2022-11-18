@@ -14,11 +14,11 @@ include ("ownerNav.php");
   <title>PET HERO</title>
 </head>
 <body>
-  
     <div class="container w-100 d-flex justify-content-center align-items-center flex-column">
       <h3 class="fw-nromal my-5">Here your profile!</h3>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Last Name</h4></label>
+      
       <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getLastName();?></p></h3></div>
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#name" data-bs-whatever="@getbootstrap">Edit Last Name</button>
         <div class="modal fade" id="name" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

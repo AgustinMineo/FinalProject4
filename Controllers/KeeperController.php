@@ -94,6 +94,5 @@
             echo '<div class="alert alert-danger">Error saving the days! Please try again later</div>';
         }
         $this->goLandingKeeper();
-    }
- }
-?>
+      }
+}?>

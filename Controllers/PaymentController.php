@@ -37,7 +37,7 @@ class PaymentController {
 
 
     public function generatePaymentBooking($booking){
-        $Booking=$this->BookingDAO->searchBookingByKeeperID($booking);
+        $Booking=$this->BookingDAO->searchBookingByID($booking);
         $keeper = $this->KeeperDAO->searchKeeperByID($Booking->getKeeperId()); 
         $pet = $this->PetDAO->searchPet($Booking->getPetID());
         $status = $this->newMailerDAO->bookingCupon($keeper->getEmail(),$keeper->getfirstName(),$keeper->getLastName(),$keeper->getCBU(),$Booking->getAmountReservation(),$Booking->getFirstDate(),$Booking->getLastDate(),$pet->getPetName());
@@ -50,7 +50,4 @@ class PaymentController {
             $this->goLanding();
         }
     }
-
-}
-
-?>
+}?>

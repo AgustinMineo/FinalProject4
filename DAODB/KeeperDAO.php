@@ -75,7 +75,7 @@ class KeeperDAO implements IKeeperDAO{
     }
     public function getKeeperByDisponibility($date1,$date2){
       try{
-        $query = "SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, d.firstDate, d.lastDate  
+        $query = "SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, d.firstDate,k.cbu, d.lastDate  
                   FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON k.userID = u.userID 
                   JOIN ".$this->daysTable." d ON d.keeperID = k.keeperID
                   LEFT join ".$this->bookingTable." b on b.keeperDaysID = d.keeperDaysID
@@ -175,21 +175,27 @@ class KeeperDAO implements IKeeperDAO{
       }
     }
     public function changeAvailabilityDays($keeperID, $value1, $value2){
-      $exist = $this->searchDays($keeperID, $value1, $value2);
-      if($exist == NULL){
-        try {  
-          $query = "INSERT INTO ".$this->daysTable." (keeperDaysID, keeperID, firstDate, lastDate) 
-          VALUES (:keeperDaysID, :keeperID, :firstDate, :lastDate);";
-          $parameters['keeperDaysID'] = NULL;
-          $parameters['keeperID'] = $keeperID;
-          $parameters['firstDate'] = $value1;
-          $parameters['lastDate'] = $value2;
-          
-          $this->connection = Connection::GetInstance();
-          if($this->connection->ExecuteNonQuery($query, $parameters)){ return true; }
-          else{ return false; } 
-          
-        } catch (Exception $ex) { throw $ex; }
+      if($value1 > $value2){
+        return false;
+      } else{
+        $exist = $this->searchDays($keeperID, $value1, $value2);
+        if($exist == false){
+          try {  
+            $query = "INSERT INTO ".$this->daysTable." (keeperDaysID, keeperID, firstDate, lastDate) 
+            VALUES (:keeperDaysID, :keeperID, :firstDate, :lastDate);";
+            $parameters['keeperDaysID'] = NULL;
+            $parameters['keeperID'] = $keeperID;
+            $parameters['firstDate'] = $value1;
+            $parameters['lastDate'] = $value2;
+            
+            $this->connection = Connection::GetInstance();
+            $this->connection->ExecuteNonQuery($query, $parameters);
+            return true;          
+          } catch (Exception $ex) { throw $ex; }
+        } else{
+          return false;
+        }
+        
       }
     }
     public function searchDays($keeperID, $value1, $value2){
@@ -203,7 +209,7 @@ class KeeperDAO implements IKeeperDAO{
             $id = $row['keeperDaysID'];
           }
           return $id; 
-        } else { return NULL; } }
+        } else { return false; } }
       catch (Exception $ex) { throw $ex; } 
     }
     public function searchKeeperByID($keeperID){

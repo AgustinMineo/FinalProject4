@@ -25,7 +25,7 @@ class PetController{
             
             //$this->petDAO = new PetDAO();
             $pet = new Pet();
-
+                
             $pet->setPetName($petName);
             $pet->setPetImage($petImage);
             $pet->setBreedID($breedID);
@@ -52,15 +52,13 @@ class PetController{
     public function searchPetList(){
         $petListSearch= array();
         if(SessionHelper::getCurrentUser()){
-            // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
-
+           // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
            // $petListSearch = $this->PetDAO->searchPets($_SESSION["loggedUser"]->getOwnerId());
            // if($petListSearch){
            //     return $petListSearch; 
            // } else { echo "<div class='alert alert-danger'>You have no pets!!</div>";
            //         $this->goIndex();}
-           //
-            $petListSearch = $this->PetDAO->searchPets(SessionHelper::getCurrentOwnerID()); 
+           $petListSearch = $this->PetDAO->searchPets(SessionHelper::getCurrentOwnerID()); 
             return $petListSearch; 
         }
     }

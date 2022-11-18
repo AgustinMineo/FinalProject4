@@ -23,6 +23,8 @@ require_once(VIEWS_PATH."ownerNav.php");
                <table class="table bg-light-alpha text-center">
                     <thead>
                     <th>Booking id</th>
+                         <th>Keeper Name</th>
+                         <th>Pet Name</th>
                          <th>First date</th>
                          <th>Last Date</th>
                          <th>Reserva a pagar</th>
@@ -40,6 +42,8 @@ require_once(VIEWS_PATH."ownerNav.php");
                                    ?>
                                         <tr class=" table bg-secondary table-hover table align-middle text-center text-white" >
                                              <td><?php echo $value=$booking->getBookingID(); ?></td>
+                                             <td><?php echo $booking->getKeeperID() ?></td>
+                                             <td><?php echo $booking->getPetID() ?></td>
                                              <td><?php echo $booking->getFirstDate() ?></td>
                                              <td><?php echo $booking->getLastDate() ?></td>
                                              <td><?php echo $booking->getAmountReservation() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->

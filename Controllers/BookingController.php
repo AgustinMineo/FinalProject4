@@ -52,7 +52,6 @@ class BookingController{
             $keeperDAO = new KeeperDAO();
             $listKeepers = array();
             $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
-            var_dump($listKeepers);
             if($listKeepers){
                 if(SessionHelper::getCurrentUser()){
                     $petList = array(); /// create a pet array
@@ -60,6 +59,7 @@ class BookingController{
                         $petList=$this->petDAO->searchPetsBySize(SessionHelper::getCurrentOwnerID(),$keeperInfo->getAnimalSize());
                     }
                     if($petList){
+
                         $this->goBookingView($petList,$listKeepers);
                     }else{
                         echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";

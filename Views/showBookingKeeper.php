@@ -21,7 +21,7 @@ require_once(VIEWS_PATH."validate-session.php");
                          <th>Booking id</th>
                               <th>First date</th>
                               <th>Last Date</th>
-                              <th>KeeperID</th>
+                              <th>Keeper Name</th>
                               <th>Pet Name</th>
                               <th>Total value</th>
                               <th>Status</th>

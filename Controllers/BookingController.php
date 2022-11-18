@@ -2,17 +2,17 @@
 namespace Controllers;
 use DAO\MailerDAO as MailerDAO;
         // DAO WITH JSON
-use DAO\BookingDAO as BookingDAO;
-use DAO\PetDAO as PetDAO;
-use DAO\KeeperDAO as KeeperDAO;
+//use DAO\BookingDAO as BookingDAO;
+//use DAO\PetDAO as PetDAO;
+//use DAO\KeeperDAO as KeeperDAO;
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;
 
         // DAO WITH DATA BASE
-//use DAODB\PetDAO as PetDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
-//use DAODB\BookingDAO as BookingDAO;
+use DAODB\PetDAO as PetDAO;
+use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\BookingDAO as BookingDAO;
 use Helper\SessionHelper as SessionHelper;
 
 class BookingController{
@@ -27,6 +27,9 @@ class BookingController{
      public function goIndexOwner(){
          require_once(VIEWS_PATH."showPetBooking.php");
     }
+    public function goIndexKeeper(){
+        require_once(VIEWS_PATH."keeperNav.php");
+    }
      public function goBookingView($petList,$listKeepers){
 
         require_once(VIEWS_PATH."ownerNav.php");
@@ -35,25 +38,26 @@ class BookingController{
      public function goIndex(){
         require_once(VIEWS_PATH."landingPage.php");
     } 
-    public function goIndexKeeper(){
-        require_once(VIEWS_PATH."keeperNav.php");
-    } 
     public function __construct(){
         $this->BookingDAO = new BookingDAO();
         $this->petDAO = new PetDAO();
         $this->keeperDAO = new KeeperDAO();
         $this->MailerDAO = new MailerDAO();
     }
-    
     public function bookingBuild($value1,$value2){
-        $keeperDAO = new KeeperDAO();
-        $listKeepers = array();
-        $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
-        if($listKeepers){
+        // if($value1 > $value2){
+        //     echo "<div class='alert alert-danger'>Las fechas no son correctas</div>";
+        //     $this->goIndex(); }
+        // else {
+            $keeperDAO = new KeeperDAO();
+            $listKeepers = array();
+            $listKeepers = $this->keeperDAO->getKeeperByDisponibility($value1,$value2);
+            if($listKeepers){
                 if(SessionHelper::getCurrentUser()){
                     $petList = array(); /// create a pet array
-                        foreach($listKeepers as $keeperInfo){
+                    foreach($listKeepers as $keeperInfo){
                         $petList=$this->petDAO->searchPetsBySize(SessionHelper::getCurrentOwnerID(),$keeperInfo->getAnimalSize());
+
                         }
                             if($petList)
                             {
@@ -157,5 +161,4 @@ class BookingController{
         $numberDays = intval($numberDays); // PARA PASARLO A ENTERO
         return $price * $numberDays;
     }
-} 
-?>
+} ?>

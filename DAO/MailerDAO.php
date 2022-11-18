@@ -655,7 +655,7 @@ function newBooking($lastname,$name,$email){
                             <td align='center' style='padding:0;Margin:0;padding-top:10px;padding-left:15px;padding-right:15px;font-size:0px'><a target='_blank' href='https://viewstripo.email' style='-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#926B4A;font-size:14px'><img src='https://yisyaf.stripocdn.email/content/guids/CABINET_455a2507bd277c27cf7436f66c6b427c/images/60121620374838489.png' alt style='display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic' width='30'></a></td>
                            </tr>
                            <tr>
-                            <td align='center' style='Margin:0;padding-top:5px;padding-bottom:10px;padding-left:10px;padding-right:10px'><p style='Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#666666;font-size:14px'>Reservado con el keeper $fullNameKeeper<br>desde el dia $firstDate hasta el $lastDate&nbsp;</p></td>
+                            <td align='center' style='Margin:0;padding-top:5px;padding-bottom:10px;padding-left:10px;padding-right:10px'><p style='Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#666666;font-size:14px'>Reservado con el keeper $fullNameKeeper<br>Con el CBU <strong>$cuit</strong> <br> desde el dia $firstDate hasta el $lastDate&nbsp;</p></td>
                            </tr>
                          </table></td>
                        </tr>

@@ -9,7 +9,7 @@ use Helper\SessionHelper as SessionHelper;
 
 class PetDAO implements IPetDAO{
     private $connection;
-    private $petTable = 'Pet';
+    private $petTable = 'pet';
     private $ownerTable = 'owner';
     private $breedTable = 'breed';
     private $petList = array();
@@ -35,6 +35,7 @@ class PetDAO implements IPetDAO{
                 $queryAmount = "update " .$this->ownerTable." o set petAmount = ".SessionHelper::getCurrentPetAmount()." + 1 WHERE o.ownerID = ".SessionHelper::getCurrentOwnerID();
                 $this->connection->ExecuteNonQuery($queryAmount,array());
             }
+            return true;
         } catch (Exception $ex) { throw $ex; } 
     }
     public function GetAllPet(){
@@ -92,9 +93,8 @@ class PetDAO implements IPetDAO{
         } else {return NULL;}
     }
     public function searchPetsBySize($ownerID,$size){
-        $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVaccinationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, b.name
+        $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVaccinationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, p.breedID
         FROM ".$this->petTable." p JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID 
-        JOIN ".$this->breedTable." b ON p.breedID = b.breedID
         WHERE p.ownerID = $ownerID AND p.petSize = '$size';";
 
         $this->connection = Connection::GetInstance();
@@ -105,7 +105,7 @@ class PetDAO implements IPetDAO{
                 $pet = new Pet();
                 $pet->setPetID($row['petID']);
                 $pet->setPetName($row['petName']);
-                $pet->setBreedID($row['name']);
+                $pet->setBreedID($row['breedID']);
                 $pet->setPetSize($row['petSize']);
                 $pet->setPetWeight($row['petWeight']);
                 $pet->setPetAge($row['petAge']);
@@ -139,5 +139,29 @@ class PetDAO implements IPetDAO{
         $petListSearch = $this->searchPets(SessionHelper::getCurrentOwnerID()); // Buscamos la lista de pets que tenga el cliente por correo. (Cambiar a objeto)
         return $petListSearch; 
         }
+    }
+    public function searchPet($petSearch){
+        try{
+            $query = "SELECT petName,breedID,petDetails,petImage,petAge,ownerID,petWeight,petVideo,petVaccinationPlan,petSize 
+            FROM ".$this->petTable." WHERE petID = $petSearch;";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if($resultSet){
+                foreach($resultSet as $row){
+                    $pet = new Pet();
+                    $pet->setPetName($row['petName']);
+                    $pet->setBreedID($row['breedID']);
+                    $pet->setPetDetails($row['petDetails']);
+                    $pet->setPetImage($row['petImage']);
+                    $pet->setPetAge($row['petAge']);
+                    $pet->setOwnerID($row['ownerID']);
+                    $pet->setPetWeight($row['petWeight']);
+                    $pet->setPetVideo($row['petVideo']);
+                    $pet->setPetVaccinationPlan($row['petVaccinationPlan']);
+                    $pet->setPetSize($row['petSize']);
+                }
+                return $pet;
+            } else{ return null;}
+        } catch (Exception $ex) {throw $ex;}
     }
 }?>

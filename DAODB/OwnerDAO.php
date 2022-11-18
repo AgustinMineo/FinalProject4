@@ -47,7 +47,9 @@ class OwnerDAO{
         try {
             $ownerList = array();
 
-            $query = "SELECT * FROM ".$this->userTable." u LEFT JOIN ".$this->ownerTable." o ON o.userID = u.userID";
+            $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password,u.userDescription,o.petAmount,o.ownerID
+            FROM ".$this->userTable." u 
+            INNER JOIN ".$this->ownerTable." o ON o.userID = u.userID";
 
             $this->connection = Connection::GetInstance();
 
@@ -62,7 +64,6 @@ class OwnerDAO{
                 $owner->setCellPhone($row["cellphone"]);
                 $owner->setbirthDate($row["birthdate"]);
                 $owner->setPassword($row["password"]);
-                $owner->setImage($row["userImage"]);
                 $owner->setDescription($row["userDescription"]);
                 $owner->setPetAmount($row["petAmount"]);
                 $owner->setOwnerId($row["ownerID"]);
@@ -76,17 +77,38 @@ class OwnerDAO{
     //Funcion para validar que no exista el mail
     public function searchOwnerByEmail($email){
         try {
-                $query = "SELECT email FROM ".$this->userTable." WHERE email = '$email';";
+                $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, u.password, u.userDescription, u.email, o.petAmount, o.ownerID  
+                FROM ".$this->userTable." u 
+                INNER JOIN ".$this->ownerTable." o ON u.userID = o.userID 
+                WHERE email = '$email';";
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
-                if($resultSet){ return $resultSet; }
+                if($resultSet){ 
+                    foreach($resultSet as $row){
+                        $owner = new Owner();
+                
+                        $owner->setfirstName($row["firstName"]);
+                        $owner->setLastName($row["lastName"]);
+                        $owner->setEmail($row["email"]);
+                        $owner->setCellPhone($row["cellphone"]);
+                        $owner->setbirthDate($row["birthdate"]);
+                        $owner->setPassword($row["password"]);
+                        $owner->setDescription($row["userDescription"]);
+                        $owner->setPetAmount($row["petAmount"]);
+                        $owner->setOwnerId($row["ownerID"]);
+                    }
+                    return $owner;
+                 }
                 else{ return NULL; }
         }  catch (Exception $ex) { throw $ex; }
     }
     //Funcion para buscar Owner para iniciar seseion
     public function searchOwnerToLogin($email, $password){
         try {
-            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userDescription, o.petAmount FROM ".$this->userTable." u RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID WHERE email = '$email' AND password = md5($password);";
+            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userDescription, o.petAmount FROM 
+            ".$this->userTable." u 
+            RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID 
+            WHERE email = '$email' AND password = md5($password);";
 
             $this->connection = Connection::GetInstance();
 
@@ -104,7 +126,7 @@ class OwnerDAO{
                 $owner->setEmail($row["email"]);
                 $owner->setCellPhone($row["cellphone"]);
                 $owner->setbirthDate($row["birthdate"]);
-                $owner->setPassword($row["password"]);;
+                $owner->setPassword($row["password"]);
                 $owner->setDescription($row["userDescription"]);
                 $owner->setPetAmount($row["petAmount"]);
                 return $owner;
@@ -131,5 +153,30 @@ class OwnerDAO{
         catch (Exception $ex) {
         throw $ex;
         }
+    }
+    public function updateName($newName,$emailUser){
+        $query = "UPDATE ".$this->userTable." SET lastName = '$newName' WHERE email = '$emailUser';";
+        $this->connection = Connection::GetInstance();
+        $this->connection->Execute($query);
+        $owner = $this->searchOwnerByEmail($emailUser);
+        return $owner;
+    }
+    public function updateFirstName($newFirstName,$emailUser){
+        $query = "UPDATE ".$this->userTable." SET firstName = '$newFirstName' WHERE email = '$emailUser';";
+        $this->connection = Connection::GetInstance();
+        $this->connection->Execute($query);
+        return $this->searchOwnerByEmail($emailUser);
+    }
+    public function updateCellphone($newCellphone,$emailUser){
+        $query = "UPDATE ".$this->userTable." SET cellphone = '$newCellphone' WHERE email = '$emailUser';";
+        $this->connection = Connection::GetInstance();
+        $this->connection->Execute($query);
+        return $this->searchOwnerByEmail($emailUser);
+    }
+    public function updateDescription($newDescription,$emailUser){
+        $query = "UPDATE ".$this->userTable." SET userDescription = '$newDescription' WHERE email = '$emailUser';";
+        $this->connection = Connection::GetInstance();
+        $this->connection->Execute($query);
+            return $this->searchOwnerByEmail($emailUser);
     }
 }?>

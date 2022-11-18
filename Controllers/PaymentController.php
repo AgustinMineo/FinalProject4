@@ -2,18 +2,18 @@
 namespace Controllers;
 use DAO\MailerDAO as MailerDAO;
         // DAO WITH JSON
-use DAO\BookingDAO as BookingDAO;
-use DAO\PetDAO as PetDAO;
-use DAO\KeeperDAO as KeeperDAO;
+//use DAO\BookingDAO as BookingDAO;
+//use DAO\PetDAO as PetDAO;
+//use DAO\KeeperDAO as KeeperDAO;
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;
 use Models\Owner as Owner;
 
         // DAO WITH DATA BASE
-//use DAODB\PetDAO as PetDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
-//use DAODB\BookingDAO as BookingDAO;
+use DAODB\PetDAO as PetDAO;
+use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\BookingDAO as BookingDAO;
 use Helper\SessionHelper as SessionHelper;
 
 class PaymentController {

@@ -38,7 +38,7 @@ class UserController{
     }
 
     public function logOut(){
-        session_destroy();
+        SessionHelper::sessionEnd();
         require_once(VIEWS_PATH."mainLanding.php");
     }
 

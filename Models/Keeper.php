@@ -10,7 +10,6 @@ class Keeper extends User{
     private $firstAvailabilityDays; /// Change for the database
     private $lastAvailabilityDays; ///Change for the database
     private $CBU;
-    // private $point;
 
         public function getKeeperId(){
             return $this->keeperId;
@@ -30,31 +29,24 @@ class Keeper extends User{
         public function setPrice($price){
              $this->price = $price;
         }
+
         public function getFirstAvailabilityDays(){
             return $this->firstAvailabilityDays;
         }
         public function setFirstAvailabilityDays($firstAvailabilityDays){
-            $this->firstAvailabilityDays =$firstAvailabilityDays ;
+            $this->firstAvailabilityDays = $firstAvailabilityDays;
         }
-
         public function getLastAvailabilityDays(){
             return $this->lastAvailabilityDays;
         }
         public function setLastAvailabilityDays($lastAvailabilityDays){
-            $this->lastAvailabilityDays =$lastAvailabilityDays;
+            $this->lastAvailabilityDays = $lastAvailabilityDays;
         }
-        // public function getPoints(){
-        //     return $this->points;
-        // }
-        // public function setPoints($points){
-        //     $this->points = $points;
-        // }
         public function getCBU(){
             return $this->CBU;
         }
         public function setCBU($CBU){
             $this->CBU = $CBU;
     }
-    
 }
 ?>

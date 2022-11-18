@@ -8,7 +8,6 @@ use Models\Owner as Owner;
 use DAODB\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;
 
-
 use Helper\SessionHelper as SessionHelper;
 
  class OwnerController
@@ -57,20 +56,18 @@ use Helper\SessionHelper as SessionHelper;
                 }else{
                     echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
                     $this->addOwnerView();  
-                } 
-            }else{
-                echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-                $this->addOwnerView();  
-            }
-        }else{
-        echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-        $this->addOwnerView(); 
-        }
+
+                } }
+                else{
+                    echo '<div class="alert alert-danger">Email already exist! Please try again with another email/div>';
+                    $this->addOwnerView();  
+                }
     }
+}
 
     public function showCurrentOwner(){
         $owner=$this->OwnerDAO->searchOwnerByEmail(SessionHelper::getCurrentUser()->getEmail());
         $this->goMyProfile($owner);
     }
-}
+} 
 ?>

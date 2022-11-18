@@ -37,8 +37,7 @@ abstract class User {
         return $this->birthDate;
     }
     public function setbirthDate($birthDate){
-        //$date=date_create($birthDate);
-        $this->birthDate = $birthDate; //date_format($date,"d/m/Y"); CHECK ERROR CUANDO LOG
+        $this->birthDate = $birthDate;
     }
 
     public function getEmail(){

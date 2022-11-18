@@ -29,10 +29,10 @@ class KeeperDAO implements IKeeperDAO{
                   $this->connection = Connection::GetInstance();
 
                    if($this->connection->ExecuteNonQuery($query, $parameters)){
+
                       $id = $this->searchKeeperID($keeper->getEmail());
                       $queryKeeper = "INSERT INTO ".$this->keeperTable."(keeperID, userID, animalSize, price, cbu)
-                                     VALUES (:keeperID, :userID, :animalSize, :price, :cbu);
-                      ";
+                                     VALUES (:keeperID, :userID, :animalSize, :price, :cbu);";
 
                       $parametersKeeper["keeperID"] = NULL;
                       $parametersKeeper["userID"] = $id;
@@ -135,6 +135,7 @@ class KeeperDAO implements IKeeperDAO{
                 FROM ".$this->userTable." u 
                 RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID 
                 WHERE email = '$email' AND password = md5($password);";
+
       $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);

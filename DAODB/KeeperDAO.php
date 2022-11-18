@@ -74,20 +74,18 @@ class KeeperDAO implements IKeeperDAO{
       } catch(Exception $ex){throw $ex;}
     }
     public function getKeeperByDisponibility($date1,$date2){
-      var_dump($date1);
-      var_dump($date2);
       try{
         $query = "SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, d.firstDate, d.lastDate  
-        FROM USER u JOIN keeper k ON k.userID = u.userID 
-        JOIN keeperdays d ON d.keeperID = k.keeperID
-        left join booking b on b.keeperDaysID = d.keeperDaysID
-        WHERE b.keeperDaysID is null and firstDate >= '$date1' AND lastDate <= '$date2';";
+                  FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON k.userID = u.userID 
+                  JOIN ".$this->daysTable." d ON d.keeperID = k.keeperID
+                  LEFT join ".$this->bookingTable." b on b.keeperDaysID = d.keeperDaysID
+                  WHERE b.keeperDaysID is null and firstDate >= '$date1' AND lastDate <= '$date2';";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
-        var_dump($resultSet);
+
         if($resultSet){
+          $keeperList = array();
           foreach($resultSet as $row){
-            $keeperList = array();
             $keeper = new Keeper();
             $keeper->setKeeperId($row['keeperID']);
             $keeper->setFirstName($row['firstName']);
@@ -131,8 +129,8 @@ class KeeperDAO implements IKeeperDAO{
       catch (Exception $ex) { throw $ex; } 
     }
     public function searchKeeperToLogin($email,$password){
-    if($email && $password){
-    try {
+      if($email && $password){
+      try {
       $query = "SELECT k.keeperID, k.animalSize, k.price, k.cbu, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userDescription 
                 FROM ".$this->userTable." u 
                 RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID 
@@ -144,27 +142,27 @@ class KeeperDAO implements IKeeperDAO{
             
             if($resultSet)
             {
-                foreach($resultSet as $row){
+              foreach($resultSet as $row){
 
-                $keeper = new Keeper();
-                $keeper->setKeeperID($row["keeperID"]);
-                $keeper->setAnimalSize($row["animalSize"]);
-                $keeper->setPrice($row["price"]);
-                $keeper->setCBU($row["cbu"]);
-                $keeper->setfirstName($row["firstName"]);
-                $keeper->setLastName($row["lastName"]);
-                $keeper->setEmail($row["email"]);
-                $keeper->setCellPhone($row["cellphone"]);
-                $keeper->setbirthDate($row["birthdate"]);
-                $keeper->setPassword($row["password"]);
-                $keeper->setDescription($row["userDescription"]);
-                return $keeper;
-            }
-        }
-        else{
+              $keeper = new Keeper();
+              $keeper->setKeeperID($row["keeperID"]);
+              $keeper->setAnimalSize($row["animalSize"]);
+              $keeper->setPrice($row["price"]);
+              $keeper->setCBU($row["cbu"]);
+              $keeper->setfirstName($row["firstName"]);
+              $keeper->setLastName($row["lastName"]);
+              $keeper->setEmail($row["email"]);
+              $keeper->setCellPhone($row["cellphone"]);
+              $keeper->setbirthDate($row["birthdate"]);
+              $keeper->setPassword($row["password"]);
+              $keeper->setDescription($row["userDescription"]);
+              return $keeper;
+              }
+          }
+          else{
             echo '<div class="alert alert-danger">The user doesn´t exits . Please create an account!</div>';
-            }
-        } catch (Exception $ex) {
+          }
+      } catch (Exception $ex) {
             throw $ex;
         }
       }else if($password){

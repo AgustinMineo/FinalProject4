@@ -155,35 +155,28 @@ class OwnerDAO{
         }
     }
     public function updateName($newName,$emailUser){
-        var_dump($newName);
         $query = "UPDATE ".$this->userTable." SET lastName = '$newName' WHERE email = '$emailUser';";
         $this->connection = Connection::GetInstance();
+        $this->connection->Execute($query);
         $owner = $this->searchOwnerByEmail($emailUser);
-        if( $this->connection->Execute($query) ){
-            var_dump($owner);
-            return $owner;
-        }
+        return $owner;
     }
     public function updateFirstName($newFirstName,$emailUser){
         $query = "UPDATE ".$this->userTable." SET firstName = '$newFirstName' WHERE email = '$emailUser';";
         $this->connection = Connection::GetInstance();
-        if($this->connection->Execute($query)){
-            return $this->searchOwnerByEmail($emailUser);
-        }
+        $this->connection->Execute($query);
+        return $this->searchOwnerByEmail($emailUser);
     }
     public function updateCellphone($newCellphone,$emailUser){
         $query = "UPDATE ".$this->userTable." SET cellphone = '$newCellphone' WHERE email = '$emailUser';";
         $this->connection = Connection::GetInstance();
-        if($this->connection->Execute($query)){
-            return $this->searchOwnerByEmail($emailUser);
-        }
-    }   
+        $this->connection->Execute($query);
+        return $this->searchOwnerByEmail($emailUser);
+    }
     public function updateDescription($newDescription,$emailUser){
         $query = "UPDATE ".$this->userTable." SET userDescription = '$newDescription' WHERE email = '$emailUser';";
         $this->connection = Connection::GetInstance();
-        if($this->connection->Execute($query)){
+        $this->connection->Execute($query);
             return $this->searchOwnerByEmail($emailUser);
-        }
     }
-
 }?>

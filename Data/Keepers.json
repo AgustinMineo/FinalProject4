@@ -3,14 +3,16 @@
         "keeperId": 1,
         "lastName": "keeper",
         "firstName": "keeper",
-        "cellPhone": "21312312312",
+        "cellPhone": "23123123123",
         "birthDate": "2004-01-01",
         "email": "keeper@keeper.com",
-        "password": "123",
-        "firstAvailabilityDays": "2022-11-18",
-        "lastAvailabilityDays": "2022-11-26",
+        "password": "123456",
+        "firstAvailabilityDays": null,
+        "lastAvailabilityDays": null,
         "animalSize": "Medium",
-        "cbu": "558585858585",
-        "price": "250"
+        "cbu": "1231234123123121",
+        "price": "250",
+        "answerRecovery": "What is your favorite breed of dog?",
+        "questionRecovery": "Husky"
     }
 ]

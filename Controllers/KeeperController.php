@@ -3,11 +3,11 @@
  use Models\Keeper as Keeper;
  use Helper\SessionHelper as SessionHelper;
 
- //use DAO\KeeperDAO as KeeperDAO;
+ use DAO\KeeperDAO as KeeperDAO;
  use DAO\MailerDAO as MailerDAO;
- use DAODB\KeeperDAO as KeeperDAO;
- //use DAO\OwnerDAO as OwnerDAO;
- use DAODB\OwnerDAO as OwnerDAO;
+ //use DAODB\KeeperDAO as KeeperDAO;
+ use DAO\OwnerDAO as OwnerDAO;
+ //use DAODB\OwnerDAO as OwnerDAO;
  
  class KeeperController{
     private $KeeperDAO;
@@ -33,7 +33,7 @@
          require_once(VIEWS_PATH."keeperNav.php");
     }
 
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cbu){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cbu,$answerRecovery,$questionRecovery){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -48,6 +48,8 @@
             $newKeeper->setAnimalSize($animalSize);
             $newKeeper->setPrice($price);
             $newKeeper->setCBU($cbu);
+            $newKeeper->setAnswerRecovery($answerRecovery);
+            $newKeeper->setQuestionRecovery($questionRecovery);
             $this->KeeperDAO->AddKeeper($newKeeper);
             $this->newMailer->welcomeMail($lastName,$firstName,$email);
             $this->goLoginKeeper();

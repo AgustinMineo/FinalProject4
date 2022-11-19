@@ -1,0 +1,12 @@
+[
+    {
+        "bookingID": 1,
+        "status": "6",
+        "petID": "1",
+        "firstDate": "2022-11-18",
+        "lastDate": "2022-11-26",
+        "keeperID": 1,
+        "totalValue": 2000,
+        "amountReservation": 1000
+    }
+]

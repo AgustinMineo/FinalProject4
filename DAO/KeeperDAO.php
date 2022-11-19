@@ -41,7 +41,9 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
           $keeperValue["cbu"] = $Keeper->getCBU();
-          $keeperValue["price"] = $Keeper->getPrice();          
+          $keeperValue["price"] = $Keeper->getPrice();   
+          $keeperValue["answerRecovery"] = $Keeper->getAnswerRecovery();
+          $keeperValue["questionRecovery"] = $Keeper->getQuestionRecovery();       
           
           array_push($keeperArrayEncode, $keeperValue);
       }
@@ -70,6 +72,8 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
               $keeper->setPrice($KeeperDecode["price"]);
               $keeper->setCBU($KeeperDecode["cbu"]);
+              $keeper->setAnswerRecovery($KeeperDecode["answerRecovery"]);
+              $keeper->setQuestionRecovery($KeeperDecode["questionRecovery"]);
 
               array_push($this->keeperList, $keeper);
           }
@@ -147,4 +151,18 @@ class KeeperDAO implements IKeeperDAO{
     }
     }
 
+    public function recoveryComparte($question,$answer,$keeper){
+        if($keeper){
+            if(strcmp($keeper->getQuestionRecovery(),$question) && strcmp($keeper->getAnswerRecovery(),$answer)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+    public function updatePasswordRecovery($keeper,$password){
+        $keeperUpdate=$this->searchKeeperByEmail($keeper);
+        $keeperUpdate->setPassword($password);
+        $this->SaveData();
+    }
 }?>

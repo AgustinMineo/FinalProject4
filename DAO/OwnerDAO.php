@@ -40,7 +40,9 @@ class OwnerDAO implements IOwnerDAO {
             $ownerValue["password"] = $Owner->getPassword();
             $ownerValue["userDescription"] = $Owner->getDescription();
             $ownerValue["petAmount"] = $Owner->getPetAmount();
-            
+            $ownerValue["answerRecovery"] = $Owner->getAnswerRecovery();
+            $ownerValue["questionRecovery"] = $Owner->getQuestionRecovery();
+         
             array_push($ownerArrayEncode, $ownerValue);
         }
         $ownerFile = json_encode($ownerArrayEncode, JSON_PRETTY_PRINT);
@@ -66,7 +68,9 @@ class OwnerDAO implements IOwnerDAO {
                 $owner->setPassword($OwnerDecode["password"]);
                 $owner->setDescription($OwnerDecode["userDescription"]);
                 $owner->setPetAmount($OwnerDecode["petAmount"]);
-
+                $owner->setAnswerRecovery($OwnerDecode["answerRecovery"]);
+                $owner->setQuestionRecovery($OwnerDecode["questionRecovery"]);
+                
                 array_push($this->ownerList, $owner);
             }
         }else{
@@ -145,6 +149,22 @@ class OwnerDAO implements IOwnerDAO {
         $owner->setDescription($newDescription);
         $this->SaveData();
         return $owner;
+    }
+
+    public function recoveryComparte($question,$answer,$owner){
+        if($owner){
+            if(strcmp($owner->getQuestionRecovery(),$question) && strcmp($owner->getAnswerRecovery(),$answer)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+    public function updatePasswordRecovery($owner,$password){
+        $ownerUpdate=$this->searchOwnerByEmail($owner);
+        $ownerUpdate->setPassword($password);
+        $this->SaveData();
+        return true;
     }
 }
 ?>

@@ -1,0 +1,16 @@
+[
+    {
+        "keeperId": 1,
+        "lastName": "keeper",
+        "firstName": "keeper",
+        "cellPhone": "21312312312",
+        "birthDate": "2004-01-01",
+        "email": "keeper@keeper.com",
+        "password": "123",
+        "firstAvailabilityDays": "2022-11-18",
+        "lastAvailabilityDays": "2022-11-26",
+        "animalSize": "Medium",
+        "cbu": "558585858585",
+        "price": "250"
+    }
+]

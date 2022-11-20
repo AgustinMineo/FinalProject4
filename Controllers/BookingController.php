@@ -169,31 +169,7 @@ class BookingController{
         return $price * $numberDays;
     }
 
-    public function newReview($booking,$feedback,$rate){
-        try {
-            $query = "INSERT INTO ".$this->reviewTable."(booking, feedback, rate)
-            VALUES (:bookingID,:description, :rank);";
 
-            $parameters["reviewID"] = NULL;
-            $parameters["bookingID"] = $booking;
-            $parameters["description"] = $feedback;
-            $parameters["rank"] = $rate;
-
-            $this->connection = Connection::GetInstance();
-
-            if($this->connection->ExecuteNonQuery($query, $parameters)){
-                echo "<div class='alert alert-success'>OK</div>";
-                $this->goBookingView();
-            }else{
-                echo "<div class='alert alert-danger'>Oops! Something was wrong</div>";
-                $this->goBookingView();
-            }
-           
-
-        } catch (Exception $ex) {
-            throw $ex;
-        }  
-    }
 } 
 ?>
     

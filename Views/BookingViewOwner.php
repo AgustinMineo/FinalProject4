@@ -90,7 +90,7 @@ label:hover:before {
                                              <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}
                                              elseif($booking->getStatus() == 4){echo "<h6>Waiting for confirmation</h6>";}elseif($booking->getStatus() == 5){echo "<h6>Confirmed</h6>";}
                                              elseif($booking->getStatus() == 6){echo "<h6>Finish</h6>";}else{echo "<h6>Finish</h6>";}?></td>
-                                             <td><form action='<?php echo FRONT_ROOT ?>Booking/newReview' method='post'><?php if($booking->getStatus() == '6'){ echo " 
+                                             <td><form action='<?php echo FRONT_ROOT ?>Review/newReview' method='post'><?php if($booking->getStatus() == '6'){ echo " 
                                                      <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal$value' data-bs-whatever='@getbootstrap'>New Review</button>
                                                      <div class='modal fade' id='exampleModal$value' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
                                                      <div class='modal-dialog modal-xl'>

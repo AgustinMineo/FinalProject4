@@ -150,6 +150,12 @@ class OwnerDAO implements IOwnerDAO {
         $this->SaveData();
         return $owner;
     }
+    public function updatePassword($password,$emailUser){
+        $owner = $this->searchOwnerByEmail($emailUser);
+        $owner->setPassword($password);
+        $this->SaveData();
+        return $owner;
+    }
 
     public function recoveryComparte($question,$answer,$owner){
         if($owner){

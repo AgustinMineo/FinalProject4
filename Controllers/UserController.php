@@ -130,6 +130,18 @@ class UserController{
             $this->goEditOwner(SessionHelper::getCurrentUser());
         }
     }
+    public function updatePassword($password,$password1){
+        if($password == $password1){
+            $response=$this->OwnerDAO->updatePassword($password,SessionHelper::getCurrentUser()->getEmail());
+            if($response){
+                echo '<div class="alert alert-success">You have successful update your Password!</div>';
+                $this->goEditOwner($response);
+            }
+        }else{
+            echo '<div class="alert alert-danger">Password cannot be empty!!</div>';
+            $this->goEditOwner(SessionHelper::getCurrentUser());
+        }
+    }
 
     public function UpdatePasswordRecovery($email,$password,$password1){
         if($password == $password1){

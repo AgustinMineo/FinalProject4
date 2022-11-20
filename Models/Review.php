@@ -2,16 +2,24 @@
 namespace Models;
 
 class Review{
-
-    private Booking $booking;
+    private $reviewID;
+    private $booking;
     private $description;
     private $points;
+
+    public function getReviewID(){
+        return $this->reviewID;
+    }
+
+    public function setReviewID($reviewID){
+        $this->reviewID = $reviewID;
+    }
 
     public function getBooking(){
         return $this->booking;
     }
 
-    public function setBooking(Booking $booking){
+    public function setBooking($booking){
         $this->booking = $booking;
     }
 

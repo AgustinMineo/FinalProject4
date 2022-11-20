@@ -138,7 +138,7 @@ class UserController{
                 $this->goEditOwner($response);
             }
         }else{
-            echo '<div class="alert alert-danger">Password cannot be empty!!</div>';
+            echo '<div class="alert alert-danger">The Password doesnt match!!</div>';
             $this->goEditOwner(SessionHelper::getCurrentUser());
         }
     }

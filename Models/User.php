@@ -10,6 +10,8 @@ abstract class User {
     private $password;
     private $userImage;
     private $userDescription;
+    private $questionRecovery;
+    private $answerRecovery;
     
     // Getter and setters
     public function getLastName(){
@@ -65,6 +67,20 @@ abstract class User {
     }
     public function setDescription($userDescription){
         $this->userDescription = $userDescription;
+    }
+
+    public function getQuestionRecovery(){
+        return $this->questionRecovery;
+    }
+    public function setQuestionRecovery($questionRecovery){
+        $this->questionRecovery = $questionRecovery;
+    }
+
+    public function getAnswerRecovery(){
+        return $this->answerRecovery;
+    }
+    public function setAnswerRecovery($answerRecovery){
+        $this->answerRecovery = $answerRecovery;
     }
 
 }

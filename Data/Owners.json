@@ -1,0 +1,15 @@
+[
+    {
+        "ownerId": 1,
+        "lastName": "Agustin",
+        "firstName": "Mineo",
+        "cellPhone": "12312312312",
+        "birthDate": "2004-01-01",
+        "email": "test@test.com",
+        "password": "123456",
+        "userDescription": "test",
+        "petAmount": "0",
+        "answerRecovery": "What is your pet's favorite place?",
+        "questionRecovery": "The park"
+    }
+]

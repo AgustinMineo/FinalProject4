@@ -1,0 +1,18 @@
+[
+    {
+        "keeperId": 1,
+        "lastName": "keeper",
+        "firstName": "keeper",
+        "cellPhone": "23123123123",
+        "birthDate": "2004-01-01",
+        "email": "keeper@keeper.com",
+        "password": "123456",
+        "firstAvailabilityDays": null,
+        "lastAvailabilityDays": null,
+        "animalSize": "Medium",
+        "cbu": "1231234123123121",
+        "price": "250",
+        "answerRecovery": "What is your favorite breed of dog?",
+        "questionRecovery": "Husky"
+    }
+]

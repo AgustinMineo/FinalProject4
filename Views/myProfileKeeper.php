@@ -1,6 +1,6 @@
 <?php
 namespace Views;
-include ("keeperNav.php");
+require_once(VIEWS_PATH."keeperNav.php");
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +14,7 @@ include ("keeperNav.php");
   <title>PET HERO</title>
 </head>
 <body>
+
     <div class="container w-100 d-flex justify-content-center align-items-center flex-column">
       <h3 class="fw-nromal my-5">Here your profile!</h3>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
@@ -33,7 +34,7 @@ include ("keeperNav.php");
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Last name right now :<hr></label>
                         <div class="container">
-                            <?php echo $owner->getLastName();?>
+                            <?php echo $keeper->getLastName();?>
                         </div>
                         <hr>
                     </div>
@@ -67,7 +68,7 @@ include ("keeperNav.php");
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100"> First Name now :<hr></label>
                         <div class="container">
-                            <?php echo $owner->getfirstName();?>
+                            <?php echo $keeper->getfirstName();?>
                         </div>
                         <hr>
                     </div>
@@ -87,8 +88,7 @@ include ("keeperNav.php");
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Cellphone</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getCellPhone();?></p></h3></div>
-      
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getCellPhone();?></p></h3></div>
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cellphone" data-bs-whatever="@getbootstrap">Edit cellphone</button>
         <div class="modal fade" id="cellphone" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -102,7 +102,7 @@ include ("keeperNav.php");
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Cellphone now :<hr></label>
                         <div class="container">
-                            <?php echo $owner->getCellPhone();?>
+                            <?php echo $keeper->getCellPhone();?>
                         </div>
                         <hr>
                     </div>
@@ -122,15 +122,15 @@ include ("keeperNav.php");
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>BirthDate</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php $date=date_create($owner->getbirthDate()); echo date_format($date,"d/m/Y");?></p></h3></div>
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php $date=date_create($keeper->getbirthDate()); echo date_format($date,"d/m/Y");?></p></h3></div>
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Email</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getEmail();?></p></h3></div>
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getEmail();?></p></h3></div>
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
         <label for="" class=""><h4>Description</h4></label>
-        <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getDescription();?></p></h3></div>
+        <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getDescription();?></p></h3></div>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#description" data-bs-whatever="@getbootstrap">Edit description</button>
         <div class="modal fade" id="description" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -144,7 +144,7 @@ include ("keeperNav.php");
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Description now :<hr></label>
                         <div class="container">
-                            <p class="text-break"><?php echo $owner->getDescription();?></p>
+                            <p class="text-break"><?php echo $keeper->getDescription();?></p>
                         </div>
                         <hr>
                     </div>

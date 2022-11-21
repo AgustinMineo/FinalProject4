@@ -162,6 +162,46 @@ include ("ownerNav.php");
             </div>
         </div>       
     </div>
+
+    <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
+        <label for="" class=""><h4>Password</h4></label>
+        <div class="container"><h3 class="text-center"><hr><p class="text-break">***********</p></h3></div>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#password" data-bs-whatever="@getbootstrap">Edit password</button>
+        <div class="modal fade" id="password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="<?php echo FRONT_ROOT ?>User/updatePassword" method="post" class="bg-light-alpha p-5">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label w-100">Password now :<hr></label>
+                        <div class="container">
+                            <p class="text-break">**********</p>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">New Password</label>
+                        <input class="form-control" type="password" name="password" id="password"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Repeat Password</label>
+                        <input class="form-control" type="password" name="password1" id="password1"></input>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Password</button>
+                </div>
+            </div>
+        </form>
+            </div>
+        </div>       
+    </div>
+
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Pet Amount</h4></label>
       <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getPetAmount();?></p></h3></div>

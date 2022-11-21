@@ -3,7 +3,6 @@ namespace Views;
 require_once(VIEWS_PATH."keeperNav.php");
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,12 +14,13 @@ require_once(VIEWS_PATH."keeperNav.php");
   <title>PET HERO</title>
 </head>
 <body>
-  
+
     <div class="container w-100 d-flex justify-content-center align-items-center flex-column">
       <h3 class="fw-nromal my-5">Here your profile!</h3>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Last Name</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getLastName();?></p></h3></div>
+      
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getLastName();?></p></h3></div>
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#name" data-bs-whatever="@getbootstrap">Edit Last Name</button>
         <div class="modal fade" id="name" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -30,11 +30,11 @@ require_once(VIEWS_PATH."keeperNav.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?php echo FRONT_ROOT ?>User/updateLastName" method="post" class="bg-light-alpha p-5">
+                    <form action="<?php echo FRONT_ROOT ?>User/updateLastNameKeeper" method="post" class="bg-light-alpha p-5">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Last name right now :<hr></label>
                         <div class="container">
-                            <?php echo $owner->getLastName();?>
+                            <?php echo $keeper->getLastName();?>
                         </div>
                         <hr>
                     </div>
@@ -54,7 +54,7 @@ require_once(VIEWS_PATH."keeperNav.php");
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>First Name</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getfirstName();?></p></h3></div>
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getfirstName();?></p></h3></div>
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#firstName" data-bs-whatever="@getbootstrap">Edit First Name</button>
         <div class="modal fade" id="firstName" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -64,11 +64,11 @@ require_once(VIEWS_PATH."keeperNav.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?php echo FRONT_ROOT ?>User/updateFirstName" method="post" class="bg-light-alpha p-5">
+                    <form action="<?php echo FRONT_ROOT ?>User/updateFirstNameKeeper" method="post" class="bg-light-alpha p-5">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100"> First Name now :<hr></label>
                         <div class="container">
-                            <?php echo $owner->getfirstName();?>
+                            <?php echo $keeper->getfirstName();?>
                         </div>
                         <hr>
                     </div>
@@ -88,7 +88,7 @@ require_once(VIEWS_PATH."keeperNav.php");
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Cellphone</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getCellPhone();?></p></h3></div>
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getCellPhone();?></p></h3></div>
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cellphone" data-bs-whatever="@getbootstrap">Edit cellphone</button>
         <div class="modal fade" id="cellphone" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -98,11 +98,11 @@ require_once(VIEWS_PATH."keeperNav.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?php echo FRONT_ROOT ?>User/UpdateUserCellphone" method="post" class="bg-light-alpha p-5"> 
+                    <form action="<?php echo FRONT_ROOT ?>User/UpdateCellphoneKeeper" method="post" class="bg-light-alpha p-5"> 
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Cellphone now :<hr></label>
                         <div class="container">
-                            <?php echo $owner->getCellPhone();?>
+                            <?php echo $keeper->getCellPhone();?>
                         </div>
                         <hr>
                     </div>
@@ -122,15 +122,15 @@ require_once(VIEWS_PATH."keeperNav.php");
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>BirthDate</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getbirthDate();?></p></h3></div>
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php $date=date_create($keeper->getbirthDate()); echo date_format($date,"d/m/Y");?></p></h3></div>
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Email</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getEmail();?></p></h3></div>
+      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getEmail();?></p></h3></div>
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
         <label for="" class=""><h4>Description</h4></label>
-        <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getDescription();?></p></h3></div>
+        <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getDescription();?></p></h3></div>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#description" data-bs-whatever="@getbootstrap">Edit description</button>
         <div class="modal fade" id="description" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -140,11 +140,11 @@ require_once(VIEWS_PATH."keeperNav.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="<?php echo FRONT_ROOT ?>User/updateDescription" method="post" class="bg-light-alpha p-5">
+                    <form action="<?php echo FRONT_ROOT ?>User/UpdateDescriptionKeeper" method="post" class="bg-light-alpha p-5">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label w-100">Description now :<hr></label>
                         <div class="container">
-                            <p class="text-break"><?php echo $owner->getDescription();?></p>
+                            <p class="text-break"><?php echo $keeper->getDescription();?></p>
                         </div>
                         <hr>
                     </div>
@@ -163,8 +163,113 @@ require_once(VIEWS_PATH."keeperNav.php");
         </div>       
     </div>
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
-      <label for="" class=""><h4>Pet Amount</h4></label>
-      <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getPetAmount();?></p></h3></div>
+        <label for="" class=""><h4>Animal Size</h4></label>
+        <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getAnimalSize();?></p></h3></div>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#animalSize" data-bs-whatever="@getbootstrap">Edit animal size</button>
+        <div class="modal fade" id="animalSize" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit animal size</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="<?php echo FRONT_ROOT ?>User/UpdateAnimalSizeKeeper" method="post" class="bg-light-alpha p-5">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label w-100">Animal size now :<hr></label>
+                        <div class="container">
+                            <p class="text-break"><?php echo $keeper->getAnimalSize();?></p>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Animal Size</label>
+                        <div class="form-group h-75">
+                            <label for="">Tamaño del animal</label>
+                                <select name="animalSize" class="w-100 h-75" Required>
+                                    <option value="Small">Small</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Big">Big</option>
+                                </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Animal Size</button>
+                </div>
+            </div>
+        </form>
+            </div>
+        </div>       
+    </div>
+    <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
+        <label for="" class=""><h4>Price</h4></label>
+        <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getPrice();?></p></h3></div>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#price" data-bs-whatever="@getbootstrap">Edit Price</button>
+        <div class="modal fade" id="price" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Price</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="<?php echo FRONT_ROOT ?>User/UpdatePriceKeeper" method="post" class="bg-light-alpha p-5">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label w-100">Price now :<hr></label>
+                        <div class="container">
+                            <p class="text-break"><?php echo $keeper->getPrice();?></p>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">New Price</label>
+                        <textarea class="form-control" name="newPrice" id="newPrice"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update price</button>
+                </div>
+            </div>
+        </form>
+            </div>
+        </div>       
+    </div>
+    <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
+        <label for="" class=""><h4>CBU</h4></label>
+        <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $keeper->getCBU();?></p></h3></div>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cbu" data-bs-whatever="@getbootstrap">Edit CBU</button>
+        <div class="modal fade" id="cbu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit CBU</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="<?php echo FRONT_ROOT ?>User/UpdateCBUKeeper" method="post" class="bg-light-alpha p-5">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label w-100">CBU now :<hr></label>
+                        <div class="container">
+                            <p class="text-break"><?php echo $keeper->getCBU();?></p>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">New CBU</label>
+                        <textarea class="form-control" name="newCBU" id="newCBU"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update CBU</button>
+                </div>
+            </div>
+        </form>
+            </div>
+        </div>       
     </div>
     </div>
  

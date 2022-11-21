@@ -21,6 +21,9 @@ require_once(VIEWS_PATH."validate-session.php");
             <div class="navbar navbar-dark shadow-sm">
                 <div class="container d-flex flex-nowrap justify-content-center mt-2">
                     <ul style="list-style-type: none; box-shadow: 5px 6px 6px 2px #e9ecef;transform: scale(1.1);" class="d-flex flex-nowrap py-2">
+                        <li class="nav-item m-3" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
+                        <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Keeper/showCurrentKeeper">My profile</a>
+                        </li>
                         <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                             <a class="nav-link m-3 " href="<?php echo FRONT_ROOT ?>Views/updateAvailabilityDays.php">Update Availability Days</a>
                         </li>   

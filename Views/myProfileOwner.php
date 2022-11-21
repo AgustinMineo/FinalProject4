@@ -88,6 +88,7 @@ include ("ownerNav.php");
     <div class="col-auto  w-50 border shadow-lg p-3 mb-5 bg-body rounded">
       <label for="" class=""><h4>Cellphone</h4></label>
       <div class="container"><h3 class="text-center"><hr><p class="text-break"><?php echo $owner->getCellPhone();?></p></h3></div>
+      
       <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cellphone" data-bs-whatever="@getbootstrap">Edit cellphone</button>
         <div class="modal fade" id="cellphone" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">

@@ -41,10 +41,10 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["firstAvailabilityDays"] = $Keeper->getFirstAvailabilityDays();// cambiar a 2 variables
           $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
-          $keeperValue["points"] = $Keeper->getPoints();
-          $keeperValue["price"] = $Keeper->getPrice();
-          $keeperValue["CBU"] = $Keeper->getCBU();
-          
+          $keeperValue["cbu"] = $Keeper->getCBU();
+          $keeperValue["price"] = $Keeper->getPrice();   
+          $keeperValue["answerRecovery"] = $Keeper->getAnswerRecovery();
+          $keeperValue["questionRecovery"] = $Keeper->getQuestionRecovery();       
           
           array_push($keeperArrayEncode, $keeperValue);
       }
@@ -75,6 +75,9 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setPrice($KeeperDecode["price"]);
               $keeper->setPoints($KeeperDecode["points"]);
               $keeper->setCBU($KeeperDecode["cbu"]);
+              $keeper->setAnswerRecovery($KeeperDecode["answerRecovery"]);
+              $keeper->setQuestionRecovery($KeeperDecode["questionRecovery"]);
+              
               array_push($this->keeperList, $keeper);
           }
       }else{
@@ -198,5 +201,19 @@ class KeeperDAO implements IKeeperDAO{
     $this->SaveData();
     return $keeper;
 }
-}
-?>
+
+    public function recoveryComparte($question,$answer,$keeper){
+        if($keeper){
+            if(strcmp($keeper->getQuestionRecovery(),$question) && strcmp($keeper->getAnswerRecovery(),$answer)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+    public function updatePasswordRecovery($keeper,$password){
+        $keeperUpdate=$this->searchKeeperByEmail($keeper);
+        $keeperUpdate->setPassword($password);
+        $this->SaveData();
+    }
+}?>

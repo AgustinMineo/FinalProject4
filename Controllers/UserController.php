@@ -1,11 +1,11 @@
 <?php
 namespace Controllers;
 
-//use DAO\OwnerDAO as OwnerDAO;
-use DAODB\OwnerDAO as OwnerDAO;
+use DAO\OwnerDAO as OwnerDAO;
+//use DAODB\OwnerDAO as OwnerDAO;
 use Models\Owner as Owner;
-// use DAO\KeeperDAO as KeeperDAO;
-use DAODB\KeeperDAO as KeeperDAO;
+use DAO\KeeperDAO as KeeperDAO;
+//use DAODB\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
 use Helper\SessionHelper as SessionHelper;
 
@@ -38,6 +38,9 @@ class UserController{
     }
     public function goEditKeeper($keeper){
         require_once(VIEWS_PATH."myProfileKeeper.php");
+    }
+    public function goRecovery($user){
+        require_once(VIEWS_PATH."recoveryPassword.php");
     }
 
     public function logOut(){
@@ -160,11 +163,11 @@ class UserController{
                 $response=$this->KeeperDAO->updateCellphoneKeeper($newCellphone,SessionHelper::getCurrentUser()->getEmail());
                 if($response){
                     echo '<div class="alert alert-success">You have successful update your Cellphone!</div>';
-                    $this->goEditOwner($response);
+                    $this->goEditKeeper($response);
                 }
             }else{
                 echo '<div class="alert alert-danger">The Cellphone cannot be empty!!</div>';
-                $this->goEditOwner(SessionHelper::getCurrentUser());
+                $this->goEditKeeper(SessionHelper::getCurrentUser());
             }
         }
     public function UpdateDescriptionKeeper($newDescription){
@@ -217,5 +220,67 @@ class UserController{
             $this->goEditKeeper(SessionHelper::getCurrentUser());
         }
     }
+
+    public function updatePassword($password,$password1){
+        if($password == $password1){
+            $response=$this->OwnerDAO->updatePassword($password,SessionHelper::getCurrentUser()->getEmail());
+            if($response){
+                echo '<div class="alert alert-success">You have successful update your Password!</div>';
+                $this->goEditOwner($response);
+            }
+        }else{
+            echo '<div class="alert alert-danger">The Password doesnt match!!</div>';
+            $this->goEditOwner(SessionHelper::getCurrentUser());
+        }
+    }
+
+    public function UpdatePasswordRecovery($email,$password,$password1){
+        if($password == $password1){
+            $response =  $this->OwnerDAO->searchOwnerByEmail($email);
+            if($response){
+                $this->OwnerDAO->updatePasswordRecovery($email,$password);
+                echo '<div class="alert alert-success">You have successfully updated your password</div>';
+                $this->gologinUser();
+            }else{
+                $this->KeeperDAO->updatePasswordRecovery($email,$password);
+                echo '<div class="alert alert-success">You have successfully updated your password</div>';
+                $this->gologinUser();
+            }
+        }else{
+            echo '<div class="alert alert-danger">The passwords doesnt match!!</div>';
+            $this->gologinUser();
+        }
+    }
+
+    public function forgotPassword($email,$questionRecovery,$answerRecovery){
+        if($email && $questionRecovery && $answerRecovery){
+                $newOwner = $this->OwnerDAO->searchOwnerByEmail($email);
+                if($newOwner){
+                    $response=$this->OwnerDAO->recoveryComparte($questionRecovery,$answerRecovery,$newOwner);
+                    if($response == true){
+                        $this->goRecovery($newOwner);
+                    }else{
+                        echo '<div class="alert alert-danger">Oops! The answer or the question where wrong</div>';
+                        $this->gologinUser();
+                    }
+                } else if($newKeeper = $this->KeeperDAO->searchKeeperByEmail($email)){
+                    if($newKeeper){
+                        $response=$this->KeeperDAO->recoveryComparte($questionRecovery,$answerRecovery,$newKeeper);
+                        if($response == true){
+                            $this->goRecovery($newKeeper);
+                        }else{
+                            echo '<div class="alert alert-danger">Oops! The answer or the question where wrong</div>';
+                        $this->gologinUser();
+                        }
+                    }
+                }else{
+                    echo '<div class="alert alert-danger">The Email doesn´t exist</div>';
+                    $this->gologinUser();
+                }
+    }else{
+        echo '<div class="alert alert-danger">The Email, question and answer is requeried to recovery the password!</div>';
+            $this->gologinUser();
+    }
+}
 }
 ?>

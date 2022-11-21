@@ -18,6 +18,7 @@ class KeeperDAO implements IKeeperDAO{
       // save the data
       $this->SaveData();
   }
+
   public function getAllKeeper(){
       // bring all of the keeper
       $this->RetriveData();
@@ -40,14 +41,17 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["firstAvailabilityDays"] = $Keeper->getFirstAvailabilityDays();// cambiar a 2 variables
           $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
-          $keeperValue["cbu"] = $Keeper->getCBU();
-          $keeperValue["price"] = $Keeper->getPrice();          
+          $keeperValue["points"] = $Keeper->getPoints();
+          $keeperValue["price"] = $Keeper->getPrice();
+          $keeperValue["CBU"] = $Keeper->getCBU();
+          
           
           array_push($keeperArrayEncode, $keeperValue);
       }
       $keeperFile = json_encode($keeperArrayEncode, JSON_PRETTY_PRINT);
       file_put_contents('Data/Keepers.json',$keeperFile);
   }
+
   private function RetriveData(){
       $this->keeperList = array();
       //Tenemos que tener el file creado
@@ -69,8 +73,8 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
               $keeper->setPrice($KeeperDecode["price"]);
+              $keeper->setPoints($KeeperDecode["points"]);
               $keeper->setCBU($KeeperDecode["cbu"]);
-
               array_push($this->keeperList, $keeper);
           }
       }else{
@@ -86,6 +90,7 @@ class KeeperDAO implements IKeeperDAO{
         }
         return null;
   }
+
   public function searchKeeperByID($id){
     $this->RetriveData();
         foreach($this->keeperList as $value){ /// Buscamos dentro del arreglo de keeper
@@ -95,16 +100,17 @@ class KeeperDAO implements IKeeperDAO{
         }
         return null;
   }
+
   public function searchKeeperToLogin($email,$password){
     $newKeeper =$this->searchKeeperByEmail($email);
     if($newKeeper){
         if($newKeeper->getPassword()==$password){
             return $newKeeper;
         }
-        }else{
+    }else{
         return null;
-        }
-  }
+    }
+}
   public function changeAvailabilityDays($id,$value1, $value2){
     $newValues = array();
     $value = $this->searchKeeperByID($id);
@@ -130,12 +136,13 @@ class KeeperDAO implements IKeeperDAO{
             }
         }
     }
-        }else{
-         echo '<div class="alert alert-danger">There are no keepers </div>';
-         return array();
-        }
-        return $keeperListDisponibility;
-    }
+}else{
+    echo '<div class="alert alert-danger">There are no keepers </div>';
+    return array();
+}
+    return $keeperListDisponibility;
+}
+
     public function getLastID(){
     $this->RetriveData();
     if($this->keeperList != NULL){
@@ -145,6 +152,51 @@ class KeeperDAO implements IKeeperDAO{
     else{
         return 1;
     }
-    }
+} 
 
-}?>
+    public function updateLastNameKeeper($newName,$emailUser){
+    $keeper = $this->searchKeeperByEmail($emailUser);
+    $keeper->setLastName($newName);
+    $this->SaveData();
+    return $keeper;
+}
+
+    public function updateFirstNameKeeper($newFirstName,$emailUser){
+    $keeper = $this->searchKeeperByEmail($emailUser);
+    $keeper->setFirstName($newFirstName);
+    $this->SaveData();
+    return $keeper;
+}
+
+    public function updateCellphoneKeeper($newCellphone,$emailUser){
+    $keeper = $this->searchKeeperByEmail($emailUser);
+    $owner->setCellPhone($newCellphone);
+    $keeper->SaveData();
+    return $keeper;
+}
+    public function updateDescriptionKeeper($newDescription,$emailUser){
+    $keeper = $this->searchKeeperByEmail($emailUser);
+    $keeper->setDescription($newDescription);
+    $this->SaveData();
+    return $keeper;
+}
+    public function updateAnimalSizeKeeper($newAnimalSize,$emailUser){
+    $keeper = $this->searchKeeperByEmail($emailUser);
+    $keeper->setAnimalSize($newAnimalSize);
+    $this->SaveData();
+    return $keeper;
+}
+    public function updatePriceKeeper($newPrice,$emailUser){
+    $keeper = $this->searchKeeperByEmail($emailUser);
+    $keeper->setDescription($newPrice);
+    $this->SaveData();
+    return $keeper;
+}
+    public function updateCBUKeeper($newCBU,$emailUser){
+    $keeper = $this->searchKeeperByEmail($emailUser);
+    $keeper->setDescription($newCBU);
+    $this->SaveData();
+    return $keeper;
+}
+}
+?>

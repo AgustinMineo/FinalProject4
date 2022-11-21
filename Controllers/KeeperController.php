@@ -32,6 +32,9 @@
     public function Index($message = ""){
          require_once(VIEWS_PATH."keeperNav.php");
     }
+    public function myProfile($keeper){
+        require_once(VIEWS_PATH."myProfileKeeper.php");
+    }
 
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cbu){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
@@ -94,6 +97,12 @@
             echo '<div class="alert alert-danger">Error saving the days! Please try again later</div>';
         }
         $this->goLandingKeeper();
+    }
+
+    public function showCurrentKeeper(){
+        $keeper=$this->KeeperDAO->searchKeeperByEmail(SessionHelper::getCurrentUser()->getEmail());
+        var_dump($keeper);
+        $this->myProfile($keeper);
     }
  }
 ?>

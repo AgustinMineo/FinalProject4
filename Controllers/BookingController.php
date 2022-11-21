@@ -2,17 +2,19 @@
 namespace Controllers;
 use DAO\MailerDAO as MailerDAO;
         // DAO WITH JSON
-//use DAO\BookingDAO as BookingDAO;
-//use DAO\PetDAO as PetDAO;
-//use DAO\KeeperDAO as KeeperDAO;
+use DAO\BookingDAO as BookingDAO;
+use DAO\PetDAO as PetDAO;
+use DAO\KeeperDAO as KeeperDAO;
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;
 
-        // DAO WITH DATA BASE
-use DAODB\PetDAO as PetDAO;
-use DAODB\KeeperDAO as KeeperDAO;
-use DAODB\BookingDAO as BookingDAO;
+// DAO WITH DATA BASE
+//use DAODB\PetDAO as PetDAO;
+//use DAODB\KeeperDAO as KeeperDAO;
+//use DAODB\BookingDAO as BookingDAO;
+//use DAODB\Connection as Connection;
+
 use Helper\SessionHelper as SessionHelper;
 
 class BookingController{
@@ -20,6 +22,11 @@ class BookingController{
     private $petDAO;
     private $keeperDAO;
     private $MailerDAO;
+
+    private $connection;
+    private $reviewTable = 'Review';
+
+
 
     public function GoBooking(){
          require_once(VIEWS_PATH."showBookingKeeper.php");
@@ -161,4 +168,8 @@ class BookingController{
         $numberDays = intval($numberDays); // PARA PASARLO A ENTERO
         return $price * $numberDays;
     }
-} ?>
+
+
+} 
+?>
+    

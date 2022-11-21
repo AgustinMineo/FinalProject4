@@ -89,6 +89,23 @@
                                    <input type="text" name="cbu" class="form-control" Required></input>
                               </div>
                          </div>
+                         <div class="col-lg-4">
+                                   <div class="form-group w-100">
+                                        <label for="">Question</label>
+                                        <select name="QuestionRecovery" class="w-100 h-75" Required>
+                                             <option value="What was your first pet called? " name="questionRecovery">What was your first pet called?</option>
+                                             <option value="What is your favorite breed of dog?" name="questionRecovery">What is your favorite breed of dog?</option>
+                                             <option value="What is your pet's favorite place?" name="questionRecovery">What is your pet's favorite place?</option>
+                                             <option value="What is your pet's favorite toy?" name="questionRecovery">What is your pet's favorite toy?</option>
+                                        </select>
+                                   </div>
+                         </div>
+                         <div class="col-lg-4">
+                               <div class="form-group">
+                              <label for="">Answer</label>
+                              <textarea type="textarea" name="answerRecovery" rows = "1" cols ="15" maxlength="120" class="form-control" Required></textarea>
+                              </div>
+                         </div>
                     </div>
                     <div class = "container d-flex justify-content-center mt-5">
                          <button type="submit" class="btn btn-dark ml-auto d-block w-25">Sign Up</button>

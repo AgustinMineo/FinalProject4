@@ -103,7 +103,7 @@ class BookingDAO implements IBookingDAO{
         }
     }
     public function updateByID($id,$status){
-        $bookingRecord = $this->searchBookingByKeeperID($id);
+        $bookingRecord = $this->searchBookingByID($id);
         if($bookingRecord){
             $bookingRecord->setStatus($status);
             $this->SaveData();

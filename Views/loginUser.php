@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-  <title>Document</title>
+  <title>PET HERO</title>
 </head>
 <body>
   
@@ -34,15 +34,20 @@
               <input type="email" name="email" class="form-control form-control-lg" />
               <label class="form-label" for="">Email address</label>
             </div>
-  
+
             <div class="form-outline mb-4">
               <input type="password" name="password" class="form-control form-control-lg" />
               <label class="form-label" for="">Password</label>
+            </div>
+
+            <div class="d-flex justify-content-around align-items-center mb-4">
+              <a href="<?php echo '/FinalProject4/' ?>Views/recoveryView.php">Forgot password?</a>
             </div>
   
             <div class="container d-flex flex-wrap justify-content-center align-items-center">
             <button type="submit" class="btn btn-primary btn-lg btn-block ">Log in</button>
             </div>
+            
   
           </form>
         </div>

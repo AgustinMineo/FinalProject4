@@ -11,6 +11,8 @@ CREATE TABLE `User` (
   `birthdate` date DEFAULT NULL,
   `password` varchar(32) NOT NULL,
   `userDescription` varchar(255) DEFAULT NULL,
+   `questionRecovery` varchar(80) DEFAULT NULL,
+   `answerRecovery` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB;
@@ -56,7 +58,7 @@ CREATE TABLE `Booking` (
   `bookingID` int(11) NOT NULL AUTO_INCREMENT,
   `keeperID` int(11) NOT NULL references Keeper(keeperID),
   `petID` int(11) NOT NULL references Pet(petID),
-  `status` tinyint(5) NOT NULL,
+  `status` tinyint(7) NOT NULL,
   `animalSize` varchar(30) ,
   `totalValue` float,
   `amountReservation` float,
@@ -73,13 +75,25 @@ CREATE TABLE `KeeperDays` (
 
 CREATE TABLE `Status`(
 	`statusID` int(11) NOT NULL AUTO_INCREMENT,
-    `name` varchar(20) NOT NULL UNIQUE KEY,
+    `name` varchar(40) NOT NULL UNIQUE KEY,
     PRIMARY KEY (`statusID`)
 ) ENGINE=InnoDB;
 
--- INSERT DE STATUS EN LA TABLA STATUS--
-INSERT INTO status VALUES ("1","Peding"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish");
---INSERT DE BREEDS EN TABLA BREED--
+CREATE TABLE `Review`(
+	`reviewID` int(11) NOT NULL AUTO_INCREMENT,
+    `description` varchar(255),
+     `rank` tinyint(5),
+     `bookingID` int(11) NOT NULL references Booking(bookingID),
+    PRIMARY KEY (`reviewID`)
+) ENGINE=InnoDB;
+
+/*                                INSERT DE STATUS EN LA TABLA STATUS                       */
+INSERT INTO status VALUES ("1","Peding"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed");
+/*                                INSERT DE STATUS EN LA TABLA STATUS                       */
+
+
+/*                                    INSERT DE BREEDS EN TABLA BREED                       */
 INSERT INTO breed VALUES ("1","Beagle"), ("2", "Chihuahua"), ("3","Bulldog"),("4", "German Shepherd"),
 ("5", "Shih-tzu"), ("6", "Dogo"), ("7", "Golden Retriever"), ("8","Fox Terrier"), ("9","Whippet"),
 ("10","Pinscher"), ("11","Cocker"), ("12","Shiba Inu"), ("13","Doberman"), ("14","Border Collie"), ("15","Yorkshire");
+/*                                    INSERT DE BREEDS EN TABLA BREED                       */

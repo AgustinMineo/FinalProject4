@@ -1,18 +1,19 @@
 [
     {
         "keeperId": 1,
-        "lastName": "keeper",
-        "firstName": "keeper",
-        "cellPhone": "23123123123",
-        "birthDate": "2004-01-01",
-        "email": "keeper@keeper.com",
-        "password": "123456",
+        "lastName": "Mineo",
+        "firstName": "Agustin",
+        "cellPhone": "1312312",
+        "birthDate": "1998-04-24",
+        "email": "agustin@test.com",
+        "password": "123",
         "firstAvailabilityDays": null,
         "lastAvailabilityDays": null,
+        "userDescription": "test",
         "animalSize": "Medium",
-        "cbu": "1231234123123121",
-        "price": "250",
-        "answerRecovery": "What is your favorite breed of dog?",
-        "questionRecovery": "Husky"
+        "cbu": "15000",
+        "price": "150",
+        "answerRecovery": "What was your first pet called? ",
+        "questionRecovery": "test"
     }
 ]

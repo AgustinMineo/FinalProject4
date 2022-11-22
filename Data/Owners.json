@@ -11,5 +11,18 @@
         "petAmount": "0",
         "answerRecovery": "What is your pet's favorite place?",
         "questionRecovery": "The park"
+    },
+    {
+        "ownerId": 2,
+        "lastName": "Miranda",
+        "firstName": "Martin",
+        "cellPhone": "2235066075",
+        "birthDate": "1988-04-18",
+        "email": "tinchomirandda@gmail.com",
+        "password": "123",
+        "userDescription": "test",
+        "petAmount": "0",
+        "answerRecovery": "What was your first pet called? ",
+        "questionRecovery": "test"
     }
 ]

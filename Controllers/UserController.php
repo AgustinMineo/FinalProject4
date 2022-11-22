@@ -185,7 +185,7 @@ class UserController{
 
     public function UpdateAnimalSizeKeeper($animalSizeKeeper){
         if($animalSizeKeeper){
-            $response = $this->KeeperDAO->updateAnimalSizeKeeper();
+            $response = $this->KeeperDAO->updateAnimalSizeKeeper($animalSizeKeeper,SessionHelper::getCurrentUser()->getEmail());
             if($response){
                 echo '<div class="alert alert-success">You have successful update your Animal Size!</div>';
                 $this->goEditKeeper($response);
@@ -197,7 +197,7 @@ class UserController{
     }
     public function UpdatePriceKeeper($priceKeeper){
         if($priceKeeper){
-            $response = $this->KeeperDAO->updatePriceKeeper();
+            $response = $this->KeeperDAO->updatePriceKeeper($priceKeeper,SessionHelper::getCurrentUser()->getEmail());
             if($response){
                 echo '<div class="alert alert-success">You have successful update your Price!</div>';
                 $this->goEditKeeper($response);
@@ -210,7 +210,7 @@ class UserController{
 
     public function UpdateCBUKeeper($cbuKeeper){
         if($cbuKeeper){
-            $response = $this->KeeperDAO->updateCBUKeeper();
+            $response = $this->KeeperDAO->updateCBUKeeper($cbuKeeper,SessionHelper::getCurrentUser()->getEmail());
             if($response){
                 echo '<div class="alert alert-success">You have successful update your CBU!</div>';
                 $this->goEditKeeper($response);

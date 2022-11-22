@@ -103,7 +103,6 @@
 
     public function showCurrentKeeper(){
         $keeper=$this->KeeperDAO->searchKeeperByEmail(SessionHelper::getCurrentUser()->getEmail());
-        var_dump($keeper);
         $this->myProfile($keeper);
     }
  }

@@ -187,9 +187,9 @@ require_once(VIEWS_PATH."keeperNav.php");
                         <div class="form-group h-75">
                             <label for="">Tamaño del animal</label>
                                 <select name="animalSize" class="w-100 h-75" Required>
-                                    <option value="Small">Small</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Big">Big</option>
+                                    <option value="Small" name="animalSize">Small</option>
+                                    <option value="Medium" name="animalSize">Medium</option>
+                                    <option value="Big" name="animalSize">Big</option>
                                 </select>
                         </div>
                     </div>

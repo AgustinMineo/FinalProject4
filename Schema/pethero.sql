@@ -11,8 +11,8 @@ CREATE TABLE `User` (
   `birthdate` date DEFAULT NULL,
   `password` varchar(32) NOT NULL,
   `userDescription` varchar(255) DEFAULT NULL,
-   `questionRecovery` varchar(80) DEFAULT NULL,
-   `answerRecovery` varchar(120) DEFAULT NULL,
+  `questionRecovery` varchar(80) DEFAULT NULL,
+  `answerRecovery` varchar(120) DEFAULT NULL,
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB;

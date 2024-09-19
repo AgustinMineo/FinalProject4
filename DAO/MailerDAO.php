@@ -16,11 +16,11 @@ class MailerDAO implements IMailerDAO{
         try{
         $phpmailer = new PHPMailer();
         $phpmailer->isSMTP();
-        $phpmailer->Host = 'smtp.mailtrap.io';
+        $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
         $phpmailer->SMTPAuth = true;
         $phpmailer->Port = 2525;
-        $phpmailer->Username = 'c9dc2bf4f2e5fc';
-        $phpmailer->Password = '0c2723ee9361ed';
+        $phpmailer->Username = 'd06bef564e3a17';
+        $phpmailer->Password = 'dfeffc4266b7af';
         $phpmailer->setFrom('pethero@pethero.com', 'Mailer');
         $phpmailer->addAddress($email,$fullName);  
     
@@ -260,11 +260,11 @@ function newBooking($lastname,$name,$email){
       try{
       $phpmailer = new PHPMailer();
       $phpmailer->isSMTP();
-      $phpmailer->Host = 'smtp.mailtrap.io';
+      $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
       $phpmailer->SMTPAuth = true;
       $phpmailer->Port = 2525;
-      $phpmailer->Username = 'c9dc2bf4f2e5fc';
-      $phpmailer->Password = '0c2723ee9361ed';
+      $phpmailer->Username = 'd06bef564e3a17';
+      $phpmailer->Password = 'dfeffc4266b7af';
       $phpmailer->setFrom('pethero@pethero.com', 'Mailer');
       $phpmailer->addAddress($email,$fullName);    
       $phpmailer->CharSet = 'UTF-8';
@@ -514,11 +514,11 @@ function newBooking($lastname,$name,$email){
       try{
       $phpmailer = new PHPMailer();
       $phpmailer->isSMTP();
-      $phpmailer->Host = 'smtp.mailtrap.io';
+      $phpmailer->Host = 'sandbox.sandbox.smtp.mailtrap.io';
       $phpmailer->SMTPAuth = true;
       $phpmailer->Port = 2525;
-      $phpmailer->Username = 'c9dc2bf4f2e5fc';
-      $phpmailer->Password = '0c2723ee9361ed';
+      $phpmailer->Username = 'd06bef564e3a17';
+      $phpmailer->Password = 'dfeffc4266b7af';
       $phpmailer->setFrom('pethero@pethero.com', 'PET HERO');
       $phpmailer->addAddress($Keeperemail,$fullNameKeeper);    
       //$phpmailer->addCC($owner->getEmail());

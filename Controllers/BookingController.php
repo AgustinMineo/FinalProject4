@@ -2,18 +2,18 @@
 namespace Controllers;
 use DAO\MailerDAO as MailerDAO;
         // DAO WITH JSON
-use DAO\BookingDAO as BookingDAO;
-use DAO\PetDAO as PetDAO;
-use DAO\KeeperDAO as KeeperDAO;
+//use DAO\BookingDAO as BookingDAO;
+//use DAO\PetDAO as PetDAO;
+//use DAO\KeeperDAO as KeeperDAO;
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;
 
 // DAO WITH DATA BASE
-//use DAODB\PetDAO as PetDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
-//use DAODB\BookingDAO as BookingDAO;
-//use DAODB\Connection as Connection;
+use DAODB\PetDAO as PetDAO;
+use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\BookingDAO as BookingDAO;
+use DAODB\Connection as Connection;
 
 use Helper\SessionHelper as SessionHelper;
 
@@ -37,10 +37,14 @@ class BookingController{
     public function goIndexKeeper(){
         require_once(VIEWS_PATH."keeperNav.php");
     }
-     public function goBookingView($petList,$listKeepers){
+     public function goBookingView($petList,$listKeepers,$value1,$value2){
 
         require_once(VIEWS_PATH."ownerNav.php");
         require_once(VIEWS_PATH."BookingViews.php");
+    }
+    public function searchBooking(){
+        require_once(VIEWS_PATH."ownerNav.php");
+        require_once(VIEWS_PATH . "searchByDateBooking.php");
     }
      public function goIndex(){
         require_once(VIEWS_PATH."landingPage.php");
@@ -68,7 +72,7 @@ class BookingController{
                         }
                             if($petList)
                             {
-                                $this->goBookingView($petList,$listKeepers);
+                                $this->goBookingView($petList,$listKeepers,$value1,$value2);
                             }else{
                                 echo "<div class='alert alert-danger'>No tiene mascotas que concuerden con el tamaño</div>";
                                 $this->goIndex();
@@ -85,16 +89,18 @@ class BookingController{
             }
         }
 
-    public function newBooking($email,$petId){
+    public function newBooking($email,$petId,$startDate,$finishDate){
         $newBooking = new Booking();
         $keeperInfo = new Keeper(); //CHECK
         $keeperInfo=$this->keeperDAO->searchKeeperByEmail($email);
+        $finalPrice = $this->BookingDAO->calculateTotalDays($startDate,$finishDate, $keeperInfo->getKeeperId());
+        $finalPrice = $finalPrice * $keeperInfo->getPrice();
         $newBooking->setStatus('1');
-        $newBooking->setFirstDate($keeperInfo->getFirstAvailabilityDays());//cambiar a dias que pide el owner // tomar datos de form y pasarlos a array para tirarlos aca VER
-        $newBooking->setLastDate($keeperInfo->getLastAvailabilityDays());// cambiar a dias que pide el owner
+        $newBooking->setStartDate($startDate);
+        $newBooking->setEndDate($finishDate);
         $newBooking->setKeeperID($keeperInfo->getKeeperId());
-        $newBooking->setTotalValue($this->priceCounter($newBooking->getFirstDate(), $newBooking->getLastDate(), $keeperInfo->getPrice()));
-        $newBooking->setAmountReservation($newBooking->getTotalValue()*0.5); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
+        $newBooking->setTotalValue($finalPrice);
+        $newBooking->setAmountReservation($newBooking->getTotalValue() * 0.5); /// value*cantDias * 0.5; ESTO ES LA SEÑA TO DO
         $newBooking->setPetID($petId);
         $this->MailerDAO->newBooking($keeperInfo->getLastName(),$keeperInfo->getfirstName(),$keeperInfo->getEmail());
         $result =$this->BookingDAO->addBooking($newBooking);
@@ -159,8 +165,9 @@ class BookingController{
             if($resultSet){ return $resultSet; } else { return NULL; } 
         } catch( Exception $ex ){ throw $ex; }
     }
-//ARREGLAR TOTAL DE PRECIO Y MIGRARLO A DAO
+
     public function priceCounter($first, $last, $price){
+
         $firstDay = strtotime($first);
         $lastDay = strtotime($last);
         $timeDiff = abs($firstDay - $lastDay);

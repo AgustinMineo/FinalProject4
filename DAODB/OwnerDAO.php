@@ -14,8 +14,10 @@ class OwnerDAO{
     //Funcion para agregar un Owner a la DB
     public function AddOwner (Owner $owner){
         try {
-           $query = "INSERT INTO ".$this->userTable."(userID, firstName, lastName, email, cellphone, birthdate, password, userDescription)
-           VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, :userDescription);";
+           $query = "INSERT INTO ".$this->userTable."(userID, firstName, lastName, email, cellphone, 
+           birthdate, password, userDescription,questionRecovery,answerRecovery)
+           VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, 
+           :userDescription, :questionRecovery, :answerRecovery);";
                     $parameters["userID"] = NULL;
                     $parameters["firstName"] = $owner->getfirstName();
                     $parameters["lastName"] = $owner->getLastName();
@@ -24,6 +26,8 @@ class OwnerDAO{
                     $parameters["birthdate"] = $owner->getbirthDate();
                     $parameters["password"] = MD5($owner->getPassword());
                     $parameters["userDescription"] = $owner->getDescription();
+                    $parameters["questionRecovery"] = $owner->getQuestionRecovery();
+                    $parameters["answerRecovery"] = $owner->getAnswerRecovery();
                     $this->connection = Connection::GetInstance();
                      if($this->connection->ExecuteNonQuery($query, $parameters)){
                         $queryOwner = "INSERT INTO ".$this->ownerTable."(ownerId, userID, petAmount)
@@ -47,7 +51,9 @@ class OwnerDAO{
         try {
             $ownerList = array();
 
-            $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password,u.userDescription,o.petAmount,o.ownerID
+            $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, 
+            u.birthdate, u.password,u.userDescription,o.petAmount,o.ownerID,
+            u.answerRecovery,u.questionRecovery
             FROM ".$this->userTable." u 
             INNER JOIN ".$this->ownerTable." o ON o.userID = u.userID";
 
@@ -67,6 +73,8 @@ class OwnerDAO{
                 $owner->setDescription($row["userDescription"]);
                 $owner->setPetAmount($row["petAmount"]);
                 $owner->setOwnerId($row["ownerID"]);
+                $owner->setAnswerRecovery($row["answerRecovery"]);
+                $owner->setQuestionRecovery($row["questionRecovery"]);
                 array_push($ownerList, $owner);
             }
             return $ownerList;
@@ -77,7 +85,9 @@ class OwnerDAO{
     //Funcion para validar que no exista el mail
     public function searchOwnerByEmail($email){
         try {
-                $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, u.password, u.userDescription, u.email, o.petAmount, o.ownerID  
+                $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, 
+                u.password, u.userDescription, u.email, o.petAmount, o.ownerID,
+                u.answerRecovery,u.questionRecovery
                 FROM ".$this->userTable." u 
                 INNER JOIN ".$this->ownerTable." o ON u.userID = o.userID 
                 WHERE email = '$email';";
@@ -96,6 +106,8 @@ class OwnerDAO{
                         $owner->setDescription($row["userDescription"]);
                         $owner->setPetAmount($row["petAmount"]);
                         $owner->setOwnerId($row["ownerID"]);
+                        $owner->setAnswerRecovery($row["answerRecovery"]);
+                        $owner->setQuestionRecovery($row["questionRecovery"]);
                     }
                     return $owner;
                  }
@@ -105,7 +117,9 @@ class OwnerDAO{
     //Funcion para buscar Owner para iniciar seseion
     public function searchOwnerToLogin($email, $password){
         try {
-            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userDescription, o.petAmount FROM 
+            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, 
+            u.birthdate, u.password, u.userDescription, o.petAmount,u.answerRecovery,
+            u.questionRecovery FROM 
             ".$this->userTable." u 
             RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID 
             WHERE email = '$email' AND password = md5($password);";
@@ -129,6 +143,8 @@ class OwnerDAO{
                 $owner->setPassword($row["password"]);
                 $owner->setDescription($row["userDescription"]);
                 $owner->setPetAmount($row["petAmount"]);
+                $owner->setAnswerRecovery($row["answerRecovery"]);
+                $owner->setQuestionRecovery($row["questionRecovery"]);
                 return $owner;
             }
         }
@@ -154,6 +170,11 @@ class OwnerDAO{
         throw $ex;
         }
     }
+    
+    public function incrementPetAmount(){
+
+    }
+
     public function updateName($newName,$emailUser){
         $query = "UPDATE ".$this->userTable." SET lastName = '$newName' WHERE email = '$emailUser';";
         $this->connection = Connection::GetInstance();
@@ -175,6 +196,13 @@ class OwnerDAO{
     }
     public function updateDescription($newDescription,$emailUser){
         $query = "UPDATE ".$this->userTable." SET userDescription = '$newDescription' WHERE email = '$emailUser';";
+        $this->connection = Connection::GetInstance();
+        $this->connection->Execute($query);
+            return $this->searchOwnerByEmail($emailUser);
+    }
+    public function updatePassword($newPassword,$emailUser){
+        $passwordNew = MD5($newPassword);
+        $query = "UPDATE ".$this->userTable." SET password = '$passwordNew' WHERE email = '$emailUser';";
         $this->connection = Connection::GetInstance();
         $this->connection->Execute($query);
             return $this->searchOwnerByEmail($emailUser);

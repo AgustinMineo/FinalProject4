@@ -37,6 +37,17 @@ class SessionHelper{
         return session_destroy();
     }
 
+    public static function validateSession() {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+    
+        if (!isset($_SESSION["loggedUser"])) {
+            header("Location: " . FRONT_ROOT . "loginUser.php");
+            exit();
+        }
+    }
+
 }
 
 ?>

@@ -1,6 +1,8 @@
 <?php
 namespace Views;
+//require_once(VIEWS_PATH. 'ownerNav.php');
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

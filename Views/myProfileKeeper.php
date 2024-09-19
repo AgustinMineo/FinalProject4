@@ -225,7 +225,7 @@ require_once(VIEWS_PATH."keeperNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New Price</label>
-                        <textarea class="form-control" name="newPrice" id="newPrice"></textarea>
+                        <input class="form-control" name="newPrice" id="newPrice"></input>
                     </div>
                 </div>
                 <div class="modal-footer">

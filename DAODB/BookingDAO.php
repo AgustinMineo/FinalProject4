@@ -30,16 +30,22 @@ class BookingDAO implements IBookingDAO{
     }
     public function AddBooking (Booking $booking){
       try {
-            $keeperDaysID = $this->keeperDAO->searchDays($booking->getKeeperID(),$booking->getFirstDate(), $booking->getLastDate());
-            $query = "INSERT INTO ".$this->bookingTable."(bookingID, keeperDaysID, petID, status, totalValue, amountReservation)
-                      VALUES (:bookingID, :keeperDaysID, :petID, :status, :totalValue, :amountReservation);";
+            $keeperDaysID = $this->keeperDAO->searchDays($booking->getKeeperID(),$booking->getStartDate(), $booking->getEndDate());
+            $query = "INSERT INTO ".$this->bookingTable."(bookingID, keeperID, petID, status, 
+            totalValue, amountReservation,startDate,endDate)
+                    VALUES (:bookingID, :keeperID, :petID, 
+                    :status, :totalValue, :amountReservation,
+                    :startDate,:endDate
+                    );";
             //Seteamos los valores de booking
             $parameters["bookingID"] = NULL;
-            $parameters["keeperDaysID"] = $this->keeperDAO->searchDays($booking->getKeeperID(),$booking->getFirstDate(), $booking->getLastDate());
+            $parameters["keeperID"] = $booking->getKeeperID();
             $parameters["petID"] = $booking->getPetID();
             $parameters["status"] = $booking->getStatus();
             $parameters["totalValue"] = $booking->getTotalValue();
             $parameters["amountReservation"] = $booking->getAmountReservation();
+            $parameters["startDate"] = $booking->getStartDate();
+            $parameters["endDate"] = $booking->getEndDate();
             $this->connection = Connection::GetInstance();
             $this->connection->ExecuteNonQuery($query, $parameters); 
             return true;    
@@ -61,7 +67,7 @@ class BookingDAO implements IBookingDAO{
         catch (Exception $ex) { throw $ex; }
     }
     public function searchByID($idBooking){
-        $query = "SELECT d.firstDate, d.lastDate, d.keeperID, b.petID, b.totalValue, s.name FROM booking b 
+        $query = "SELECT d.startDate, d.endDate, d.keeperID, b.petID, b.totalValue, s.name FROM booking b 
                   JOIN keeperdays d ON d.keeperDaysID = b.keeperDaysID 
                   JOIN status s ON s.statusID = b.status WHERE bookingID = $idBooking;";
         $this->connection = Connection::GetInstance();
@@ -72,8 +78,8 @@ class BookingDAO implements IBookingDAO{
                 $booking = new Booking();
                 $booking->setBookingID($idBooking);
                 $booking->setKeeperID($row['keeperID']);
-                $booking->setFirstDate($row['firstDate']);
-                $booking->setLastDate($row['lastDate']);
+                $booking->setStartDate($row['startDate']);
+                $booking->setEndDate($row['endDate']);
                 $booking->setPetID($row['petID']);
                 $booking->setTotalValue($row['totalValue']);
                 $booking->setStatus($row['name']);               
@@ -85,13 +91,11 @@ class BookingDAO implements IBookingDAO{
         if(isset($_SESSION["loggedUser"])){
             $keeperID = $_SESSION["loggedUser"]->getKeeperId();
             try{
-                $query = "SELECT b.bookingID, d.firstDate, d.lastDate, concat(u.firstName, ' ', u.lastName) as nameKeeper,b.petID, b.totalValue,b.amountReservation, p.petName,b.status FROM booking b 
-                          JOIN keeperdays d ON d.keeperDaysID = b.keeperDaysID
-                          JOIN pet p ON p.petID = b.petID
-                          left join keeper k on k.keeperID = d.keeperID
-                          left join user u ON u.userID = k.userID
-                          WHERE d.keeperID = $keeperID;";
-            
+                $query = "SELECT b.bookingID, b.startDate, b.endDate, concat(u.firstName, ' ', u.lastName) as nameKeeper,b.petID, b.totalValue,b.amountReservation, p.petName,b.status FROM booking b 
+                        JOIN pet p ON p.petID = b.petID
+                        left join keeper k on k.keeperID = b.keeperID
+                        left join user u ON u.userID = k.userID
+                        WHERE b.keeperID = $keeperID;";
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
                 if($resultSet){
@@ -100,8 +104,8 @@ class BookingDAO implements IBookingDAO{
                         $booking = new Booking();
                         $booking->setBookingID($row['bookingID']);
                         $booking->setKeeperID($row['nameKeeper']);
-                        $booking->setFirstDate($row['firstDate']);
-                        $booking->setLastDate($row['lastDate']);
+                        $booking->setStartDate($row['startDate']);
+                        $booking->setEndDate($row['endDate']);
                         $booking->setPetID($row['petName']);
                         $booking->setTotalValue($row['totalValue']);
                         $booking->setAmountReservation($row['amountReservation']);
@@ -110,19 +114,21 @@ class BookingDAO implements IBookingDAO{
                     } return $bookingList;  
                 } else { echo "<h1>No existen reservas</h1>"; return NULL; }
             } catch (Exception $ex) { throw $ex; }
-        }
+        }//FALTA EL ELSE SI ES QUE TIENE VENCIDA LA SESSION
     }
     public function showBookingByOwnerID($petListOwner){
         if(isset($_SESSION["loggedUser"])){
             $ownerID = $_SESSION["loggedUser"]->getOwnerID();
         try{
-            $query = "SELECT b.bookingID, d.firstDate, d.lastDate, b.totalValue,b.amountReservation, p.petName, concat(u.firstName, ' ', u.lastName) as nameKeeper, b.status FROM booking b 
-                      left join keeperdays d ON d.keeperDaysID = b.keeperDaysID
-                      left join pet p ON p.petID = b.petID
-                      left join keeper k ON k.keeperID = d.keeperID
-                      left join user u ON u.userID = k.userID  
-                      JOIN owner o ON o.ownerID = p.ownerID
-                      WHERE o.ownerID = $ownerID";
+            $query = "SELECT b.bookingID, b.startDate, b.endDate, 
+            b.totalValue,b.amountReservation, p.petName, concat(u.firstName, ' ', u.lastName) as nameKeeper,
+            b.status FROM booking b 
+                    left join pet p ON p.petID = b.petID
+                    left join keeper k ON k.keeperID = b.keeperID
+                    left join user u ON u.userID = k.userID  
+                    JOIN owner o ON o.ownerID = p.ownerID
+                    WHERE o.ownerID = $ownerID
+                    ORDER BY b.status ASC";
         
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
@@ -132,23 +138,22 @@ class BookingDAO implements IBookingDAO{
                     $booking = new Booking();
                     $booking->setBookingID($row['bookingID']);
                     $booking->setKeeperID($row['nameKeeper']);
-                    $booking->setFirstDate($row['firstDate']);
-                    $booking->setLastDate($row['lastDate']);
+                    $booking->setStartDate($row['startDate']);
+                    $booking->setEndDate($row['endDate']);
                     $booking->setPetID($row['petName']);
                     $booking->setTotalValue($row['totalValue']);
                     $booking->setAmountReservation($row['amountReservation']);
                     $booking->setStatus($row['status']);               
                     array_push($bookingList,$booking);
                 } return $bookingList;  
-            } else { return NULL; }
+            } else { return  NULL; }
         } catch (Exception $ex) { throw $ex; }
         }
     }
     public function searchBookingByID($bookingID){
         try{
-            $query = "SELECT b.bookingID, b.petID, b.status, b.totalValue, b.amountReservation, kd.firstDate, kd.lastDate, kd.keeperID
-                      FROM booking b INNER JOIN keeperdays kd ON b.keeperdaysID = kd.keeperdaysID
-                      WHERE bookingID = $bookingID;";
+            $query = "SELECT *
+                    FROM booking WHERE bookingID = $bookingID;";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             if($resultSet){
@@ -160,11 +165,34 @@ class BookingDAO implements IBookingDAO{
                     $booking->setStatus($row['status']);
                     $booking->setTotalValue($row['totalValue']);
                     $booking->setAmountReservation($row['amountReservation']);
-                    $booking->setFirstDate($row['firstDate']);
-                    $booking->setLastDate($row['lastDate']);
+                    $booking->setStartDate($row['startDate']);
+                    $booking->setEndDate($row['endDate']);
                 }
                 return $booking;
             } else {return Null;}
         } catch(Exception $ex){ throw $ex;}
     }
+
+    //Cuenta cantidad de dias de reserva
+    public function calculateTotalDays($dateStart, $dateEnd, $keeperID) {
+        try {
+            $query = "SELECT COUNT(*) AS totalDays FROM `keeperdays` 
+                      WHERE `keeperID` = $keeperID 
+                      AND `day` BETWEEN '$dateStart' AND '$dateEnd';";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            // Si no es vacio, opero sobre el valor de la respuesta.
+            if ($resultSet && isset($resultSet[0]['totalDays'])) {
+                // Transformo el valor para que no sea un string -> De string a entero.
+                return intval($resultSet[0]['totalDays']);
+            } else {
+                return 0; // Si no tiene valor devuelvo 0.
+            }
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    
+    
+    
 }?>

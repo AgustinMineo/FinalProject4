@@ -3,11 +3,12 @@
  use Models\Keeper as Keeper;
  use Helper\SessionHelper as SessionHelper;
 
- use DAO\KeeperDAO as KeeperDAO;
+ //use DAO\KeeperDAO as KeeperDAO;
+ 
+ //use DAO\OwnerDAO as OwnerDAO;
  use DAO\MailerDAO as MailerDAO;
- //use DAODB\KeeperDAO as KeeperDAO;
- use DAO\OwnerDAO as OwnerDAO;
- //use DAODB\OwnerDAO as OwnerDAO;
+ use DAODB\KeeperDAO as KeeperDAO;
+ use DAODB\OwnerDAO as OwnerDAO;
  
  class KeeperController{
     private $KeeperDAO;
@@ -35,8 +36,13 @@
     public function myProfile($keeper){
         require_once(VIEWS_PATH."myProfileKeeper.php");
     }
+    public function updateDaysAvailables(){
+        require_once(VIEWS_PATH."keeperNav.php");
+        require_once(VIEWS_PATH."updateAvailabilityDays.php");
+    }
 
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cbu,$answerRecovery,$questionRecovery){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,
+    $password,$confirmPassword,$animalSize,$price,$userDescription,$cbu,$QuestionRecovery,$answerRecovery){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -51,8 +57,8 @@
             $newKeeper->setAnimalSize($animalSize);
             $newKeeper->setPrice($price);
             $newKeeper->setCBU($cbu);
+            $newKeeper->setQuestionRecovery($QuestionRecovery);
             $newKeeper->setAnswerRecovery($answerRecovery);
-            $newKeeper->setQuestionRecovery($questionRecovery);
             $this->KeeperDAO->AddKeeper($newKeeper);
             $this->newMailer->welcomeMail($lastName,$firstName,$email);
             $this->goLoginKeeper();
@@ -91,8 +97,8 @@
         }
     }
 // MIGRAR A DAO
-    public function updateAvailabilityDays($date1,$date2){
-        $value = $this->KeeperDAO->changeAvailabilityDays(SessionHelper::getCurrentKeeperID(),$date1,$date2);
+    public function updateAvailabilityDays($date1,$date2,$available){
+        $value = $this->KeeperDAO->changeAvailabilityDays(SessionHelper::getCurrentKeeperID(),$date1,$date2,$available);
         if($value){
             echo '<div class="alert alert-success">The new dates were set correctly</div>';
         }else{
@@ -103,7 +109,6 @@
 
     public function showCurrentKeeper(){
         $keeper=$this->KeeperDAO->searchKeeperByEmail(SessionHelper::getCurrentUser()->getEmail());
-        var_dump($keeper);
         $this->myProfile($keeper);
     }
  }

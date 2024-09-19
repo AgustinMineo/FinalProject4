@@ -1,11 +1,11 @@
 <?php
 namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+//use DAO\KeeperDAO as KeeperDAO;
+use DAODB\OwnerDAO as OwnerDAO;
+use DAODB\KeeperDAO as KeeperDAO;
 use Models\Owner as Owner;
-use DAO\KeeperDAO as KeeperDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
 use Models\Keeper as Keeper;
 use Helper\SessionHelper as SessionHelper;
 
@@ -45,7 +45,8 @@ class UserController{
 
     public function logOut(){
         SessionHelper::sessionEnd();
-        require_once(VIEWS_PATH."mainLanding.php");
+        //require_once(VIEWS_PATH."mainLanding.php");
+        header("location: " . FRONT_ROOT . VIEWS_PATH . "loginUser.php");
     }
 
     public function loginUser($email,$password){
@@ -63,12 +64,9 @@ class UserController{
                             $_SESSION["loggedUser"] = $loggedUser;
                             echo '<div class="alert alert-success">Login successful!</div>';
                             $this->goLandingKeeper();
-                            }else{
-                                $this->gologinUser();
-                                echo '<div class="alert alert-danger">The user doesn´t  ERROR KEEPER NO EXISTE exist. Please register!</div>';
                             }
                     }else{
-                        echo '<div class="alert alert-danger">The user doesn´t exist. Please register!</div>';
+                        
                         $this->gologinUser();
                     }
                 }catch ( Exception $ex) {
@@ -223,7 +221,7 @@ class UserController{
 
     public function updatePassword($password,$password1){
         if($password == $password1){
-            $response=$this->OwnerDAO->updatePassword($password,SessionHelper::getCurrentUser()->getEmail());
+            $response=$this->OwnerDAO->updatePassword(md5($password),SessionHelper::getCurrentUser()->getEmail());
             if($response){
                 echo '<div class="alert alert-success">You have successful update your Password!</div>';
                 $this->goEditOwner($response);

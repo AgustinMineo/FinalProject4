@@ -2,10 +2,14 @@
 namespace Controllers;
 
 use Models\Pet as Pet;
-use DAO\PetDAO as PetDAO;
-//use DAODB\PetDAO as PetDAO;
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
+
+//          Json
+//use DAO\PetDAO as PetDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+
+//          DB
+use DAODB\PetDAO as PetDAO;
+use DAODB\OwnerDAO as OwnerDAO;
 use Helper\SessionHelper as SessionHelper;
 
 class PetController{
@@ -19,6 +23,11 @@ class PetController{
     public function __construct(){
         $this->PetDAO = new PetDAO();
         $this->OwnerDAO = new OwnerDAO();       
+    }
+
+    public function goNewPet(){
+        require_once(VIEWS_PATH."ownerNav.php");
+        require_once(VIEWS_PATH . "pet-add.php");
     }
     
     public function newPet($petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){

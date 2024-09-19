@@ -1,18 +1,19 @@
 [
     {
         "keeperId": 1,
-        "lastName": "keeper",
-        "firstName": "keeper",
-        "cellPhone": "23123123123",
+        "lastName": "Keeper",
+        "firstName": "Keeper",
+        "cellPhone": "234234234",
         "birthDate": "2004-01-01",
         "email": "keeper@keeper.com",
-        "password": "123456",
-        "firstAvailabilityDays": null,
-        "lastAvailabilityDays": null,
+        "password": "123",
+        "firstAvailabilityDays": "2022-11-22",
+        "lastAvailabilityDays": "2022-11-30",
         "animalSize": "Medium",
-        "cbu": "1231234123123121",
-        "price": "250",
-        "answerRecovery": "What is your favorite breed of dog?",
-        "questionRecovery": "Husky"
+        "cbu": "231231231231",
+        "points": null,
+        "price": "2500",
+        "answerRecovery": "What is your pet's favorite place?",
+        "questionRecovery": "The park"
     }
 ]

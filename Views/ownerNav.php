@@ -21,7 +21,7 @@ require_once(VIEWS_PATH."validate-session.php");
                   <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Owner/showCurrentOwner">My profile</a>
               </li>
               <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
-                  <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Views/pet-add.php">New pet</a>
+                  <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Pet/goNewPet">New pet</a>
               </li>   
               <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                   <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Pet/showPets">Show my pet</a>
@@ -33,7 +33,7 @@ require_once(VIEWS_PATH."validate-session.php");
                   <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Booking/showBookingsOwner">Show Bookings</a>
               </li> 
               <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
-                  <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Views/searchByDateBooking.php">Booking with a Keepers</a>
+                  <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Booking/searchBooking">Booking with a Keepers</a>
               </li>
               <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                   <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>User/logOut">Log Out</a>

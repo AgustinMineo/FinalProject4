@@ -53,6 +53,7 @@ require_once(VIEWS_PATH."validate-session.php");
     <div class="container d-flex p-5 flex-wrap flex-row w-100 bg-light">
         
         <div class="container d-flex col-md-4 w-auto p-5  flex-wrap bg-light text-center"><div class='alert alert-success'><h1>Los keeper disponibles entre las fechas seleccionadas son</h1></div></div>
+       
         <?php
         if($listKeepers){
 
@@ -77,10 +78,10 @@ require_once(VIEWS_PATH."validate-session.php");
             <li class="list-group-item bg-light text-dark">Pet Size : <?php echo $keeper->getAnimalSize()?></li>
             
             
-            <li class="list-group-item bg-secondary text-white">Del <?php $date=date_create($keeper->getFirstAvailabilityDays()); echo date_format($date,"d/m/Y");?></li>
+            <li class="list-group-item bg-secondary text-white">Del <?php $date=date_create($value1); echo date_format($date,"d/m/Y");?></li>
             
             
-            <li class="list-group-item bg-light text-dark">Al <?php $date=date_create($keeper->getLastAvailabilityDays()); echo date_format($date,"d/m/Y");?></li>
+            <li class="list-group-item bg-light text-dark">Al <?php $date=date_create($value2); echo date_format($date,"d/m/Y");?></li>
             <div class="checkboxID actionCheck">
             <label style=" width:100%; padding:0; margin:0;"> <input type="radio" id="" name="email" value="<?php echo $keeper->getEmail();?>"><span>Reservar con este Keeper</span></label><!--/// Cambiar el email por el keeperID-->
             </div>
@@ -123,6 +124,9 @@ else{
     echo "<div class='container w-100 text-center'><div class='alert alert-success'><h1>Tus pets disponibles</h1></div></div>";
 }
     ?>
+    <!-- Campos ocultos para value1 y value2 -->
+    <input type="hidden" name="startDate" value="<?php echo $value1; ?>">
+    <input type="hidden" name="finishDate" value="<?php echo $value2; ?>">
         <button type="submit" class="btn btn-info d-flex justify-content-center align-content-center w-100">Reservation</button>  
     </div>
     </div>

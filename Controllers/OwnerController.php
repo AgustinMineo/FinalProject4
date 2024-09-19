@@ -1,12 +1,13 @@
 <?php
  namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
-use Models\Owner as Owner;
-use DAO\KeeperDAO as KeeperDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+//use DAO\KeeperDAO as KeeperDAO;
+use DAODB\OwnerDAO as OwnerDAO;
+use DAODB\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;
+
+use Models\Owner as Owner;
 
 use Helper\SessionHelper as SessionHelper;
 
@@ -37,7 +38,7 @@ use Helper\SessionHelper as SessionHelper;
         require_once(VIEWS_PATH."myProfileOwner.php");
     }
 
-    public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userDescription,$answerRecovery,$questionRecovery){ 
+    public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){ 
         if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
             if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -50,8 +51,8 @@ use Helper\SessionHelper as SessionHelper;
                     $newOwner->setPassword($password);
                     $newOwner->setDescription($userDescription);
                     $newOwner->setPetAmount('0');
+                    $newOwner->setQuestionRecovery($QuestionRecovery);
                     $newOwner->setAnswerRecovery($answerRecovery);
-                    $newOwner->setQuestionRecovery($questionRecovery);
                     $this->OwnerDAO->AddOwner($newOwner);
                     $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
                     $this->goLandingOwner();

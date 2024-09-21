@@ -2,6 +2,8 @@
 namespace Views;
 
 if(!isset($_SESSION["loggedUser"])){
-    require_once(VIEWS_PATH. "loginUser.php");
+    header("Location: loginUser.php");
+    exit();
+    //require_once(VIEWS_PATH. "loginUser.php");
 }
 ?>

@@ -56,6 +56,7 @@ class BookingController{
         $this->MailerDAO = new MailerDAO();
     }
     public function bookingBuild($value1,$value2){
+        SessionHelper::validateUserRole([2]);
         // if($value1 > $value2){
         //     echo "<div class='alert alert-danger'>Las fechas no son correctas</div>";
         //     $this->goIndex(); }
@@ -90,6 +91,7 @@ class BookingController{
         }
 
     public function newBooking($email,$petId,$startDate,$finishDate){
+        SessionHelper::validateUserRole([2]);
         $newBooking = new Booking();
         $keeperInfo = new Keeper(); //CHECK
         $keeperInfo=$this->keeperDAO->searchKeeperByEmail($email);
@@ -114,12 +116,14 @@ class BookingController{
     }
 // MIGRAR A DAO
     public function showBookings(){
+        SessionHelper::validateUserRole([3]);
         $bookingListKeeper = array();
         $bookingListKeeper= $this->BookingDAO->showBookingByKeeperID();
         require_once(VIEWS_PATH."showBookingKeeper.php");
     }
 //MIGRAR A DAO
     public function showBookingsOwner(){
+        SessionHelper::validateUserRole([2]);
         $bookingListKeeper = array();
         $petListByOwner = array();
         $petListByOwner=$this->petDAO->searchPetList();
@@ -139,6 +143,7 @@ class BookingController{
     }
 // MIGRAR A DAO
     public function updateBookingStatus($idBooking,$status){
+        SessionHelper::validateUserRole([3]);
         $value = $this->BookingDAO->updateByID($idBooking,$status);
         if($value){
             if($status == 2){
@@ -157,6 +162,7 @@ class BookingController{
         }
     }
     public function petWithBooking($petID){
+        SessionHelper::validateUserRole([2,3]);
         try{
             $query = "SELECT petID FROM ".$this->bookingTable." WHERE petID = $petID;";
 
@@ -164,16 +170,6 @@ class BookingController{
             $resultSet = $this->connection->Execute($query);
             if($resultSet){ return $resultSet; } else { return NULL; } 
         } catch( Exception $ex ){ throw $ex; }
-    }
-
-    public function priceCounter($first, $last, $price){
-
-        $firstDay = strtotime($first);
-        $lastDay = strtotime($last);
-        $timeDiff = abs($firstDay - $lastDay);
-        $numberDays = $timeDiff/86400;  // 86400 SEGUNDOS EN EL DIA
-        $numberDays = intval($numberDays); // PARA PASARLO A ENTERO
-        return $price * $numberDays;
     }
 
 

@@ -11,8 +11,10 @@ CREATE TABLE `User` (
   `birthdate` date DEFAULT NULL,
   `password` varchar(32) NOT NULL,
   `userDescription` varchar(255) DEFAULT NULL,
-   `questionRecovery` varchar(80) DEFAULT NULL,
-   `answerRecovery` varchar(120) DEFAULT NULL,
+  `questionRecovery` varchar(80) DEFAULT NULL,
+  `answerRecovery` varchar(120) DEFAULT NULL,
+  `rolID` tinyint(1) NOT NULL,
+  CONSTRAINT FK_UserRole FOREIGN KEY (`roleID`) REFERENCES `Roles`(`roleID`)
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB;
@@ -85,10 +87,19 @@ CREATE TABLE `Status`(
 CREATE TABLE `Review`(
 	`reviewID` int(11) NOT NULL AUTO_INCREMENT,
     `description` varchar(255),
-     `rank` tinyint(5),
-     `bookingID` int(11) NOT NULL references Booking(bookingID),
+    `rank` tinyint(5),
+    `bookingID` int(11) NOT NULL references Booking(bookingID),
     PRIMARY KEY (`reviewID`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE `Roles`(
+  `roleID` TINYINT(1) NOT NULL,
+  `roleName` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`roleID`)
+)ENGINE=InnoDB;
+
+
+INSERT INTO `roles` (roleID, roleName) VALUES (1, 'Admin'), (2, 'Owner'), (3, 'Keeper');
 
 /*                                INSERT DE STATUS EN LA TABLA STATUS                       */
 INSERT INTO status VALUES ("1","Peding"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed");

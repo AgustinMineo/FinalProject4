@@ -1,7 +1,7 @@
 <?php
 namespace Views;
+require_once("validate-session.php");
 require_once(VIEWS_PATH."keeperNav.php");
-require_once(VIEWS_PATH."validate-session.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +9,7 @@ require_once(VIEWS_PATH."validate-session.php");
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Document</title>
+     <title>Pet Hero</title>
 </head>
 <body>
      <main class="py-5">

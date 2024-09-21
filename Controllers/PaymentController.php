@@ -37,6 +37,7 @@ class PaymentController {
 
 
     public function generatePaymentBooking($booking){
+        SessionHelper::validateUserRole([2]);
         //$Booking=$this->BookingDAO->searchBookingByKeeperID($booking);
         $Booking=$this->BookingDAO->searchBookingByID($booking);
         $keeper = $this->KeeperDAO->searchKeeperByID($Booking->getKeeperId()); 
@@ -47,9 +48,11 @@ class PaymentController {
             echo '<div class="alert alert-success">The payment was successful! Please wait until the keeper accepts your reservation. </div>';
             $this->BookingDAO->updateByID($booking,"4");
             $this->goLanding();
+        }else if($status == false){
+            echo '<div class="alert alert-danger">Error al enviar el comprobante</div>';
+            $this->goLanding();
         }else{
             echo '<div class="alert alert-danger">The payment could not be made.. </div>';
-            echo $status;
             $this->goLanding();
         }
     }

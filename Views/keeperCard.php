@@ -1,7 +1,7 @@
 <?php
 namespace Views;
+require_once("validate-session.php");
 include ("ownerNav.php");
-require_once(VIEWS_PATH."validate-session.php");
 ?>
 
 

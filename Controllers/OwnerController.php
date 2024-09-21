@@ -28,6 +28,7 @@ use Helper\SessionHelper as SessionHelper;
         require_once(VIEWS_PATH."loginUser.php");
     }
     public function goLandingOwner(){
+        SessionHelper::validateUserRole([2]);
         require_once(VIEWS_PATH."landingPage.php");
     }
     public function addOwnerView(){
@@ -38,7 +39,8 @@ use Helper\SessionHelper as SessionHelper;
         require_once(VIEWS_PATH."myProfileOwner.php");
     }
 
-    public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){ 
+    public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,
+    $confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){ 
         if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
             if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -50,9 +52,10 @@ use Helper\SessionHelper as SessionHelper;
                     $newOwner->setEmail($email);
                     $newOwner->setPassword($password);
                     $newOwner->setDescription($userDescription);
-                    $newOwner->setPetAmount('0');
+                    $newOwner->setPetAmount(0);
                     $newOwner->setQuestionRecovery($QuestionRecovery);
                     $newOwner->setAnswerRecovery($answerRecovery);
+                    $newOwner->setRol(2);
                     $this->OwnerDAO->AddOwner($newOwner);
                     $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
                     $this->goLandingOwner();
@@ -69,6 +72,7 @@ use Helper\SessionHelper as SessionHelper;
 }
 
     public function showCurrentOwner(){
+        //SessionHelper::validateUserRole([2]);
         $owner=$this->OwnerDAO->searchOwnerByEmail(SessionHelper::getCurrentUser()->getEmail());
         $this->goMyProfile($owner);
     }

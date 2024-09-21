@@ -103,7 +103,7 @@ CREATE TABLE `Review`(
 INSERT INTO `roles` (roleID, roleName) VALUES (1, 'Admin'), (2, 'Owner'), (3, 'Keeper');
 
 /*                                INSERT DE STATUS EN LA TABLA STATUS                       */
-INSERT INTO status VALUES ("1","Peding"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed");
+INSERT INTO status VALUES ("1","Pending"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed");
 /*                                INSERT DE STATUS EN LA TABLA STATUS                       */
 
 

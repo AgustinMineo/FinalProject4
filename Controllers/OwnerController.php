@@ -1,11 +1,12 @@
 <?php
  namespace Controllers;
 
-use DAO\OwnerDAO as OwnerDAO;
-//use DAODB\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+//use DAO\KeeperDAO as KeeperDAO;
 use Models\Owner as Owner;
-use DAO\KeeperDAO as KeeperDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
+
+use DAODB\OwnerDAO as OwnerDAO;
+use DAODB\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;
 
 use Helper\SessionHelper as SessionHelper;

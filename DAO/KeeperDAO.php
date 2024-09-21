@@ -40,6 +40,7 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["password"] = $Keeper->getPassword();
           $keeperValue["firstAvailabilityDays"] = $Keeper->getFirstAvailabilityDays();// cambiar a 2 variables
           $keeperValue["lastAvailabilityDays"] = $Keeper->getLastAvailabilityDays();// cambiar a 2 variables
+          $keeperValue["userDescription"] = $Keeper->getDescription();
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
           $keeperValue["cbu"] = $Keeper->getCBU();
           $keeperValue["points"] = $Keeper->getPoints();
@@ -73,8 +74,8 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setFirstAvailabilityDays($KeeperDecode["firstAvailabilityDays"]);
               $keeper->setLastAvailabilityDays($KeeperDecode["lastAvailabilityDays"]);
               $keeper->setAnimalSize($KeeperDecode["animalSize"]);
+              $keeper->setDescription($KeeperDecode["userDescription"]);
               $keeper->setPrice($KeeperDecode["price"]);
-              $keeper->setPoints($KeeperDecode["points"]);
               $keeper->setCBU($KeeperDecode["cbu"]);
               $keeper->setAnswerRecovery($KeeperDecode["answerRecovery"]);
               $keeper->setQuestionRecovery($KeeperDecode["questionRecovery"]);
@@ -174,8 +175,8 @@ class KeeperDAO implements IKeeperDAO{
 
     public function updateCellphoneKeeper($newCellphone,$emailUser){
     $keeper = $this->searchKeeperByEmail($emailUser);
-    $owner->setCellPhone($newCellphone);
-    $keeper->SaveData();
+    $keeper->setCellPhone($newCellphone);
+    $this->SaveData();
     return $keeper;
 }
     public function updateDescriptionKeeper($newDescription,$emailUser){
@@ -192,13 +193,13 @@ class KeeperDAO implements IKeeperDAO{
 }
     public function updatePriceKeeper($newPrice,$emailUser){
     $keeper = $this->searchKeeperByEmail($emailUser);
-    $keeper->setDescription($newPrice);
+    $keeper->setPrice($newPrice);
     $this->SaveData();
     return $keeper;
 }
     public function updateCBUKeeper($newCBU,$emailUser){
     $keeper = $this->searchKeeperByEmail($emailUser);
-    $keeper->setDescription($newCBU);
+    $keeper->setCBU($newCBU);
     $this->SaveData();
     return $keeper;
 }

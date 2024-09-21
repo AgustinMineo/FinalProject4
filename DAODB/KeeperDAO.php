@@ -125,7 +125,7 @@ class KeeperDAO implements IKeeperDAO{
   
               return $keeperList;
           } else {
-              return NULL;
+              return null;
           }
       } catch (Exception $ex) {
           throw $ex;
@@ -215,7 +215,11 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setRol($row['roleID']);
             return $keeper;
           }
-        } else { return NULL; } }
+        } else { 
+          echo '<div class="alert alert-danger">No existen keepers disponibles</div>';
+          return NULL; 
+        } 
+      }
       catch (Exception $ex) { throw $ex; } 
     }
     public function searchKeeperToLogin($email,$password){

@@ -5,8 +5,8 @@ class Booking {
     private $bookingID;  /// booking ID
     private $status;   /// 1 pending - 2 rejected -- 3 accepted -- 4 Confirmed -- 5 Finish
     private $petID;    /// id pet and owner from petOwner
-    private $firstDate; // start date
-    private $lastDate; /// finish date
+    private $startDate; // start date
+    private $endDate; /// finish date
     private $keeperID; /// keeper id
     private $totalValue; /// Total value from the reservation
     private $amountReservation; /// amount reservation
@@ -30,17 +30,17 @@ class Booking {
     public function setPetID($petID){
         $this->petID = $petID;
     }
-    public function getFirstDate(){
-        return $this->firstDate;
+    public function getStartDate(){
+        return $this->startDate;
     }
-    public function setFirstDate($firstDate){
-        $this->firstDate = $firstDate;
+    public function setStartDate($startDate){
+        $this->startDate = $startDate;
     }
-    public function getLastDate(){
-        return $this->lastDate;
+    public function getEndDate(){
+        return $this->endDate;
     }
-    public function setLastDate($lastDate){
-        $this->lastDate = $lastDate;
+    public function setEndDate($endDate){
+        $this->endDate = $endDate;
     }
     public function getKeeperID(){
         return $this->keeperID;

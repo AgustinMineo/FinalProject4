@@ -1,16 +1,18 @@
-<?php 
+<?php
 namespace Views;
+require_once("validate-session.php");
+require_once ("ownerNav.php");
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <!-- JavaScript Bundle with Popper -->
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-     <!-- CSS only -->
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"  crossorigin="anonymous"></script>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
      <main class="py-5">
      <title>PET HERO</title>
 </head>
@@ -95,12 +97,12 @@ namespace Views;
                               <div class="col-lg-4 w-100 d-flex justify-content-center align-content-center flex-wrap">
                                    <div class="form-group w-50">
                                         <label for="">Pet Age</label>
-                                        <input type="date" name="petAge" placeholder="Age" value="" max="2022-10-01" class="form-control" Required >
+                                        <input type="number" name="petAge" placeholder="Age" value=""  class="form-control" Required >
                                    </div>
                               </div>
                          </div>
                          <div class="container d-flex justify-content-center align-content-center mt-5 w-50">
-                              <button type="submit" class="btn bg-success ml-auto d-block w-50 mr-3">Save</button>
+                              <button type="submit" class="btn bg-success ml-auto d-block w-50 mr-3">Guardar</button>
                               </div>
                          </form>
                </div>

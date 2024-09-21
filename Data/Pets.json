@@ -24,5 +24,31 @@
         "petWeight": "Medium",
         "ownerID": "1",
         "petAge": "2022-10-01"
+    },
+    {
+        "petID": 3,
+        "petName": "Rocco",
+        "petImage": "https:\/\/content.nationalgeographic.com.es\/medio\/2023\/11\/29\/golden-retriever-corriendo_7a50f15e_231129131211_800x800.jpg",
+        "breedID": "2",
+        "petSize": "Medium",
+        "petVaccinationPlan": "https:\/\/content.nationalgeographic.com.es\/medio\/2023\/11\/29\/golden-retriever-corriendo_7a50f15e_231129131211_800x800.jpg",
+        "petDetails": "Le gusta jugar mucho",
+        "petVideo": "",
+        "petWeight": "Light",
+        "ownerID": 2,
+        "petAge": "2020-01-30"
+    },
+    {
+        "petID": 4,
+        "petName": "Nombre",
+        "petImage": "https:\/\/encrypted-tbn0.gstatic.com\/images?q=tbn:ANd9GcTXXq-lVTezao2Cw1jYYDSegIVh6puWjl20yC25vlmOMjq7IHjQqFgoAs13ajFMPbXIksM&usqp=CAU",
+        "breedID": "1",
+        "petSize": "Medium",
+        "petVaccinationPlan": "https:\/\/encrypted-tbn0.gstatic.com\/images?q=tbn:ANd9GcTXXq-lVTezao2Cw1jYYDSegIVh6puWjl20yC25vlmOMjq7IHjQqFgoAs13ajFMPbXIksM&usqp=CAU",
+        "petDetails": "https:\/\/encrypted-tbn0.gstatic.com\/images?q=tbn:ANd9GcTXXq-lVTezao2Cw1jYYDSegIVh6puWjl20yC25vlmOMjq7IHjQqFgoAs13ajFMPbXIksM&usqp=CAU",
+        "petVideo": "",
+        "petWeight": "Light",
+        "ownerID": 3,
+        "petAge": "2022-09-26"
     }
 ]

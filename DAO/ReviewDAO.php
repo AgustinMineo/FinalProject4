@@ -1,7 +1,23 @@
 <?php
 namespace DAO;
-
+/*      Models      */
 use Models\Review as Review;
+use Models\Owner as Owner;
+use Models\Keeper as Keeper;
+use Models\Booking as Booking;
+/*      Models      */
+
+/*      DAO      */
+use DAO\OwnerDAO as OwnerDAO;
+use DAO\KeeperDAO as KeeperDAO;
+
+/*      DAO      */
+
+/*      DAODB      */
+//use DAODB\OwnerDAO as OwnerDAO;
+//use DAODB\KeeperDAO as KeeperDAO;
+//use DAODB\BookingDAO as BookingDAO;
+/*      DAODB      */
 
 class ReviewDAO implements IReviewDAO{
 
@@ -9,23 +25,22 @@ class ReviewDAO implements IReviewDAO{
 
     public function AddReview($review){
         $this->RetriveData();
-       // $review->setReviewID($this->ReviewID());
         array_push($this->reviewList,$review);
         $this->SaveData();
         return true;
     }
 
     public function GetAllReview(){
-        // bring all of the owners
+     
         $this->RetriveData();
-        // return the owner list
+       
         return $this->reviewList;
     }
 
     private function SaveData(){
-        // creamos un arreglo de pets
+    
         $reviewArrayEncode= array();
-        // recorremos la lista y guardamos la info del los pets.
+   
         foreach($this->reviewList as $review){
             $reviewValue = array();
             $reviewValue["reviewID"] = $review->getReviewID();
@@ -41,10 +56,10 @@ class ReviewDAO implements IReviewDAO{
 
     private function RetriveData(){
         $this->petList = array();
-        //Tenemos que tener el file creado
+       
         if(file_exists('Data/Reviews.json')){
             $reviewFile = file_get_contents(ROOT.'Data/Reviews.json');
-            // Si el file tiene datos hace un decode de la info y la guarda en el arreglo, sino devuelve un arreglo vacio.
+          
             $reviewFileDecode = ($reviewFile) ? json_decode($reviewFile, true) : array();
             
             foreach($reviewFileDecode as $reviewDecode){
@@ -63,11 +78,11 @@ class ReviewDAO implements IReviewDAO{
 
 
 
-    public function searchReviewByOwner(){
+    public function searchReviewByOwner($Owner){
         
     }
 
-    public function searchReviewByKeeper(){
+    public function searchReviewByKeeper($keeper){
 
     }
 }

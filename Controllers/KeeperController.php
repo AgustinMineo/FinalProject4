@@ -21,6 +21,7 @@ class KeeperController{
         $this->newMailer = new MailerDAO();
         $this->OwnerDAO = new OwnerDAO();
     }
+
     public function addKeeperView(){
         require_once(VIEWS_PATH."keeper-add.php");
     }
@@ -28,16 +29,25 @@ class KeeperController{
         require_once(VIEWS_PATH."loginUser.php");
     }
     public function goLandingKeeper(){
+        SessionHelper::validateUserRole([3]);
         require_once(VIEWS_PATH."keeperNav.php");
     }
     public function Index($message = ""){
+        SessionHelper::validateUserRole([3]);
          require_once(VIEWS_PATH."keeperNav.php");
     }
     public function myProfile($keeper){
+        SessionHelper::validateUserRole([3]);
         require_once(VIEWS_PATH."myProfileKeeper.php");
     }
+    public function updateDaysAvailables(){
+        SessionHelper::validateUserRole([3]);
+        require_once(VIEWS_PATH."keeperNav.php");
+        require_once(VIEWS_PATH."updateAvailabilityDays.php");
+    }
 
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,$password,$confirmPassword,$animalSize,$price,$userDescription,$cbu,$answerRecovery,$questionRecovery){
+    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,
+    $password,$confirmPassword,$animalSize,$price,$userDescription,$cbu,$QuestionRecovery,$answerRecovery){
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -52,8 +62,9 @@ class KeeperController{
             $newKeeper->setAnimalSize($animalSize);
             $newKeeper->setPrice($price);
             $newKeeper->setCBU($cbu);
+            $newKeeper->setQuestionRecovery($QuestionRecovery);
             $newKeeper->setAnswerRecovery($answerRecovery);
-            $newKeeper->setQuestionRecovery($questionRecovery);
+            $newKeeper->setRol(3);
             $this->KeeperDAO->AddKeeper($newKeeper);
             $this->newMailer->welcomeMail($lastName,$firstName,$email);
             $this->goLoginKeeper();
@@ -75,14 +86,15 @@ class KeeperController{
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
          //$newKeeper->setKeeperImg($keeperImg);
     }
-// MIGRAR A DAO
+
     public function showKeepers(){
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getAllKeeper();
         require_once(VIEWS_PATH. "showKeeper.php");
     }
-// MIGRAR A DAO
+
     public function showKeepersByAvailability($value1,$value2){
+        SessionHelper::validateUserRole([3]);
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getKeeperByDisponibility($value1,$value2);
         if($listKeepers){
@@ -91,9 +103,10 @@ class KeeperController{
             echo "<h1>No existen keepers con disponibilidad de entre $value1 y $value2</h1>";
         }
     }
-// MIGRAR A DAO
-    public function updateAvailabilityDays($date1,$date2){
-        $value = $this->KeeperDAO->changeAvailabilityDays(SessionHelper::getCurrentKeeperID(),$date1,$date2);
+
+    public function updateAvailabilityDays($date1,$date2,$available){
+        SessionHelper::validateUserRole([3]);
+        $value = $this->KeeperDAO->changeAvailabilityDays(SessionHelper::getCurrentKeeperID(),$date1,$date2,$available);
         if($value){
             echo '<div class="alert alert-success">The new dates were set correctly</div>';
         }else{
@@ -103,8 +116,9 @@ class KeeperController{
     }
 
     public function showCurrentKeeper(){
+        SessionHelper::validateUserRole([3]);
         $keeper=$this->KeeperDAO->searchKeeperByEmail(SessionHelper::getCurrentUser()->getEmail());
         $this->myProfile($keeper);
     }
- }
+}
 ?>

@@ -4,21 +4,24 @@ namespace Controllers;
 //use DAO\OwnerDAO as OwnerDAO;
 //use DAO\KeeperDAO as KeeperDAO;
 
-use Models\Owner as Owner;
-use Models\Keeper as Keeper;
-
 use DAODB\OwnerDAO as OwnerDAO;
 use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\UserDAO as UserDAO;
+use Models\Owner as Owner;
+use Models\Keeper as Keeper;
+use Models\User as User;
 
 use Helper\SessionHelper as SessionHelper;
 
 class UserController{
     private $OwnerDAO;
     private $KeeperDAO;
+    private $UserDAO;
 
     public function __construct(){
         $this->OwnerDAO = new OwnerDAO();
         $this->KeeperDAO = new KeeperDAO();
+        $this->UserDAO = new UserDAO();
     }
 
     public function addOwnerView(){
@@ -28,18 +31,22 @@ class UserController{
         require_once(VIEWS_PATH."keeper-add.php");
     }
     public function goLandingKeeper(){
+        SessionHelper::validateUserRole([3]);
         require_once(VIEWS_PATH."keeperNav.php");
     }
     public function goLandingOwner(){
+        //SessionHelper::validateUserRole([2]);
         require_once(VIEWS_PATH."landingPage.php");
     }
     public function gologinUser(){
         require_once(VIEWS_PATH."loginUser.php");
     }
     public function goEditOwner($owner){
+        SessionHelper::validateUserRole([2]);
         require_once(VIEWS_PATH."myProfileOwner.php");
     }
     public function goEditKeeper($keeper){
+        SessionHelper::validateUserRole([3]);
         require_once(VIEWS_PATH."myProfileKeeper.php");
     }
     public function goRecovery($user){
@@ -48,7 +55,8 @@ class UserController{
 
     public function logOut(){
         SessionHelper::sessionEnd();
-        require_once(VIEWS_PATH."mainLanding.php");
+        //require_once(VIEWS_PATH."mainLanding.php");
+        header("location: " . FRONT_ROOT . VIEWS_PATH . "loginUser.php");
     }
 
     public function loginUser($email,$password){
@@ -66,12 +74,9 @@ class UserController{
                             $_SESSION["loggedUser"] = $loggedUser;
                             echo '<div class="alert alert-success">Login successful!</div>';
                             $this->goLandingKeeper();
-                            }else{
-                                $this->gologinUser();
-                                echo '<div class="alert alert-danger">The user doesn´t  ERROR KEEPER NO EXISTE exist. Please register!</div>';
                             }
                     }else{
-                        echo '<div class="alert alert-danger">The user doesn´t exist. Please register!</div>';
+                        
                         $this->gologinUser();
                     }
                 }catch ( Exception $ex) {
@@ -90,7 +95,7 @@ class UserController{
     }
 
     public function updateLastName($newName){
-        $response=$this->OwnerDAO->updateName($newName,SessionHelper::getCurrentUser()->getEmail());
+        $response=$this->UserDAO->updateFirstName($newName,SessionHelper::getCurrentUser()->getEmail());
         if($response){
             echo '<div class="alert alert-success">You have successful update your Last Name!</div>';
             $this->goEditOwner($response);
@@ -226,7 +231,7 @@ class UserController{
 
     public function updatePassword($password,$password1){
         if($password == $password1){
-            $response=$this->OwnerDAO->updatePassword($password,SessionHelper::getCurrentUser()->getEmail());
+            $response=$this->OwnerDAO->updatePassword(md5($password),SessionHelper::getCurrentUser()->getEmail());
             if($response){
                 echo '<div class="alert alert-success">You have successful update your Password!</div>';
                 $this->goEditOwner($response);

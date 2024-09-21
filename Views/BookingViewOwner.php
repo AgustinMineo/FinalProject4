@@ -1,5 +1,6 @@
 <?php
 namespace Views;
+require_once("validate-session.php");
 require_once(VIEWS_PATH."ownerNav.php");
 ?>
 
@@ -71,22 +72,31 @@ label:hover:before {
                          <th>Actividad</th>
                     </thead>
                     <tbody>
-                         <div class="container d-flex flex-wrap flex-row w-100 bg-light ">
+                         <div class="container d-flex flex-wrap flex-row w-100 ">
                          <?php
                          if($bookingListKeeper){
                               foreach($bookingListKeeper as $booking)
                               {
                                    
                                    ?> 
-                                        <tr class=" table bg-secondary table-hover table align-middle text-center text-white" >
+                                        <tr class="
+                                        <?php 
+                                        if($booking->getStatus() == 1 ){echo "bg-primary";}
+                                        elseif($booking->getStatus() == 2){echo "bg-danger";}
+                                        elseif($booking->getStatus() == 3){echo "bg-primary";}
+                                        elseif($booking->getStatus() == 4){echo "bg-primary";}
+                                        else{echo "bg-success";}
+                                        ?> 
+                                        
+                                        table  table-hover table align-middle text-center text-white" >
                                              
                                              <td><?php echo $value=$booking->getBookingID(); ?></td>
                                              <td><?php echo $booking->getKeeperID() ?></td>
                                              <td><?php echo $booking->getPetID() ?></td>
-                                             <td><?php $date=date_create($booking->getFirstDate()); echo date_format($date,"d/m/Y");  ?></td>
-                                             <td><?php $date=date_create($booking->getLastDate()); echo date_format($date,"d/m/Y");  ?></td>
-                                             <td><?php echo $booking->getAmountReservation() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
-                                             <td><?php echo $booking->getTotalValue()?></td>
+                                             <td><?php $date=date_create($booking->getStartDate()); echo date_format($date,"d/m/Y");  ?></td>
+                                             <td><?php $date=date_create($booking->getEndDate()); echo date_format($date,"d/m/Y");  ?></td>
+                                             <td>$<?php echo $booking->getAmountReservation() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
+                                             <td>$<?php echo $booking->getTotalValue()?></td>
                                              <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}
                                              elseif($booking->getStatus() == 4){echo "<h6>Waiting for confirmation</h6>";}elseif($booking->getStatus() == 5){echo "<h6>Confirmed</h6>";}
                                              elseif($booking->getStatus() == 6){echo "<h6>Finish</h6>";}else{echo "<h6>Finish</h6>";}?></td>

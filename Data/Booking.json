@@ -8,5 +8,15 @@
         "keeperID": 1,
         "totalValue": 2000,
         "amountReservation": 1000
+    },
+    {
+        "bookingID": 2,
+        "status": "1",
+        "petID": "4",
+        "firstDate": "2022-11-22",
+        "lastDate": "2022-11-30",
+        "keeperID": 1,
+        "totalValue": 20000,
+        "amountReservation": 10000
     }
 ]

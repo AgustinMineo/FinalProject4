@@ -3,11 +3,13 @@ namespace Controllers;
 
 use DAO\MailerDAO as MailerDAO;
         // DAO WITH JSON
-        /*
+
+/*
 use DAO\BookingDAO as BookingDAO;
 use DAO\PetDAO as PetDAO;
 use DAO\KeeperDAO as KeeperDAO;
-use DAO\ReviewDAO as ReviewDAO;*/
+use DAO\ReviewDAO as ReviewDAO;
+*/
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;

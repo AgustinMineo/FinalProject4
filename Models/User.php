@@ -8,10 +8,10 @@ abstract class User {
     private $birthDate;
     private $email;
     private $password;
-    private $userImage;
     private $userDescription;
     private $questionRecovery;
     private $answerRecovery;
+    private $rol; // 1- Admin, 2- Owner, 3- Keeper
     
     // Getter and setters
     public function getLastName(){
@@ -55,11 +55,11 @@ abstract class User {
     public function setPassword($password){
          $this->password = $password;
     }
-    public function getImage(){
-        return $this->userImage;
+    public function getRol(){
+        return $this->userRol;
     }
-    public function setImage($image){
-        $this->userImage = $image;
+    public function setRol($Rol){
+        $this->userRol = $Rol;
     }
 
     public function getDescription(){

@@ -17,10 +17,10 @@ class KeeperDAO implements IKeeperDAO{
       try {
          $query = "INSERT INTO ".$this->userTable."
          (userID, firstName, lastName, email, cellphone, 
-         birthdate, password, userDescription,QuestionRecovery,answerRecovery)
+         birthdate, password, userDescription,QuestionRecovery,answerRecovery,roleID)
       VALUES 
       (:userID,:firstName, :lastName, :email,
-      :cellphone, :birthdate, :password, :userDescription,:QuestionRecovery,:answerRecovery);";
+      :cellphone, :birthdate, :password, :userDescription,:QuestionRecovery,:answerRecovery,:roleID);";
                   $parameters["userID"] = NULL;
                   $parameters["firstName"] = $keeper->getfirstName();
                   $parameters["lastName"] = $keeper->getLastName();
@@ -31,7 +31,7 @@ class KeeperDAO implements IKeeperDAO{
                   $parameters["userDescription"] = $keeper->getDescription();
                   $parameters["QuestionRecovery"] =$keeper->getQuestionRecovery();
                   $parameters["answerRecovery"] = $keeper->getAnswerRecovery();
-
+                  $parameters["roleID"] = $keeper->getRol();
                   $this->connection = Connection::GetInstance();
 
                    if($this->connection->ExecuteNonQuery($query, $parameters)){
@@ -193,7 +193,7 @@ class KeeperDAO implements IKeeperDAO{
     public function searchKeeperByEmail($email){
       try {
         $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email, k.keeperID, k.price, k.cbu,
-                  u.userDescription,u.questionRecovery,u.answerRecovery,k.animalSize
+                  u.userDescription,u.questionRecovery,u.answerRecovery,k.animalSize,u.roleID
                   FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID
                   WHERE email = '$email';";
         $this->connection = Connection::GetInstance();
@@ -212,6 +212,7 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setDescription($row['userDescription']);
             $keeper->setQuestionRecovery($row['questionRecovery']);
             $keeper->setAnswerRecovery($row['answerRecovery']);
+            $keeper->setRol($row['roleID']);
             return $keeper;
           }
         } else { return NULL; } }
@@ -220,7 +221,8 @@ class KeeperDAO implements IKeeperDAO{
     public function searchKeeperToLogin($email,$password){
       if($email && $password){
       try {
-      $query = "SELECT k.keeperID, k.animalSize, k.price, k.cbu, u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, u.password, u.userDescription 
+      $query = "SELECT k.keeperID, k.animalSize, k.price, k.cbu, u.firstName, u.lastName, 
+      u.email, u.cellphone, u.birthdate, u.password, u.userDescription, u.roleID 
                 FROM ".$this->userTable." u 
                 RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID 
                 WHERE email = '$email' AND password = md5($password);";
@@ -246,6 +248,7 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setbirthDate($row["birthdate"]);
               $keeper->setPassword($row["password"]);
               $keeper->setDescription($row["userDescription"]);
+              $keeper->setRol($row["roleID"]);
               return $keeper;
               }
           }
@@ -363,7 +366,8 @@ class KeeperDAO implements IKeeperDAO{
     
     public function searchKeeperByID($keeperID){
       try {
-        $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price,k.cbu, k.animalSize 
+        $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, 
+        k.price,k.cbu, k.animalSize,u.rolID 
                   FROM ".$this->userTable." u 
                   INNER JOIN ".$this->keeperTable." k ON u.userID = k.userID 
                   WHERE k.keeperID = $keeperID;";
@@ -381,6 +385,7 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setAnimalSize($row['animalSize']);
             $keeper->setPrice($row['price']);
             $keeper->setCBU($row['cbu']);
+            $keeper->setRol($row['rolID']);
            // $keeper->setFirstAvailabilityDays($row['firstDate']);
             //$keeper->setLastAvailabilityDays($row['lastDate']);
           }
@@ -390,6 +395,7 @@ class KeeperDAO implements IKeeperDAO{
         throw $th;
       }
     }
+    
     public function searchKeeperID($email){
       $query = "SELECT userID FROM ".$this->userTable." Where email = '$email';";
 

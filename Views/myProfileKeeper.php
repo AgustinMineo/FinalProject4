@@ -1,5 +1,6 @@
 <?php
 namespace Views;
+require_once("validate-session.php");
 require_once(VIEWS_PATH."keeperNav.php");
 ?>
 

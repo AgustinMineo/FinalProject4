@@ -112,7 +112,7 @@ class BookingDAO implements IBookingDAO{
                         $booking->setStatus($row['status']);               
                         array_push($bookingList,$booking);
                     } return $bookingList;  
-                } else { echo "<h1>No existen reservas</h1>"; return NULL; }
+                } else { return NULL; }
             } catch (Exception $ex) { throw $ex; }
         }//FALTA EL ELSE SI ES QUE TIENE VENCIDA LA SESSION
     }

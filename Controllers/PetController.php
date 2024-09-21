@@ -2,12 +2,9 @@
 namespace Controllers;
 
 use Models\Pet as Pet;
-
-//          Json
 //use DAO\PetDAO as PetDAO;
 //use DAO\OwnerDAO as OwnerDAO;
 
-//          DB
 use DAODB\PetDAO as PetDAO;
 use DAODB\OwnerDAO as OwnerDAO;
 use Helper\SessionHelper as SessionHelper;

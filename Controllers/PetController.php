@@ -31,35 +31,44 @@ class PetController{
         require_once(VIEWS_PATH . "pet-add.php");
     }
     
-    public function newPet($petName,$petImage,$breedID,$petSize,$petVaccinationPlan,$petDetails,$petVideo,$petWeight,$petAge){
+    public function newPet($petName, $breedID, $petSize,$petDetails, $petWeight, $petAge,$petImage,$petVaccinationPlan,$petVideo) {
         SessionHelper::validateUserRole([2]);
-        if(SessionHelper::getCurrentUser()){
+        if (SessionHelper::getCurrentUser()) {
             
-            //$this->petDAO = new PetDAO();
             $pet = new Pet();
-                
+
             $pet->setPetName($petName);
-            $pet->setPetImage($petImage);
             $pet->setBreedID($breedID);
             $pet->setPetSize($petSize);
-            $pet->setPetVaccinationPlan($petVaccinationPlan);
-            $pet->setPetDetails($petDetails);
-            $pet->setPetVideo($petVideo);
             $pet->setPetWeight($petWeight);
-            $pet->setOwnerID(SessionHelper::getCurrentOwnerID());
+            $pet->setPetDetails($petDetails);
             $pet->setPetAge($petAge);
-            $this->OwnerDAO->incrementPetAmount(SessionHelper::getCurrentOwnerID());
-            $result=$this->PetDAO->AddPet($pet);
-            if($result){
-                echo "<div class='alert alert-success'>$petName was create successfully!</div>";
-                $this->goLandingOwner();
-            }else{
-                echo "<div class='alert alert-danger'>Ups!Error registering the pet!</div>";
-                $this->goLandingOwner();
+            $pet->setOwnerID(SessionHelper::getCurrentOwnerID());
+    
+            $uploadResult = $this->uploadFile($pet);
+    
+            if ($uploadResult['success']) {
+                $pet->setPetImage($uploadResult['petImage']);
+                $pet->setPetVaccinationPlan($uploadResult['vaccinationPlan']);
+                $pet->setPetVideo($uploadResult['video']);
+                
+                $this->OwnerDAO->incrementPetAmount(SessionHelper::getCurrentOwnerID());
+                $result = $this->PetDAO->AddPet($pet);
+    
+                if ($result) {
+                    echo "<div class='alert alert-success'>$petName was created successfully!</div>";
+                    $this->goLandingOwner();
+                } else {
+                    echo "<div class='alert alert-danger'>Ups! Error registering the pet!</div>";
+                    $this->goLandingOwner();
+                }
+            } else {
+                // Manejar errores de carga de archivos
+                echo "<div class='alert alert-danger'>Error uploading files: {$uploadResult['message']}</div>";
             }
-        }else{
-            echo "<div class='alert alert-danger'>Ups!You are not register</div>";
-            }
+        } else {
+            echo "<div class='alert alert-danger'>Ups! You are not registered</div>";
+        }
     }
     public function searchPetList(){
         SessionHelper::validateUserRole([2]);
@@ -80,52 +89,75 @@ class PetController{
         $petList = $this->PetDAO->searchPetList();
         require_once(VIEWS_PATH . "showPet.php");
     }
-     private function UploadFiles(Owner $owner,Pet $pet){ 
-            
-            $message = "";
-
-            if (isset($_FILES['picture'])){
-                if($_FILES['picture']['error']==0){
-                    $dir = IMG_PATH;
-                    $filename = $owner->getUserName() . $pet->getName() . ".jpg"; // debería ser por Id de pet, no nombre
-
-                    $fileToAdd = $dir . $filename;
-
-                    if(move_uploaded_file($_FILES['picture']['tmp_name'], $fileToAdd)){
-                        $message = $message . $_FILES['picture']['name'] . ' was uploaded and saved as '. $filename . '</br>';
-                        $pet->setPicture($filename);
-                    }else{$message = $message . 'ERROR: Could not move Picture file. ';}
-                }else{$message = $message .  'ERROR: Could not upload Picture file. ';}
-            }else{$message = $message .  'ERROR: Could not find Picture file. ';}
-
-            if (isset($_FILES['vacPlan'])){
-                if($_FILES['vacPlan']['error']==0){
-                    $dir = IMG_PATH;
-                    $filename = $owner->getUserName() . $pet->getName() . "-VAC.jpg"; // debería ser por Id de pet, no nombre
-
-                    $fileToAdd = $dir . $filename;
-
-                    if(move_uploaded_file($_FILES['vacPlan']['tmp_name'], $fileToAdd)){
-                        $message = $message .  $_FILES['vacPlan']['name'] . ' was uploaded and saved as '. $filename . '</br>';
-                        $pet->setVacPlan($filename);
-                    }else{$message = $message .  'ERROR: Could not move VacPlan file. ';}
-                }else{$message = $message .  'ERROR: Could not upload VacPlan file. ';}
-            }else{$message = $message .  'ERROR: Could not find VacPlan file. ';}
-
-            if (isset($_FILES['video'])){
-                if($_FILES['video']['error']==0){
-                    $dir = IMG_PATH;
-                    $filename = $owner->getUserName() . $pet->getName() . "-VID.gif"; // debería ser por Id de pet, no nombre
-
-                    $fileToAdd = $dir . $filename;
-
-                    if(move_uploaded_file($_FILES['video']['tmp_name'], $fileToAdd)){
-                        $message = $message .  $_FILES['video']['name'] . ' was uploaded and saved as '. $filename . '</br>';
-                        $pet->setVideo($filename);
-                    }else{$message = $message .  'ERROR: Could not move video file. ';}
-                }else{$message = $message .  'ERROR: Could not upload video file. ';}
-            }else{$message = $message .  'ERROR: Could not find video file. ';}
-            
-            return $message;
+    
+    private function uploadFile(Pet $pet) {
+        $uploadDir = UPLOADS_PATH . "{$pet->getOwnerID()}-{$pet->getBreedID()}-{$pet->getPetName()}/";
+        
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
         }
+    
+        $result = [
+            'success' => true,
+            'petImage' => '',
+            'vaccinationPlan' => '',
+            'video' => '',
+            'message' => ''
+        ];
+    
+        if (isset($_FILES['petImage']) && $_FILES['petImage']['error'] === UPLOAD_ERR_OK) {
+            $imageName = "{$pet->getPetID()}-Image." . pathinfo($_FILES['petImage']['name'], PATHINFO_EXTENSION);
+            if (move_uploaded_file($_FILES['petImage']['tmp_name'], $uploadDir . $imageName)) {
+                $result['petImage'] = $uploadDir . $imageName;
+            } else {
+                $result['success'] = false;
+                $result['message'] .= "Error uploading pet image. ";
+            }
+        }
+    
+        if (isset($_FILES['petVaccinationPlan']) && $_FILES['petVaccinationPlan']['error'] === UPLOAD_ERR_OK) {
+            $allowedFormats = ['jpg', 'jpeg', 'png'];
+            $vacPlanExtension = strtolower(pathinfo($_FILES['petVaccinationPlan']['name'], PATHINFO_EXTENSION));
+            
+            if (in_array($vacPlanExtension, $allowedFormats)) {
+                $vacPlanName = "{$pet->getPetID()}-VaccinationPlan." . $vacPlanExtension;
+                if (move_uploaded_file($_FILES['petVaccinationPlan']['tmp_name'], $uploadDir . $vacPlanName)) {
+                    $result['vaccinationPlan'] = $uploadDir . $vacPlanName;
+                } else {
+                    $result['success'] = false;
+                    $result['message'] .= "Error uploading vaccination plan. ";
+                }
+            } else {
+                $result['success'] = false;
+                $result['message'] .= "Vaccination plan must be an image (jpg, jpeg, png). ";
+            }
+        }
+    
+        
+        if (isset($_FILES['petVideo']) && $_FILES['petVideo']['error'] === UPLOAD_ERR_OK) {
+            // Verificar que el archivo es un MP4
+            $fileType = mime_content_type($_FILES['petVideo']['tmp_name']);
+            if ($fileType === 'video/mp4') {
+                $videoName = "{$pet->getPetID()}-Video." . pathinfo($_FILES['petVideo']['name'], PATHINFO_EXTENSION);
+                if (move_uploaded_file($_FILES['petVideo']['tmp_name'], $uploadDir . $videoName)) {
+                    $result['video'] = $uploadDir . $videoName;
+                    
+                } else {
+                    $result['success'] = false;
+                    $result['message'] .= "Error uploading pet video. ";
+                }
+            } else {
+                $result['success'] = false;
+                
+                $result['message'] .= "Invalid video format. Only MP4 files are allowed. ";
+            }
+        }
+    
+        return $result;
+    }
+    
+    
+    
+    
+    
 }?>

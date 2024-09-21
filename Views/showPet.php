@@ -115,14 +115,19 @@ include ("ownerNav.php");
                                                                       <hr>
                                                                       <h5 class="text-center">Video</h5>
                                                                       <div class="d-flex flex-wrap justify-content-center w-100">
-                                                                           <?php 
-                                                                           if (!$pets->getPetVideo()) {
-                                                                                echo "<h3>Sin video</h3>";
-                                                                           } else {
-                                                                                echo '<object width="425" height="350" data="http://www.youtube.com/v/' . substr($pets->getPetVideo(), -11) . '" type="application/x-shockwave-flash"></object>';
-                                                                           }
-                                                                           ?>
+                                                                      <?php 
+                                                                      if (!$pets->getPetVideo()) {
+                                                                           echo "<h3>Sin video</h3>";
+                                                                      } else {
+                                                                           // Mostrar el video usando la etiqueta <video>
+                                                                           echo '<video width="320" height="240" controls>';
+                                                                           echo '<source src="' .FRONT_ROOT . $pets->getPetVideo() . '" type="video/mp4">';
+                                                                           echo 'Your browser does not support the video tag.';
+                                                                           echo '</video>';
+                                                                      }
+                                                                      ?>
                                                                       </div>
+
                                                                  </div>
                                                                  <div class="modal-footer d-flex flex-wrap justify-content-center">
                                                                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

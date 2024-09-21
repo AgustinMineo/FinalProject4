@@ -90,7 +90,12 @@
     public function showKeepers(){
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getAllKeeper();
-        require_once(VIEWS_PATH. "showKeeper.php");
+        if($listKeepers){
+            require_once(VIEWS_PATH. "showKeeper.php");
+        }else{
+            echo '<div class="alert alert-danger">There is no availables keepers right now!</div>';
+            require_once(VIEWS_PATH. "landingPage.php");
+        }
     }
 
     public function showKeepersByAvailability($value1,$value2){

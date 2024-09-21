@@ -34,6 +34,9 @@ class SessionHelper{
         return $_SESSION["loggedUser"]->getPetAmount();
     }
     public static function sessionEnd(){
+        if (isset($_SESSION['loggedUser'])) {
+            unset($_SESSION['loggedUser']);
+        }
         return session_destroy();
     }
 
@@ -46,6 +49,31 @@ class SessionHelper{
             header("Location: " . VIEWS_PATH . "loginUser.php");
             exit();
         }
+    }
+
+    public static function getCurrentRole(){
+        return $userRole = (int)$_SESSION["loggedUser"]->getRol();
+    }
+
+    //
+    public static function redirectTo404()
+    {
+    if (self::getCurrentUser()) {
+        $role = self::getCurrentRole();
+
+        if ($role == 2) {
+            require_once(VIEWS_PATH . "ownerNav.php");
+            require_once(VIEWS_PATH . "Error404.php");
+        } elseif ($role == 3) {
+            require_once(VIEWS_PATH . "keeperNav.php");
+            require_once(VIEWS_PATH . "Error404.php");
+        } else {
+            require_once(VIEWS_PATH . "Error404.php");
+        }
+    } else {
+        header("Location: /FinalProject4/Views/Error404.php");
+        exit();
+    }
     }
 
     public static function validateUserRole($requiredRole){

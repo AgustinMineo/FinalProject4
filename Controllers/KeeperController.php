@@ -3,14 +3,14 @@
  use Models\Keeper as Keeper;
  use Helper\SessionHelper as SessionHelper;
 
- //use DAO\KeeperDAO as KeeperDAO;
- 
- //use DAO\OwnerDAO as OwnerDAO;
- use DAO\MailerDAO as MailerDAO;
- use DAODB\KeeperDAO as KeeperDAO;
- use DAODB\OwnerDAO as OwnerDAO;
- 
- class KeeperController{
+//use DAO\KeeperDAO as KeeperDAO;
+//use DAO\OwnerDAO as OwnerDAO;
+
+use DAO\MailerDAO as MailerDAO;
+use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\OwnerDAO as OwnerDAO;
+
+class KeeperController{
     private $KeeperDAO;
     private $newKeeper;
     private $newMailer;

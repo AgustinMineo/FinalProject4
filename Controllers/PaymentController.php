@@ -6,6 +6,7 @@ use DAO\MailerDAO as MailerDAO;
 use DAO\BookingDAO as BookingDAO;
 use DAO\PetDAO as PetDAO;
 use DAO\KeeperDAO as KeeperDAO;*/
+
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;
@@ -38,16 +39,22 @@ class PaymentController {
 
 
     public function generatePaymentBooking($booking){
-        $Booking=$this->BookingDAO->searchBookingByKeeperID($booking);
+        SessionHelper::validateUserRole([2]);
+        //$Booking=$this->BookingDAO->searchBookingByKeeperID($booking);
+        $Booking=$this->BookingDAO->searchBookingByID($booking);
         $keeper = $this->KeeperDAO->searchKeeperByID($Booking->getKeeperId()); 
         $pet = $this->PetDAO->searchPet($Booking->getPetID());
-        $status = $this->newMailerDAO->bookingCupon($keeper->getEmail(),$keeper->getfirstName(),$keeper->getLastName(),$keeper->getCBU(),$Booking->getAmountReservation(),$Booking->getFirstDate(),$Booking->getLastDate(),$pet->getPetName());
+        $status = $this->newMailerDAO->bookingCupon($keeper->getEmail(),$keeper->getfirstName(),$keeper->getLastName(),$keeper->getCBU(),$Booking->getAmountReservation(),$Booking->getStartDate(),$Booking->getEndDate(),$pet->getPetName());
+        
         if($status){
             echo '<div class="alert alert-success">The payment was successful! Please wait until the keeper accepts your reservation. </div>';
             $this->BookingDAO->updateByID($booking,"4");
             $this->goLanding();
+        }else if($status == false){
+            echo '<div class="alert alert-danger">Error al enviar el comprobante</div>';
+            $this->goLanding();
         }else{
-            echo '<div class="alert alert-danger">The payment could not be made..</div>';
+            echo '<div class="alert alert-danger">The payment could not be made.. </div>';
             $this->goLanding();
         }
     }

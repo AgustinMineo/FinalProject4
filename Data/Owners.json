@@ -14,15 +14,41 @@
     },
     {
         "ownerId": 2,
-        "lastName": "Miranda",
-        "firstName": "Martin",
-        "cellPhone": "2235066075",
-        "birthDate": "1988-04-18",
-        "email": "tinchomirandda@gmail.com",
-        "password": "123",
-        "userDescription": "test",
+        "lastName": "Mineo",
+        "firstName": "Agustin",
+        "cellPhone": "2235673455",
+        "birthDate": "1999-03-29",
+        "email": "agustinmineo@gmail.com",
+        "password": "123456",
+        "userDescription": "Descripcion",
         "petAmount": "0",
         "answerRecovery": "What was your first pet called? ",
-        "questionRecovery": "test"
+        "questionRecovery": "Rocco"
+    },
+    {
+        "ownerId": 3,
+        "lastName": "Agustin Nicolas",
+        "firstName": "Mineo",
+        "cellPhone": "2235673455",
+        "birthDate": "1999-03-29",
+        "email": "mineoagustin@gmail.com",
+        "password": "123456",
+        "userDescription": "Descripcion",
+        "petAmount": "0",
+        "answerRecovery": "What was your first pet called? ",
+        "questionRecovery": "Rocco"
+    },
+    {
+        "ownerId": 4,
+        "lastName": "Pruebas",
+        "firstName": "2024",
+        "cellPhone": "2235673455",
+        "birthDate": "1999-03-29",
+        "email": "agustin@gmail.com",
+        "password": "123456",
+        "userDescription": "hola",
+        "petAmount": "0",
+        "answerRecovery": "What was your first pet called? ",
+        "questionRecovery": "Rocco"
     }
 ]

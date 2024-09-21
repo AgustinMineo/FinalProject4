@@ -43,6 +43,7 @@ class KeeperDAO implements IKeeperDAO{
           $keeperValue["userDescription"] = $Keeper->getDescription();
           $keeperValue["animalSize"] = $Keeper->getAnimalSize();
           $keeperValue["cbu"] = $Keeper->getCBU();
+          $keeperValue["points"] = $Keeper->getPoints();
           $keeperValue["price"] = $Keeper->getPrice();   
           $keeperValue["answerRecovery"] = $Keeper->getAnswerRecovery();
           $keeperValue["questionRecovery"] = $Keeper->getQuestionRecovery();       

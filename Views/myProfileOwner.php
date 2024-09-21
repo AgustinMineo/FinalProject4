@@ -1,6 +1,8 @@
 <?php
 namespace Views;
+require_once("validate-session.php");
 include ("ownerNav.php");
+//require_once(VIEWS_PATH."validate-session.php");
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +11,7 @@ include ("ownerNav.php");
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
 
   <title>PET HERO</title>
 </head>
@@ -39,7 +41,7 @@ include ("ownerNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New last name</label>
-                        <input type="text" class="form-control" name="newName" id="newName"></input>
+                        <input type="text" class="form-control" name="newName" id="newName" minlength="3" value='<?php echo $owner->getLastName();?>'></input>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -108,7 +110,7 @@ include ("ownerNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New cellphone</label>
-                        <input type="number" class="form-control" name="newCellphone" id="newCellphone"></input>
+                        <input type="number" class="form-control" name="newCellphone" id="newCellphone" value='<?php echo $owner->getCellPhone();?>'></input>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -150,7 +152,7 @@ include ("ownerNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New description</label>
-                        <textarea class="form-control" name="newDescription" id="newDescription"></textarea>
+                        <textarea class="form-control" name="newDescription" id="newDescription" value='<?php echo $owner->getDescription();?>'></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -185,16 +187,16 @@ include ("ownerNav.php");
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">New Password</label>
-                        <input class="form-control" type="password" name="password" id="password"></input>
+                        <input class="form-control" type="password" minlength="6" required  name="password" id="password" ></input>
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Repeat Password</label>
-                        <input class="form-control" type="password" name="password1" id="password1"></input>
+                        <input class="form-control" type="password" minlength="6" required  name="password1" id="password1" ></input>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update Password</button>
+                    <button type="submit" class="btn btn-primary passwordButton" >Update Password</button>
                 </div>
             </div>
         </form>
@@ -219,8 +221,9 @@ include ("ownerNav.php");
 
 
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script src="./js/main.js"></script>
 </body>
 </html>

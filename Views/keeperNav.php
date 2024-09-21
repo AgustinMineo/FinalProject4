@@ -1,6 +1,6 @@
 <?php
 namespace Views;
-require_once(VIEWS_PATH."validate-session.php");
+require_once("validate-session.php");
 ?>
 
 <!doctype html>
@@ -25,7 +25,7 @@ require_once(VIEWS_PATH."validate-session.php");
                         <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Keeper/showCurrentKeeper">My profile</a>
                         </li>
                         <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
-                            <a class="nav-link m-3 " href="<?php echo FRONT_ROOT ?>Views/updateAvailabilityDays.php">Update Availability Days</a>
+                            <a class="nav-link m-3 " href="<?php echo FRONT_ROOT ?>Keeper/updateDaysAvailables">Update Availability Days</a>
                         </li>   
                         <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                             <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>Booking/showBookings">Show reservations</a>

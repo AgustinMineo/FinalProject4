@@ -7,46 +7,62 @@ class Keeper extends User{
     private $keeperId; // not null
     private $animalSize; // not null
     private $price;
-    private $firstAvailabilityDays; /// Change for the database
-    private $lastAvailabilityDays; ///Change for the database
     private $CBU;
+    private $points;
+    private $availability; // Disponibilidad
+    private $questionRecovery;
+    private $answerRecovery; 
 
-        public function getKeeperId(){
-            return $this->keeperId;
-        }
-        public function setKeeperId($keeperId){
-         $this->keeperId = $keeperId;
-        }
-        public function getAnimalSize(){
-            return $this->animalSize;
-        }
-        public function setAnimalSize($AnimalSize){
-             $this->animalSize = $AnimalSize;
-        }
-        public function getPrice(){
-            return $this->price;
-        }
-        public function setPrice($price){
-             $this->price = $price;
-        }
+    public function getKeeperId(){
+        return $this->keeperId;
+    }
+    public function setKeeperId($keeperId){
+        $this->keeperId = $keeperId;
+    }
+    public function getAnimalSize(){
+        return $this->animalSize;
+    }
+    public function setAnimalSize($AnimalSize){
+        $this->animalSize = $AnimalSize;
+    }
+    public function getPrice(){
+        return $this->price;
+    }
+    public function setPrice($price){
+        $this->price = $price;
+    }
 
-        public function getFirstAvailabilityDays(){
-            return $this->firstAvailabilityDays;
-        }
-        public function setFirstAvailabilityDays($firstAvailabilityDays){
-            $this->firstAvailabilityDays = $firstAvailabilityDays;
-        }
-        public function getLastAvailabilityDays(){
-            return $this->lastAvailabilityDays;
-        }
-        public function setLastAvailabilityDays($lastAvailabilityDays){
-            $this->lastAvailabilityDays = $lastAvailabilityDays;
-        }
-        public function getCBU(){
-            return $this->CBU;
-        }
-        public function setCBU($CBU){
-            $this->CBU = $CBU;
+    public function getQuestionRecovery(){
+        return $this->questionRecovery;
+    }
+    public function setQuestionRecovery($questionRecovery){
+        $this->questionRecovery = $questionRecovery;
+    }
+    public function getAnswerRecovery(){
+        return $this->answerRecovery;
+    }
+    public function setAnswerRecovery($answerRecovery){
+        $this->answerRecovery = $answerRecovery;
+    }
+    public function getAvailability() {
+        return $this->availability;
+    }
+    
+    public function setAvailability($availability) {
+        $this->availability = $availability;
+    }
+    public function getCBU(){
+        return $this->CBU;
+    }
+    public function setCBU($CBU){
+        $this->CBU = $CBU;
+    }
+
+    public function getPoints(){
+        return $this->points;
+    }
+    public function setPoints($points){
+        $this->points = $points;
     }
 }
 ?>

@@ -37,6 +37,28 @@ class SessionHelper{
         return session_destroy();
     }
 
+    public static function validateSession() {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+    
+        if (!isset($_SESSION["loggedUser"])) {
+            header("Location: " . VIEWS_PATH . "loginUser.php");
+            exit();
+        }
+    }
+
+    public static function validateUserRole($requiredRole){
+        self::validateSession();
+
+        $userRole = (int)$_SESSION["loggedUser"]->getRol();
+
+        if (!in_array($userRole, $requiredRole, true)) {
+            header("Location: " . FRONT_ROOT. VIEWS_PATH . "loginUser.php"); 
+            exit();
+        }
+    }
+
 }
 
 ?>

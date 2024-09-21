@@ -13,6 +13,9 @@ CREATE TABLE `User` (
   `userDescription` varchar(255) DEFAULT NULL,
   `questionRecovery` varchar(80) DEFAULT NULL,
   `answerRecovery` varchar(120) DEFAULT NULL,
+  `roleID` tinyint(1) NOT NULL,
+  CONSTRAINT FK_UserRole FOREIGN KEY (`roleID`) REFERENCES `Roles`(`roleID`)
+
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB;
@@ -54,24 +57,27 @@ CREATE TABLE `Pet` (
   PRIMARY KEY (`petID`)
 ) ENGINE=InnoDB;
 
+/* Nuevo esquema  */
 CREATE TABLE `Booking` (
   `bookingID` int(11) NOT NULL AUTO_INCREMENT,
   `keeperID` int(11) NOT NULL references Keeper(keeperID),
   `petID` int(11) NOT NULL references Pet(petID),
-  `status` tinyint(7) NOT NULL,
-  `animalSize` varchar(30) ,
+  `status` int(11) NOT NULL references Status(statusID),
   `totalValue` float,
   `amountReservation` float,
-  PRIMARY KEY (`bookingID`)
+  `startDate` DATE NOT NULL, -- Fecha de inicio de la reserva
+  `endDate` DATE NOT NULL,   -- Fecha de fin de la reserva
+  PRIMARY KEY (`bookingID`),
 ) ENGINE=InnoDB;
 
 CREATE TABLE `KeeperDays` (
   `keeperDaysID` int(11) NOT NULL AUTO_INCREMENT,
   `keeperID` int(11) NOT NULL references Keeper(keeperID),
-  `firstDate` date DEFAULT NULL,
-  `lastDate` date DEFAULT NULL,
-  PRIMARY KEY (`keeperDaysID`)
+  `day` DATE NOT NULL, -- Dia
+  `available` BOOLEAN NOT NULL DEFAULT TRUE,  -- True es disponible
+  PRIMARY KEY (`keeperDaysID`, `keeperID`, `day`)
 ) ENGINE=InnoDB;
+
 
 CREATE TABLE `Status`(
 	`statusID` int(11) NOT NULL AUTO_INCREMENT,
@@ -82,10 +88,19 @@ CREATE TABLE `Status`(
 CREATE TABLE `Review`(
 	`reviewID` int(11) NOT NULL AUTO_INCREMENT,
     `description` varchar(255),
-     `rank` tinyint(5),
-     `bookingID` int(11) NOT NULL references Booking(bookingID),
+    `rank` tinyint(5),
+    `bookingID` int(11) NOT NULL references Booking(bookingID),
     PRIMARY KEY (`reviewID`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE `Roles`(
+  `roleID` TINYINT(1) NOT NULL,
+  `roleName` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`roleID`)
+)ENGINE=InnoDB;
+
+
+INSERT INTO `roles` (roleID, roleName) VALUES (1, 'Admin'), (2, 'Owner'), (3, 'Keeper');
 
 /*                                INSERT DE STATUS EN LA TABLA STATUS                       */
 INSERT INTO status VALUES ("1","Pending"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed");
@@ -93,7 +108,55 @@ INSERT INTO status VALUES ("1","Pending"),("2","Rejected"),("3","Waiting for Pay
 
 
 /*                                    INSERT DE BREEDS EN TABLA BREED                       */
-INSERT INTO breed VALUES ("1","Beagle"), ("2", "Chihuahua"), ("3","Bulldog"),("4", "German Shepherd"),
-("5", "Shih-tzu"), ("6", "Dogo"), ("7", "Golden Retriever"), ("8","Fox Terrier"), ("9","Whippet"),
-("10","Pinscher"), ("11","Cocker"), ("12","Shiba Inu"), ("13","Doberman"), ("14","Border Collie"), ("15","Yorkshire");
+INSERT INTO breed VALUES 
+("1", "Beagle"), 
+("2", "Chihuahua"), 
+("3", "Bulldog"), 
+("4", "German Shepherd"),
+("5", "Shih-tzu"), 
+("6", "Dogo"), 
+("7", "Golden Retriever"), 
+("8", "Fox Terrier"), 
+("9", "Whippet"),
+("10", "Pinscher"), 
+("11", "Cocker"), 
+("12", "Shiba Inu"), 
+("13", "Doberman"), 
+("14", "Border Collie"), 
+("15", "Yorkshire"),
+("16", "Poodle"),
+("17", "Rottweiler"),
+("18", "Labrador Retriever"),
+("19", "Pug"),
+("20", "Siberian Husky"),
+("21", "Boxer"),
+("22", "Dalmatian"),
+("23", "Maltese"),
+("24", "Saint Bernard"),
+("25", "Cavalier King Charles Spaniel"),
+("26", "French Bulldog"),
+("27", "Great Dane"),
+("28", "Basenji"),
+("29", "Akita"),
+("30", "Alaskan Malamute"),
+("31", "Samoyed"),
+("32", "Basset Hound"),
+("33", "Australian Shepherd"),
+("34", "Pembroke Welsh Corgi"),
+("35", "Bichon Frise"),
+("36", "Papillon"),
+("37", "Jack Russell Terrier"),
+("38", "Weimaraner"),
+("39", "Bull Terrier"),
+("40", "Pekingese"),
+("41", "Staffordshire Bull Terrier"),
+("42", "Airedale Terrier"),
+("43", "Cane Corso"),
+("44", "English Setter"),
+("45", "Saluki"),
+("46", "Italian Greyhound"),
+("47", "Portuguese Water Dog"),
+("48", "Tibetan Mastiff"),
+("49", "Chow Chow"),
+("50", "Irish Wolfhound");
 /*                                    INSERT DE BREEDS EN TABLA BREED                       */

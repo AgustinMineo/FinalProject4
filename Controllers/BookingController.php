@@ -2,18 +2,19 @@
 namespace Controllers;
 use DAO\MailerDAO as MailerDAO;
         // DAO WITH JSON
+/*
 use DAO\BookingDAO as BookingDAO;
 use DAO\PetDAO as PetDAO;
-use DAO\KeeperDAO as KeeperDAO;
+use DAO\KeeperDAO as KeeperDAO;*/
         // MODELS
 use Models\Booking as Booking;
 use Models\Keeper as Keeper;
 
 // DAO WITH DATA BASE
-//use DAODB\PetDAO as PetDAO;
-//use DAODB\KeeperDAO as KeeperDAO;
-//use DAODB\BookingDAO as BookingDAO;
-//use DAODB\Connection as Connection;
+use DAODB\PetDAO as PetDAO;
+use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\BookingDAO as BookingDAO;
+use DAODB\Connection as Connection;
 
 use Helper\SessionHelper as SessionHelper;
 
@@ -29,7 +30,7 @@ class BookingController{
 
 
     public function GoBooking(){
-         require_once(VIEWS_PATH."showBookingKeeper.php");
+        require_once(VIEWS_PATH."showBookingKeeper.php");
     }
      public function goIndexOwner(){
          require_once(VIEWS_PATH."showPetBooking.php");

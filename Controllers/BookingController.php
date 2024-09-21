@@ -2,6 +2,7 @@
 namespace Controllers;
 use DAO\MailerDAO as MailerDAO;
         // DAO WITH JSON
+
 //use DAO\BookingDAO as BookingDAO;
 //use DAO\PetDAO as PetDAO;
 //use DAO\KeeperDAO as KeeperDAO;
@@ -29,7 +30,7 @@ class BookingController{
 
 
     public function GoBooking(){
-         require_once(VIEWS_PATH."showBookingKeeper.php");
+        require_once(VIEWS_PATH."showBookingKeeper.php");
     }
      public function goIndexOwner(){
          require_once(VIEWS_PATH."showPetBooking.php");

@@ -66,6 +66,7 @@ class BookingDAO implements IBookingDAO{
         } else { return true; } }
         catch (Exception $ex) { throw $ex; }
     }
+
     public function searchByID($idBooking){
         $query = "SELECT d.startDate, d.endDate, d.keeperID, b.petID, b.totalValue, s.name FROM booking b 
                   JOIN keeperdays d ON d.keeperDaysID = b.keeperDaysID 

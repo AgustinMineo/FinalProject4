@@ -8,8 +8,6 @@ use DAODB\OwnerDAO as OwnerDAO;
 use DAODB\KeeperDAO as KeeperDAO;
 use DAO\MailerDAO as MailerDAO;
 
-use Models\Owner as Owner;
-
 use Helper\SessionHelper as SessionHelper;
 
  class OwnerController

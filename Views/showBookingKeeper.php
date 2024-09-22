@@ -18,10 +18,9 @@ require_once(VIEWS_PATH."keeperNav.php");
                     <h2 class="mb-4">Listado de reservas</h2>
                     <table class="table bg-light-alpha">
                          <thead>
-                         <th>Booking id</th>
+                              <th>Booking id</th>
                               <th>First date</th>
                               <th>Last Date</th>
-                              <th>Owner Name</th>
                               <th>Pet Name</th>
                               <th>Total value</th>
                               <th>Reserva</th>
@@ -35,15 +34,24 @@ require_once(VIEWS_PATH."keeperNav.php");
                                    foreach($bookingListKeeper as $booking)
                                    {
                                         ?>
-                                             <tr class=" table table-info table-hover table align-middle" >
+                                             <tr class="
+                                        <?php 
+                                        if($booking->getStatus() == 1 ){echo "bg-secondary";}
+                                        elseif($booking->getStatus() == 2){echo "bg-danger";}
+                                        elseif($booking->getStatus() == 8){echo "bg-danger";}
+                                        elseif($booking->getStatus() == 3){echo "bg-primary";}
+                                        elseif($booking->getStatus() == 4){echo "bg-primary";}
+                                        else{echo "bg-success";}
+                                        ?> 
+                                        
+                                        table  table-hover table align-middle text-center text-white" >
                                                   <td><?php echo $booking->getBookingID(); $value=$booking->getBookingID();?></td>
                                                   <td><?php $date=date_create($booking->getStartDate()); echo date_format($date,"d/m/Y"); ?></td>
                                                   <td><?php $date=date_create($booking->getEndDate()); echo date_format($date,"d/m/Y"); ?></td>
-                                                  <td><?php echo $booking->getKeeperID() ?></td> <!-- CAMBIAR A OWNER NAME PARA SABER DUEÑO DEL PERRO VER -->
                                                   <td><?php echo $booking->getPetID()?></td>
                                                   <td><?php echo $booking->getTotalValue()?></td>
                                                   <td><?php echo $booking->getTotalValue() * 0.5?></td>
-                                                  <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Waiting for confirmation</h6>";}elseif($booking->getStatus() == 5){echo "<h6>Confirmed</h6>";}else{echo "<h6>Finish</h6>";}?></td>
+                                                  <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}elseif($booking->getStatus() == 4){echo "<h6>Waiting for confirmation</h6>";}elseif($booking->getStatus() == 5){echo "<h6>Confirmed</h6>";}elseif($booking->getStatus() == 6){echo "<h6>Finish</h6>";}elseif($booking->getStatus() == 7){echo "<h6>Completed</h6>";}else{echo "<h6>Overdue</h6>";}?></td>
                                                   <td><form action='<?php echo FRONT_ROOT ?> Booking/updateBookingStatus' method='post'><?php if($booking->getStatus() == '1'){ echo "<div class='d-flex'><input type='hidden' name='id' value='$value'><input type='hidden' name='status' value='3'>
                                                        <button type='submit' class='btn btn-outline-primary w-auto p-1 m-1'>Aceptar</button>
                                                        </div>";}elseif($booking->getStatus() == '4'){echo "<div class='d-flex'><input type='hidden' name='id' value='$value'><input type='hidden' name='status' value='5'>

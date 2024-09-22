@@ -103,7 +103,7 @@ CREATE TABLE `Review`(
 INSERT INTO `roles` (roleID, roleName) VALUES (1, 'Admin'), (2, 'Owner'), (3, 'Keeper');
 
 /*                                INSERT DE STATUS EN LA TABLA STATUS                       */
-INSERT INTO status VALUES ("1","Pending"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed");
+INSERT INTO status VALUES ("1","Pending"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed"),("8","Overdue");
 /*                                INSERT DE STATUS EN LA TABLA STATUS                       */
 
 
@@ -160,3 +160,21 @@ INSERT INTO breed VALUES
 ("49", "Chow Chow"),
 ("50", "Irish Wolfhound");
 /*                                    INSERT DE BREEDS EN TABLA BREED                       */
+
+/*Validacion para ver si los jobs estan activos (Por defecto no en mysql) */
+SHOW VARIABLES LIKE 'event_scheduler';
+SET GLOBAL event_scheduler = ON;
+
+/*Job de actualización de estados*/
+CREATE EVENT IF NOT EXISTS update_reservations_status
+ON SCHEDULE EVERY 5 MINUTE
+DO
+
+UPDATE Booking
+SET status = 6  
+WHERE status = 5
+AND endDate < NOW();
+UPDATE Booking
+SET status = 8
+WHERE status IN (1, 3, 4)
+AND endDate < NOW();

@@ -51,37 +51,42 @@ class KeeperController{
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
-            $newKeeper = new Keeper();
-            $newKeeper->setLastName($lastName);
-            $newKeeper->setfirstName($firstName);
-            $newKeeper->setCellPhone($cellPhone);
-            $newKeeper->setbirthDate($birthDate);
-            $newKeeper->setEmail($email);
-            $newKeeper->setPassword($password);
-            $newKeeper->setDescription($userDescription);
-            $newKeeper->setAnimalSize($animalSize);
-            $newKeeper->setPrice($price);
-            $newKeeper->setCBU($cbu);
-            $newKeeper->setQuestionRecovery($QuestionRecovery);
-            $newKeeper->setAnswerRecovery($answerRecovery);
-            $newKeeper->setRol(3);
-            $this->KeeperDAO->AddKeeper($newKeeper);
-            $this->newMailer->welcomeMail($lastName,$firstName,$email);
-            $this->goLoginKeeper();
+                    if($this->KeeperDAO->searchKeeperCBU($cbu) ==NULL){
+                        $newKeeper = new Keeper();
+                        $newKeeper->setLastName($lastName);
+                        $newKeeper->setfirstName($firstName);
+                        $newKeeper->setCellPhone($cellPhone);
+                        $newKeeper->setbirthDate($birthDate);
+                        $newKeeper->setEmail($email);
+                        $newKeeper->setPassword($password);
+                        $newKeeper->setDescription($userDescription);
+                        $newKeeper->setAnimalSize($animalSize);
+                        $newKeeper->setPrice($price);
+                        $newKeeper->setCBU($cbu);
+                        $newKeeper->setQuestionRecovery($QuestionRecovery);
+                        $newKeeper->setAnswerRecovery($answerRecovery);
+                        $newKeeper->setRol(3);
+                        $this->KeeperDAO->AddKeeper($newKeeper);
+                        $this->newMailer->welcomeMail($lastName,$firstName,$email);
+                        $this->goLoginKeeper();
+                    }else{
+                        echo "<div class='alert alert-danger'>The CBU already exist.</div>";
+                        $this->addKeeperView();
+                    }
             }else{
-                echo '<div class="alert alert-danger">Passwords are not the same. Please try again</div>';
-                    $this->addKeeperView();
+                echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
+                $this->addKeeperView();
             }
         }
         else{
-                echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
+                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
                 $this->addKeeperView();
             }
-                }        
-                else{
-                    echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
-                    $this->addKeeperView();
-                }
+        }        
+        else{
+            echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
+            $this->addKeeperView();
+        }
          //$newKeeper->setPoints('0');
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
          //$newKeeper->setKeeperImg($keeperImg);

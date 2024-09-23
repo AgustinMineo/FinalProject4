@@ -80,7 +80,7 @@ class Pet{
     public function getOwnerID(){
         return $this->ownerID;
     }
-    public function setOwnerID($ownerID){
+    public function setOwnerID(Owner $ownerID){
         $this->ownerID=$ownerID;
     }
 

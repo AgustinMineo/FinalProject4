@@ -42,8 +42,8 @@ class PaymentController {
         SessionHelper::validateUserRole([2]);
         //$Booking=$this->BookingDAO->searchBookingByKeeperID($booking);
         $Booking=$this->BookingDAO->searchBookingByID($booking);
-        $keeper = $this->KeeperDAO->searchKeeperByID($Booking->getKeeperId()); 
-        $pet = $this->PetDAO->searchPet($Booking->getPetID());
+        $keeper = $this->KeeperDAO->searchKeeperByID($Booking->getKeeperId()->getKeeperId()); 
+        $pet = $this->PetDAO->searchPet($Booking->getPetID()->getPetID());
         $status = $this->newMailerDAO->bookingCupon($keeper->getEmail(),$keeper->getfirstName(),$keeper->getLastName(),$keeper->getCBU(),$Booking->getAmountReservation(),$Booking->getStartDate(),$Booking->getEndDate(),$pet->getPetName());
         
         if($status){

@@ -8,7 +8,7 @@ use Models\Pet as Pet;
 use DAODB\PetDAO as PetDAO;
 use DAODB\OwnerDAO as OwnerDAO;
 use Helper\SessionHelper as SessionHelper;
-
+use Models\Owner as Owner;
 class PetController{
 
     private $OwnerDAO;
@@ -31,7 +31,7 @@ class PetController{
     public function newPet($petName, $breedID, $petSize,$petDetails, $petWeight, $petAge,$petImage,$petVaccinationPlan,$petVideo) {
         SessionHelper::validateUserRole([2]);
         if (SessionHelper::getCurrentUser()) {
-            
+            $owner = new Owner();
             $pet = new Pet();
 
             $pet->setPetName($petName);
@@ -40,7 +40,8 @@ class PetController{
             $pet->setPetWeight($petWeight);
             $pet->setPetDetails($petDetails);
             $pet->setPetAge($petAge);
-            $pet->setOwnerID(SessionHelper::getCurrentOwnerID());
+            $owner = $this->OwnerDAO->searchBasicInfoOwnerByID(SessionHelper::getCurrentOwnerID());
+            $pet->setOwnerID($owner);
     
             $uploadResult = $this->uploadFile($pet);
     
@@ -88,7 +89,8 @@ class PetController{
     }
     
     private function uploadFile(Pet $pet) {
-        $uploadDir = UPLOADS_PATH . "{$pet->getOwnerID()}-{$pet->getBreedID()}-{$pet->getPetName()}/";
+
+        $uploadDir = UPLOADS_PATH . "{$pet->getOwnerID()->getOwnerID()}-{$pet->getBreedID()}-{$pet->getPetName()}/";
         
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0777, true);

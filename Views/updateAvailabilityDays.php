@@ -57,6 +57,22 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
   </style>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"  crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"  crossorigin="anonymous"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', () => {
+      // Selecciona todos los campos de entrada de tipo 'date'
+      const dateFields = document.querySelectorAll('input[type="date"]');
+      const dateFormat = 'dd/mm/yyyy';
+      
+      // Obtén la fecha actual en formato YYYY-MM-DD
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Aplica la restricción de fecha mínima a todos los campos de fecha
+      dateFields.forEach(field => {
+          field.setAttribute('min', today )
+          
+      });
+  });
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"  crossorigin="anonymous"></script>
 </body>
 </html>

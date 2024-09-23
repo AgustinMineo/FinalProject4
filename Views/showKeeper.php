@@ -60,6 +60,7 @@ include ("ownerNav.php");
                                                   <ul class="list-group">
                                                        <?php 
                                                        $availability = $keeper->getAvailability();
+                                                       
                                                        if (!empty($availability)) {
                                                             foreach ($availability as $day) {
                                                                 // Convertir fecha de d/m/Y a Y-m-d para la comparación

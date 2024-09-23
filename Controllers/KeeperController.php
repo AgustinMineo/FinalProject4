@@ -9,15 +9,18 @@
 use DAO\MailerDAO as MailerDAO;
 use DAODB\KeeperDAO as KeeperDAO;
 use DAODB\OwnerDAO as OwnerDAO;
+use DAODB\BookingDAO as BookingDAO;
 
 class KeeperController{
     private $KeeperDAO;
+    private $BookingDAO;
     private $newKeeper;
     private $newMailer;
     private $OwnerDAO;
 
     public function __construct(){
         $this->KeeperDAO = new KeeperDAO();
+        $this->BookingDAO = new BookingDAO();
         $this->newMailer = new MailerDAO();
         $this->OwnerDAO = new OwnerDAO();
     }
@@ -44,6 +47,11 @@ class KeeperController{
         SessionHelper::validateUserRole([3]);
         require_once(VIEWS_PATH."keeperNav.php");
         require_once(VIEWS_PATH."updateAvailabilityDays.php");
+    }
+    public function calendarDays($days,$bookings){
+        SessionHelper::validateUserRole([3]);
+        require_once(VIEWS_PATH."keeperNav.php");
+        require_once(VIEWS_PATH."keeperDays.php");
     }
 
     public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,
@@ -124,6 +132,21 @@ class KeeperController{
         }
         $this->goLandingKeeper();
     }
+
+    public function showCalendarData(){
+        SessionHelper::validateUserRole([3]);
+
+        // Obtener el keeper actual
+        $keeper = $this->KeeperDAO->searchKeeperByIDReduce(SessionHelper::getCurrentUser()->getKeeperId());
+
+        // Obtener los días del keeper
+        $days = $this->KeeperDAO->getAvailabilityDays($keeper->getKeeperId());
+
+        $bookings = $this->BookingDAO->showBookingByKeeperID();
+        $this->calendarDays($days,$bookings);
+    }
+
+
 
     public function showCurrentKeeper(){
         SessionHelper::validateUserRole([3]);

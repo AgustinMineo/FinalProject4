@@ -38,8 +38,14 @@ class BookingController{
     public function goIndexKeeper(){
         require_once(VIEWS_PATH."keeperNav.php");
     }
+    public function goBookingViewAll($bookingList){
+        if(SessionHelper::getCurrentRole()==2){//2 Owner
+            require_once(VIEWS_PATH."BookingViewOwner.php");
+        }elseif(SessionHelper::getCurrentRole()==3){
+            require_once(VIEWS_PATH."showBookingKeeper.php");
+        }
+    }
      public function goBookingView($petList,$listKeepers,$value1,$value2){
-
         require_once(VIEWS_PATH."ownerNav.php");
         require_once(VIEWS_PATH."BookingViews.php");
     }
@@ -93,16 +99,18 @@ class BookingController{
         SessionHelper::validateUserRole([2]);
         $newBooking = new Booking();
         $keeperInfo = new Keeper(); //CHECK
-        $keeperInfo=$this->keeperDAO->searchKeeperByEmail($email);
+        $pet = $this->petDAO->searchPet($petId);//Busco al pet
+        $keeperInfo=$this->keeperDAO->searchKeeperByEmail($email); //Busco el keeper
+
         $finalPrice = $this->BookingDAO->calculateTotalDays($startDate,$finishDate, $keeperInfo->getKeeperId());
         $finalPrice = $finalPrice * $keeperInfo->getPrice();
         $newBooking->setStatus('1');
         $newBooking->setStartDate($startDate);
         $newBooking->setEndDate($finishDate);
-        $newBooking->setKeeperID($keeperInfo->getKeeperId());
+        $newBooking->setKeeperID($keeperInfo);
         $newBooking->setTotalValue($finalPrice);
         $newBooking->setAmountReservation($newBooking->getTotalValue() * 0.5);
-        $newBooking->setPetID($petId);
+        $newBooking->setPetID($pet);
         $this->MailerDAO->newBooking($keeperInfo->getLastName(),$keeperInfo->getfirstName(),$keeperInfo->getEmail());
         $result =$this->BookingDAO->addBooking($newBooking);
 
@@ -121,20 +129,20 @@ class BookingController{
 
     public function showBookings(){
         SessionHelper::validateUserRole([3]);
-        $bookingListKeeper = array();
-        $bookingListKeeper= $this->BookingDAO->showBookingByKeeperID();
-        require_once(VIEWS_PATH."showBookingKeeper.php");
+        $bookingList = array();
+        $bookingList= $this->BookingDAO->showBookingByKeeperID();
+        $this->goBookingViewAll($bookingList);
     }
 
     public function showBookingsOwner(){
         SessionHelper::validateUserRole([2]);
-        $bookingListKeeper = array();
+        $bookingList = array();
         $petListByOwner = array();
         $petListByOwner=$this->petDAO->searchPetList();
         if($petListByOwner){
-            $bookingListKeeper=$this->BookingDAO->showBookingByOwnerID($petListByOwner);
-            if($bookingListKeeper){
-                require_once(VIEWS_PATH."BookingViewOwner.php");
+            $bookingList=$this->BookingDAO->showBookingByOwnerID($petListByOwner);
+            if($bookingList){
+                $this->goBookingViewAll($bookingList);
             }else{
                 echo "<div class='alert alert-danger'>You have no reservations available!</div>";
                 $this->goIndex();

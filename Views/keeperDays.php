@@ -6,6 +6,8 @@ require_once("validate-session.php");
 $selectedMonth = isset($_GET['month']) ? intval($_GET['month']) : date('n');
 $selectedYear = isset($_GET['year']) ? intval($_GET['year']) : date('Y');
 
+//$generatedDays=refreshDays();
+
 // Inicializar bookings y days para evitar errores si están en null
 $bookings = isset($bookings) ? $bookings : [];
 $days = isset($days) ? $days : [];
@@ -83,84 +85,169 @@ function isBooked($day, $bookings) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Reseñas</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Calendario de disponibilidad</title>
 </head>
-<!-- HTML para mostrar el calendario -->
+<body>
 <div class="container mt-4">
     <h2>Calendario de Disponibilidad</h2>
+    <div class="container">
+        <!-- Filtros de mes y año -->
+        <form method="GET" action="">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label for="month">Mes:</label>
+                    <select id="month" name="month" class="form-control">
+                        <?php
+                        for ($m = 1; $m <= 12; $m++) {
+                            $selected = ($m == $selectedMonth) ? 'selected' : '';
+                            echo "<option value='$m' $selected>" . date('F', mktime(0, 0, 0, $m, 1)) . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
 
-    <!-- Filtros de mes y año -->
-    <form method="GET" action="">
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <label for="month">Mes:</label>
-                <select id="month" name="month" class="form-control">
-                    <?php
-                    for ($m = 1; $m <= 12; $m++) {
-                        $selected = ($m == $selectedMonth) ? 'selected' : '';
-                        echo "<option value='$m' $selected>" . date('F', mktime(0, 0, 0, $m, 1)) . "</option>";
-                    }
-                    ?>
-                </select>
+                <div class="col-md-4">
+                    <label for="year">Año:</label>
+                    <select id="year" name="year" class="form-control">
+                        <?php
+                        $today = date('d/m/Y');
+                        $currentYear = date('Y');
+                        for ($y = $currentYear-5; $y <= $currentYear + 5; $y++) {
+                            $selected = ($y == $selectedYear) ? 'selected' : '';
+                            echo "<option value='$y' $selected>$y</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-center mt-4 w-25 ">
+                   
+                    <button type="submit" class="btn btn-primary btn-block w-50">Filtrar</button>
+                </div>
             </div>
-            <div class="col-md-4">
-                <label for="year">Año:</label>
-                <select id="year" name="year" class="form-control">
-                    <?php
-                    $currentYear = date('Y');
-                    for ($y = $currentYear; $y <= $currentYear + 5; $y++) {
-                        $selected = ($y == $selectedYear) ? 'selected' : '';
-                        echo "<option value='$y' $selected>$y</option>";
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="col-md-3 d-flex align-items-center mt-4 w-25 ">
-                <label>&nbsp;</label>
-                <button type="submit" class="btn btn-primary btn-block w-50">Filtrar</button>
+        </form>
+
+        <div class="container mb-5">
+            <div class="d-flex flex-wrap">
+                <div class="">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="form-action" onchange="saveCheckboxState()" name="form-action">
+                        <label class="form-check-label" id="form-action">
+                            Activar opciones adicionales
+                        </label>
+                    </div>
+                    <div class="form-check options " id="checkboxLabel" style="display: none;" >
+                        <p>Las opciones adicionales permiten <strong>activar o desactivar</strong> el estado de los días. 
+                        Únicamente los días que están en <strong>"No Configurados"</strong> o <strong>"Disponibles"</strong>.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-    </form>
 
-    <!-- Mostrar días del mes -->
-    <div class="row">
+    
+    <div class="row" id="calendarContainer">
         <?php
         foreach ($generatedDays as $day) {
             $date = new \DateTime($day['day']);
             $formattedDate = $date->format('d/m/Y');
             $isAvailable = $day['available'] === '1';
             $isBooked = isBooked($day, $filteredBookings); // Usar el bookings filtrado para el mes actual
-
+            $cursorPointer='pointer';
+            //Casteo las fechas para que se comparen correctamente en el if de las card
+            $CastFormattedDate = \DateTime::createFromFormat('d/m/Y', $formattedDate);
+            $CastToday = \DateTime::createFromFormat('d/m/Y', $today);
+            
             // Determina la clase de la card
             if ($isBooked) {
                 $cardClass = 'bg-warning'; // Ocupado
                 $bookingID = $isBooked->getBookingID();
                 $bookingDetail=$isBooked;
+                $tooltip = 'Reserva generada';
             } elseif ($isAvailable) {
                 $bookingID=null;
+                $formStatus=null;
                 $cardClass = 'bg-success'; // Disponible
-            } else {
+                $tooltip='Dia disponible para reservar';
+            } elseif($CastFormattedDate <=$CastToday) {
                 $bookingID=null;
+                $formStatus = 'data-modal="true"'; //Reuso función para que no se pueda cambiar el estado.
+                $cardClass = 'bg-secondary'; //Fuera de fecha
+                $tooltip='Dia no disponible para actualizar';
+                $cursorPointer='default';
+            }else {
+                $bookingID=null;
+                $formStatus=null;
                 $cardClass = 'bg-danger'; // No disponible
+                $tooltip= 'Dia disponible pero no registrado';
+                //$cursorPointer='default';
             }
             ?>
-            <div class="col-4 col-md-2 mb-3">
-            <div class="card <?php echo $cardClass; ?>" data-date="<?php echo $day['day']; ?>"data-bs-toggle="modal" type="button" data-bs-target="#reservationModal<?php echo $isBooked ? $isBooked->getBookingID() : ''; ?>">
-                    <div class="card-body text-center text-white">
+            <div class="col-4 col-md-2 mb-3"  >
+            <?php if ($isBooked) { ?>
+                <div class="card <?php echo $cardClass; ?>" data-date="<?php echo $day['day']; ?>" data-bs-toggle="modal" data-modal="true" type="button" data-bs-target="#reservationModal<?php echo $isBooked ? $isBooked->getBookingID() : ''; ?>">
+                <div class="card-body text-center text-white">
+                <h5 class="card-title"><?php echo $formattedDate; ?></h5>
+                    <p class="card-text">
+                        <?php
+                            if ($isBooked->getStatus()=='1') {
+                                echo 'Pending';
+                            } elseif ($isBooked->getStatus()=='3') {
+                                echo 'Waiting for Payment';
+                            } elseif($isBooked->getStatus()=='4') {
+                                echo 'Waiting for confirmation'; 
+                            } elseif($isBooked->getStatus()=='5') {
+                                echo 'Confirmed'; 
+                            } elseif($isBooked->getStatus()=='6') {
+                                echo 'Finish'; 
+                            } elseif($isBooked->getStatus()=='7') {
+                                echo 'Completed'; 
+                            }else {
+                                echo 'OverDue';
+                            }
+                        ?>
+                        <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $tooltip ?>"> <i class="bi bi-question-circle"></i></span>
+                    </p>
+                </div>
+                </div>
+            <?php } else { ?>
+                <form
+                id="form-<?php echo $day['day']; ?>"
+                <?php echo $formStatus?>
+                data-status="" method="post" class="card <?php echo $cardClass; ?>" data-date="<?php echo $day['day']; ?>" >
+                <input type="hidden" name="date"  value="<?php echo $day['day']; ?>">
+                    <input type="hidden" name="available" value="<?php echo ($day['available']); ?>">
+                   
+                    <div class="card-body text-center text-white" style="cursor: <?php echo $cursorPointer;?>">
                         <h5 class="card-title"><?php echo $formattedDate; ?></h5>
                         <p class="card-text">
                             <?php
+                            $cursorPointer='pointer';
                             if ($isBooked) {
-                                echo 'Ocupado';
+                            echo 'Ocupado';
+                            $tooltip='Dia reservado';
                             } elseif ($isAvailable) {
                                 echo 'Disponible';
-                            } else {
+                                $tooltip='Dia disponible para reservar';
+                                $cursorPointer='default';
+                            }elseif($CastFormattedDate<$CastToday) {
+                                echo 'No disponible';
+                                $tooltip='Dia no disponible para actualizar';
+                                $cursorPointer='default';
+                            }else {
                                 echo 'No Configurado';
+                                $tooltip= 'Dia disponible pero no activo';
+                                //$cursorPointer='default';
                             }
                             ?>
-                        </p>
-                    </div>
+                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title='<?php echo $tooltip; ?>'> <i class="bi bi-question-circle"></i></span>
+                    </p>
                 </div>
+                
+            </form>
+            <?php } ?>
             </div>
             <?php if($bookingID) { ?>
             <div class="modal fade" id="reservationModal<?php echo $bookingID; ?>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -261,6 +348,156 @@ function isBooked($day, $bookings) {
     </div>
 </div>
 
+<script>
+function saveCheckboxState() {
+    const checkbox = document.getElementById('form-action');
+    localStorage.setItem('formActionCheckbox', checkbox.checked);
+}
 
 
+function activateCheckbox() {
+    const checkboxState = localStorage.getItem('formActionCheckbox');
+    const checkbox = document.getElementById('form-action');
+    const label = document.getElementById('checkboxLabel');
+    if (checkbox) {
+        checkbox.checked = (checkboxState === 'true'); // Activa el checkbox
+        // Muestra el label solo si el checkbox está marcado
+        if (label) {
+            label.style.display = checkbox.checked ? 'block' : 'none'; // Muestra o oculta el label basado en el estado del checkbox
+        }
+    }
+}
 
+// Aseguro de que el DOM este listo
+document.addEventListener('DOMContentLoaded', function () {
+    activateCheckbox(); // Activa el checkbox y muestra el label nuevamente desde localStorage
+
+});
+
+
+// Llama a activateCheckbox cuando se carga la página
+window.onload = activateCheckbox;
+
+//Se usa para cambiar el estado del checkbox de "Activar opciones adicionales"
+$(document).ready(function() {
+    $('#form-action').change(function() {
+        if ($(this).is(':checked')) {
+            $('.options').show(); // Muestra las opciones adicionales
+        } else {
+            $('.options').hide(); // Oculta las opciones adicionales
+        }
+    });
+
+    // Agrega evento de clic a las tarjetas 
+    //(Se usa para desactivar el clic sobre cards con booking registradas) o ejecutar el ajax
+    $('.card').click(function(event) {
+        event.preventDefault(); // Previene el comportamiento predeterminado del clic
+        var date = $(this).data('date'); // Obtiene la fecha de data-date
+        var formId = '#form-' + date; // Construye el ID del formulario
+        var form = $(formId); // Selecciona el formulario por su ID
+
+        if ($(this).data('modal') === true) {//No hago nada si la card tiene un modal configurado (Con booking)
+            return; 
+        }
+
+        // Verifica el estado del checkbox antes de permitir el envío
+        if ($('#form-action').is(':checked')) {
+            if (!form.prop('disabled')) { // Verifica que el formulario no esté deshabilitado
+                var dateInput = form.find('input[name="date"]'); // Obtiene el input de fecha
+                var originalDate = dateInput.val(); // Obtiene la fecha
+
+                // Solo formatea la fecha si tiene un valor
+                if (originalDate) {
+                    var formattedDate = formatDate(originalDate); // Formatea la fecha
+                    dateInput.val(formattedDate); // Actualiza el valor de la fecha en el formulario
+                    form.find('input[name="date"]').val(formattedDate); // Actualiza el valor de la fecha en el formulario
+                    
+                    //Ejecución del controller
+                    $.ajax({
+                        type: 'POST',
+                        url: '<?php echo '/FinalProject4/Keeper/updateAvailabilityDay'; ?>', // La URL de accion del formulario (controlador)
+                        data: form.serialize(), // Serializa los datos de la card (Input en estado hidden)
+                        success: function(response) {
+                            // Alerta de exito
+                            const data = JSON.parse(response);//Formateo la respuesta para mostrar
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    title: 'Éxito',
+                                    text: data.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'Aceptar'
+                                }).then(() => {
+                                    refreshDays(); // Refrescar los dias
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: data.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'Aceptar'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Alerta de error
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Hubo un problema al actualizar la disponibilidad.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            }).then(() => {
+                                refreshDays();
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'La fecha no está definida.',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            } else {
+                Swal.fire({
+                    title: 'Formulario deshabilitado',
+                    text: 'El formulario no está disponible.',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        } else {//Alerta si el checkbox no esta activo.
+            Swal.fire({
+                title: 'Opciones adicionales no activadas!',
+                text: 'Por favor, si desea cambiar el estado del dia, active las Opciones Adicionales para continuar.',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    });
+    //Funcion para actualizar el formulario
+    function refreshDays() {
+    $.ajax({
+        url: '<?php echo '/FinalProject4/Keeper/refreshDays'; ?>',
+        type: 'GET',
+        success: function(data) {
+            // Actualiza la vista con los cambios realizados
+                saveCheckboxState();
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al refrescar los días:', error);
+        }
+    });
+}
+    // Función para formatear la fecha
+    function formatDate(dateString) {
+        var dateParts = dateString.split('-'); // Divide la fecha en partes
+        return dateParts[0] + '-' + (dateParts[1].padStart(2, '0')) + '-' + (dateParts[2].padStart(2, '0')); // Formatea a YYYY-MM-DD
+    }
+});
+
+</script>
+</body>

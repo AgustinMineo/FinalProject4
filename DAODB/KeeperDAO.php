@@ -155,9 +155,7 @@ class KeeperDAO implements IKeeperDAO{
         $parametersSelect = ['idBooking' => $idBooking];
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query, $parametersSelect);
-
-
-        if(!empty($resultSet)){
+        if(!empty($resultSet)){//Si no esta vacio
           $startDate = $resultSet[0]["startDate"];
           $endDate = $resultSet[0]["endDate"];
 
@@ -172,13 +170,8 @@ class KeeperDAO implements IKeeperDAO{
                   $this->connection = Connection::GetInstance();
                   $result = $this->connection->ExecuteNonQuery($queryUpdate, $parameters);
         }
-
-        // Verifica el resultado
-        if($result){
-            return true;
-        } else {
-            return false;
-        }
+        
+        return true;
     }
     catch (Exception $ex) {
         throw $ex;
@@ -444,7 +437,7 @@ class KeeperDAO implements IKeeperDAO{
           ];
           $existingDays = $this->connection->Execute($queryExistingDays, $parametersExisting);
   
-          // Crear un array con los días existentes para una actualización rápida
+          // Crear un array con los días existentes para una actualizacion rapida
           $existingDaysArray = array_column($existingDays, 'day');
           
           // Crear un array con los días del rango especificado
@@ -456,7 +449,7 @@ class KeeperDAO implements IKeeperDAO{
               if (!in_array($currentDate, $existingDaysArray)) {
                   $datesToInsert[] = $currentDate;
               }
-              // Actualizar los días existentes
+              // Actualizar los días existentes donde el status!=0
               $queryUpdate = "UPDATE ".$this->daysTable."
                               SET available = :available
                               WHERE keeperID = :keeperID AND day = :day and available!=0";
@@ -490,6 +483,53 @@ class KeeperDAO implements IKeeperDAO{
           throw $ex;
       }
   }
+  //Funcion para cambiar el estado desde calendario.
+  public function changeAvailabilityDay($keeperID,$date,$available){
+   
+
+   try {
+       // Conectamos a la base de datos
+       $this->connection = Connection::GetInstance();
+
+       // Verificamos si el día ya existe
+       $queryExistingDay = "SELECT day FROM ".$this->daysTable."
+                             WHERE keeperID = :keeperID AND day = :day";
+       $parametersExisting = [
+           'keeperID' => $keeperID,
+           'day' => $date
+       ];
+       $existingDay = $this->connection->Execute($queryExistingDay, $parametersExisting);
+
+       // Verifica si el día existe
+       if (!empty($existingDay)) {
+           // Si el día existe, actualizamos la disponibilidad
+           $queryUpdate = "UPDATE ".$this->daysTable."
+                           SET available = :available
+                           WHERE keeperID = :keeperID AND day = :day ";
+           $parametersUpdate = [
+               'keeperID' => $keeperID,
+               'day' => $date,
+               'available' => $available
+           ];
+            $this->connection->ExecuteNonQuery($queryUpdate, $parametersUpdate);
+       } else {
+           // Si el día no existe, lo insertamos
+           $queryInsert = "INSERT INTO ".$this->daysTable." (keeperID, day, available) 
+                           VALUES (:keeperID, :day, :available)";
+           $parametersInsert = [
+               'keeperID' => $keeperID,
+               'day' => $date,
+               'available' => $available
+           ];
+            $this->connection->ExecuteNonQuery($queryInsert, $parametersInsert);
+       }
+
+       return true;
+
+   } catch (Exception $ex) {
+       throw $ex;
+   }
+}
 
 
     public function searchDays($keeperID, $value1, $value2){

@@ -48,7 +48,7 @@ class KeeperController{
         require_once(VIEWS_PATH."keeperNav.php");
         require_once(VIEWS_PATH."updateAvailabilityDays.php");
     }
-    public function calendarDays($days,$bookings){
+    public function calendarDays($days,$bookings,$keeper){
         SessionHelper::validateUserRole([3]);
         require_once(VIEWS_PATH."keeperNav.php");
         require_once(VIEWS_PATH."keeperDays.php");
@@ -124,15 +124,55 @@ class KeeperController{
 
     public function updateAvailabilityDays($date1,$date2,$available){
         SessionHelper::validateUserRole([3]);
-        $value = $this->KeeperDAO->changeAvailabilityDays(SessionHelper::getCurrentKeeperID(),$date1,$date2,$available);
-        if($value){
-            echo '<div class="alert alert-success">The new dates were set correctly</div>';
+        //Si la fecha date1 es < a la fecha actual deberia dar error
+        //Si la fecha de date2 es < a la fecha de hoy deberia dar error
+        $today = date('Y-m-d');
+        if($date1 <$today && $date2<$today){
+            echo '<div class="alert alert-danger">Error saving the days! The dates can be less that today´s day </div>';
+            $this->goLandingKeeper();
+            return;
+        }else if($date1<$today){
+            echo '<div class="alert alert-danger">Error saving the days! The start date can be less that today´s day </div>';
+            $this->goLandingKeeper();
+            return;
+        }else if($date2<$today){
+            echo '<div class="alert alert-danger">Error saving the days! The end date can be less that today´s day </div>';
+            $this->goLandingKeeper();
+            return;
         }else{
-            echo '<div class="alert alert-danger">Error saving the days! Please try again later</div>';
-        }
-        $this->goLandingKeeper();
-    }
 
+            $value = $this->KeeperDAO->changeAvailabilityDays(SessionHelper::getCurrentKeeperID(),$date1,$date2,$available);
+            if($value){
+                echo '<div class="alert alert-success">The new dates were set correctly</div>';
+            }else{
+                echo '<div class="alert alert-danger">Error saving the days! Please try again later</div>';
+            }
+            $this->goLandingKeeper();
+        }
+    }
+    //Funcion para vista calendario
+    public function updateAvailabilityDay($date,$available){
+        SessionHelper::validateUserRole([3]);
+        if($date < date('Y-m-d')){
+            echo json_encode(['status' => 'error', 'message' => 'No se puede actualizar una fecha pasada a la actual ']);
+            return;
+        }else{
+            if($available=='1'){
+                $newAvailable=0;
+            }else{
+                $newAvailable=1;
+            }
+            $value = $this->KeeperDAO->changeAvailabilityDay(SessionHelper::getCurrentKeeperID(),$date,$newAvailable);
+            if($value){
+                echo json_encode(['status' => 'success', 'message' => 'The date was succefully update! ']);
+                return;
+            }else{
+                echo json_encode(['status' => 'error', 'message' => 'Error saving the days! Please try again later! ']);
+                return;
+            }
+        }
+    }
+    //Funcion para mostrar el calendario
     public function showCalendarData(){
         SessionHelper::validateUserRole([3]);
 
@@ -143,11 +183,24 @@ class KeeperController{
         $days = $this->KeeperDAO->getAvailabilityDays($keeper->getKeeperId());
 
         $bookings = $this->BookingDAO->showBookingByKeeperID();
-        $this->calendarDays($days,$bookings);
+        $this->calendarDays($days,$bookings,$keeper);
     }
-
-
-
+    //Funcion para refrescar el calendario luego de un cambio
+    public function refreshDays() {
+        SessionHelper::validateUserRole([3]);
+        
+        // Obtener el keeper actual
+        $keeper = $this->KeeperDAO->searchKeeperByIDReduce(SessionHelper::getCurrentUser()->getKeeperId());
+    
+        // Obtener los días del keeper
+        $days = $this->KeeperDAO->getAvailabilityDays($keeper->getKeeperId());
+        $bookings = $this->BookingDAO->showBookingByKeeperID();
+        //$this->calendarDays($days,$bookings,$keeper);
+        // Generar el HTML que será enviado a la llamada AJAX
+    
+        return $days; /// Devuelve el HTML generado
+    }
+    
     public function showCurrentKeeper(){
         SessionHelper::validateUserRole([3]);
         $keeper=$this->KeeperDAO->searchKeeperByEmail(SessionHelper::getCurrentUser()->getEmail());

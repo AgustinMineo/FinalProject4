@@ -1,137 +1,144 @@
 <?php
 namespace Views;
 require_once("validate-session.php");
-include ("ownerNav.php");
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
-<title>Keeper disponibles</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <title>Keeper disponibles</title>
+    <style>
+        #keeperAvailabilityModal .modal-body {
+            min-height: 400px; /* Ajusta esta altura según sea necesario */
+        }
+    </style>
 </head>
 <body>
 <main class="py-5">
-     <section id="listado" class="mb-5">
-          <div class="container">
-               <h2 class="mb-4">Listado de Keepers</h2>
-               <table class="table bg-light-alpha">
-                    <thead>
+<section id="listado" class="mb-5">
+    <div class="container">
+        <h2 class="mb-4 text-center">Listado de Keepers</h2>
+        <table class="table table-striped table-hover bg-light-alpha">
+            <thead class="table-primary">
+                <tr>
                     <th>Last Name</th>
                     <th>First Name</th>
                     <th>Cellphone</th>
-                    <th>birthDate</th>
-                    <th>email</th>
+                    <th>Birth Date</th>
+                    <th>Email</th>
                     <th>Disponibilidad</th>
-                    <th>animalSize</th>
+                    <th>Animal Size</th>
                     <th>Price</th>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($listKeepers as $keeper) { ?>
-                         <tr>
-                              <td><?php echo $keeper->getLastName(); ?></td>
-                              <td><?php echo $keeper->getFirstName(); ?></td>
-                              <td><?php echo $keeper->getCellPhone(); ?></td>
-                              <td><?php $date=date_create($keeper->getBirthDate()); echo date_format($date,"d/m/Y"); ?></td>
-                              <td><?php echo $keeper->getEmail(); ?></td>
-                              <td>
-                                   <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#availabilityModal<?php echo $keeper->getKeeperId(); ?>">
-                                        Ver Disponibilidad
-                                   </button>
-                                   <!-- Inicio de modal Modal -->
-                                   <div class="modal fade" id="availabilityModal<?php echo $keeper->getKeeperId(); ?>" tabindex="-1" aria-labelledby="availabilityModalLabel<?php echo $keeper->getKeeperId(); ?>" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                        <div class="modal-content">
-                                             <div class="modal-header">
-                                                  <h5 class="modal-title" id="availabilityModalLabel<?php echo $keeper->getKeeperId(); ?>">Disponibilidad de <?php echo $keeper->getFirstName() . ' ' . $keeper->getLastName(); ?></h5>
-                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                             </div>
-                                             <div class="modal-body">
-                                                  <div class="mb-3">
-                                                       <label for="startDate<?php echo $keeper->getKeeperId(); ?>" class="form-label">Fecha de inicio</label>
-                                                       <input type="date" class="form-control" id="startDate<?php echo $keeper->getKeeperId(); ?>" oninput="filterAvailability(<?php echo $keeper->getKeeperId(); ?>)">
-                                                  </div>
-                                                  <div class="mb-3">
-                                                       <label for="endDate<?php echo $keeper->getKeeperId(); ?>" class="form-label">Fecha de fin</label>
-                                                       <input type="date" class="form-control" id="endDate<?php echo $keeper->getKeeperId(); ?>" oninput="filterAvailability(<?php echo $keeper->getKeeperId(); ?>)">
-                                                  </div>
-                                                  <ul class="list-group">
-                                                       <?php 
-                                                       $availability = $keeper->getAvailability();
-                                                       
-                                                       if (!empty($availability)) {
-                                                            foreach ($availability as $day) {
-                                                                // Convertir fecha de d/m/Y a Y-m-d para la comparación
-                                                            $dateFormatted = date('d/m/Y', strtotime($day['day']));
-                                                                // Mostrar solo fechas futuras
-                                                            if (strtotime($day['day']) >= strtotime(date('Y-m-d'))) {
-                                                                 $availabilityClass = $day['available'] ? 'list-group-item-success' : 'list-group-item-danger';
-                                                                 echo '<li class="list-group-item '.$availabilityClass.'" data-date="'.$dateFormatted.'">'.$dateFormatted.'</li>';
-                                                            }
-                                                            }
-                                                       } else {
-                                                            echo '<li class="list-group-item">No tiene disponibilidad</li>';
-                                                       }
-                                                       ?>
-                                                  </ul>
-                                             </div>
-                                             <div class="modal-footer">
-                                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                             </div>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($listKeepers as $keeper) { ?>
+                    <tr>
+                        <td><?php echo $keeper->getLastName(); ?></td>
+                        <td><?php echo $keeper->getFirstName(); ?></td>
+                        <td><?php echo $keeper->getCellPhone(); ?></td>
+                        <td><?php $date = date_create($keeper->getBirthDate()); echo date_format($date, "d/m/Y"); ?></td>
+                        <td><?php echo $keeper->getEmail(); ?></td>
+                        <td>
+                            <button type="button" class="btn btn-info animate__animated animate__pulse" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#availabilityModal<?php echo $keeper->getKeeperId(); ?>" 
+                                    onclick='initializeCalendar(<?php echo $keeper->getKeeperId(); ?>, <?php echo json_encode($keeper->getAvailability()); ?>)'>
+                                Ver Disponibilidad
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="availabilityModal<?php echo $keeper->getKeeperId(); ?>" tabindex="-1" aria-labelledby="availabilityModalLabel<?php echo $keeper->getKeeperId(); ?>" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="availabilityModalLabel<?php echo $keeper->getKeeperId(); ?>">Disponibilidad de <?php echo $keeper->getFirstName() . ' ' . $keeper->getLastName(); ?></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
+                                        <div class="modal-body">
+                                            <div id="calendar<?php echo $keeper->getKeeperId(); ?>"></div>
                                         </div>
-                                   </div>
-                                                  <!--Fin de modal --> 
-                              </td>
-                              <td><?php echo $keeper->getAnimalSize(); ?></td>
-                              <td>$<?php echo $keeper->getPrice(); ?></td>
-                         </tr>
-                    <?php } ?>
-                    </tbody>
-               </table>
-          </div>
-     </section>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><?php echo $keeper->getAnimalSize(); ?></td>
+                        <td>$<?php echo $keeper->getPrice(); ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+</section>
 </main>
+
 <script src="../Views/js/datepicker.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
 <script>
-function filterAvailability(keeperId) {
-var startDate = document.getElementById('startDate' + keeperId).value;
-var endDate = document.getElementById('endDate' + keeperId).value;
-var listItems = document.querySelectorAll('#availabilityModal' + keeperId + ' .list-group-item');
+function convertAvailability(data) {
+    return data.map(item => {
+        return {
+            title: item.available === "1" ? 'Disponible' : 'No disponible',
+            start: item.day,
+            end: item.available === "1" ? item.day : null,
+            allDay: true,
+            backgroundColor: item.available === "1" ? 'green' : 'red'
+        };
+    });
+}
 
-    //Valido que sea un date
-     if (startDate) {
-          startDate = new Date(startDate);
-          startDate.setHours(0, 0, 0, 0); // Para que arranque a las 00:00:00
-     }
+let isInitialRender = true; 
 
-     if (endDate) {
-          endDate = new Date(endDate);
-          endDate.setHours(23, 59, 59, 999); //Para que tome hasta las 23:59:59
-     }
+function initializeCalendar(keeperId, availabilityData) {
+    var calendarEl = document.getElementById('calendar' + keeperId);
+    calendarEl.innerHTML = '';
+    if (!calendarEl) {
+        console.error("Calendar element not found");
+        return;
+    }
 
-listItems.forEach(function(item) {
-     var dateText = item.textContent.trim();
-     var [day, month, year] = dateText.split('/').map(Number);
-     var itemDate = new Date(year, month - 1, day-1); // Convertir d/m/Y a Date
+    console.log("Initializing calendar for keeperId: " + keeperId);
 
-     var showItem = true;
+    
+    var events = convertAvailability(availabilityData);
 
-        // comparo con la fecha de inicio
-     if (startDate && itemDate < startDate) {
-          showItem = false;
-     }
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        events: events,
+        eventRender: function(info) {
+            console.log("Rendering event: ", info.event);
+        },
+        datesSet: function(dateInfo) {
+            console.log("Calendar dates updated: ", dateInfo);
 
-        // comparo con fecha de fin
-     if (endDate && itemDate >= endDate) {
-          showItem = false;
-     }
+            if (isInitialRender) {
+                setTimeout(() => {
+                    calendar.gotoDate(new Date());
+                    isInitialRender = false;
+                }, 70); 
+            }
+        }
+    });
 
-     item.style.display = showItem ? '' : 'none';
-});
+    calendar.render();
+    calendar.updateSize();
+
+
+    setTimeout(() => {
+        calendar.gotoDate(new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1));
+        setTimeout(() => {
+            calendar.gotoDate(new Date()); 
+        }, 500); 
+    }, 0); 
 }
 
 

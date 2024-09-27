@@ -20,7 +20,6 @@ namespace Views;
     <div>
       <h3 class="float-md-start mb-0">PET HERO</h3>
       <nav class="nav nav-masthead justify-content-center float-md-end">
-      
       </nav>
     </div>
   </header>
@@ -31,13 +30,13 @@ namespace Views;
     <p class="lead">
     <div class=" container col-lg-6 d-flex justify-content-center w-75 p-5">
         <button type="button" class="btn border border-1 p-4 " style="background:#B1adfb">
-          <a href="<?php echo FRONT_ROOT?>User/addOwnerView" class="text-decoration-none ">Sign-up owner</a>
+          <a href="<?php echo FRONT_ROOT?>User/newOwner" class="text-decoration-none ">Sign-up owner</a>
         </button>
         <button type="button" class="btn border border-1 p-4" style="background:#B1adfb">
           <a href="<?php echo FRONT_ROOT?>Views/loginUser.php" class="text-decoration-none">Login</a>
         </button>
         <button type="button" class="btn border border-1 p-4" style="background:#B1adfb">
-          <a href="<?php echo FRONT_ROOT?>User/addKeeperView" class="text-decoration-none">Sign-up Keeper</a>
+          <a href="<?php echo FRONT_ROOT?>User/newKeeper" class="text-decoration-none">Sign-up Keeper</a>
           </button>
         </div>
     </p>

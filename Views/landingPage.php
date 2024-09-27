@@ -1,7 +1,6 @@
 <?php
 namespace Views;
 require_once("validate-session.php");
-require_once(VIEWS_PATH."ownerNav.php");
 ?>
 <!doctype html>
 <html lang="en">
@@ -27,15 +26,28 @@ require_once(VIEWS_PATH."ownerNav.php");
 </head>
 <body>
 
-<main>
-  <section class="py-5 text-center container">
-    <div class="row py-lg-5">
-      <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Our Keepers</h1>
-        <p class="lead text-muted">We have the best pet sitters in the country! </p>
-       
+  <main>
+    <?php if($userRole == 2): ?>
+    <section class="py-5 text-center container">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light">Our Keepers</h1>
+          <p class="lead text-muted">We have the best pet sitters in the country! </p>
           <a  class="btn btn-primary my-2" href="<?php echo FRONT_ROOT ?>Keeper/showKeepers">Here are some keepers!</a>
-  </section>
-</main>
+        </div>
+      </div>
+    </section>
+    <?php endif?>
+    <?php if($userRole == 3): ?>
+    <section class="py-5 text-center container">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light">Welcome Back!</h1>
+          <a  class="btn btn-primary my-2" href="<?php echo FRONT_ROOT ?>Keeper/showCalendarData">Let's check your scheduler!</a>
+        </div>
+      </div>
+    </section>
+    <?php endif?>
+  </main>
   </body>
 </html>

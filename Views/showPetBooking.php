@@ -1,7 +1,6 @@
 <?php
 namespace Views;
 require_once("validate-session.php");
-include ("ownerNav.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">

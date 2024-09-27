@@ -1,0 +1,151 @@
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+    color: #007bff; 
+}
+
+.list-group-item {
+    background-color: #ffffff; 
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem; 
+    transition: all 0.2s; 
+}
+
+.list-group-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.btn-primary {
+    background-color: #007bff; 
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+.owner-info {
+    animation: fadeIn 0.5s ease; 
+}
+
+.info-box {
+    background-color: #f8f9fa; 
+    border: 1px solid #ddd; 
+    border-radius: 5px;
+    padding: 10px; 
+    margin-bottom: 15px; 
+    transition: background-color 0.3s; 
+}
+
+.info-box:hover {
+    background-color: #e2e6ea;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px); 
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); 
+    }
+}
+
+.modal-body {
+    padding: 20px; 
+    border-radius: 10px; 
+}
+
+h3 {
+    font-family: 'Arial', sans-serif; 
+    font-weight: bold;
+    color: #333;
+}
+
+strong {
+    color: #0056b3; 
+}
+
+p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    font-size: 1.1rem; 
+    margin-bottom: 10px; 
+}
+.card {
+    border-radius: 10px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+}
+
+.pet-details {
+    animation: fadeIn 0.5s ease; 
+}
+
+.list-group-item {
+    background-color: #f8f9fa; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    margin-bottom: 10px; 
+    transition: background-color 0.3s;
+}
+
+.list-group-item:hover {
+    background-color: #e2e6ea; 
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px); 
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0); 
+    }
+}
+
+.modal-body {
+    padding: 20px; 
+}
+.video-container {
+    border: 1px solid #ddd;
+    border-radius: 10px; 
+    overflow: hidden; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 10px; 
+}
+
+.video-container video {
+    border-radius: 10px;
+}
+
+
+/*Modal Booking*/
+.hover-effect {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.hover-effect:hover {
+    background-color: #f8f9fa; /* Color de fondo al pasar el ratón */
+    transform: translateY(-2px); /* Efecto de elevación */
+}
+
+.border {
+    border: 1px solid #ced4da; /* Color del borde */
+}
+
+.rounded {
+    border-radius: 0.25rem; /* Bordes redondeados */
+}
+
+.modal-title {
+    font-family: 'Arial', sans-serif; /* Fuente de la cabecera */
+    font-weight: bold; /* Negrita */
+}
+
+.modal-body {
+    font-family: 'Verdana', sans-serif; /* Fuente del cuerpo */
+    font-size: 16px; /* Tamaño de fuente */
+}

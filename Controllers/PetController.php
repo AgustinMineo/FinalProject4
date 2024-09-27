@@ -14,22 +14,25 @@ class PetController{
     private $OwnerDAO;
     private $PetDAO;
 
-    public function goLandingOwner(){
-        require_once(VIEWS_PATH."ownerNav.php");
-    }
     public function __construct(){
         $this->PetDAO = new PetDAO();
         $this->OwnerDAO = new OwnerDAO();       
     }
 
+    //Views
+    public function goLanding(){
+        $userRole=SessionHelper::InfoSession([1,2]);
+    }
     public function goNewPet(){
-        SessionHelper::validateUserRole([2]);
-        require_once(VIEWS_PATH."ownerNav.php");
+        $userRole=SessionHelper::InfoSession([2]);
         require_once(VIEWS_PATH . "pet-add.php");
+    }
+    public function showPetsList($petList){
+        $userRole=SessionHelper::InfoSession([1,2]);
+        require_once(VIEWS_PATH . "showPet.php");
     }
     
     public function newPet($petName, $breedID, $petSize,$petDetails, $petWeight, $petAge,$petImage,$petVaccinationPlan,$petVideo) {
-        SessionHelper::validateUserRole([2]);
         if (SessionHelper::getCurrentUser()) {
             $owner = new Owner();
             $pet = new Pet();
@@ -55,10 +58,10 @@ class PetController{
     
                 if ($result) {
                     echo "<div class='alert alert-success'>$petName was created successfully!</div>";
-                    $this->goLandingOwner();
+                    $this->goLanding();
                 } else {
                     echo "<div class='alert alert-danger'>Ups! Error registering the pet!</div>";
-                    $this->goLandingOwner();
+                    $this->goLanding();
                 }
             } else {
                 // Manejar errores de carga de archivos
@@ -78,16 +81,27 @@ class PetController{
            //     return $petListSearch; 
            // } else { echo "<div class='alert alert-danger'>You have no pets!!</div>";
            //         $this->goIndex();}
-           $petListSearch = $this->PetDAO->searchPets(SessionHelper::getCurrentOwnerID()); 
+            $petListSearch = $this->PetDAO->searchPets(SessionHelper::getCurrentOwnerID()); 
             return $petListSearch; 
         }
     }
+    //Muestra la lista de pets
     public function showPets(){
-        SessionHelper::validateUserRole([2]);
-        $petList = $this->PetDAO->searchPetList();
-        require_once(VIEWS_PATH . "showPet.php");
+        if(SessionHelper::getCurrentRole()===1){
+            //Listado para admin
+            $petList = $this->PetDAO->GetAllPet();
+        }else{
+            $petList = $this->PetDAO->searchPetList();
+        }
+
+        if($petList){
+            $this->showPetsList($petList);
+        }else{
+            echo '<div class="alert alert-danger">You dont have any pet´s  right now!</div>';
+            $this->goLanding();
+        }
     }
-    
+    //Controla de subir los archivos (Se llama en newPet)
     private function uploadFile(Pet $pet) {
 
         $uploadDir = UPLOADS_PATH . "{$pet->getOwnerID()->getOwnerID()}-{$pet->getBreedID()}-{$pet->getPetName()}/";
@@ -154,9 +168,8 @@ class PetController{
     
         return $result;
     }
-    
-    
-    
-    
-    
+
+    public function getAllPets(){
+        
+    }
 }?>

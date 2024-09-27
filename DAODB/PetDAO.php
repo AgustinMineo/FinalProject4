@@ -52,11 +52,11 @@ class PetDAO implements IPetDAO{
             JOIN ".$this->breedTable." b ON p.breedID = b.breedID;";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
-            $owner= new Owner();
-            $owner= $this->OwnerDAO->searchBasicInfoOwnerByID($row["ownerID"]);
             if($resultSet){
                 $petList = array();
                 foreach($resultSet as $row){
+                    $owner= new Owner();
+                    $owner= $this->OwnerDAO->searchBasicInfoOwnerByID($row["ownerID"]);
                     $pet = new Pet();
                     $pet->setPetID($row["petID"]);
                     $pet->setPetName($row["petName"]);

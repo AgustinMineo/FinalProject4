@@ -1,0 +1,59 @@
+.hover-effect {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.hover-effect:hover {
+    background-color: #f8f9fa; /* Color de fondo al pasar el ratón */
+    transform: translateY(-2px); /* Efecto de elevación */
+}
+
+.border {
+    border: 1px solid #ced4da; /* Color del borde */
+}
+
+.rounded {
+    border-radius: 0.25rem; /* Bordes redondeados */
+}
+
+.modal-title {
+    font-family: 'Arial', sans-serif; /* Fuente de la cabecera */
+    font-weight: bold; /* Negrita */
+}
+
+.modal-body {
+    font-family: 'Verdana', sans-serif; /* Fuente del cuerpo */
+    font-size: 16px; /* Tamaño de fuente */
+}
+
+/*Modal pet keeper*/
+.hover-effect {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.hover-effect:hover {
+    background-color: #f8f9fa; /* Color de fondo al pasar el ratón */
+    transform: translateY(-2px); /* Efecto de elevación */
+}
+
+.border {
+    border: 1px solid #ced4da; /* Color del borde */
+}
+
+.rounded {
+    border-radius: 0.25rem; /* Bordes redondeados */
+}
+
+.card-title {
+    font-family: 'Arial', sans-serif; /* Fuente del nombre de la mascota */
+    font-weight: bold; /* Negrita */
+}
+
+.modal-title {
+    font-family: 'Arial', sans-serif; /* Fuente de la cabecera */
+    font-weight: bold; /* Negrita */
+}
+
+.modal-body {
+    font-family: 'Verdana', sans-serif; /* Fuente del cuerpo */
+    font-size: 16px; /* Tamaño de fuente */
+}

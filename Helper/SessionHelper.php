@@ -28,7 +28,6 @@ class SessionHelper{
     }
     /*Return Owner ID*/
     public static function getCurrentOwnerID(){
-
         return $_SESSION["loggedUser"]->getOwnerId();
     }
     public static function getCurrentPetAmount(){
@@ -39,6 +38,19 @@ class SessionHelper{
             unset($_SESSION['loggedUser']);
         }
         return session_destroy();
+    }
+
+    public static function InfoSession($requiredRole){
+        //Valido que el usuario tenga el rol que necesita para acceder a la vista
+        //Si $userRole no es valido, va al login, si ocurre algo y no se valida eso, entra al if
+        //Si el if no es valido el valor, lo que hace es ir al validateSession
+        $userRole = self::validateUserRole($requiredRole);
+        if($userRole){
+            require_once(VIEWS_PATH . "mainNavBar.php");
+            return $userRole;
+        }else{
+            self::validateSession();
+        }
     }
 
     public static function validateSession() {
@@ -53,38 +65,28 @@ class SessionHelper{
     }
 
     public static function getCurrentRole(){
-        return $userRole = (int)$_SESSION["loggedUser"]->getRol();
+        return $userRole = (int)$_SESSION["loggedUser"]->getRol() ?? null;
     }
 
-    //
-    public static function redirectTo404()
-    {
-    if (self::getCurrentUser()) {
-        $role = self::getCurrentRole();
 
-        if ($role == 2) {
-            require_once(VIEWS_PATH . "ownerNav.php");
-            require_once(VIEWS_PATH . "Error404.php");
-        } elseif ($role == 3) {
-            require_once(VIEWS_PATH . "keeperNav.php");
-            require_once(VIEWS_PATH . "Error404.php");
+    public static function redirectTo404(){
+        if (self::getCurrentUser()) {
+        self::InfoSession();
+        require_once(VIEWS_PATH . "Error404.php");
         } else {
-            require_once(VIEWS_PATH . "Error404.php");
-        }
-    } else {
         header("Location: /FinalProject4/Views/Error404.php");
         exit();
-    }
+        }
     }
 
     public static function validateUserRole($requiredRole){
         self::validateSession();
-
         $userRole = (int)$_SESSION["loggedUser"]->getRol();
-
         if (!in_array($userRole, $requiredRole, true)) {
             header("Location: " . FRONT_ROOT. VIEWS_PATH . "loginUser.php"); 
             exit();
+        }else{
+            return $userRole;
         }
     }
 

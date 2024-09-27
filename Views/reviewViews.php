@@ -12,6 +12,7 @@ require_once("validate-session.php");
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/review.css">
     <title>Listado de Reseñas</title>
 </head>
 <body>
@@ -27,141 +28,218 @@ require_once("validate-session.php");
                         } else {
                             
                             foreach ($reviewList as $review) {
-                                
                                 ?>
-                                
-                                <div class="card m-3" style="width: 20rem;">
-                                    <div class="card-body ">
-                                        <h5 class="card-title">Reseña ID: <?php echo $review->getReviewID(); ?></h5>
-                                        <p class="card-text"><strong>Descripción:</strong> <?php echo $review->getDescription(); ?></p>
-                                        <p class="card-text"><strong>Puntuación:</strong> <?php echo $review->getPoints(); ?></p>
-                                        <p class="card-text"><strong>Reserva ID:</strong> <?php echo $review->getBooking()->getBookingID(); ?></p>
-                                        <p class="card-text"><strong>Estado de la Reserva:</strong> <?php if($review->getBooking()->getStatus() == '7'){echo "Completed";}?></p>
-                                        <p class="card-text"><strong>Fecha de Inicio:</strong> <?php echo $review->getBooking()->getStartDate(); ?></p>
-                                        <p class="card-text"><strong>Fecha de Fin:</strong> <?php echo $review->getBooking()->getEndDate(); ?></p>
-                                        <div class="container d-flex justify-content-center">
-                                        
-                                            <div class="d-flex flex-wrap mx-auto">
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#infoModal<?php echo $review->getReviewID(); ?>">Ver Detalle</button>
-                                            </div>
-                                        
-                                            <div class="d-flex justify-content-center mx-auto">
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#bookingModal<?php echo $review->getBooking()->getBookingID(); ?>">Ver Booking</button>
-                                            </div>
-                                            
-                                        </div>
+                                    <div class="card m-3" style="width: 20rem;">
+                                        <div class="card-body ">
+                                        <h5 class="card-title text-primary">Reseña ID: <?php echo $review->getReviewID(); ?></h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <strong>Descripción:</strong> <?php echo $review->getDescription(); ?>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Puntuación:</strong> <?php echo $review->getPoints(); ?>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Reserva ID:</strong> <?php echo $review->getBooking()->getBookingID(); ?>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Estado de la Reserva:</strong> 
+                                            <?php echo $review->getBooking()->getStatus(); ?>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Fecha de Inicio:</strong> <?php echo $review->getBooking()->getStartDate(); ?>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Fecha de Fin:</strong> <?php echo $review->getBooking()->getEndDate(); ?>
+                                        </li>
+                                    </ul>
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#infoModal<?php echo $review->getReviewID(); ?>">Ver Detalle</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bookingModal<?php echo $review->getBooking()->getBookingID(); ?>">Ver Booking</button>
+                                    </div>
                                         
                                         <!-- Modal Review -->
                                         <div class="modal fade" id="infoModal<?php echo $review->getReviewID(); ?>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalLabel">Detalle completo</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body bg-light">
-                                                        <h3 class="text-center">Reseña</h3>
-                                                        <p><strong>Descripción:</strong> <?php echo $review->getDescription(); ?></p>
-                                                        <p><strong>Puntuación:</strong> <?php echo $review->getPoints(); ?></p>
-                                                        <p><strong>Reserva ID:</strong> <?php echo $review->getBooking()->getBookingID(); ?></p>
-                                                        <p><strong>Estado de la Reserva:</strong> <?php if($review->getBooking()->getStatus() == '7'){echo "Completed";} ?></p>
-                                                        <p><strong>Fecha de Inicio:</strong> <?php echo $review->getBooking()->getStartDate(); ?></p>
-                                                        <p><strong>Fecha de Fin:</strong> <?php echo $review->getBooking()->getEndDate(); ?></p>
-                                                        
-                                                    </div>
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalLabel">Detalle Completo de la Reseña</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body bg-light">
+                                                    <h3 class="text-center">Detalles de la Reseña</h3>
+                                                    <hr>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item">
+                                                            <strong>Descripción:</strong> <?php echo $review->getDescription(); ?>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <strong>Puntuación:</strong>
+                                                            <span class="stars">
+                                                                <?php 
+                                                                    $points = $review->getPoints();
+                                                                    for ($i = 0; $i < 5; $i++) {
+                                                                        echo ($i < $points) ? '⭐' : '☆'; 
+                                                                    }
+                                                                ?>
+                                                            </span>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <strong>Reserva ID:</strong> <?php echo $review->getBooking()->getBookingID(); ?>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <strong>Estado de la Reserva:</strong>
+                                                            <?php 
+                                                                echo $review->getBooking()->getStatus();
+                                                            ?>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <strong>Fecha de Inicio:</strong> <?php echo date("d/m/Y", strtotime($review->getBooking()->getStartDate())); ?>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <strong>Fecha de Fin:</strong> <?php echo date("d/m/Y", strtotime($review->getBooking()->getEndDate())); ?>
+                                                        </li>
+                                                    </ul>
+                                                    <hr>
+                                                </div>
+
                                         <!--Modal keeper-->
-                                                    <?php if ($userRole == 2): ?> 
-                                                    <div class="modal-body bg-light">
-                                                        <hr>
-                                                        <h3 class="text-center">Cuidador</h3>
-                                                        <p><strong>Nombre:</strong> <?php echo $review->getBooking()->getKeeperID()->getLastName() ?> <?php echo $review->getBooking()->getKeeperID()->getfirstName() ?></p>
-                                                        <p><strong>Correo:</strong> <?php echo $review->getBooking()->getKeeperID()->getEmail()  ?></p>
-                                                        <p><strong>Descripción:</strong> <?php echo $review->getBooking()->getKeeperID()->getDescription()  ?></p>
-                                                        <p><strong>Fecha de nacimiento:</strong> <?php echo $review->getBooking()->getKeeperID()->getbirthDate()  ?></p>
-                                                        <p><strong>Tamaño de mascota:</strong> <?php echo $review->getBooking()->getKeeperID()->getAnimalSize()  ?></p>
-                                                        <p><strong>Precio por dia:</strong> $<?php echo $review->getBooking()->getKeeperID()->getPrice()  ?></p>
-                                                        <p><strong>CBU:</strong> <?php echo $review->getBooking()->getKeeperID()->getCBU()  ?></p>
-                                                        <p><strong>Puntos:</strong> <?php echo $review->getBooking()->getKeeperID()->getPoints()  ?></p>
-                                                        <hr>
-                                                    </div>
+                                                    <?php if ($userRole === 2 || $userRole=== 1 ): ?> 
+                                                        <div class="modal-body bg-light p-4 rounded">
+                                                            <h3 class="text-center text-primary">Detalles del Cuidador</h3>
+                                                            <ul class="list-group list-group-flush">
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <strong>Nombre:</strong>
+                                                                    <span><?php echo $review->getBooking()->getKeeperID()->getLastName() ?> <?php echo $review->getBooking()->getKeeperID()->getFirstName() ?></span>
+                                                                </li>
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <strong>Correo:</strong>
+                                                                    <span><?php echo $review->getBooking()->getKeeperID()->getEmail() ?></span>
+                                                                </li>
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <strong>Descripción:</strong>
+                                                                    <span><?php echo $review->getBooking()->getKeeperID()->getDescription() ?></span>
+                                                                </li>
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <strong>Fecha de Nacimiento:</strong>
+                                                                    <span><?php echo date("d/m/Y", strtotime($review->getBooking()->getKeeperID()->getBirthDate())) ?></span>
+                                                                </li>
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <strong>Tamaño de Mascota:</strong>
+                                                                    <span><?php echo $review->getBooking()->getKeeperID()->getAnimalSize() ?></span>
+                                                                </li>
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <strong>Precio por Día:</strong>
+                                                                    <span>$<?php echo number_format($review->getBooking()->getKeeperID()->getPrice(), 2) ?></span>
+                                                                </li>
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <strong>CBU:</strong>
+                                                                    <span><?php echo $review->getBooking()->getKeeperID()->getCBU() ?></span>
+                                                                </li>
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <strong>Puntos:</strong>
+                                                                    <span><?php echo $review->getBooking()->getKeeperID()->getPoints() ?></span>
+                                                                </li>
+                                                            </ul>
+                                                            <hr>
+                                                            
+                                                        </div>
+
+
                                                     <?php endif; ?>
                                                         <!--Modal owner--> 
-                                                        <?php if ($userRole == 3): ?> 
-                                                    <div class="modal-body bg-light">
-                                                        <hr>
-                                                        <h3 class="text-center">Dueño</h3>
-                                                        <p><strong>Nombre y apellido:</strong> <?php echo $review->getBooking()->getPetID()->getOwnerId()->getLastName() ?> <?php echo $review->getBooking()->getKeeperID()->getfirstName() ?></p>
-                                                        <p><strong>Correo:</strong> <?php echo $review->getBooking()->getPetID()->getOwnerId()->getEmail()  ?></p>
-                                                        <p><strong>Descripción:</strong> <?php echo $review->getBooking()->getPetID()->getOwnerId()->getDescription()  ?></p>
-                                                        <p><strong>Fecha de nacimiento:</strong> <?php echo $review->getBooking()->getPetID()->getOwnerId()->getbirthDate()  ?></p>
-                                                        <p><strong>Cantidad de mascotas:</strong> <?php echo $review->getBooking()->getPetID()->getOwnerId()->getPetAmount()  ?></p>
-                                            
-                                                        <hr>
-                                                    </div>
+                                                        <?php if ($userRole == 3 || $userRole===1): ?> 
+                                                            <div class="modal-body bg-light">
+                                                                <h3 class="text-center">Dueño</h3>
+                                                                <hr>
+                                                                <div class="owner-info">
+                                                                <ul class="list-group list-group-flush">
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <strong>Nombre:</strong>
+                                                                        <span><?php echo $review->getBooking()->getPetID()->getOwnerId()->getLastName(); ?> <?php echo $review->getBooking()->getPetID()->getOwnerId()->getFirstName(); ?></span>
+                                                                    </li>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <strong>Correo:</strong>
+                                                                        <span><?php echo $review->getBooking()->getPetID()->getOwnerId()->getEmail(); ?></span>
+                                                                    </li>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <strong>Descripción:</strong>
+                                                                        <span><?php echo $review->getBooking()->getPetID()->getOwnerId()->getDescription(); ?></span>
+                                                                    </li>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <strong>Fecha de nacimiento:</strong>
+                                                                        <span><?php echo date("d/m/Y", strtotime($review->getBooking()->getPetID()->getOwnerId()->getBirthDate())); ?></span>
+                                                                    </li>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <strong>Cantidad de mascotas:</strong>
+                                                                        <span><?php echo $review->getBooking()->getPetID()->getOwnerId()->getPetAmount(); ?></span>
+                                                                    </li>
+                                                                </div>
+                                                                <hr>
+                                                            </div>
                                                     <?php endif; ?>
                                                         <!-- Modal owner-->
+                                                        <!--Modal Pet-->
                                                         <div class="container">
-                                                        <div class="modal-dialog modal-lg">
-                                                            <h5 class="modal-title text-center" id="modalLabel">Detalles de <?php echo $review->getBooking()->getPetID()->getPetName(); ?> </h5>
-                                                            </div>
-                                                            <div class="modal-body bg-light d-flex flex-nowarp align-items-center justify-content-center">
-                                                            <div class="card m-3" style="width: 75%;">
-                                                            
-                                                            <?php 
-                                                            if ($image = $review->getBooking()->getPetID()->getPetImage()) {
-                                                                $imageData = base64_encode(file_get_contents($image));
-                                                                echo '<img src="data:image/jpeg;base64,'.$imageData.'" class="card-img-top" alt="Imagen de '. $review->getBooking()->getPetID()->getPetName() .'">';
-                                                            } else {
-                                                                echo '<img src="'.IMG_PATH.'default-pet.jpg" class="card-img-top" alt="Imagen por defecto">';
-                                                            }
-                                                            ?>
-                                                            <div class="card-body">
-                                                                <h5 class="card-title text-center"><?php echo $review->getBooking()->getPetID()->getPetName(); ?></h5>
-                                                                <hr>
-                                                                <ul class="list-group list-group-flush">
-                                                                        
-                                                                        <li class="list-group-item"><strong>Breed:</strong> <?php echo $review->getBooking()->getPetID()->getPetBreedByText(); ?></li>
-                                                                        
-                                                                        <li class="list-group-item"><strong>Weight:</strong> <?php echo $review->getBooking()->getPetID()->getPetWeight(); ?> kg</li>
-                                                                        
-                                                                        <li class="list-group-item"><strong>Size:</strong> <?php echo $review->getBooking()->getPetID()->getPetSize(); ?></li>
-                                                                        
-                                                                        <li class="list-group-item"><strong>Age:</strong> <?php echo $review->getBooking()->getPetID()->getPetAge(); ?> years</li>
+                                                            <div class="modal-dialog modal-lg">
+                                                                <h5 class="modal-title text-center" id="modalLabel">Detalles de <?php echo $review->getBooking()->getPetID()->getPetName(); ?> </h5>
+                                                                </div>
+                                                                <div class="modal-body bg-light d-flex flex-nowrap align-items-center justify-content-center">
+                                                                    <div class="card m-3" style="width: 75%;">
+                                                                        <?php 
+                                                                        if ($image = $review->getBooking()->getPetID()->getPetImage()) {
+                                                                            $imageData = base64_encode(file_get_contents($image));
+                                                                            echo '<img src="data:image/jpeg;base64,'.$imageData.'" class="card-img-top" alt="Imagen de '. $review->getBooking()->getPetID()->getPetName() .'">';
+                                                                        } else {
+                                                                            echo '<img src="'.IMG_PATH.'default-pet.jpg" class="card-img-top" alt="Imagen por defecto">';
+                                                                        }
+                                                                        ?>
+                                                                        <div class="card-body">
+                                                                            <h5 class="card-title text-center"><?php echo $review->getBooking()->getPetID()->getPetName(); ?></h5>
+                                                                            <hr>
+                                                                            <div class="pet-details">
+                                                                                <ul class="list-group list-group-flush">
+                                                                                    <li class="list-group-item"><strong>Raza:</strong> <?php echo $review->getBooking()->getPetID()->getPetBreedByText(); ?></li>
+                                                                                    <li class="list-group-item"><strong>Peso:</strong> <?php echo $review->getBooking()->getPetID()->getPetWeight(); ?></li>
+                                                                                    <li class="list-group-item"><strong>Tamaño:</strong> <?php echo $review->getBooking()->getPetID()->getPetSize(); ?></li>
+                                                                                    <li class="list-group-item"><strong>Edad:</strong> <?php echo $review->getBooking()->getPetID()->getPetAge(); ?> años</li>
+                                                                                    <li class="list-group-item"><strong>Detalles:</strong> <?php echo $review->getBooking()->getPetID()->getPetDetails(); ?></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="text-center">
+                                                                                <h6>Plan de Vacunación</h6>
+                                                                                <?php 
+                                                                                if (!$review->getBooking()->getPetID()->getPetVaccinationPlan()) {
+                                                                                    echo "<p>No disponible</p>";
+                                                                                } else {
+                                                                                    $VaccinationPlan = $review->getBooking()->getPetID()->getPetVaccinationPlan();
+                                                                                    $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));
+                                                                                    echo '<img src="data:image/jpeg;base64,'.$VaccinationPlanData.'" class="img-fluid" alt="Plan de vacunación">';
+                                                                                }
+                                                                                ?>
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="text-center">
+                                                                                <h6>Video de <?php echo $review->getBooking()->getPetID()->getPetName(); ?></h6>
+                                                                                <p class="text-muted">Aquí puedes ver un video de <?php echo $review->getBooking()->getPetID()->getPetName(); ?> disfrutando de su tiempo.</p>
+                                                                                <?php 
+                                                                                if (!$review->getBooking()->getPetID()->getPetVideo()) {
+                                                                                    echo "<p>No disponible</p>";
+                                                                                } else {
+                                                                                    echo '<div class="video-container" style="animation: fadeIn 0.5s ease;">'; // Añadimos una animación de entrada
+                                                                                    echo '<video width="100%" height="240" controls>';
+                                                                                    echo '<source src="' . FRONT_ROOT . $review->getBooking()->getPetID()->getPetVideo() . '" type="video/mp4">';
+                                                                                    echo 'Tu navegador no soporta la etiqueta de video.';
+                                                                                    echo '</video>';
+                                                                                    echo '</div>'; // Cerramos el contenedor del video
+                                                                                }
+                                                                                ?>
+                                                                            </div>
 
-                                                                        <li class="list-group-item"><strong>Detalles:</strong> <?php echo $review->getBooking()->getPetID()->getPetDetails(); ?></li>
-                                                                </ul>
-                                                                <hr>
-                                                                <div class="text-center">
-                                                                        
-                                                                        <h6>Vaccination Plan</h6>
-                                                                        <?php 
-                                                                        if (!$review->getBooking()->getPetID()->getPetVaccinationPlan()) {
-                                                                            echo "<p>Not available</p>";
-                                                                        } else {
-                                                                            $VaccinationPlan = $review->getBooking()->getPetID()->getPetVaccinationPlan();
-                                                                            $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));
-                                                                            echo '<img src="data:image/jpeg;base64,'.$VaccinationPlanData.'" class="img-fluid" alt="Plan de vacunación">';
-                                                                        }
-                                                                        ?>
+                                                                        </div>   
+                                                                    </div>
                                                                 </div>
-                                                                <hr>
-                                                                <div class="text-center">
-                                                                        
-                                                                        <h6>Video</h6>
-                                                                        <?php 
-                                                                        if (!$review->getBooking()->getPetID()->getPetVideo()) {
-                                                                            echo "<p>Not available</p>";
-                                                                        } else {
-                                                                            echo '<video width="100%" height="240" controls>';
-                                                                            echo '<source src="' . FRONT_ROOT . $review->getBooking()->getPetID()->getPetVideo() . '" type="video/mp4">';
-                                                                            echo 'Your browser does not support the video tag.';
-                                                                            echo '</video>';
-                                                                        }
-                                                                        ?>
-                                                                </div>
-                                                            </div>   
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                     
                                                     <div class="modal-footer">
@@ -172,32 +250,56 @@ require_once("validate-session.php");
                                         </div>
                                         
                                         <!-- Modal Review -->
-                                         <!--Modal Owner-->
-                                         
-                                         <!-- Modal Booking -->
-                                         <div class="modal fade" id="bookingModal<?php echo $review->getBooking()->getBookingID(); ?>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalLabel">Detalles de la Reserva</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <!--Modal Owner-->
+                                        
+                                        <!-- Modal Booking -->
+                                        <div class="modal fade" id="bookingModal<?php echo $review->getBooking()->getBookingID(); ?>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalLabel">Detalles de la Reserva</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body bg-light">
+                                                    <h3 class="text-center">Información de la Reserva</h3>
+                                                    <hr>
+                                                    <div class="reservation-details" style="animation: fadeIn 0.5s ease;">
+                                                        <div class="mb-3 border rounded p-3 hover-effect">
+                                                            <p><strong>Reserva ID:</strong> <?php echo $review->getBooking()->getBookingID(); ?></p>
+                                                        </div>
+                                                        <div class="mb-3 border rounded p-3 hover-effect">
+                                                            <p><strong>Estado de la Reserva:</strong> 
+                                                                <?php 
+                                                                    echo $review->getBooking()->getStatus(); 
+                                                                ?>
+                                                            </p>
+                                                        </div>
+                                                        <div class="mb-3 border rounded p-3 hover-effect">
+                                                            <p><strong>Fecha de Inicio:</strong> <?php echo date("d/m/Y", strtotime($review->getBooking()->getStartDate())); ?></p>
+                                                        </div>
+                                                        <div class="mb-3 border rounded p-3 hover-effect">
+                                                            <p><strong>Fecha de Fin:</strong> <?php echo date("d/m/Y", strtotime($review->getBooking()->getEndDate())); ?></p>
+                                                        </div>
+                                                        <div class="mb-3 border rounded p-3 hover-effect">
+                                                            <p><strong>Valor Total:</strong> $<?php echo number_format($review->getBooking()->getTotalValue(), 2); ?></p>
+                                                        </div>
+                                                        <div class="mb-3 border rounded p-3 hover-effect">
+                                                            <p><strong>Mascota:</strong> <?php echo $review->getBooking()->getPetID()->getPetName(); ?></p>
+                                                        </div>
+                                                        <div class="mb-3 border rounded p-3 hover-effect">
+                                                            <p><strong>Cuidador:</strong> <?php echo $review->getBooking()->getKeeperID()->getFirstName(); ?> <?php echo $review->getBooking()->getKeeperID()->getLastName(); ?></p>
+                                                        </div>
                                                     </div>
-                                                    <div class="modal-body bg-light">
-                                                        <p><strong>Reserva ID:</strong> <?php echo $review->getBooking()->getBookingID(); ?></p>
-                                                        <p><strong>Estado de la Reserva:</strong> <?php if($review->getBooking()->getStatus() == '7'){echo "Completed";} ?></p>
-                                                        <p><strong>Fecha de Inicio:</strong> <?php echo $review->getBooking()->getStartDate(); ?></p>
-                                                        <p><strong>Fecha de Fin:</strong> <?php echo $review->getBooking()->getEndDate(); ?></p>
-                                                        <p><strong>Valor Total:</strong> <?php echo $review->getBooking()->getTotalValue(); ?></p>
-                                                        <p><strong>Mascota</strong> <?php echo $review->getBooking()->getPetID()->getPetName(); ?></p>
-                                                        <p><strong>Cuidador:</strong> <?php echo $review->getBooking()->getKeeperID()->getfirstName(); ?> <?php echo $review->getBooking()->getKeeperID()->getlastName(); ?></p>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                                    </div>
+                                                    <hr>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+
+
                                          <!-- Modal Review -->
                                     </div>
                                 </div>

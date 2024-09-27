@@ -33,21 +33,15 @@ class ReviewController{
         $this->BookingDAO = new BookingDAO();
     }
 
+    //Va a la navbar del owner
     private function goOwnerMenu(){
-        require_once(VIEWS_PATH."ownerNav.php");
+        SessionHelper::InfoSession([2]);
     }
+    //Va al reviwe
     private function goReviewMenu($reviewList){
-            if(SessionHelper::getCurrentRole()==2){
-                $userRole=2;
-                require_once(VIEWS_PATH."ownerNav.php");
-                require_once(VIEWS_PATH."reviewViews.php");
-            }elseif(SessionHelper::getCurrentRole()==3){
-                $userRole=3;
-                require_once(VIEWS_PATH."keeperNav.php");
-                require_once(VIEWS_PATH."reviewViews.php");
-            }else{
-                //Vista admin
-            }
+        $userRole=SessionHelper::InfoSession([1,2,3]);
+        require_once(VIEWS_PATH."reviewViews.php");
+
     }
 
     public function newReview($rate,$bookingID,$feedback){
@@ -72,7 +66,6 @@ class ReviewController{
             echo "<div class='alert alert-danger'>!Error, Insufficient permissions to creating a review!</div>";
             $this->goOwnerMenu();
         }
-        var_dump($result);
         if($result){
             $this->BookingDAO->updateByID($bookingID,'7');
             echo "<div class='alert alert-success'>The review was create successfully!</div>";
@@ -84,8 +77,9 @@ class ReviewController{
     }
 
     public function getAllReviews(){//Metodo para perfil admin
-        if(SessionHelper::getCurrentRole()==1){
+        if(SessionHelper::getCurrentRole()===1){
             $reviewList = $this->ReviewDAO->GetAllReviews();
+            $this->goReviewMenu($reviewList);
         }else{
             echo "<div class='alert alert-danger'>!Error, Insufficient permissions to see all reviews!</div>";
             $this->goReviewMenu();

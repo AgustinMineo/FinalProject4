@@ -24,33 +24,30 @@ class KeeperController{
         $this->newMailer = new MailerDAO();
         $this->OwnerDAO = new OwnerDAO();
     }
-
     public function addKeeperView(){
         require_once(VIEWS_PATH."keeper-add.php");
     }
     public function goLoginKeeper(){
         require_once(VIEWS_PATH."loginUser.php");
     }
+
     public function goLandingKeeper(){
-        SessionHelper::validateUserRole([3]);
-        require_once(VIEWS_PATH."keeperNav.php");
+        SessionHelper::InfoSession([3]);
     }
-    public function Index($message = ""){
-        SessionHelper::validateUserRole([3]);
-         require_once(VIEWS_PATH."keeperNav.php");
+    public function showKeepersAll($listKeepers){
+        $userRole=SessionHelper::InfoSession([1,2]);
+        require_once(VIEWS_PATH. "showKeeper.php");
     }
     public function myProfile($keeper){
-        SessionHelper::validateUserRole([3]);
+        SessionHelper::InfoSession([3]);
         require_once(VIEWS_PATH."myProfileKeeper.php");
     }
     public function updateDaysAvailables(){
-        SessionHelper::validateUserRole([3]);
-        require_once(VIEWS_PATH."keeperNav.php");
+        SessionHelper::InfoSession([3]);
         require_once(VIEWS_PATH."updateAvailabilityDays.php");
     }
     public function calendarDays($days,$bookings,$keeper){
-        SessionHelper::validateUserRole([3]);
-        require_once(VIEWS_PATH."keeperNav.php");
+        SessionHelper::InfoSession([3]);
         require_once(VIEWS_PATH."keeperDays.php");
     }
 
@@ -59,7 +56,7 @@ class KeeperController{
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
-                    if($this->KeeperDAO->searchKeeperCBU($cbu) ==NULL){
+                    if($this->KeeperDAO->searchCBU($cbu) ==NULL && strlen($cbu)<=20){
                         $newKeeper = new Keeper();
                         $newKeeper->setLastName($lastName);
                         $newKeeper->setfirstName($firstName);
@@ -71,6 +68,7 @@ class KeeperController{
                         $newKeeper->setAnimalSize($animalSize);
                         $newKeeper->setPrice($price);
                         $newKeeper->setCBU($cbu);
+                        $newKeeper->setPoints(0);
                         $newKeeper->setQuestionRecovery($QuestionRecovery);
                         $newKeeper->setAnswerRecovery($answerRecovery);
                         $newKeeper->setRol(3);
@@ -78,7 +76,7 @@ class KeeperController{
                         $this->newMailer->welcomeMail($lastName,$firstName,$email);
                         $this->goLoginKeeper();
                     }else{
-                        echo "<div class='alert alert-danger'>The CBU already exist.</div>";
+                        echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
                         $this->addKeeperView();
                     }
             }else{
@@ -104,10 +102,10 @@ class KeeperController{
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getAllKeeper();
         if($listKeepers){
-            require_once(VIEWS_PATH. "showKeeper.php");
+            $this->showKeepersAll($listKeepers);
         }else{
             echo '<div class="alert alert-danger">There is no availables keepers right now!</div>';
-            require_once(VIEWS_PATH. "landingPage.php");
+            $this->goLandingKeeper();
         }
     }
 

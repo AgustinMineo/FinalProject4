@@ -36,8 +36,9 @@ CREATE TABLE `Keeper` (
   `keeperID` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL references User(userID),
   `animalSize` varchar(30) DEFAULT NULL,
-  `price` float DEFAULT NULL,
+  `price` DECIMAL DEFAULT NULL,
   `cbu` varchar (20) UNIQUE KEY, 
+  `rank` DECIMAL DEFAULT 0,
   PRIMARY KEY (`keeperID`)
 ) ENGINE=InnoDB;
 

@@ -15,6 +15,16 @@ namespace Views;
     <title>PET HERO</title>
 </head>
 <body style="background:#E0dfff;">
+  <nav class="navbar navBar404 navbar-expand-lg d-flex navbar-dark bg-dark" id="navbar">
+         <span class="navbar-text">
+             <strong>Pet Hero</strong>
+         </span>
+         <ul class="navbar-nav ml-auto">
+             <li class="nav-item">
+                 <a class="nav-link" href="<?php echo '/FinalProject4/' ?>index.php">Home</a>
+             </li>          
+         </ul>
+     </nav> 
  <main >
      <div style="background:#E0dfff;" class="container w-25 h-50 d-flex flex-wrap justify-content-center shadow-lg p-3 mb-5 bg-body rounded">
         <form class="d-flex flex-column w-100" action="<?php echo '/FinalProject4/' ?>User/UpdatePasswordRecovery" method="post">

@@ -27,7 +27,7 @@ use Helper\SessionHelper as SessionHelper;
         require_once(VIEWS_PATH."loginUser.php");
     }
     public function goLandingOwner(){
-        SessionHelper::validateUserRole([2]);
+        $userRole=SessionHelper::InfoSession([1,2]);
         require_once(VIEWS_PATH."landingPage.php");
     }
     public function addOwnerView(){
@@ -35,11 +35,16 @@ use Helper\SessionHelper as SessionHelper;
     }
 
     public function goMyProfile($owner){
+        $userRole=SessionHelper::InfoSession([2]);
         require_once(VIEWS_PATH."myProfileOwner.php");
     }
 
     public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,
-    $confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){ 
+    $confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){
+ 
+        if($lastName && $firstName && $cellPhone && $birthDate 
+            && $email && $password && $confirmPassword && $userDescription 
+            && $QuestionRecovery && $answerRecovery){
         if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
             if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -57,16 +62,21 @@ use Helper\SessionHelper as SessionHelper;
                     $newOwner->setRol(2);
                     $this->OwnerDAO->AddOwner($newOwner);
                     $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
+                    $_SESSION["loggedUser"] = $newOwner;
                     $this->goLandingOwner();
                 }else{
                     echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
-                    $this->addOwnerView();  
-
-                } }
-                else{
-                    echo '<div class="alert alert-danger">Email already exist! Please try again with another email/div>';
-                    $this->addOwnerView();  
-                }
+                    $this->addOwnerView(); 
+                } 
+            }
+            else{
+                echo '<div class="alert alert-danger">Email already exist! Please try again with another email/div>';
+                $this->addOwnerView();  
+            }
+        }
+    }else{
+        echo '<div class="alert alert-danger">All the values are required!/div>';
+        $this->addOwnerView();
     }
 }
 
@@ -75,5 +85,6 @@ use Helper\SessionHelper as SessionHelper;
         $owner=$this->OwnerDAO->searchOwnerByEmail(SessionHelper::getCurrentUser()->getEmail());
         $this->goMyProfile($owner);
     }
+
 } 
 ?>

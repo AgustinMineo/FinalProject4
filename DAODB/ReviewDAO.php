@@ -42,12 +42,12 @@ class ReviewDAO implements IReviewDAO{
 
     public function GetAllReviews(){
         try {
-            $query = "SELECT *FROM ".$this->reviewTable." ";
+            $query = "SELECT * FROM ".$this->reviewTable." ";
 
             $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
-
+            $reviewList = array();
             foreach($resultSet as $row){
                 $review = new Review();
                 $booking= new Booking();

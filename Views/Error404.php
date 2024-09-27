@@ -11,7 +11,7 @@ namespace Views;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <title>404 - Page Not Found</title>    
     <script>
-        var userRole = <?php echo isset($role) ? json_encode($role) : 0; ?>; // Asignar el rol o undefined
+        var userRole = <?php echo isset($userRole) ? json_encode($userRole) : 0; ?>; // Asignar el rol o undefined
     </script>
 </head>
 <body>

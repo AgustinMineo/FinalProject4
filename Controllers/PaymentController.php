@@ -34,6 +34,7 @@ class PaymentController {
     }
 
     public function goLanding(){
+        $userRole=SessionHelper::InfoSession([2]);
         require_once(VIEWS_PATH."landingPage.php");
     }
 

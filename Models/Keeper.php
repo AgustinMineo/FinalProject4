@@ -2,6 +2,7 @@
 namespace Models;
 
 use Models\User as User;
+use Models\Keeper as Keeper;
 
 class Keeper extends User{
     private $keeperId; // not null

@@ -84,6 +84,44 @@ class OwnerDAO{
             throw $ex;
         }
     }
+    //Busco los perfiles que tengan un roleID=1;
+    public function GetAllAdminUser(){
+
+        try {
+            $ownerList = array();
+
+            $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, 
+            u.birthdate, u.password,u.userDescription,o.petAmount,o.ownerID,
+            u.answerRecovery,u.questionRecovery,u.roleID
+            FROM ".$this->userTable." u 
+            INNER JOIN ".$this->ownerTable." o ON o.userID = u.userID and u.roleID=1";
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            foreach($resultSet as $row){
+                $owner = new Owner();
+                
+                $owner->setfirstName($row["firstName"]);
+                $owner->setLastName($row["lastName"]);
+                $owner->setEmail($row["email"]);
+                $owner->setCellPhone($row["cellphone"]);
+                $owner->setbirthDate($row["birthdate"]);
+                $owner->setPassword($row["password"]);
+                $owner->setDescription($row["userDescription"]);
+                $owner->setPetAmount($row["petAmount"]);
+                $owner->setOwnerId($row["ownerID"]);
+                $owner->setAnswerRecovery($row["answerRecovery"]);
+                $owner->setQuestionRecovery($row["questionRecovery"]);
+                $owner->setRol($row["roleID"]);
+                array_push($ownerList, $owner);
+            }
+            return $ownerList;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
     //Funcion para validar que no exista el mail
     public function searchOwnerByEmail($email){
         try {
@@ -177,12 +215,9 @@ class OwnerDAO{
                     $owner->setEmail($row["email"]);
                     $owner->setCellPhone($row["cellphone"]);
                     $owner->setbirthDate($row["birthdate"]);
-                   // $owner->setPassword($row["password"]);
                     $owner->setDescription($row["userDescription"]);
                     $owner->setPetAmount($row["petAmount"]);
                     $owner->setOwnerId($row["ownerID"]);
-                    //$owner->setAnswerRecovery($row["answerRecovery"]);
-                    //$owner->setQuestionRecovery($row["questionRecovery"]);
                     $owner->setRol($row["roleID"]);
                 }
                 return $owner;
@@ -208,10 +243,5 @@ class OwnerDAO{
         throw $ex;
         }
     }
-    
-    public function incrementPetAmount(){
-
-    }
-
 
 }?>

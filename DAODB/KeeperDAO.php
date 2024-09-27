@@ -34,23 +34,24 @@ class KeeperDAO implements IKeeperDAO{
                   $parameters["roleID"] = $keeper->getRol();
                   $this->connection = Connection::GetInstance();
 
-                   if($this->connection->ExecuteNonQuery($query, $parameters)){
+                  if($this->connection->ExecuteNonQuery($query, $parameters)){
 
                       $id = $this->searchKeeperID($keeper->getEmail());
-                      $queryKeeper = "INSERT INTO ".$this->keeperTable."(keeperID, userID, animalSize, price, cbu)
-                                     VALUES (:keeperID, :userID, :animalSize, :price, :cbu);";
+                      $queryKeeper = "INSERT INTO ".$this->keeperTable."(keeperID, userID, animalSize, price, cbu,rank)
+                      VALUES (:keeperID, :userID, :animalSize, :price, :cbu,:rank);";
 
                       $parametersKeeper["keeperID"] = NULL;
                       $parametersKeeper["userID"] = $id;
                       $parametersKeeper["animalSize"] = $keeper->getAnimalSize();
                       $parametersKeeper["price"] = $keeper->getPrice();
                       $parametersKeeper["cbu"] = $keeper->getCBU();
-
+                      $parametersKeeper["rank"]=$keeper->getPoints();
                       $this->connection->ExecuteNonQuery($queryKeeper, $parametersKeeper);
                    };
       } catch (Exception $ex) { throw $ex; }   
     }
-    public function searchKeeperCBU($cbu){
+
+  public function searchCBU($cbu){
       $query = "SELECT keeperID
       FROM ".$this->keeperTable." WHERE cbu like '$cbu';";
       $this->connection = Connection::GetInstance();
@@ -60,37 +61,36 @@ class KeeperDAO implements IKeeperDAO{
       }else{
         return null;
       }
-    }
-    /*public function GetAllKeeper(){
+  }
+
+  public function updateCBU($cbu,$keeperID){
       try{
-        $query = "SELECT  u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price, k.animalSize, k.cbu, d.firstDate, d.lastDate 
-                FROM ".$this->userTable." u 
-                JOIN ".$this->keeperTable." k ON u.userID = k.userID 
-                JOIN ".$this->daysTable." d ON k.keeperID = d.keeperID;";
-        $this->connection = Connection::GetInstance();
-        $resultSet = $this->connection->Execute($query);
-        if($resultSet){
-          $keeperList = array();
-          foreach($resultSet as $row){
-            $keeper = new Keeper();
-            $keeper->setKeeperId($row['keeperID']);
-            $keeper->setFirstName($row['firstName']);
-            $keeper->setLastName($row['lastName']);
-            $keeper->setEmail($row['email']);
-            $keeper->setCellPhone($row['cellphone']);
-            $keeper->setbirthDate($row['birthdate']);
-            $keeper->setFirstAvailabilityDays($row['firstDate']);
-            $keeper->setLastAvailabilityDays($row['lastDate']);
-            $keeper->setAnimalSize($row['animalSize']);
-            $keeper->setPrice($row['price']);
-            $keeper->setCBU($row['cbu']);
-            array_push($keeperList,$keeper);
-          }
-          return $keeperList;
-        } else {return NULL;}
-      } catch(Exception $ex){throw $ex;}
-    }*/
-    public function GetAllKeeper() {
+          $query = "UPDATE ".$this->keeperTable." SET cbu = '$cbu' WHERE keeperID = '$keeperID';";
+          $this->connection = Connection::GetInstance();
+          $result = $this->connection->Execute($query);
+            return 3;
+      }catch (Exception $ex) { throw $ex; } 
+  }
+
+  public function updatePrice($price,$keeperID){
+      try{
+          $query = "UPDATE ".$this->keeperTable." SET price = '$price' WHERE keeperID = '$keeperID';";
+          $this->connection = Connection::GetInstance();
+          $this->connection->Execute($query);
+          return 3;
+        }catch (Exception $ex) { throw $ex; }  
+  }
+
+  public function updateAnimalSizeKeeper($animalSize,$keeperID){
+    try{
+      $query = "UPDATE ".$this->keeperTable." SET animalSize = '$animalSize' WHERE keeperID = '$keeperID';";
+      $this->connection = Connection::GetInstance();
+      $result = $this->connection->Execute($query);
+      return 3;
+    }catch (Exception $ex) { throw $ex; }  
+  }
+
+  public function GetAllKeeper() {
       try {
           $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price, k.animalSize, k.cbu, d.day, d.available
                     FROM ".$this->userTable." u
@@ -485,9 +485,7 @@ class KeeperDAO implements IKeeperDAO{
   }
   //Funcion para cambiar el estado desde calendario.
   public function changeAvailabilityDay($keeperID,$date,$available){
-   
-
-   try {
+  try {
        // Conectamos a la base de datos
        $this->connection = Connection::GetInstance();
 

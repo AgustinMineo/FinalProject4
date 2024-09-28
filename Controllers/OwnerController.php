@@ -39,9 +39,13 @@ use Helper\SessionHelper as SessionHelper;
         require_once(VIEWS_PATH."myProfileOwner.php");
     }
 
-    public function newOwner($lastName,$firstName,$cellPhone,$birthDate,$email,$password,
+    public function newOwner($rol,$lastName,$firstName,$cellPhone,$birthDate,$email,$password,
     $confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){
- 
+        $userRole=0;
+        if($rol!='0'){
+            $userRole=SessionHelper::getCurrentRole();
+        }
+
         if($lastName && $firstName && $cellPhone && $birthDate 
             && $email && $password && $confirmPassword && $userDescription 
             && $QuestionRecovery && $answerRecovery){
@@ -56,26 +60,40 @@ use Helper\SessionHelper as SessionHelper;
                     $newOwner->setEmail($email);
                     $newOwner->setPassword($password);
                     $newOwner->setDescription($userDescription);
-                    $newOwner->setPetAmount(0);
                     $newOwner->setQuestionRecovery($QuestionRecovery);
                     $newOwner->setAnswerRecovery($answerRecovery);
+                    $newOwner->setPetAmount(0);
                     $newOwner->setRol(2);
+                    if(intval($rol) === 1 && intval(SessionHelper::getCurrentRole()) === 1){
+                        //Si el rol enviado es 1 y el rol del currentUser es 1 (Admin) pisamos el rol
+                        $newOwner->setRol(1);//Asigno role admin
+                    }
                     $this->OwnerDAO->AddOwner($newOwner);
                     $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
-                    $_SESSION["loggedUser"] = $newOwner;
-                    $this->goLandingOwner();
+
+                    if($userRole===0){//Se evalua si es desde admin o desde registro owner
+                        $_SESSION["loggedUser"] = $newOwner;
+                        $this->goLandingOwner();
+                    }else{
+                        $userRole=SessionHelper::InfoSession([1]);
+                        $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                        $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                        $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                        require_once(VIEWS_PATH."userListAdminView.php");
+                        //return $newOwner;
+                    }
                 }else{
                     echo '<div class="alert alert-danger">Las contraseñas no son iguales. Intente de nuevo</div>';
                     $this->addOwnerView(); 
                 } 
             }
             else{
-                echo '<div class="alert alert-danger">Email already exist! Please try again with another email/div>';
+                echo '<div class="alert alert-danger">Email already exist! Please try again with another email</div>';
                 $this->addOwnerView();  
             }
         }
     }else{
-        echo '<div class="alert alert-danger">All the values are required!/div>';
+        echo '<div class="alert alert-danger">All the values are required!</div>';
         $this->addOwnerView();
     }
 }

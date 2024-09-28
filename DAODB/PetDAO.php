@@ -38,8 +38,7 @@ class PetDAO implements IPetDAO{
             $this->connection = Connection::GetInstance();
             //Funcion para hacer el Update de PETAMOUNT en la Tabla de Owners. 
             if($this->connection->ExecuteNonQuery($query, $parameters)){
-                $queryAmount = "update " .$this->ownerTable." o set petAmount = ".SessionHelper::getCurrentPetAmount()." + 1 WHERE o.ownerID = ".SessionHelper::getCurrentOwnerID();
-                $this->connection->ExecuteNonQuery($queryAmount,array());
+                $this->OwnerDAO->incrementPetAmount(SessionHelper::getCurrentOwnerID());
             }
             return true;
         } catch (Exception $ex) { throw $ex; } 

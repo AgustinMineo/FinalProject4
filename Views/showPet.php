@@ -122,7 +122,7 @@ require_once("validate-session.php");
                                                                       <h5>Detalles</h5>
                                                                  </div>
                                                                  <div class="d-flex flex-wrap justify-content-center w-100">
-                                                                      <?php echo $pets->getPetDetails() ?>
+                                                                      <p class="text-break "><?php echo $pets->getPetDetails() ?></p>
                                                                  </div>
                                                                  <hr>
 

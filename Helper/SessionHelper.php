@@ -20,19 +20,36 @@ class SessionHelper{
     }
     /*Return Current user logged*/
     public static function getCurrentUser(){
-        return $_SESSION["loggedUser"];
+        if(!isset($_SESSION["loggedUser"])){
+            header("Location: /FinalProject4/Views/loginUser.php");
+            exit();
+        }else{
+            return $_SESSION["loggedUser"];
+        }
     }
     /*Return keeper ID*/
     public static function getCurrentKeeperID(){
-        return $_SESSION["loggedUser"]->getKeeperId();
+        if($_SESSION["loggedUser"]->getKeeperId()){
+            return $_SESSION["loggedUser"]->getKeeperId();
+        }else{
+            header("Location: /FinalProject4/Views/loginUser.php");
+            exit();
+        }
     }
     /*Return Owner ID*/
     public static function getCurrentOwnerID(){
-        return $_SESSION["loggedUser"]->getOwnerId();
+        if($_SESSION["loggedUser"]->getOwnerId()){
+            return $_SESSION["loggedUser"]->getOwnerId();
+        }else{
+            header("Location: /FinalProject4/Views/loginUser.php");
+            exit();
+        }
     }
+    
     public static function getCurrentPetAmount(){
         return $_SESSION["loggedUser"]->getPetAmount();
     }
+
     public static function sessionEnd(){
         if (isset($_SESSION['loggedUser'])) {
             unset($_SESSION['loggedUser']);
@@ -65,16 +82,33 @@ class SessionHelper{
     }
 
     public static function getCurrentRole(){
-        return $userRole = (int)$_SESSION["loggedUser"]->getRol() ?? null;
+        if(!isset($_SESSION["loggedUser"])){
+            header("Location: /FinalProject4/Views/login.php");
+            exit();
+        }else{
+            return $userRole = (int)$_SESSION["loggedUser"]->getRol() ?? null;
+        }
     }
 
+    public static function redirectTo403(){
+        if (self::getCurrentUser()) {//Si el usuario esta logeado, mando el 403
+            $userRole= self::getCurrentRole();
+            require_once(VIEWS_PATH . "mainNavBar.php");
+            require_once(VIEWS_PATH . "Error403.php");
+            return $userRole;
+        } else {
+            header("Location: /FinalProject4/Views/Error403.php");
+            exit();
+        } 
+    }
 
     public static function redirectTo404(){
         if (self::getCurrentUser()) {
-        self::InfoSession();
-        require_once(VIEWS_PATH . "Error404.php");
+            $userRole= self::getCurrentRole();
+            require_once(VIEWS_PATH . "mainNavBar.php");
+            require_once(VIEWS_PATH . "Error404.php");
         } else {
-        header("Location: /FinalProject4/Views/Error404.php");
+        header("Location: /FinalProject4/Views/loginUser.php");
         exit();
         }
     }
@@ -83,7 +117,10 @@ class SessionHelper{
         self::validateSession();
         $userRole = (int)$_SESSION["loggedUser"]->getRol();
         if (!in_array($userRole, $requiredRole, true)) {
-            header("Location: " . FRONT_ROOT. VIEWS_PATH . "loginUser.php"); 
+            $userRole= self::getCurrentRole();
+            require_once(VIEWS_PATH . "mainNavBar.php");
+            require_once(VIEWS_PATH . "Error403.php");
+            self::redirectTo403(); 
             exit();
         }else{
             return $userRole;

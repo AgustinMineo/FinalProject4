@@ -41,55 +41,107 @@ class UserController{
         require_once(VIEWS_PATH."loginUser.php");
     }
     //Vista para editar a todos los usuarios (Admin,owner y keeper (Formularios))
-    public function goEditView($userSearch,$roleUser){
-        $userRole=SessionHelper::InfoSession([1,2,3]);
-        //Reviso si el usuario es un string y si tiene forma de correo.
-        //Solo en el caso de que sea admin y edite un usuario
-        $flag=1;
-        //Transformo el role a int
-        $role = intval($roleUser);
+    //Se agrega =null por si se intenta de viajar directamente cambiando la url, para que se evalue y no de error
+    //Si tiene session significa que esta logeado y tira al 403, sino te manda al login
+    public function goEditView($userSearch=null,$roleUser=null){
+        if($userSearch === null && $roleUser === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }else{
+            $userRole=SessionHelper::InfoSession([1,2,3]);
+            //Reviso si el usuario es un string y si tiene forma de correo.
+            //Solo en el caso de que sea admin y edite un usuario
+            $flag=1;
+            //Transformo el role a int
+            $role = intval($roleUser);
 
-        if($role){
-            //Caso de que entre por vista de admin (Owner o Keeper)
-            if(is_string($userSearch) && filter_var($userSearch,FILTER_VALIDATE_EMAIL) && $role!=1){
-                $flag=1;
-                if($role === 2){
-                    $user = $this->OwnerDAO->searchOwnerByEmail($userSearch);
+            if($role){
+                //Caso de que entre por vista de admin (Owner o Keeper)
+                if(is_string($userSearch) && filter_var($userSearch,FILTER_VALIDATE_EMAIL) && $role!=1){
+                    $flag=1;
+                    if($role === 2){
+                        $user = $this->OwnerDAO->searchOwnerByEmail($userSearch);
+                    }else{
+                        $user= $this->KeeperDAO->searchKeeperByEmail($userSearch);
+                    }
+                }elseif($role !=1){
+                    $user = $userSearch;
                 }else{
+                    //Si es perfil admin y el correo es el mismo que el del admin, entonces modifica su usuario
+                    if($role === 1 && $userSearch === SessionHelper::getCurrentUser()->getEmail()){
+                        $flag = 0;
+                        $user=$this->OwnerDAO->searchAdminByEmail($userSearch);
+                    }elseif($role===1 && $userSearch != SessionHelper::getCurrentUser()->getEmail()){
+                        //Editando a otro usuario admin
+                        $flag = 1;
+                        $user=$this->OwnerDAO->searchAdminByEmail($userSearch);
+                    }
+                }
+            }elseif(intval(SessionHelper::getCurrentUser()->getRol()) === 1){//Si ocurrio algo en el update
+                $this->editUser();
+            }else{//Como ultima instancia, buscamos el usuario en keepers y owner para devolver a la vista.
+                $flag=1;
+                $role=2;
+                $user = $this->OwnerDAO->searchOwnerByEmail($userSearch);
+                if(!$user){
+                    $role=3;
                     $user= $this->KeeperDAO->searchKeeperByEmail($userSearch);
                 }
-            }elseif($role !=1){
-                $user = $userSearch;
-            }else{
-                //Si es perfil admin y el correo es el mismo que el del admin, entonces modifica su usuario
-                if($role === 1 && $userSearch === SessionHelper::getCurrentUser()->getEmail()){
-                    $flag = 0;
-                    $user=$this->OwnerDAO->searchOwnerByEmail($userSearch);;
-                }
             }
-        }elseif(intval(SessionHelper::getCurrentUser()->getRol()) === 1){//Si ocurrio algo en el update
-            $this->editUser();
-        }else{//Como ultima instancia, buscamos el usuario en keepers y owner para devolver a la vista.
-            $flag=1;
-            $role=2;
-            $user = $this->OwnerDAO->searchOwnerByEmail($userSearch);
-            if(!$user){
-                $role=3;
-                $user= $this->KeeperDAO->searchKeeperByEmail($userSearch);
-            }
+            
+            require_once(VIEWS_PATH."myProfileUser.php");
+            //exit();
         }
-        
-        require_once(VIEWS_PATH."myProfileUser.php");
-        //exit();
     }
     //Vista para editar a todos los usuarios (Admin,owner y keeper (Vista admin))
-    public function goAdminView($ownerUsers,$keeperUsers,$adminUsers){
-        $userRole=SessionHelper::InfoSession([1]);
-        require_once(VIEWS_PATH."userListAdminView.php");
-        exit();
+    public function goAdminView($ownerUsers = null,$keeperUsers= null,$adminUsers= null){
+        if($ownerUsers === null && $keeperUsers === null && $adminUsers === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }else{
+            $userRole=SessionHelper::InfoSession([1]);
+            require_once(VIEWS_PATH."userListAdminView.php");
+            exit();
+        }
     }
-    public function goRecovery($user){
-        require_once(VIEWS_PATH."recoveryPassword.php");
+    public function newUserByAdmin($rol = null,$lastName = null, $firstName = null,$cellPhone = null,
+    $birthDate = null,$email = null,$password = null,$password1 = null,$userDescription = null,
+    $questionRecovery = null,$answerRecovery = null){
+        $userRole=SessionHelper::InfoSession([1]);
+        if ($lastName === null && $firstName === null &&  $cellPhone === null && $birthDate === null && 
+            $email === null && $password === null && $userDescription === null && $questionRecovery === null && 
+            $answerRecovery === null && $rol === null) 
+        {
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }else{
+            var_dump(
+                $rol,
+                $firstName,
+                $lastName,
+                $email,
+                $password,
+                $password1,
+                $cellPhone,
+                $birthDate,
+                $userDescription,
+                $questionRecovery,
+                $answerRecovery
+            );
+        }
+
+    }
+    public function goRecovery($user=null){
+        if($user){
+            require_once(VIEWS_PATH."recoveryPassword.php");
+        }else{
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
     }
     public function goRecoveryView(){
         require_once(VIEWS_PATH."recoveryView.php");
@@ -101,7 +153,12 @@ class UserController{
         header("location: " . FRONT_ROOT . VIEWS_PATH . "loginUser.php");
     }
 
-    public function loginUser($email,$password){
+    public function loginUser($email = null,$password = null){
+        if($email === null && $password === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }else{
             if($email && $password){
                 try{
                     $newOwner = $this->OwnerDAO->searchOwnerToLogin($email,$password);
@@ -124,19 +181,26 @@ class UserController{
                 }catch ( Exception $ex) {
                     throw $ex;
                 }
-        }else if($password){
-            echo '<div class="alert alert-danger">The Email is requeried to login!</div>';
-            $this->gologinUser();
-        }else if($email){
-            echo '<div class="alert alert-danger">The Password is requeried to login!</div>';
-            $this->gologinUser();
-        }else{
-            echo '<div class="alert alert-danger">The Email and Password is requeried to login!</div>';
-            $this->gologinUser();
+            }else if($password){
+                echo '<div class="alert alert-danger">The Email is requeried to login!</div>';
+                $this->gologinUser();
+            }else if($email){
+                echo '<div class="alert alert-danger">The Password is requeried to login!</div>';
+                $this->gologinUser();
+            }else{
+                echo '<div class="alert alert-danger">The Email and Password is requeried to login!</div>';
+                $this->gologinUser();
+            }
         }
     }
     /*------------------------- Updates -------------------------*/
-    public function updateFirstName($newFirstName,$userEmail){
+    public function updateFirstName($newFirstName = null,$userEmail = null){
+        if($newFirstName === null && $userEmail === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
+
         if($newFirstName){
             $response=$this->UserDAO->updateFirstName($newFirstName,$userEmail);
             if($response){
@@ -152,7 +216,12 @@ class UserController{
         }
     }
 
-    public function updateLastName($newName,$userEmail){
+    public function updateLastName($newName = null,$userEmail = null){
+        if($newName === null && $userEmail === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         $response=$this->UserDAO->updateLastName($newName,$userEmail);
         if($response){
             echo '<div class="alert alert-success">You have successful update your Last Name!</div>';
@@ -162,7 +231,12 @@ class UserController{
             $this->goEditView($user,$response);
         }
     }
-    public function UpdateUserCellphone($newCellphone,$userEmail){
+    public function UpdateUserCellphone($newCellphone = null,$userEmail = null){
+        if($newCellphone === null && $userEmail === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         if($newCellphone){
             $response=$this->UserDAO->updateCellphone($newCellphone,$userEmail);
             if($response){
@@ -174,7 +248,12 @@ class UserController{
             $this->goEditView($userEmail,$response);
         }
     }
-    public function UpdateDescription($newDescription,$userEmail){
+    public function UpdateDescription($newDescription = null,$userEmail = null){
+        if($newDescription === null && $userEmail === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         if($newDescription){
             $response=$this->UserDAO->updateDescription($newDescription,$userEmail);
             if($response){
@@ -186,7 +265,12 @@ class UserController{
             $this->goEditView($userEmail,$response);
         }
     }
-    public function updateEmail($newEmail,$userEmail){ 
+    public function updateEmail($newEmail = null,$userEmail = null){
+        if($newEmail === null && $userEmail === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         $response=0;
         if($newEmail != $userEmail){
             $exist = $this->UserDAO->searchUserByEmail($newEmail);
@@ -209,7 +293,12 @@ class UserController{
             $this->goEditView($userEmail,$response);
         }
     }
-    public function updateRecovery($QuestionRecovery,$answerRecovery,$userEmail){
+    public function updateRecovery($QuestionRecovery = null,$answerRecovery = null,$userEmail = null){
+        if($userEmail === null && $QuestionRecovery === null && $answerRecovery ===null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         if(!empty(trim($QuestionRecovery)) && !empty(trim($answerRecovery)) && !empty(trim($userEmail))){
             $resultQuestion = $this->UserDAO->updateQuestionRecovery($QuestionRecovery,$userEmail);
             if($resultQuestion){
@@ -230,7 +319,12 @@ class UserController{
             $this->goEditView($userEmail,$resultQuestion);
         }
     }
-    public function updateBirthdate($newBirthdate,$userEmail){
+    public function updateBirthdate($newBirthdate = null,$userEmail = null){
+        if($newBirthdate === null && $userEmail ===null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         if($newBirthdate){
             $dateNew = date('Y-m-d',strtotime($newBirthdate));
             $response = $this->UserDAO->updateBirthdate($dateNew,$userEmail);
@@ -242,9 +336,14 @@ class UserController{
             $this->goEditView($userEmail,$response);
             }
         }
-    }//Falta
+    }
 
-    public function UpdateAnimalSize($animalSizeKeeper,$userEmail,$keeperID){
+    public function UpdateAnimalSize($animalSizeKeeper = null,$userEmail = null,$keeperID= null){
+        if($animalSizeKeeper === null && $userEmail === null && $keeperID === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         if($animalSizeKeeper){
             $response = $this->KeeperDAO->updateAnimalSizeKeeper($animalSizeKeeper,$keeperID);
             if($response){
@@ -256,7 +355,12 @@ class UserController{
             $this->goEditView($userEmail,$response);
         }
     }
-    public function UpdatePrice($priceKeeper,$userEmail,$keeperID){
+    public function UpdatePrice($priceKeeper = null,$userEmail = null,$keeperID = null){
+        if($priceKeeper === null && $userEmail === null && $keeperID === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         if($priceKeeper){
             $response = $this->KeeperDAO->updatePrice($priceKeeper,$keeperID);
             if($response){
@@ -269,7 +373,12 @@ class UserController{
         }
     }
 
-    public function UpdateCBU($CBU,$userEmail,$keeperID){
+    public function UpdateCBU($CBU = null,$userEmail = null,$keeperID = null){
+        if($CBU === null && $userEmail === null && $keeperID === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         $response=0;
         if($CBU){
             $flag = $this->KeeperDAO->searchCBU($CBU);
@@ -292,7 +401,12 @@ class UserController{
         }
     }
 
-    public function updatePassword($password,$password1,$userEmail){
+    public function updatePassword($password = null,$password1 = null,$userEmail = null){
+        if($password === null && $userEmail === null && $password1 === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         $response=0;
         if($password == $password1){
             $response=$this->UserDAO->updatePassword(md5($password),$userEmail);
@@ -307,7 +421,12 @@ class UserController{
     }
 
     //Flujo de recovery
-    public function UpdatePasswordRecovery($email,$password,$password1){
+    public function UpdatePasswordRecovery($email = null,$password = null,$password1 = null){
+        if($email === null && $password === null && $password1 === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         if($password == $password1){
             $result = $this->UserDAO->updatePassword($password,$email);
             if($result){
@@ -324,7 +443,12 @@ class UserController{
             $this->goRecoveryView();
         }
     }
-    public function forgotPassword($email,$questionRecovery,$answerRecovery){
+    public function forgotPassword($email = null,$questionRecovery = null,$answerRecovery = null){
+        if($email === null && $questionRecovery === null && $answerRecovery === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         if($email && $questionRecovery && $answerRecovery){
             $newOwner = $this->UserDAO->searchUserToRecovery($email);
                 if($newOwner){

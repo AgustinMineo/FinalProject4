@@ -45,7 +45,6 @@ require_once("validate-session.php");
 
   <div class="container my-5">
     <h3 class="fw-normal text-center mb-4"><?php if($flag === 1 && $userRole===1){  echo 'Modificando a '. "<strong>". $user->getLastName(). " " . $user->getFirstName() . "</strong>"; }else{ echo 'Your Profile';} ?> </h3>
-    
     <!-- Last Name Section -->
     <div class="row mb-4">
       <div class="col-md-6 mx-auto">
@@ -297,7 +296,7 @@ require_once("validate-session.php");
             <form action="<?php echo FRONT_ROOT ?>User/UpdateDescription" method="post">
               <div class="mb-3">
                 <label for="newDescription" class="form-label">Description</label>
-                <textarea type="text" class="form-control" id="newDescription" name="newDescription" value="<?php echo $user->getDescription(); ?>" required></textarea>
+                <textarea type="text" class="form-control" id="newDescription" name="newDescription" value="<?php echo $user->getDescription();?>" required></textarea>
               </div>
               <div class="modal-footer">
                 <input type="hidden" name="userEmail" value="<?php echo $user->getEmail(); ?>">
@@ -355,8 +354,7 @@ require_once("validate-session.php");
     <!-- User Recovery Section -->
 
     <!-- Pet Amount Section (Only Owner) -->
-    <?php if($userRole===2 || ($userRole !==3 && $flag===1 && $user->getRol()!='3' ) ): ?>
-
+    <?php if($userRole=== 2 || ($userRole !==3 && $flag===1 && $user->getRol()!='3' && $user->getRol()!='1' )  ): ?>
       <div class="row mb-4">
       <div class="col-md-6 mx-auto">
         <div class="card shadow">
@@ -493,7 +491,18 @@ require_once("validate-session.php");
       </div>
     </div>
     <!-- Keeper Animal Size Section -->
-
+    <!-- Keeper Points Section -->
+    <div class="row mb-4">
+      <div class="col-md-6 mx-auto">
+        <div class="card shadow">
+          <div class="card-body">
+            <h4 class="card-title">Ranking</h4>
+            <p class="card-text"><?php echo $user->getPoints(); ?></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Keeper Points Section -->
     <?php endif;?>
     <!-- Keeper section (Only Keeper) -->
   </div>

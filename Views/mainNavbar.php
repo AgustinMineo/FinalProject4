@@ -28,7 +28,7 @@ require_once("validate-session.php");
                         <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>Booking/showBookings">Show reservations</a>
                     </li>
                     <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white;">
-                        <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>Review/getReviewByKeeper">Mis Reviews</a>
+                        <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>Review/getAllReviews">Mis Reviews</a>
                     </li> 
                     <li class="nav-item" style="width:auto; border-style:solid; border-width:2px; border-color:white;">
                         <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>Keeper/showCalendarData">Calendario</a>
@@ -65,7 +65,7 @@ require_once("validate-session.php");
                         <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Booking/searchBooking">Booking with a Keepers</a>
                     </li>
                     <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
-                        <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Review/getReviewByOwner">Review Menu</a>
+                        <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>Review/getAllReviews">Review Menu</a>
                     </li> 
                     <li class="nav-item m-2" style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                         <a class="nav-link text-black  list-group-item-action" href="<?php echo FRONT_ROOT ?>User/logOut">Log Out</a>

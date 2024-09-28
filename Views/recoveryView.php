@@ -40,7 +40,7 @@ namespace Views;
             <label for=""><h3>Question</h3></label>
             <div class="container d-flex align-items-center justify-content-center">
 
-                <select name="QuestionRecovery" class="w-auto border border-1  text-center" Required>
+                <select name="QuestionRecovery" class="w-auto border border-1  text-center form-select-lg mb-3" Required>
                     <option value="What was your first pet called?" name="questionRecovery">What was your first pet called?</option>
                     <option value="What is your favorite breed of dog?" name="questionRecovery">What is your favorite breed of dog?</option>
                     <option value="What is your pet's favorite place?" name="questionRecovery">What is your pet's favorite place?</option>

@@ -71,6 +71,7 @@
                <div class="container">
                     <h2 class="text-center">New Owner Registration</h2>
                     <form action="<?php echo FRONT_ROOT ?>Owner/newOwner" method="post" class="p-4">
+                    <input type="hidden" name="rol" value="0">
                          <div class="mb-3">
                               <label for="lastName">Last Name</label>
                               <input type="text" name="lastName" id="lastName" placeholder="Last name" class="form-control" required>
@@ -94,7 +95,7 @@
                          <div class="form-group">
                          <label for="password">Contraseña:</label>
                          <div class="input-group">
-                              <input type="password" id="password" name="password" class="form-control" required>
+                              <input type="password" id="password" name="password" class="form-control" minlength="6" required>
                               <div class="input-group-append">
                                    <button id="togglePassword1" class="btn btn-outline-secondary" type="button">
                                    <i class="bi bi-eye-slash-fill"></i>

@@ -166,32 +166,6 @@ $alterRole=$userRole;
                          <button type="submit" class="btn btn-primary">Filtrar</button>
                     </form>
                </div>
-          <!--If paginado admin-->
-               <?php if($userRole===1 && $alterRole=== 1):?>
-                    <div class="container">
-                         <nav aria-label="Page navigation example">
-                              <ul class="pagination" id="pagination">
-                                   <?php if ($page > 1): ?>
-                                        <li class="page-item">
-                                             <a class="page-link" href="?page=<?= $page - 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Previous">« Anterior</a>
-                                        </li>
-                                   <?php endif; ?>
-
-                                   <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                        <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
-                                             <a class="page-link" href="?page=<?= $i; ?>&requiredRole=<?= $userRole; ?>"><?= $i; ?></a>
-                                        </li>
-                                   <?php endfor; ?>
-
-                                   <?php if ($page < $totalPages): ?>
-                                        <li class="page-item">
-                                             <a class="page-link" href="?page=<?= $page + 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Next">Siguiente »</a>
-                                        </li>
-                                   <?php endif; ?>
-                              </ul>
-                         </nav>
-                    </div>
-               <?php endif; ?><!--Cierro If paginado admin-->
           </div>
      </div>
 
@@ -221,13 +195,16 @@ $alterRole=$userRole;
                                         ?> 
                                              <tr class="
                                              <?php 
-                                             if($booking->getStatus() == 1 ){echo "bg-primary";}
-                                             elseif($booking->getStatus() == 2){echo "bg-danger";}
-                                             elseif($booking->getStatus() == 8){echo "bg-danger";}
-                                             elseif($booking->getStatus() == 3){echo "bg-primary";}
-                                             elseif($booking->getStatus() == 4){echo "bg-primary";}
-                                             else{echo "bg-success";}
-                                             ?> 
+                                             if ($booking->getStatus() == 1) {
+                                             echo "table-secondary";
+                                             } elseif ($booking->getStatus() == 2 || $booking->getStatus() == 8) {
+                                             echo "table-danger";
+                                             } elseif ($booking->getStatus() == 3 || $booking->getStatus() == 4) {
+                                             echo "table-primary";
+                                             } else {
+                                             echo "table-success";
+                                             }
+                                             ?>"
                                              
                                              table  table-hover table align-middle text-center text-white" >
                                                   
@@ -446,7 +423,12 @@ $alterRole=$userRole;
                                              <!-- Modal pet -->
                                         <?php
                                    }}else{
-                                        echo "<div class='alert alert-danger'>No tiene bookings realizados!</div>";
+                                        if($userRole!=1){
+
+                                             echo "<div class='alert alert-danger w-100'>No tiene bookings disponibles!</div>";
+                                        }else{
+                                             echo "<div class='alert alert-danger w-100'>No existen registros disponibles!!</div>";
+                                        }
                                    }
                               ?>
                               </tr>
@@ -455,9 +437,9 @@ $alterRole=$userRole;
                </table>
           </div>
      </section>
-     <?php if($userRole === 2 || $userRole===1 && $alterRole=== 2):?>
+     <?php if($userRole === 2 && $totalPages>1 || $userRole=== 1 && $alterRole=== 2 && $totalPages>1 || $totalPages>1 && $userRole === 2 ):?>
           <div class="container">
-               <nav aria-label="Page navigation example">
+               <nav aria-label="Owner Paginate">
                     <ul class="pagination" id="pagination">
                          <?php if ($page > 1): ?>
                               <li class="page-item">
@@ -644,14 +626,19 @@ $alterRole=$userRole;
                                         <?php
                                    }
                               } else {
-                                   echo "<div class='alert alert-danger'>No tienes ninguna reserva en este momento!</div>";
+                                   if($userRole!=1){
+                                        echo "<div class='alert alert-danger'>No tienes ninguna reserva en este momento!</div>";
+                                   }else{
+                                        echo "<div class='alert alert-danger'>No existen registros disponibles!</div>";
+                                   }
                               }
                               ?>
                          </tbody>
                          </table>
                </div>
           </section>
-          <?php if($userRole===3 || $userRole===1 && $alterRole===3):?>
+
+          <?php if($userRole===3 && $totalPages>1  || $userRole===1 && $alterRole===3 && $totalPages>1 ):?>
           <div class="container">
                <nav aria-label="Page navigation example">
                     <ul class="pagination" id="pagination">
@@ -677,6 +664,32 @@ $alterRole=$userRole;
           </div>
           <?php endif;?><!--Cierro navbar-->
      <?php endif; ?> <!--Cierro vista keeper-->
+     <!--If paginado admin-->
+     <?php if($userRole===1 && $alterRole=== 1 && $totalPages>1):?>
+                    <div class="container">
+                         <nav aria-label="Page navigation Admin">
+                              <ul class="pagination" id="pagination">
+                                   <?php if ($page > 1): ?>
+                                        <li class="page-item">
+                                             <a class="page-link" href="?page=<?= $page - 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Previous">« Anterior</a>
+                                        </li>
+                                   <?php endif; ?>
+
+                                   <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                        <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
+                                             <a class="page-link" href="?page=<?= $i; ?>&requiredRole=<?= $userRole; ?>"><?= $i; ?></a>
+                                        </li>
+                                   <?php endfor; ?>
+
+                                   <?php if ($page < $totalPages): ?>
+                                        <li class="page-item">
+                                             <a class="page-link" href="?page=<?= $page + 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Next">Siguiente »</a>
+                                        </li>
+                                   <?php endif; ?>
+                              </ul>
+                         </nav>
+                    </div>
+               <?php endif; ?><!--Cierro If paginado admin-->
 </main>
 </body>
 <script>

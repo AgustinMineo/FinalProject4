@@ -115,7 +115,7 @@ class ReviewDAO implements IReviewDAO{
                 $review->setReviewID($row["reviewID"]);
                 $review->setDescription($row["description"]);
                 $review->setPoints($row["rank"]);
-                $booking = $this->BookingDAO->searchBookingByID($row["bookingID"]);
+                $booking = $this->BookingDAO->searchByID($row["bookingID"]);
                 if($booking){
                     $review->setBooking($booking);
                 }
@@ -148,7 +148,7 @@ class ReviewDAO implements IReviewDAO{
                 $review->setReviewID($row["reviewID"]);
                 $review->setDescription($row["description"]);
                 $review->setPoints($row["rank"]);
-                $booking = $this->BookingDAO->searchBookingByID($row["bookingID"]);
+                $booking = $this->BookingDAO->searchByID($row["bookingID"]);
                 if($booking){
                     $review->setBooking($booking);
                 }

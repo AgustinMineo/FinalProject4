@@ -51,8 +51,12 @@ class KeeperController{
         require_once(VIEWS_PATH."keeperDays.php");
     }
 
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,
-    $password,$confirmPassword,$animalSize,$price,$userDescription,$cbu,$QuestionRecovery,$answerRecovery){
+    public function newKeeper($rol=null,$lastName,$firstName,$cellPhone,$birthDate,$email,
+    $password,$confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery,$animalSize,$price,$cbu){
+        $userRole=0;
+        if($rol!='0'){
+            $userRole=SessionHelper::getCurrentRole();
+        }
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
@@ -72,9 +76,20 @@ class KeeperController{
                         $newKeeper->setQuestionRecovery($QuestionRecovery);
                         $newKeeper->setAnswerRecovery($answerRecovery);
                         $newKeeper->setRol(3);
-                        $this->KeeperDAO->AddKeeper($newKeeper);
+                        $keeperID= $this->KeeperDAO->AddKeeper($newKeeper);
+                        $newKeeper->setKeeperID($keeperID);
                         $this->newMailer->welcomeMail($lastName,$firstName,$email);
-                        $this->goLoginKeeper();
+                        if($userRole===0){//Se evalua si es desde admin o desde registro owner
+                            echo "<div class='alert alert-success'>¡Usuario registrado correctamente!</div>";
+                            $this->goLoginKeeper();
+                        }else{
+                            $userRole=SessionHelper::InfoSession([1]);
+                            $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                            $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                            $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                            require_once(VIEWS_PATH."userListAdminView.php");
+                            return $newKeeper;
+                        }
                     }else{
                         echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
                         $this->addKeeperView();

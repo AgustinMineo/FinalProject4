@@ -14,10 +14,10 @@ class OwnerDAO{
     //Funcion para agregar un Owner a la DB
     public function AddOwner (Owner $owner){
         try {
-           $query = "INSERT INTO ".$this->userTable."(userID, firstName, lastName, email, cellphone, 
-           birthdate, password, userDescription,questionRecovery,answerRecovery,roleID)
-           VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, 
-           :userDescription, :questionRecovery, :answerRecovery,:roleID);";
+            $query = "INSERT INTO ".$this->userTable."(userID, firstName, lastName, email, cellphone, 
+            birthdate, password, userDescription,questionRecovery,answerRecovery,roleID)
+            VALUES (:userID,:firstName, :lastName, :email, :cellphone, :birthdate, :password, 
+            :userDescription, :questionRecovery, :answerRecovery,:roleID);";
                     $parameters["userID"] = NULL;
                     $parameters["firstName"] = $owner->getfirstName();
                     $parameters["lastName"] = $owner->getLastName();
@@ -30,7 +30,10 @@ class OwnerDAO{
                     $parameters["answerRecovery"] = $owner->getAnswerRecovery();
                     $parameters["roleID"] = $owner->getRol();
                     $this->connection = Connection::GetInstance();
-                    if($this->connection->ExecuteNonQuery($query, $parameters)){
+                    if($this->connection->ExecuteNonQuery($query, $parameters) 
+                        && intval($owner->getRol())===2){
+                        //Se agrega validación de rol === 2 para poder crear los usuarios admin 
+                        //Sobre la tabla de owners sin crear un registro sobre la tabla owner
                         $queryOwner = "INSERT INTO ".$this->ownerTable."(ownerId, userID, petAmount)
                         VALUES (:ownerId, :userID, :petAmount);
                         ";
@@ -91,10 +94,9 @@ class OwnerDAO{
             $ownerList = array();
 
             $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, 
-            u.birthdate, u.password,u.userDescription,o.petAmount,o.ownerID,
+            u.birthdate, u.password,u.userDescription,
             u.answerRecovery,u.questionRecovery,u.roleID
-            FROM ".$this->userTable." u 
-            INNER JOIN ".$this->ownerTable." o ON o.userID = u.userID and u.roleID=1";
+            FROM ".$this->userTable." u where u.roleID=1";
 
             $this->connection = Connection::GetInstance();
 
@@ -110,8 +112,8 @@ class OwnerDAO{
                 $owner->setbirthDate($row["birthdate"]);
                 $owner->setPassword($row["password"]);
                 $owner->setDescription($row["userDescription"]);
-                $owner->setPetAmount($row["petAmount"]);
-                $owner->setOwnerId($row["ownerID"]);
+                //$owner->setPetAmount($row["petAmount"]);
+               // $owner->setOwnerId($row["ownerID"]);
                 $owner->setAnswerRecovery($row["answerRecovery"]);
                 $owner->setQuestionRecovery($row["questionRecovery"]);
                 $owner->setRol($row["roleID"]);
@@ -154,6 +156,33 @@ class OwnerDAO{
                  }
                 else{ return NULL; }
         }  catch (Exception $ex) { throw $ex; }
+    }
+    public function searchAdminByEmail($email){
+        try {
+            $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, 
+            u.password, u.userDescription, u.email,
+            u.answerRecovery,u.questionRecovery,u.roleID
+            FROM ".$this->userTable." u WHERE u.email = '$email';";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if($resultSet){ 
+                foreach($resultSet as $row){
+                    $admin = new Owner();
+                    $admin->setfirstName($row["firstName"]);
+                    $admin->setLastName($row["lastName"]);
+                    $admin->setEmail($row["email"]);
+                    $admin->setCellPhone($row["cellphone"]);
+                    $admin->setbirthDate($row["birthdate"]);
+                    $admin->setPassword($row["password"]);
+                    $admin->setDescription($row["userDescription"]);
+                    $admin->setAnswerRecovery($row["answerRecovery"]);
+                    $admin->setQuestionRecovery($row["questionRecovery"]);
+                    $admin->setRol($row["roleID"]);
+                }
+                return $admin;
+             }
+            else{ return NULL; }
+    }  catch (Exception $ex) { throw $ex; }
     }
     //Funcion para buscar Owner para iniciar seseion
     public function searchOwnerToLogin($email, $password){
@@ -244,4 +273,23 @@ class OwnerDAO{
         }
     }
 
+    public function incrementPetAmount($ownerID){
+        try{
+            $queryAmount = "SELECT petAmount FROM ".$this->ownerTable." WHERE ownerID = '$ownerID';";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($queryAmount);
+            if($resultSet){
+                foreach($resultSet as $row){
+                    $amount = intval($row['petAmount']);
+                }
+                $amount += 1;
+                $query = "UPDATE ".$this->ownerTable." SET petAmount = '$amount' WHERE ownerID = '$ownerID';";
+                $this->connection = Connection::GetInstance();
+                $this->connection->Execute($query);
+            }
+            return true;
+        }catch (Exception $ex) { 
+            throw $ex; 
+        }
+    }
 }?>

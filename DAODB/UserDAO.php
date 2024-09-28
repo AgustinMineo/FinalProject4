@@ -68,7 +68,6 @@ class UserDAO implements IUserDAO{
     }
     public function updateFirstName($newFirstName,$emailUser){
         try{
-
             $query = "UPDATE ".$this->userTable." SET firstName = '$newFirstName' WHERE email = '$emailUser';";
             $this->connection = Connection::GetInstance();
             $this->connection->Execute($query);
@@ -78,7 +77,6 @@ class UserDAO implements IUserDAO{
             throw $ex; 
         }
     }
-
     public function updateLastName($newName,$emailUser){
         try{
             $query = "UPDATE ".$this->userTable." SET lastName = '$newName' WHERE email = '$emailUser';";

@@ -80,7 +80,7 @@ class BookingDAO implements IBookingDAO{
                     $booking->setPetID($pet);
                     $booking->setTotalValue($row['totalValue']);
                     $booking->setAmountReservation($row['amountReservation']);
-                    $booking->setStatus($row['status']);               
+                    $booking->setStatus($row['status']);        
                     array_push($bookingList,$booking);
                 } 
                     
@@ -188,7 +188,7 @@ class BookingDAO implements IBookingDAO{
                     $booking->setPetID($pet);
                     $booking->setTotalValue($row['totalValue']);
                     $booking->setAmountReservation($row['amountReservation']);
-                    $booking->setStatus($row['status']);               
+                    $booking->setStatus($row['status']);             
                     array_push($bookingList,$booking);
                 } 
                 

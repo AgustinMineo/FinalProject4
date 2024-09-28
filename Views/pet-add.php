@@ -121,7 +121,7 @@ require_once("validate-session.php");
                     <div class="col-lg-6">
                          <div class="form-group">
                               <label for="petDetails" class="form-label">Pet Details</label>
-                              <input type="text" name="petDetails" placeholder="Enter pet's details" class="form-control" required>
+                              <input type="text" name="petDetails" placeholder="Enter pet's details" class="form-control" maxlength="254" required>
                          </div>
                     </div>
                     

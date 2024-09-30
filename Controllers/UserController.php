@@ -106,34 +106,6 @@ class UserController{
             exit();
         }
     }
-    public function newUserByAdmin($rol = null,$lastName = null, $firstName = null,$cellPhone = null,
-    $birthDate = null,$email = null,$password = null,$password1 = null,$userDescription = null,
-    $questionRecovery = null,$answerRecovery = null){
-        $userRole=SessionHelper::InfoSession([1]);
-        if ($lastName === null && $firstName === null &&  $cellPhone === null && $birthDate === null && 
-            $email === null && $password === null && $userDescription === null && $questionRecovery === null && 
-            $answerRecovery === null && $rol === null) 
-        {
-            if(SessionHelper::getCurrentUser()){
-                SessionHelper::redirectTo403();
-            }
-        }else{
-            var_dump(
-                $rol,
-                $firstName,
-                $lastName,
-                $email,
-                $password,
-                $password1,
-                $cellPhone,
-                $birthDate,
-                $userDescription,
-                $questionRecovery,
-                $answerRecovery
-            );
-        }
-
-    }
     public function goRecovery($user=null){
         if($user){
             require_once(VIEWS_PATH."recoveryPassword.php");
@@ -409,7 +381,7 @@ class UserController{
         }
         $response=0;
         if($password == $password1){
-            $response=$this->UserDAO->updatePassword(md5($password),$userEmail);
+            $response=$this->UserDAO->updatePassword($password,$userEmail);
             if($response){
                 echo '<div class="alert alert-success">You have successful update your Password!</div>';
                 $this->goEditView($userEmail,$response);;

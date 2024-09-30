@@ -34,19 +34,25 @@ class KeeperController{
     public function goLandingKeeper(){
         SessionHelper::InfoSession([3]);
     }
-    public function showKeepersAll($listKeepers){
+    public function showKeepersAll($listKeepers=null){
+        if($listKeepers === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         $userRole=SessionHelper::InfoSession([1,2]);
         require_once(VIEWS_PATH. "showKeeper.php");
-    }
-    public function myProfile($keeper){
-        SessionHelper::InfoSession([3]);
-        require_once(VIEWS_PATH."myProfileKeeper.php");
     }
     public function updateDaysAvailables(){
         SessionHelper::InfoSession([3]);
         require_once(VIEWS_PATH."updateAvailabilityDays.php");
     }
-    public function calendarDays($days,$bookings,$keeper){
+    public function calendarDays($days= null,$bookings= null,$keeper= null){
+        if($days === null && $keeper === null && $keeper === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         SessionHelper::InfoSession([3]);
         require_once(VIEWS_PATH."keeperDays.php");
     }
@@ -124,7 +130,12 @@ class KeeperController{
         }
     }
 
-    public function showKeepersByAvailability($value1,$value2){
+    public function showKeepersByAvailability($value1=null,$value2=null){
+        if($value1 === null && $value2 === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         SessionHelper::validateUserRole([3]);
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getKeeperByDisponibility($value1,$value2);
@@ -135,7 +146,12 @@ class KeeperController{
         }
     }
 
-    public function updateAvailabilityDays($date1,$date2,$available){
+    public function updateAvailabilityDays($date1=null,$date2=null,$available=null){
+        if($date1 === null && $date2 === null && $available ===null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         SessionHelper::validateUserRole([3]);
         //Si la fecha date1 es < a la fecha actual deberia dar error
         //Si la fecha de date2 es < a la fecha de hoy deberia dar error
@@ -164,7 +180,12 @@ class KeeperController{
         }
     }
     //Funcion para vista calendario
-    public function updateAvailabilityDay($date,$available){
+    public function updateAvailabilityDay($date=null,$available=null){
+        if($date === null && $available ===null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         SessionHelper::validateUserRole([3]);
         if($date < date('Y-m-d')){
             echo json_encode(['status' => 'error', 'message' => 'No se puede actualizar una fecha pasada a la actual ']);
@@ -200,6 +221,7 @@ class KeeperController{
     }
     //Funcion para refrescar el calendario luego de un cambio
     public function refreshDays() {
+
         SessionHelper::validateUserRole([3]);
         
         // Obtener el keeper actual
@@ -212,12 +234,6 @@ class KeeperController{
         // Generar el HTML que será enviado a la llamada AJAX
     
         return $days; /// Devuelve el HTML generado
-    }
-    
-    public function showCurrentKeeper(){
-        SessionHelper::validateUserRole([3]);
-        $keeper=$this->KeeperDAO->searchKeeperByEmail(SessionHelper::getCurrentUser()->getEmail());
-        $this->myProfile($keeper);
     }
 }
 ?>

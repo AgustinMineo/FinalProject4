@@ -117,7 +117,6 @@ class UserDAO implements IUserDAO{
 
     public function updatePassword($newPassword,$emailUser){
         try{
-
             $passwordNew = MD5($newPassword);
             $query = "UPDATE ".$this->userTable." SET password = '$passwordNew' WHERE email = '$emailUser';";
             $this->connection = Connection::GetInstance();

@@ -52,7 +52,6 @@ class ReviewController{
     public function newReview($rate = null,$bookingID= null,$feedback = null){
         if($rate === null && $bookingID === null && $feedback ===null){
             if(SessionHelper::getCurrentUser()){
-                var_dump($reviewList);
                 SessionHelper::redirectTo403();
             }
         }else{

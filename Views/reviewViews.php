@@ -34,7 +34,7 @@ require_once("validate-session.php");
                                         <h5 class="card-title text-primary">Reseña ID: <?php echo $review->getReviewID(); ?></h5>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">
-                                            <strong>Descripción:</strong> <?php echo $review->getDescription(); ?>
+                                            <strong>Reseña: <br></strong> <?php echo $review->getDescription(); ?>
                                         </li>
                                         <li class="list-group-item">
                                             <strong>Puntuación:</strong> <?php echo $review->getPoints(); ?>
@@ -54,8 +54,8 @@ require_once("validate-session.php");
                                         </li>
                                     </ul>
                                     <div class="d-flex justify-content-center mt-3">
-                                        <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#infoModal<?php echo $review->getReviewID(); ?>">Ver Detalle</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bookingModal<?php echo $review->getBooking()->getBookingID(); ?>">Ver Booking</button>
+                                        <button type="button" class="btn btn-outline-info me-2" data-bs-toggle="modal" data-bs-target="#infoModal<?php echo $review->getReviewID(); ?>">Ver Detalle</button>
+                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#bookingModal<?php echo $review->getBooking()->getBookingID(); ?>">Ver Booking</button>
                                     </div>
                                         
                                         <!-- Modal Review -->
@@ -71,7 +71,7 @@ require_once("validate-session.php");
                                                     <hr>
                                                     <ul class="list-group list-group-flush">
                                                         <li class="list-group-item">
-                                                            <strong>Descripción:</strong> <?php echo $review->getDescription(); ?>
+                                                            <strong>Reseña:</strong> <?php echo $review->getDescription(); ?>
                                                         </li>
                                                         <li class="list-group-item">
                                                             <strong>Puntuación:</strong>
@@ -207,18 +207,31 @@ require_once("validate-session.php");
                                                                                 </ul>
                                                                             </div>
                                                                             <hr>
-                                                                            <div class="text-center">
-                                                                                <h6>Plan de Vacunación</h6>
+                                                                            <div class="d-flex flex-wrap justify-content-center w-100 mt-2">
+                                                                                <h5>Plan de Vacunación</h5>
+                                                                            </div>
+                                                                            <div class="d-flex flex-wrap justify-content-center w-100">
                                                                                 <?php 
                                                                                 if (!$review->getBooking()->getPetID()->getPetVaccinationPlan()) {
-                                                                                    echo "<p>No disponible</p>";
+                                                                                    echo "<h3>Sin plan de vacunación disponible</h3>";
                                                                                 } else {
-                                                                                    $VaccinationPlan = $review->getBooking()->getPetID()->getPetVaccinationPlan();
-                                                                                    $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));
-                                                                                    echo '<img src="data:image/jpeg;base64,'.$VaccinationPlanData.'" class="img-fluid" alt="Plan de vacunación">';
+                                                                                    $vaccinationPlanPath = $review->getBooking()->getPetID()->getPetVaccinationPlan();
+                                                                                    $fileType = pathinfo($vaccinationPlanPath, PATHINFO_EXTENSION);
+
+                                                                                    if ($fileType === 'pdf') {
+                                                                                        // Mostrar PDF con iframe
+                                                                                        echo '<iframe src="' . FRONT_ROOT . $vaccinationPlanPath . '" class="w-100 px-3" style="height: 60vh;" frameborder="0"></iframe>';
+                                                                                    } elseif (in_array(strtolower($fileType), ['jpg', 'jpeg', 'png'])) {
+                                                                                        // Mostrar imagen
+                                                                                        $vaccinationPlanData = base64_encode(file_get_contents($vaccinationPlanPath));
+                                                                                        echo '<img src="data:image/' . $fileType . ';base64,' . $vaccinationPlanData . '" class="img-fluid rounded shadow-sm" style="max-height: 800px;">';
+                                                                                    } else {
+                                                                                        echo "<h3>Formato de archivo no compatible</h3>";
+                                                                                    }
                                                                                 }
                                                                                 ?>
                                                                             </div>
+
                                                                             <hr>
                                                                             <div class="text-center">
                                                                                 <h6>Video de <?php echo $review->getBooking()->getPetID()->getPetName(); ?></h6>

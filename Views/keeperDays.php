@@ -92,14 +92,14 @@ function isBooked($day, $bookings) {
 </head>
 <body>
 <div class="container mt-4">
-    <h2>Calendario de Disponibilidad</h2>
     <div class="container">
         <!-- Filtros de mes y año -->
-        <form method="GET" action="">
-            <div class="row mb-4">
+        <form method="GET" action="" class="bg-light p-4 rounded shadow-sm mb-5">
+            <h2 class="mb-5">Calendario de Disponibilidad</h2>
+            <div class="row mb-4 ">
                 <div class="col-md-4">
-                    <label for="month">Mes:</label>
-                    <select id="month" name="month" class="form-control">
+                    <label for="month" class="form-label">Mes:</label>
+                    <select id="month" name="month" class="form-select">
                         <?php
                         for ($m = 1; $m <= 12; $m++) {
                             $selected = ($m == $selectedMonth) ? 'selected' : '';
@@ -110,26 +110,22 @@ function isBooked($day, $bookings) {
                 </div>
 
                 <div class="col-md-4">
-                    <label for="year">Año:</label>
-                    <select id="year" name="year" class="form-control">
+                    <label for="year" class="form-label">Año:</label>
+                    <select id="year" name="year" class="form-select">
                         <?php
                         $today = date('d/m/Y');
                         $currentYear = date('Y');
-                        for ($y = $currentYear-5; $y <= $currentYear + 5; $y++) {
+                        for ($y = $currentYear - 5; $y <= $currentYear + 5; $y++) {
                             $selected = ($y == $selectedYear) ? 'selected' : '';
                             echo "<option value='$y' $selected>$y</option>";
                         }
                         ?>
                     </select>
                 </div>
-                <div class="col-md-3 d-flex align-items-center mt-4 w-25 ">
-                   
-                    <button type="submit" class="btn btn-primary btn-block w-50">Filtrar</button>
+                <div class="col-md-4 d-flex align-items-end justify-content-end">
+                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
                 </div>
             </div>
-        </form>
-
-        <div class="container mb-5">
             <div class="d-flex flex-wrap">
                 <div class="">
                     <div class="form-check">
@@ -145,9 +141,8 @@ function isBooked($day, $bookings) {
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
 
-    
     <div class="row" id="calendarContainer">
         <?php
         foreach ($generatedDays as $day) {
@@ -213,40 +208,47 @@ function isBooked($day, $bookings) {
                 </div>
                 </div>
             <?php } else { ?>
-                <form
-                id="form-<?php echo $day['day']; ?>"
-                <?php echo $formStatus?>
-                data-status="" method="post" class="card <?php echo $cardClass; ?>" data-date="<?php echo $day['day']; ?>" >
-                <input type="hidden" name="date"  value="<?php echo $day['day']; ?>">
-                    <input type="hidden" name="available" value="<?php echo ($day['available']); ?>">
-                   
-                    <div class="card-body text-center text-white" style="cursor: <?php echo $cursorPointer;?>">
+                <form id="form-<?php echo $day['day']; ?>"
+                    <?php echo $formStatus; ?>
+                    data-status=""
+                    method="post"
+                    class="card <?php echo $cardClass; ?> mb-3"
+                    data-date="<?php echo $day['day']; ?>"
+                >
+                    <input type="hidden" name="date" value="<?php echo $day['day']; ?>">
+                    <input type="hidden" name="available" value="<?php echo $day['available']; ?>">
+                    
+                    <div class="card-body text-center text-white" style="cursor: <?php echo $cursorPointer; ?>">
                         <h5 class="card-title"><?php echo $formattedDate; ?></h5>
                         <p class="card-text">
                             <?php
-                            $cursorPointer='pointer';
+                            // Inicializar el texto y tooltip
+                            $statusText = '';
+                            $tooltip = '';
+
                             if ($isBooked) {
-                            echo 'Ocupado';
-                            $tooltip='Dia reservado';
+                                $statusText = 'Ocupado';
+                                $tooltip = 'Día reservado';
                             } elseif ($isAvailable) {
-                                echo 'Disponible';
-                                $tooltip='Dia disponible para reservar';
-                                $cursorPointer='default';
-                            }elseif($CastFormattedDate<$CastToday) {
-                                echo 'No disponible';
-                                $tooltip='Dia no disponible para actualizar';
-                                $cursorPointer='default';
-                            }else {
-                                echo 'No Configurado';
-                                $tooltip= 'Dia disponible pero no activo';
-                                //$cursorPointer='default';
+                                $statusText = 'Disponible';
+                                $tooltip = 'Día disponible para reservar';
+                                $cursorPointer = 'default';
+                            } elseif ($CastFormattedDate < $CastToday) {
+                                $statusText = 'No disponible';
+                                $tooltip = 'Día no disponible para actualizar';
+                                $cursorPointer = 'default';
+                            } else {
+                                $statusText = 'No Configurado';
+                                $tooltip = 'Día disponible pero no activo';
                             }
                             ?>
-                    <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title='<?php echo $tooltip; ?>'> <i class="bi bi-question-circle"></i></span>
-                    </p>
-                </div>
-                
-            </form>
+                            <span class="status-text"><?php echo $statusText; ?></span>
+                            <span class="tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="<?php echo $tooltip; ?>">
+                                <i class="bi bi-question-circle"></i>
+                            </span>
+                        </p>
+                    </div>
+                </form>
             <?php } ?>
             </div>
             <?php if($bookingID) { ?>
@@ -265,13 +267,17 @@ function isBooked($day, $bookings) {
                         <div class="container mb-4">
                             <h3 class="text-center text-primary mb-4">Detalles de la Reserva</h3>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <p><strong>Del:</strong> <?php echo $bookingDetail->getStartDate(); ?></p>
-                                    <p><strong>Al:</strong> <?php echo $bookingDetail->getEndDate(); ?></p>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3 border-light">
+                                        <p class="mb-1"><strong>Del:</strong> <?php echo $bookingDetail->getStartDate(); ?></p>
+                                        <p class="mb-1"><strong>Al:</strong> <?php echo $bookingDetail->getEndDate(); ?></p>
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <p><strong>Total:</strong> $<?php echo $bookingDetail->getTotalValue(); ?></p>
-                                    <p><strong>Reserva:</strong> $<?php echo $bookingDetail->getAmountReservation(); ?></p>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card p-3 border-light">
+                                        <p class="mb-1"><strong>Total:</strong> $<?php echo $bookingDetail->getTotalValue(); ?></p>
+                                        <p class="mb-1"><strong>Reserva:</strong> $<?php echo $bookingDetail->getAmountReservation(); ?></p>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -280,7 +286,7 @@ function isBooked($day, $bookings) {
                         <!-- Pet Details -->
                         <div class="container mb-4">
                             <h3 class="text-center text-primary mb-4"><?php echo $bookingDetail->getPetID()->getPetName(); ?></h3>
-                            <div class="card p-3">
+                            <div class="card p-3 border-light">
                                 <?php
                                 if ($image = $bookingDetail->getPetID()->getPetImage()) {
                                     $imageData = base64_encode(file_get_contents($image));
@@ -289,12 +295,13 @@ function isBooked($day, $bookings) {
                                     echo "<h5 class='text-center text-muted'>No tiene imagen</h5>";
                                 }
                                 ?>
-
-                                <p><strong>Raza:</strong> <?php echo $bookingDetail->getPetID()->getPetBreedByText(); ?></p>
-                                <p><strong>Peso:</strong> <?php echo $bookingDetail->getPetID()->getPetWeight(); ?> kg</p>
-                                <p><strong>Edad:</strong> <?php echo $bookingDetail->getPetID()->getPetAge(); ?> año(s)</p>
-                                <p><strong>Tamaño:</strong> <?php echo $bookingDetail->getPetID()->getPetSize(); ?></p>
-                                <p><strong>Descripción:</strong> <?php echo $bookingDetail->getPetID()->getPetDetails(); ?></p>
+                                <div class="list-group">
+                                    <p class="list-group-item"><strong>Raza:</strong> <?php echo $bookingDetail->getPetID()->getPetBreedByText(); ?></p>
+                                    <p class="list-group-item"><strong>Peso:</strong> <?php echo $bookingDetail->getPetID()->getPetWeight(); ?> kg</p>
+                                    <p class="list-group-item"><strong>Edad:</strong> <?php echo $bookingDetail->getPetID()->getPetAge(); ?> año(s)</p>
+                                    <p class="list-group-item"><strong>Tamaño:</strong> <?php echo $bookingDetail->getPetID()->getPetSize(); ?></p>
+                                    <p class="list-group-item"><strong>Descripción:</strong> <?php echo $bookingDetail->getPetID()->getPetDetails(); ?></p>
+                                </div>
                             </div>
                             <hr>
                         </div>
@@ -304,8 +311,8 @@ function isBooked($day, $bookings) {
                             <h5><strong>Plan de Vacunación</strong></h5>
                             <?php
                             if ($imagePetVaccinationPlan = $bookingDetail->getPetID()->getPetVaccinationPlan()) {
-                                $imageDataimagePetVaccinationPlan = base64_encode(file_get_contents($imagePetVaccinationPlan));
-                                echo '<img src="data:image/jpeg;base64,'.$imageDataimagePetVaccinationPlan.'" class="img-fluid rounded mb-3" alt="Plan de vacunación">';
+                                $imageDataVaccinationPlan = base64_encode(file_get_contents($imagePetVaccinationPlan));
+                                echo '<img src="data:image/jpeg;base64,'.$imageDataVaccinationPlan.'" class="img-fluid rounded mb-3" alt="Plan de vacunación">';
                             } else {
                                 echo "<h5 class='text-muted'>No tiene imagen de plan de vacunación</h5>";
                             }
@@ -330,15 +337,40 @@ function isBooked($day, $bookings) {
                         <!-- Owner Details -->
                         <div class="container">
                             <h3 class="text-center text-primary mb-4">Datos del Dueño</h3>
-                            <div class="card p-3">
-                                <p><strong>Nombre:</strong> <?php echo $bookingDetail->getPetID()->getOwnerId()->getlastName() . " " . $bookingDetail->getPetID()->getOwnerId()->getfirstName(); ?></p>
-                                <p><strong>Celular:</strong> <?php echo $bookingDetail->getPetID()->getOwnerId()->getCellPhone(); ?></p>
-                                <p><strong>Cantidad de mascotas:</strong> <?php echo $bookingDetail->getPetID()->getOwnerId()->getPetAmount(); ?></p>
-                                <p><strong>Email:</strong> <?php echo $bookingDetail->getPetID()->getOwnerId()->getEmail(); ?></p>
-                                <p><strong>Fecha de nacimiento:</strong> <?php echo $bookingDetail->getPetID()->getOwnerId()->getbirthDate(); ?></p>
-                                <p><strong>Descripción:</strong> <?php echo $bookingDetail->getPetID()->getOwnerId()->getDescription(); ?></p>
+                            <div class="card p-4 shadow">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">Información del Propietario</h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-3 p-2 border rounded bg-light">
+                                            <strong>Nombre:</strong> 
+                                            <?php echo $bookingDetail->getPetID()->getOwnerId()->getlastName() . " " . $bookingDetail->getPetID()->getOwnerId()->getfirstName(); ?>
+                                        </li>
+                                        <li class="mb-3 p-2 border rounded bg-light">
+                                            <strong>Celular:</strong> 
+                                            <?php echo $bookingDetail->getPetID()->getOwnerId()->getCellPhone(); ?>
+                                        </li>
+                                        <li class="mb-3 p-2 border rounded bg-light">
+                                            <strong>Cantidad de mascotas:</strong> 
+                                            <?php echo $bookingDetail->getPetID()->getOwnerId()->getPetAmount(); ?>
+                                        </li>
+                                        <li class="mb-3 p-2 border rounded bg-light">
+                                            <strong>Email:</strong> 
+                                            <?php echo $bookingDetail->getPetID()->getOwnerId()->getEmail(); ?>
+                                        </li>
+                                        <li class="mb-3 p-2 border rounded bg-light">
+                                            <strong>Fecha de nacimiento:</strong> 
+                                            <?php echo $bookingDetail->getPetID()->getOwnerId()->getbirthDate(); ?>
+                                        </li>
+                                        <li class="mb-3 p-2 border rounded bg-light">
+                                            <strong>Descripción:</strong> 
+                                            <?php echo $bookingDetail->getPetID()->getOwnerId()->getDescription(); ?>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>

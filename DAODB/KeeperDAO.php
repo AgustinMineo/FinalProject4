@@ -101,7 +101,6 @@ class KeeperDAO implements IKeeperDAO{
       $this->connection = Connection::GetInstance();
       $resultSet = $this->connection->Execute($query);
       if($resultSet){
-        var_dump($resultSet['Promedio']);
         return $resultSet['Promedio'];
       }
     }catch (Exception $ex) { throw $ex; }  
@@ -232,7 +231,7 @@ class KeeperDAO implements IKeeperDAO{
   public function getKeeperByDisponibility($date1, $date2,$ownerID) {
     try {
         $query = "
-        SELECT k.keeperID, u.firstName, u.lastName, u.cellphone,u.birthdate, u.email, k.price, k.animalSize, k.cbu
+        SELECT k.keeperID, u.firstName, u.lastName, u.cellphone,u.birthdate, u.email, k.price, k.animalSize, k.cbu,k.rank
         FROM " . $this->userTable . " u
         JOIN " . $this->keeperTable . " k ON k.userID = u.userID
         JOIN " . $this->daysTable . " d ON d.keeperID = k.keeperID
@@ -274,6 +273,7 @@ class KeeperDAO implements IKeeperDAO{
                 $keeper->setPrice($row['price']);
                 $keeper->setCBU($row['cbu']);
                 $keeper->setAnimalSize($row['animalSize']);
+                $keeper->setPoints($row['rank']);
                 array_push($keeperList, $keeper);
             }
             return $keeperList;
@@ -388,7 +388,6 @@ class KeeperDAO implements IKeeperDAO{
       catch (Exception $ex) { throw $ex; } 
     }
     public function searchKeeperToLogin($email,$password){
-      if($email && $password){
       try {
       $query = "SELECT k.keeperID, k.animalSize, k.price, k.cbu, u.firstName, u.lastName, 
       u.email, u.cellphone, u.birthdate, u.password, u.userDescription, u.roleID,k.rank 
@@ -399,8 +398,6 @@ class KeeperDAO implements IKeeperDAO{
       $this->connection = Connection::GetInstance();
 
             $resultSet = $this->connection->Execute($query);
-
-            
             if($resultSet)
             {
               foreach($resultSet as $row){
@@ -422,20 +419,10 @@ class KeeperDAO implements IKeeperDAO{
               return $keeper;
               }
           }
-          else{
-            echo '<div class="alert alert-danger">The user doesn´t exits . Please create an account!</div>';
-          }
       } catch (Exception $ex) {
             throw $ex;
         }
-      }else if($password){
-        echo '<div class="alert alert-danger">Incorrect Email . Please try again!</div>';
-      } else if($email){
-        echo '<div class="alert alert-danger">Incorrect password . Please try again!</div>';
-      }else{
-        echo '<div class="alert alert-danger">Incorrect Email or password . Please try again!</div>';
-      }
-    }
+  }
     public function getAvailabilityDays($keeperID) {
       try {
           $query = "SELECT day, available FROM ".$this->daysTable."

@@ -69,10 +69,11 @@ CREATE TABLE `Booking` (
   `keeperID` int(11) NOT NULL references Keeper(keeperID),
   `petID` int(11) NOT NULL references Pet(petID),
   `status` int(11) NOT NULL references Status(statusID),
-  `totalValue` float,
-  `amountReservation` float,
+  `totalValue` DECIMAL(10,3),
+  `amountReservation` DECIMAL(10,3),
   `startDate` DATE NOT NULL, -- Fecha de inicio de la reserva
   `endDate` DATE NOT NULL,   -- Fecha de fin de la reserva
+  `payment` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`bookingID`)
 ) ENGINE=InnoDB;
 

@@ -38,17 +38,26 @@ require_once("validate-session.php");
             <h3 class="mb-3">Administradores</h3>
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
                 <?php foreach ($adminUsers as $admin): ?>
-                    <div class="col">
-                        <div class="card shadow-sm h-100">
+                    <div class="col text-center">
+                        <div class="card shadow-sm h-100 <?php if($admin->getStatus()==='0'){echo 'bg-danger';}?>">
                             <div class="card-body d-flex justify-content-between align-items-center">
-                            <p id="userEmail-<?php echo $admin->getOwnerId(); ?>"><strong>Email:</strong> <?php echo $admin->getEmail(); ?></p>
+                            <p class="m-0" id="userEmail-<?php echo $admin->getOwnerId(); ?>"><strong>Email:</strong> <?php echo $admin->getEmail(); ?></p>
                                 <form action="<?php echo FRONT_ROOT ?>User/goEditView" method="POST">
                                     <input type="hidden" name="email" value="<?php echo $admin->getEmail(); ?>">
                                     <input type="hidden" name="role" value="1">
-                                    <button type="submit" class="btn btn-warning btn-sm">
+                                    <button type="submit" class="btn btn-warning btn-sm ">
                                         <i class="bi bi-pencil-fill"></i> Modificar
                                     </button>
                                 </form>
+                                <?php if($admin->getStatus() === '0'): ?>
+                                    <form action="<?php echo FRONT_ROOT ?>User/deleteUser" method="POST">
+                                        <input type="hidden" name="email" class="userEmail" value="<?php echo $admin->getEmail(); ?>">
+                                        <input type="hidden" name="status" value="<?php echo intval($admin->getStatus()); ?>">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="bi bi-check-circle"></i> Reactivar
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -63,9 +72,9 @@ require_once("validate-session.php");
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
                 <?php foreach ($ownerUsers as $owner): ?>
                     <div class="col">
-                        <div class="card shadow-sm h-100">
+                        <div class="card shadow-sm h-100 <?php if($owner->getStatus()==='0'){echo 'bg-danger';}?>">
                             <div class="card-body d-flex justify-content-between align-items-center ">
-                                <p id="userEmail-<?php echo $owner->getOwnerId(); ?>"><strong>Email:</strong> <?php echo $owner->getEmail(); ?></p>
+                                <p class="m-0" id="userEmail-<?php echo $owner->getOwnerId(); ?>"><strong>Email:</strong> <?php echo $owner->getEmail(); ?></p>
                                 <form action="<?php echo FRONT_ROOT ?>User/goEditView" method="POST">
                                     <input type="hidden" name="email" value="<?php echo $owner->getEmail(); ?>">
                                     <input type="hidden" name="role" value="2">
@@ -73,6 +82,15 @@ require_once("validate-session.php");
                                         <i class="bi bi-pencil-fill"></i> Modificar
                                     </button>
                                 </form>
+                                <?php if($owner->getStatus() === '0'): ?>
+                                    <form action="<?php echo FRONT_ROOT ?>User/deleteUser" method="POST">
+                                        <input type="hidden" name="email" class="userEmail" value="<?php echo $owner->getEmail(); ?>">
+                                        <input type="hidden" name="status" value="<?php echo intval($owner->getStatus()); ?>">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="bi bi-check-circle"></i> Reactivar
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -88,9 +106,12 @@ require_once("validate-session.php");
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
                 <?php foreach ($keeperUsers as $keeper): ?>
                     <div class="col">
-                        <div class="card shadow-sm h-100">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <p id="userEmail-<?php echo $keeper->getKeeperId(); ?>"><strong>Email:</strong> <?php echo $keeper->getEmail(); ?></p>
+                    <div class="card shadow-sm h-100 <?php if($keeper->getStatus()==='0'){echo 'bg-danger';}?>">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <p class="m-0" id="userEmail-<?php echo $keeper->getKeeperId(); ?>">
+                                <strong>Email:</strong> <?php echo $keeper->getEmail(); ?>
+                            </p>
+                            <div class="d-flex gap-2">
                                 <form action="<?php echo FRONT_ROOT ?>User/goEditView" method="POST">
                                     <input type="hidden" name="email" class="userEmail" value="<?php echo $keeper->getEmail(); ?>">
                                     <input type="hidden" name="role" value="3">
@@ -98,10 +119,44 @@ require_once("validate-session.php");
                                         <i class="bi bi-pencil-fill"></i> Modificar
                                     </button>
                                 </form>
+                                <?php if($keeper->getStatus() === '0'): ?>
+                                    <form action="<?php echo FRONT_ROOT ?>User/deleteUser" method="POST">
+                                        <input type="hidden" name="email" class="userEmail" value="<?php echo $keeper->getEmail(); ?>">
+                                        <input type="hidden" name="status" value="<?php echo intval($keeper->getStatus()); ?>">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            <i class="bi bi-check-circle"></i> Reactivar
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
+                </div>
+
                 <?php endforeach; ?>
+                <!--Modal Reactive-->
+                <div class="modal fade" id="deleteModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title">Delete Account</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                        <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+                        </div>
+                        <div class="modal-footer">
+                        <form action="<?php echo FRONT_ROOT ?>User/deleteUser" method="post">
+                            <input type="hidden" name="userEmail" value="<?php echo $user->getEmail(); ?>">
+                            <input type="hidden" name="status" value="<?php echo intval($user->getStatus()); ?>">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Delete Account</button>
+                        </form>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!--Modal Reactive-->
             </div>
             <hr>
         </section>

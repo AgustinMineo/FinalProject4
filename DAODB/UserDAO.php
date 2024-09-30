@@ -18,7 +18,7 @@ class UserDAO implements IUserDAO{
         try {
             $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, 
             u.password, u.userDescription, u.email, u.userID,
-            u.answerRecovery,u.questionRecovery,u.roleID
+            u.answerRecovery,u.questionRecovery,u.roleID,u.status
             FROM ".$this->userTable." u WHERE email = '$email';";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
@@ -35,6 +35,7 @@ class UserDAO implements IUserDAO{
                     $user->setAnswerRecovery($row["answerRecovery"]);
                     $user->setQuestionRecovery($row["questionRecovery"]);
                     $user->setRol($row["roleID"]);
+                    $user->setStatus($row["status"]);
                 }
                 return $user;
             }
@@ -117,7 +118,7 @@ class UserDAO implements IUserDAO{
 
     public function updatePassword($newPassword,$emailUser){
         try{
-            $passwordNew = MD5($newPassword);
+            $passwordNew = md5($newPassword);
             $query = "UPDATE ".$this->userTable." SET password = '$passwordNew' WHERE email = '$emailUser';";
             $this->connection = Connection::GetInstance();
             $this->connection->Execute($query);
@@ -179,7 +180,7 @@ class UserDAO implements IUserDAO{
     //Traemos los datos necesarios unicamente
     public function searchUserToRecovery($email){
         try {
-            $query = "SELECT u.email,u.answerRecovery,u.questionRecovery
+            $query = "SELECT u.email,u.answerRecovery,u.questionRecovery,u.status
             FROM ".$this->userTable." u WHERE email = '$email';";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
@@ -189,11 +190,24 @@ class UserDAO implements IUserDAO{
                 $user->setEmail($row["email"]);
                 $user->setAnswerRecovery($row["answerRecovery"]);
                 $user->setQuestionRecovery($row["questionRecovery"]);
+                $user->setStatus($row["status"]);
                 }
                 return $user;
             }else{
                 return NULL; 
             }
+        } catch (Exception $ex) 
+        { 
+            throw $ex; 
+        }
+    }
+    public function deleteUser($emailUser,$status){//La eliminación se va a hacer de forma logica
+        try{
+            $query = "UPDATE ".$this->userTable." SET status = '$status' WHERE email = '$emailUser';";
+            $this->connection = Connection::GetInstance();
+            $this->connection->Execute($query);
+            return $this->getRoleByEmail($emailUser);
+            
         } catch (Exception $ex) 
         { 
             throw $ex; 

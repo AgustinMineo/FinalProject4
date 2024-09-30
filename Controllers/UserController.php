@@ -134,20 +134,44 @@ class UserController{
             if($email && $password){
                 try{
                     $newOwner = $this->OwnerDAO->searchOwnerToLogin($email,$password);
-                    if($newOwner){
-                        $loggedUser = $newOwner;
-                        $_SESSION["loggedUser"] = $loggedUser;
-                        echo '<div class="alert alert-success">Login successful!</div>';
-                        $this->goNavBar();
-                    } else if($newKeeper = $this->KeeperDAO->searchKeeperToLogin($email,$password)){
-                        if($newKeeper){
-                            $loggedUser = $newKeeper;
-                            $_SESSION["loggedUser"] = $loggedUser;
+                        if($newOwner){
+                            if($newOwner->getStatus()==='1'){
+                                $loggedUser = $newOwner;
+                                $_SESSION["loggedUser"] = $loggedUser;
+                                echo '<div class="alert alert-success">Login successful!</div>';
+                                $this->goNavBar();
+                            }else{
+                                echo '<div class="alert alert-danger my-0"> The User is deleted!</div>';
+                                $this->gologinUser();
+                            }
+                        } else if($newKeeper = $this->KeeperDAO->searchKeeperToLogin($email,$password)){
+                            if($newKeeper){
+                                if($newKeeper->getStatus()==='1'){
+                                    $loggedUser = $newKeeper;
+                                    $_SESSION["loggedUser"] = $loggedUser;
+                                    echo '<div class="alert alert-success my-0">Login successful!</div>';
+                                    $this->goNavBar();
+                                }else{
+                                    echo '<div class="alert alert-danger my-0">The User is deleted!</div>';
+                                    $this->gologinUser();
+                                } 
+
+                            }else{
+                                echo '<div class="alert alert-danger">The user or password is invalid!</div>';
+                                $this->gologinUser();
+                            }
+                    }elseif($newAdmin = $this->OwnerDAO->searchAdminToLogin($email,$password)){
+                        if($newAdmin->getStatus()==='1'){
+                            $_SESSION["loggedUser"] = $newAdmin;
                             echo '<div class="alert alert-success">Login successful!</div>';
                             $this->goNavBar();
-                            }
-                    }else{
-                        
+                        }else{
+                            echo '<div class="alert alert-danger my-0"> The User is deleted!</div>';
+                            $this->gologinUser();
+                        }
+                    }
+                    else{
+                        echo '<div class="alert alert-danger">The user or password is invalid!</div>';
                         $this->gologinUser();
                     }
                 }catch ( Exception $ex) {
@@ -389,6 +413,40 @@ class UserController{
         }else{
             echo '<div class="alert alert-danger">The Password doesnt match!!</div>';
             $this->goEditView($userEmail,$response);;
+        }
+    }
+    public function deleteUser($userEmail=null,$newStatus=null){
+        if($newStatus === null && $userEmail === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
+        if($newStatus === '1'){
+            $status=0;
+        }else{
+            $status=1;
+        }
+        $response=0;
+        $response = $this->UserDAO->deleteUser($userEmail,$status);
+        if($response){
+            if(SessionHelper::getCurrentRole() === 1){
+                if($status=== 0 && SessionHelper::getCurrentUser()->getEmail() !=$userEmail){
+                    echo '<div class="alert alert-success">You have successful delete this account!</div>';
+                    $this->editUser();
+                }elseif($status=== 0 && SessionHelper::getCurrentUser()->getEmail() ===$userEmail ){
+                    echo '<div class="alert alert-success">You have successful delete your account!</div>';
+                    $this->logOut();
+                }else{
+                    echo '<div class="alert alert-success">You have successful reactive this account!</div>';
+                    $this->editUser();
+                }
+            }else{
+                echo '<div class="alert alert-success">You have successful delete your account!</div>';
+                $this->logOut();
+            }
+        }else{
+            echo '<div class="alert alert-danger">Error while trying to delete your account!</div>';
+            $this->goEditView($userEmail,$response);
         }
     }
 

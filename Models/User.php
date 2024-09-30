@@ -12,6 +12,7 @@ abstract class User {
     private $questionRecovery;
     private $answerRecovery;
     private $rol; // 1- Admin, 2- Owner, 3- Keeper
+    private $status; //1 activo, 0 eliminado
     
     // Getter and setters
     public function getLastName(){
@@ -81,6 +82,12 @@ abstract class User {
     }
     public function setAnswerRecovery($answerRecovery){
         $this->answerRecovery = $answerRecovery;
+    }
+    public function getStatus(){
+        return $this->status;
+    }
+    public function setStatus($status){
+        $this->status = $status;
     }
 
 }

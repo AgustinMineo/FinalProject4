@@ -320,40 +320,6 @@ require_once("validate-session.php");
   </div>
 </div>
 <!-- User Description Section -->
- <!-- Delete user section-->
-  <div class="col-md-6 my-2">
-        <div class="card shadow ">
-            <div class="card-body text-center">
-                <h4 class="card-title"><i class="fas fa-user-slash text-danger"></i> Delete Account</h4>
-                <p class="card-text">Are you sure you want to delete your account? This action cannot be undone.</p>
-                <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                    <span>Delete Account</span>
-                </button>
-            </div>
-        </div>
-  </div>
-
-  <div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Delete Account</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-        </div>
-        <div class="modal-footer">
-          <form action="<?php echo FRONT_ROOT ?>User/deleteAccount" method="post">
-            <input type="hidden" name="userEmail" value="<?php echo $user->getEmail(); ?>">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-danger">Delete Account</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Delete User Section -->
     
     <!-- User Recovery Section -->
     <div class="col-md-6 my-2">
@@ -552,6 +518,41 @@ require_once("validate-session.php");
     <!-- Keeper Points Section -->
     <?php endif;?>
     <!-- Keeper section (Only Keeper) -->
+     <!-- Delete user section-->
+  <div class=" my-2 <?php if($user->getRol()=== '2'){echo 'col-md-6';}else{echo 'col-md-12';}?>">
+        <div class="card shadow ">
+            <div class="card-body text-center">
+                <h4 class="card-title"><i class="fas fa-user-slash text-danger"></i> Delete Account</h4>
+                <p class="card-text">Are you sure you want to delete your account? This action cannot be undone.</p>
+                <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <span>Delete Account</span>
+                </button>
+            </div>
+        </div>
+  </div>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Account</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+          <form action="<?php echo FRONT_ROOT ?>User/deleteUser" method="post">
+            <input type="hidden" name="userEmail" value="<?php echo $user->getEmail(); ?>">
+            <input type="hidden" name="status" value="<?php echo intval($user->getStatus()); ?>">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger">Delete Account</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Delete User Section -->
   </div>
   </div><!--End row-->
 

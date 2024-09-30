@@ -20,6 +20,7 @@ CREATE TABLE `User` (
   `questionRecovery` varchar(80) DEFAULT NULL,
   `answerRecovery` varchar(120) DEFAULT NULL,
   `roleID` tinyint(1) NOT NULL,
+  `status` BOOLEAN NOT NULL DEFAULT 1,--1 activo, 0 eliminado
   CONSTRAINT FK_UserRole FOREIGN KEY (`roleID`) REFERENCES `Roles`(`roleID`),
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)

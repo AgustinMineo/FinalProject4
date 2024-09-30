@@ -117,7 +117,7 @@ class KeeperDAO implements IKeeperDAO{
 
   public function GetAllKeeper() {
       try {
-          $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price, k.animalSize, k.cbu, d.day, d.available,k.rank
+          $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, k.price, k.animalSize, k.cbu, d.day, d.available,k.rank,u.status
                     FROM ".$this->userTable." u
                     JOIN ".$this->keeperTable." k ON u.userID = k.userID
                     LEFT JOIN ".$this->daysTable." d ON k.keeperID = d.keeperID";
@@ -142,6 +142,7 @@ class KeeperDAO implements IKeeperDAO{
                       $keeper->setPrice($row['price']);
                       $keeper->setCBU($row['cbu']);
                       $keeper->setPoints($row['rank']);
+                      $keeper->setStatus($row['status']);
                       $keepers[$row['keeperID']] = array('keeper' => $keeper, 'availability' => array());
                   }
                   if ($row['day']) {
@@ -236,7 +237,7 @@ class KeeperDAO implements IKeeperDAO{
         JOIN " . $this->keeperTable . " k ON k.userID = u.userID
         JOIN " . $this->daysTable . " d ON d.keeperID = k.keeperID
         LEFT JOIN " . $this->bookingTable . " b ON b.keeperID = k.keeperID
-        WHERE d.available = 1
+        WHERE d.available = 1 AND u.status = 1
           AND d.day BETWEEN :date1 AND :date2
           AND k.animalSize in (select p.petSize from ". $this->petTable . " p where p.ownerID = :ownerID )
           AND NOT EXISTS (
@@ -289,7 +290,7 @@ class KeeperDAO implements IKeeperDAO{
     public function searchKeeperByEmail($email){
       try {
         $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email,u.birthdate, k.keeperID, k.price, k.cbu,
-                  u.userDescription,u.questionRecovery,u.answerRecovery,k.animalSize,u.roleID,k.rank
+                  u.userDescription,u.questionRecovery,u.answerRecovery,k.animalSize,u.roleID,k.rank,u.status
                   FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID
                   WHERE email = '$email';";
         $this->connection = Connection::GetInstance();
@@ -311,6 +312,7 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setAnswerRecovery($row['answerRecovery']);
             $keeper->setRol($row['roleID']);
             $keeper->setPoints($row['rank']);
+            $keeper->setStatus($row['status']);
             return $keeper;
           }
         } else { 
@@ -358,7 +360,7 @@ class KeeperDAO implements IKeeperDAO{
     public function searchKeeperByIDReduce($keeperID){
       try {
         $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email,u.birthdate, k.keeperID, k.price, k.cbu,
-                  u.userDescription,k.animalSize,u.roleID,k.rank
+                  u.userDescription,k.animalSize,u.roleID,k.rank,u.status
                   FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID
                   WHERE k.keeperID = '$keeperID';";
         $this->connection = Connection::GetInstance();
@@ -378,6 +380,7 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setDescription($row['userDescription']);
             $keeper->setRol($row['roleID']);
             $keeper->setPoints($row['rank']);
+            $keeper->setStatus($row['status']);
             return $keeper;
           }
         } else { 
@@ -390,7 +393,7 @@ class KeeperDAO implements IKeeperDAO{
     public function searchKeeperToLogin($email,$password){
       try {
       $query = "SELECT k.keeperID, k.animalSize, k.price, k.cbu, u.firstName, u.lastName, 
-      u.email, u.cellphone, u.birthdate, u.password, u.userDescription, u.roleID,k.rank 
+      u.email, u.cellphone, u.birthdate, u.password, u.userDescription, u.roleID,k.rank,u.status 
                 FROM ".$this->userTable." u 
                 RIGHT JOIN ".$this->keeperTable." k ON u.userID = k.userID 
                 WHERE email = '$email' AND password = md5($password);";
@@ -416,6 +419,7 @@ class KeeperDAO implements IKeeperDAO{
               $keeper->setDescription($row["userDescription"]);
               $keeper->setRol($row["roleID"]);
               $keeper->setPoints($row["rank"]);
+              $keeper->setStatus($row['status']);
               return $keeper;
               }
           }

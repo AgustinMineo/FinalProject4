@@ -23,7 +23,7 @@ class PetDAO implements IPetDAO{
     public function AddPet(Pet $pet){
         try{
             $query = "INSERT INTO ".$this->petTable."(petID, petName, petImage, breedID, petSize, petVaccinationPlan, petDetails, petVideo, petWeight, ownerID, petAge)
-                      VALUES (:petID, :petName, :petImage, :breedID, :petSize, :petVaccinationPlan, :petDetails, :petVideo, :petWeight, :ownerID, :petAge);";
+                    VALUES (:petID, :petName, :petImage, :breedID, :petSize, :petVaccinationPlan, :petDetails, :petVideo, :petWeight, :ownerID, :petAge);";
             $parameters["petID"] = NULL;
             $parameters["petName"] = $pet->getPetName();
             $parameters["petImage"] = $pet->getPetImage();
@@ -46,7 +46,9 @@ class PetDAO implements IPetDAO{
     public function GetAllPet(){
         try {
 
-            $query = "SELECT p.petID, p.petName, p.petImage, b.name, p.petSize, p.petVaccinationPlan, p.petDetails, p.petVideo, p.petWeight, p.ownerID, p.petAge
+            $query = "SELECT p.petID, p.petName, p.petImage, b.name, p.petSize, 
+            p.petVaccinationPlan, p.petDetails, p.petVideo, p.petWeight, p.ownerID, p.petAge,
+            p.breedID
             FROM ".$this->petTable." p  JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID
             JOIN ".$this->breedTable." b ON p.breedID = b.breedID;";
             $this->connection = Connection::GetInstance();
@@ -60,8 +62,9 @@ class PetDAO implements IPetDAO{
                     $pet->setPetID($row["petID"]);
                     $pet->setPetName($row["petName"]);
                     $pet->setPetImage($row["petImage"]);
-                    $pet->setBreedID($row["name"]);
+                   // $pet->setBreedID($row["name"]);
                     $pet->setPetSize($row["petSize"]);
+                    $pet->setBreedID($row['breedID']);
                     $pet->setPetVaccinationPlan($row["petVaccinationPlan"]);
                     $pet->setPetDetails($row["petDetails"]);
                     $pet->setPetVideo($row["petVideo"]);
@@ -179,5 +182,61 @@ class PetDAO implements IPetDAO{
                 return $pet;
             } else{ return null;}
         } catch (Exception $ex) {throw $ex;}
+    }
+    public function getBreeds(){
+        try{
+            $query = "SELECT * FROM ".$this->breedTable." order by breedID asc";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            $breedTypes=array();
+            if($resultSet){
+                foreach($resultSet as $row){
+                    $breedTypes[] =array( 
+                        'id'=> $row['breedID'],
+                        'name'=> $row['name']
+                    );
+                }
+                return $breedTypes;
+            } else { return NULL; }
+        } catch(Exception $ex) { throw $ex; }
+    }
+    public function getPetByID($petID){
+        try{
+            $query = "SELECT * FROM ".$this->petTable." WHERE petID = $petID;";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if($resultSet){
+                foreach($resultSet as $row){
+                    $owner= new Owner();
+                    $owner= $this->OwnerDAO->searchBasicInfoOwnerByID($row["ownerID"]);
+                    $pet = new Pet();
+                    $pet->setPetID($row["petID"]);
+                    $pet->setPetName($row["petName"]);
+                    $pet->setPetImage($row["petImage"]);
+                    $pet->setBreedID($row["breedID"]);
+                    $pet->setPetSize($row["petSize"]);
+                    $pet->setPetVaccinationPlan($row["petVaccinationPlan"]);
+                    $pet->setPetDetails($row["petDetails"]);
+                    $pet->setPetVideo($row["petVideo"]);
+                    $pet->setPetWeight($row["petWeight"]);
+                    $pet->setOwnerID($owner);
+                    $pet->setPetAge($row["petAge"]);
+                }
+                return $pet;
+            } else { return NULL; }
+        } catch(Exception $ex) { throw $ex; }
+    }
+    public function updatePet($petID,$breedID,$petSize,$petDetails,$petWeight,
+        $petAge, $petImage, $petVaccinationPlan, $petVideo) {
+        try{
+            $query = "UPDATE " . $this->petTable . " 
+                    SET petImage = '$petImage', breedID = '$breedID', petSize = '$petSize', 
+                        petVaccinationPlan = '$petVaccinationPlan', petDetails = '$petDetails', 
+                        petVideo = '$petVideo', petWeight = '$petWeight', petAge = '$petAge' 
+                    WHERE petID = '$petID';";
+
+            $this->connection = Connection::GetInstance();
+            return $this->connection->Execute($query);
+        }catch(Exception $ex) { throw $ex; }
     }
 }?>

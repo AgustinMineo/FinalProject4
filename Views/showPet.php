@@ -26,7 +26,7 @@ require_once("validate-session.php");
                <section id="listado" class="mb-5 justify-content-center w-100">
                     <div class="container d-flex flex-wrap justify-content-center w-100">
                          <h2 class="mb-4 mt-5">Listado de Pets</h2>
-                         <div class="container d-flex flex-wrap">
+                         <div class="container d-flex flex-wrap justify-content-between">
                               <?php
                               if(!$petList){
                                    echo "<div class='d-flex flex-wrap justify-content-center w-100'> <h1>No tiene pets cargados!</h1> </div>";
@@ -34,27 +34,29 @@ require_once("validate-session.php");
                                    foreach($petList as $pets) {
                                         ?>
                                         <div class="card m-3" style="width: 20rem;">
-                                             <div class="container  " style="max-width:100% height:10%">
-
-                                                  <?php 
-                                             if ($image = $pets->getPetImage()) {
-                                                  $imageData = base64_encode(file_get_contents($image));
-                                                  echo '<img src="data:image/jpeg;base64,'.$imageData.'" class="img-fluid d-block mx-auto" width="100%" height="20%" >';
-                                             } else {
-                                                  echo '<img src="'.IMG_PATH.'default-pet.jpg" class="card-img-top">';
-                                             }
+                                        <div class="container" style="max-width: 100%; height: 200px; overflow: hidden;">
+                                             <?php 
+                                                  if ($image = $pets->getPetImage()) {
+                                                       $imageData = base64_encode(file_get_contents($image));
+                                                       echo '<img src="data:image/jpeg;base64,'.$imageData.'" class="d-block img-fluid img-thumbnail" style="width: 100%; height: 100%; object-fit: cover;">';
+                                                  } else {
+                                                       echo '<img src="'.IMG_PATH.'default-pet.jpg" class="card-img-top" style="width: 100%; height: 100%; object-fit: cover;">';
+                                                  }
                                              ?>
+                                        </div>
+                                        <div class="card-body d-flex flex-wrap justify-content-center align-items-center w-100">
+                                             <h5 class="card-title d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetName() ?></h5>
+                                             <span class="w-100"><hr></span>
+                                             <p class="card-text d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetBreedByText() ?></p>
+                                             <div class="d-grid gap-2 d-sm-block">
+                                                  <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $pets->getPetID()?>">Ver Detalles</button>
+                                                  <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modifyModal<?php echo $pets->getPetID()?>">Modificar</button>
                                              </div>
-                                             <div class="card-body d-flex flex-wrap justify-content-center align-items-center w-100">
-                                                  <h5 class="card-title d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetName() ?></h5>
-                                                  <span class="w-100"><hr></span>
-                                                  <p class="card-text d-flex flex-wrap justify-content-center w-100"><?php echo $pets->getPetBreedByText() ?></p>
-                                                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $pets->getPetID()?>">Ver más info de <?php echo $pets->getPetName() ?></button>
-                                                  <!-- Modal -->
+                                                  <!-- Modal pet -->
                                                   <div class="modal fade" id="exampleModal<?php echo $pets->getPetID() ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                                  <div class="modal-dialog modal-fullscreen modal-dialog-centered modal-dialog-scrollable">
                                                        <div class="modal-content shadow-lg border-0 rounded-3" style="animation: fadeIn 0.5s;">
-                                                            <!-- Modal Header estilizado -->
+                                                            
                                                             <div class="modal-header bg-primary text-white rounded-top-3">
                                                                  <h5 class="modal-title" id="exampleModalLabel"><?php echo $pets->getPetName() ?></h5>
                                                                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -103,18 +105,29 @@ require_once("validate-session.php");
                                                                  <!-- Plan de vacunación -->
                                                                  <div class="d-flex flex-wrap justify-content-center w-100 mt-2">
                                                                       <h5>Plan de Vacunación</h5>
-                                                                 </div>
-                                                                 <div class="d-flex flex-wrap justify-content-center w-100">
+                                                                      </div>
+                                                                      <div class="d-flex flex-wrap justify-content-center w-100">
                                                                       <?php 
                                                                       if (!$pets->getPetVaccinationPlan()) {
-                                                                      echo "<h3>Sin imagen</h3>";
+                                                                           echo "<h3>Sin plan de vacunación disponible</h3>";
                                                                       } else {
-                                                                      $VaccinationPlan = $pets->getPetVaccinationPlan();
-                                                                      $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));
-                                                                      echo '<img src="data:image/jpeg;base64,' . $VaccinationPlanData . '" class="img-fluid rounded shadow-sm">';
+                                                                           $vaccinationPlanPath = $pets->getPetVaccinationPlan();
+                                                                           $fileType = pathinfo($vaccinationPlanPath, PATHINFO_EXTENSION);
+
+                                                                           if ($fileType === 'pdf') {
+                                                                                // Muestro pdf
+                                                                                echo '<iframe src="' . FRONT_ROOT . $vaccinationPlanPath . '" class="w-100 px-3" style="height: 60vh;" frameborder="0"></iframe>';
+                                                                           } elseif (in_array(strtolower($fileType), ['jpg', 'jpeg', 'png'])) {
+                                                                                // Muestro imagen
+                                                                                $vaccinationPlanData = base64_encode(file_get_contents($vaccinationPlanPath));
+                                                                                echo '<img src="data:image/' . $fileType . ';base64,' . $vaccinationPlanData . '" class="img-fluid rounded shadow-sm" style="max-height: 800px;">';
+                                                                           } else {
+                                                                                echo "<h3>Formato de archivo no compatible</h3>";
+                                                                           }
                                                                       }
                                                                       ?>
                                                                  </div>
+
                                                                  <hr>
 
                                                                  <!-- Detalles adicionales -->
@@ -181,7 +194,151 @@ require_once("validate-session.php");
                                                        </div>
                                                   </div>
                                                   </div>
+                                                                 <!--Modal update-->
+                                             <div class="modal fade" id="modifyModal<?php echo $pets->getPetID() ?>" tabindex="-1" aria-labelledby="modifyModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog modal-fullscreen">
+                                                       <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                 <h5 class="modal-title" id="modifyModalLabel">Modificar Mascota</h5>
+                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                 <form action="<?php echo '/FinalProject4/' ?>Pet/updatePet" method="post" enctype="multipart/form-data" class="bg-light p-5 rounded shadow-sm w-100">
+                                                                      <input type="hidden" id="petID" name="petID" value="<?php echo $pets->getPetID();?>">
+                                                                      <div class="row gy-3">
+                                                                      <!-- Pet Name -->
+                                                                      <div class="col-lg-6">
+                                                                           <div class="form-group">
+                                                                                <label for="petName" class="form-label">Nombre de la Mascota</label>
+                                                                                <input type="text" name="petName" value="<?php echo $pets->getPetName(); ?>" class="form-control" disabled>
+                                                                           </div>
+                                                                      </div>
 
+                                                                      <!-- Pet Image -->
+                                                                      <div class="col-lg-6">
+                                                                           <div class="form-group">
+                                                                                <label for="petImage" class="form-label">Imagen de la Mascota (PNG/JPEG)</label>
+                                                                                <input type="file" name="petImage" class="form-control" accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
+                                                                                <img id="imagePreview" src="<?php 
+                                                                                     if ($image = $pets->getPetImage()) {
+                                                                                          $imageData = base64_encode(file_get_contents($image));
+                                                                                          echo 'data:image/jpeg;base64,'.$imageData;
+                                                                                     } else {
+                                                                                          echo '<img src="'.IMG_PATH.'default-pet.jpg" class="card-img-top">';
+                                                                                     } 
+                                                                                ?>" alt="Vista previa de la imagen" class="img-fluid mt-2" style="max-height: 200px;">
+                                                                           </div>
+                                                                      </div>
+
+                                                                      <!-- Pet Breed -->
+                                                                      <div class="col-lg-6">
+                                                                           <div class="form-group">
+                                                                                <label for="breedID" class="form-label">Breed</label>
+                                                                                <select name="breedID" class="form-select" required>
+                                                                                     <option value="" disabled>Select breed</option>
+                                                                                     <?php foreach ($breedList as $breed) { ?>
+                                                                                          <option value="<?php echo $breed['id']; ?>" 
+                                                                                               <?php echo ($breed['id'] == $pets->getBreedID()) ? 'selected' : ''; ?>>
+                                                                                               <?php echo $breed['name']; ?>
+                                                                                          </option>
+                                                                                     <?php } ?>
+                                                                                </select>
+                                                                           </div>
+                                                                      </div>
+
+
+
+                                                                      <!-- Pet Size -->
+                                                                      <div class="col-lg-6">
+                                                                           <div class="form-group">
+                                                                                <label for="petSize" class="form-label">Tamaño de la Mascota</label>
+                                                                                <select name="petSize" class="form-select" required>
+                                                                                     <option value="" disabled selected>Select size</option>
+                                                                                     <option value="Small" <?php echo ($pets->getPetSize() == 'Small') ? 'selected' : ''; ?>>Pequeño</option>
+                                                                                     <option value="Medium" <?php echo ($pets->getPetSize() == 'Medium') ? 'selected' : ''; ?>>Mediano</option>
+                                                                                     <option value="Big" <?php echo ($pets->getPetSize() == 'Big') ? 'selected' : ''; ?>>Grande</option>
+                                                                                </select>
+                                                                           </div>
+                                                                      </div>
+
+                                                                      <!-- Vaccination Plan -->
+                                                                      <div class="col-lg-6">
+                                                                           <div class="form-group">
+                                                                                <label for="petVaccinationPlan" class="form-label">Plan de Vacunación (PDF/Imagen)</label>
+                                                                                <input type="file" name="petVaccinationPlan" class="form-control" accept=".pdf, .png, .jpg, .jpeg" onchange="previewVaccinationPlan(event)">
+
+                                                                                <div id="vaccinationPreview" class="mt-2" style="height: 80vh">
+                                                                                     <?php if ($pets->getPetVaccinationPlan()) : ?>
+                                                                                          <input type="hidden" id="existingVaccinationPlan" value="<?php echo FRONT_ROOT . $pets->getPetVaccinationPlan(); ?>">
+                                                                                     <?php endif; ?>
+                                                                                </div>
+                                                                           </div>
+                                                                      </div>
+
+
+                                                                      <!-- Pet Video -->
+                                                                      <div class="col-lg-6">
+                                                                      <div class="form-group">
+                                                                           <label for="petVideo" class="form-label">Video de la Mascota (MP4)</label>
+                                                                           <input type="file" name="petVideo" class="form-control" accept="video/mp4" onchange="previewVideo(event)">
+
+                                                                           <div class="d-flex flex-wrap justify-content-center w-100">
+                                                                                <video id="videoPreview" width="920" height="720" controls class="rounded shadow-sm" style="display: none;">
+                                                                                     <source id="videoSource" src="<?php echo FRONT_ROOT . $pets->getPetVideo(); ?>" type="video/mp4">
+                                                                                     Tu navegador no soporta el elemento de video.
+                                                                                </video>
+
+                                                                                <?php 
+                                                                                     if (!$pets->getPetVideo()) {
+                                                                                     echo "<h3>Sin video</h3>";
+                                                                                     } else {
+                                                                                     echo '<video  width="820" height="720" controls class="rounded shadow-sm" id="current-video">';
+                                                                                     echo '<source src="' .FRONT_ROOT . $pets->getPetVideo() . '" type="video/mp4">';
+                                                                                     echo 'Your browser does not support the video tag.';
+                                                                                     echo '</video>';
+                                                                                     }
+                                                                                ?>
+                                                                           </div>
+                                                                      </div>
+                                                                      </div>
+                                                                      <!-- Pet Details -->
+                                                                      <div class="col-lg-6">
+                                                                           <div class="form-group">
+                                                                                <label for="petDetails" class="form-label">Detalles de la Mascota</label>
+                                                                                <input type="text" name="petDetails" value="<?php echo $pets->getPetDetails(); ?>" class="form-control" maxlength="254" required>
+                                                                           </div>
+                                                                      </div>
+                                                                      <!-- Pet Weight -->
+                                                                      <div class="col-lg-6">
+                                                                           <div class="form-group">
+                                                                                <label for="petWeight" class="form-label">Peso de la Mascota</label>
+                                                                                <select name="petWeight" class="form-select" required>
+                                                                                     <option value="" disabled selected>Select weight category</option>
+                                                                                     <option value="Light" <?php echo ($pets->getPetWeight() == 'Light') ? 'selected' : ''; ?>>0-15 kg</option>
+                                                                                     <option value="Medium" <?php echo ($pets->getPetWeight() == 'Medium') ? 'selected' : ''; ?>>15-30 kg</option>
+                                                                                     <option value="Heavy" <?php echo ($pets->getPetWeight() == 'Heavy') ? 'selected' : ''; ?>>30 kg y más</option>
+                                                                                </select>
+                                                                           </div>
+                                                                      </div>
+
+                                                                      <!-- Pet Age -->
+                                                                      <div class="col-lg-6">
+                                                                           <div class="form-group">
+                                                                                <label for="petAge" class="form-label">Edad de la Mascota (Años)</label>
+                                                                                <input type="number" name="petAge" value="<?php echo $pets->getPetAge(); ?>" class="form-control" min="0" required>
+                                                                           </div>
+                                                                      </div>
+                                                                      </div>
+                                                                      <!-- Submit Button -->
+                                                                      <div class="d-flex justify-content-center align-content-center mt-4">
+                                                                      <button type="submit" class="btn btn-outline-success w-50">Guardar Mascota</button>
+                                                                      </div>
+                                                                 </form>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                                                 <!--Modal update Finish-->
                                              </div>
                                         </div>
                                         <?php
@@ -194,4 +351,106 @@ require_once("validate-session.php");
           </div>
      </main>
 </body>
+<script>
+function previewImage(event) {
+    const imagePreview = document.getElementById('imagePreview');
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function() {
+        imagePreview.src = reader.result;
+        imagePreview.style.display = 'block';
+    }
+    
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
+
+function previewVideo(event) {
+    const videoPreview = document.getElementById('videoPreview');
+    const videoSource = document.getElementById('videoSource');
+    const currentVideo= document.getElementById('current-video');
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    if (file) {
+        reader.onload = function() {
+            videoSource.src = reader.result;
+            videoPreview.style.display = 'block'; // Mostrar el video
+            currentVideo.style.display='none';
+            videoPreview.load(); // Cargar el nuevo video
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+     const existingPlanUrl = document.getElementById('existingVaccinationPlan');
+     if (existingPlanUrl && existingPlanUrl.value) {
+          previewExistingVaccinationPlan(existingPlanUrl.value);
+     }
+});
+
+function previewVaccinationPlan(event) {
+     const vaccinationPreview = document.getElementById('vaccinationPreview');
+     const file = event.target.files[0];
+     const reader = new FileReader();
+
+     vaccinationPreview.innerHTML = ''; // Limpiar la vista previa
+
+     reader.onload = function() {
+          const fileType = file.type;
+
+          if (fileType === 'application/pdf') {
+               const iframe = document.createElement('iframe');
+               iframe.src = reader.result; 
+               iframe.type = 'application/pdf';
+               iframe.classList.add('w-100', 'px-3');
+               iframe.style.height = '60vh';
+               vaccinationPreview.appendChild(iframe);
+          } else if (fileType.startsWith('image/')) {
+               const img = document.createElement('img');
+               img.src = reader.result;
+               img.alt = 'Vista previa del plan de vacunación';
+               img.classList.add('img-fluid');
+               img.style.maxHeight = '1200px';
+               vaccinationPreview.appendChild(img);
+          } else {
+               vaccinationPreview.innerHTML = '<h3>Archivo no compatible</h3>';
+          }
+     }
+
+     if (file) {
+          reader.readAsDataURL(file);
+     }
+}
+
+function previewExistingVaccinationPlan(url) {
+     const vaccinationPreview = document.getElementById('vaccinationPreview');
+     vaccinationPreview.innerHTML = ''; // Limpiar la vista previa
+
+     // Detectar si es PDF o imagen
+     const fileType = url.split('.').pop().toLowerCase();
+
+     if (fileType === 'pdf') {
+          const iframe = document.createElement('iframe');
+          iframe.src = url;
+          iframe.type = 'application/pdf';
+          iframe.classList.add('w-100', 'px-3');
+          iframe.style.height = '60vh';
+          vaccinationPreview.appendChild(iframe);
+     } else if (['png', 'jpg', 'jpeg'].includes(fileType)) {
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = 'Vista previa del plan de vacunación';
+          img.classList.add('img-fluid');
+          img.style.maxHeight = '80vh';
+          vaccinationPreview.appendChild(img);
+     } else {
+          vaccinationPreview.innerHTML = '<h3>Archivo no compatible</h3>';
+     }
+}
+
+</script>
 </html>

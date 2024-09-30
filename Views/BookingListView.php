@@ -98,7 +98,7 @@ $alterRole=$userRole;
      <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+     
 </head>
      <title>Booking <?php if($userRole ===2){echo 'Owner';}elseif($userRole===3){echo 'Keeper';}else{echo 'Admin';}?></title>
 <body>
@@ -210,8 +210,8 @@ $alterRole=$userRole;
                                                   
                                                   <td><?php echo $value=$booking->getBookingID(); ?></td>
                                                   
-                                                  <th><button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#keeperModal<?php echo $booking->getKeeperID()->getKeeperId(); ?>">Info cuidador</button></th>
-                                                  <th><button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#petModal<?php echo $booking->getPetID()->getPetID(); ?>"><?php echo $booking->getPetID()->getPetName() ?></button></th>
+                                                  <th><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#keeperModal<?php echo $booking->getKeeperID()->getKeeperId(); ?>">Info cuidador</button></th>
+                                                  <th><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#petModal<?php echo $booking->getPetID()->getPetID(); ?>"><?php echo $booking->getPetID()->getPetName() ?></button></th>
                                                   <td><?php $date=date_create($booking->getStartDate()); echo date_format($date,"d/m/Y");  ?></td>
                                                   <td><?php $date=date_create($booking->getEndDate()); echo date_format($date,"d/m/Y");  ?></td>
                                                   <td>$<?php echo $booking->getAmountReservation() ?></td>
@@ -274,7 +274,7 @@ $alterRole=$userRole;
                                                   <td><form action='<?php echo FRONT_ROOT ?> Payment/generatePaymentBooking' method='post'>
                                                   <?php if($booking->getStatus() == '3'){ echo "
                                                        <input type='hidden' name='booking' value='$value'>
-                                                       <button type='submit' class='btn btn-secondary' data-bs-toggle='modal' data-bs-target='#'>
+                                                       <button type='button' class='btn btn-secondary' data-bs-toggle='modal' data-bs-target='#paymentModal$value'>
                                                             Realizar Pago
                                                             </button>
                                                        ";}?></form></td>
@@ -343,84 +343,116 @@ $alterRole=$userRole;
                                              </div>
 
                                              <!-- Modal Keeper -->
+
                                              <!-- Modal pet -->
                                              <div class="modal fade" id="petModal<?php echo $booking->getPetID()->getPetID(); ?>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-                                             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                                   <div class="modal-content border-0 shadow">
-                                                       <!-- Modal Header con fondo y texto estilizado -->
                                                        <div class="modal-header bg-success text-white">
                                                             <h5 class="modal-title" id="modalLabel">Detalles de <?php echo $booking->getPetID()->getPetName(); ?></h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                        </div>
 
-                                                       <!-- Modal Body con animaciones -->
-                                                       <div class="modal-body bg-light p-4 d-flex justify-content-center">
-                                                            <div class="card shadow-sm w-100" style="animation: fadeIn 0.5s;">
-                                                                 <!-- Imagen de la mascota con zoom al hacer hover -->
+                                                       <div class="modal-body bg-light p-4">
+                                                            <div class="card shadow-sm">
+                                                                 <div class="text-center">
                                                                  <?php 
                                                                  if ($image = $booking->getPetID()->getPetImage()) {
-                                                                 $imageData = base64_encode(file_get_contents($image));
-                                                                 echo '<img src="data:image/jpeg;base64,'.$imageData.'" class="card-img-top img-fluid rounded" alt="Imagen de '. $booking->getPetID()->getPetName() .'">';
+                                                                      $imageData = base64_encode(file_get_contents($image));
+                                                                      echo '<img src="data:image/jpeg;base64,'.$imageData.'" class="card-img-top img-fluid rounded" style="width:50vh; heigth:20vh" alt="Imagen de '. $booking->getPetID()->getPetName() .'">';
                                                                  } else {
-                                                                 echo '<img src="'.IMG_PATH.'default-pet.jpg" class="card-img-top img-fluid rounded" alt="Imagen por defecto">';
+                                                                      echo '<img src="'.IMG_PATH.'default-pet.jpg" class="card-img-top img-fluid rounded" alt="Imagen por defecto">';
                                                                  }
                                                                  ?>
+                                                                 </div>
 
-                                                                 <!-- Detalles de la mascota -->
                                                                  <div class="card-body">
                                                                  <h5 class="card-title text-center"><?php echo $booking->getPetID()->getPetName(); ?></h5>
                                                                  <ul class="list-group list-group-flush">
-                                                                      <li class="list-group-item"><strong>Breed:</strong> <?php echo $booking->getPetID()->getPetBreedByText(); ?></li>
-                                                                      <li class="list-group-item"><strong>Weight:</strong> <?php echo $booking->getPetID()->getPetWeight(); ?> kg</li>
-                                                                      <li class="list-group-item"><strong>Size:</strong> <?php echo $booking->getPetID()->getPetSize(); ?></li>
-                                                                      <li class="list-group-item"><strong>Age:</strong> <?php echo $booking->getPetID()->getPetAge(); ?> years</li>
+                                                                      <li class="list-group-item"><strong>Raza:</strong> <?php echo $booking->getPetID()->getPetBreedByText(); ?></li>
+                                                                      <li class="list-group-item"><strong>Peso:</strong> <?php echo $booking->getPetID()->getPetWeight(); ?></li>
+                                                                      <li class="list-group-item"><strong>Tamaño:</strong> <?php echo $booking->getPetID()->getPetSize(); ?></li>
+                                                                      <li class="list-group-item"><strong>Edad:</strong> <?php echo $booking->getPetID()->getPetAge(); ?> años</li>
                                                                       <li class="list-group-item"><strong>Detalles:</strong> <?php echo $booking->getPetID()->getPetDetails(); ?></li>
                                                                  </ul>
-
-                                                                 <!-- Plan de vacunación -->
-                                                                 <div class="text-center mt-4">
-                                                                      <h6>Vaccination Plan</h6>
-                                                                      <?php 
-                                                                      if (!$booking->getPetID()->getPetVaccinationPlan()) {
-                                                                           echo "<p>Not available</p>";
-                                                                      } else {
-                                                                           $VaccinationPlan = $booking->getPetID()->getPetVaccinationPlan();
-                                                                           $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));
-                                                                           echo '<img src="data:image/jpeg;base64,'.$VaccinationPlanData.'" class="img-fluid rounded shadow-sm" alt="Plan de vacunación">';
-                                                                      }
-                                                                      ?>
                                                                  </div>
+                                                            </div>
 
-                                                                 <!-- Video de la mascota -->
-                                                                 <div class="text-center mt-4">
-                                                                      <h6>Video</h6>
-                                                                      <?php 
+                                                            <!-- Plan de vacunación -->
+                                                            <div class="mt-4">
+                                                                 <h5 class="text-center">Plan de Vacunación</h5>
+                                                                 <div class="d-flex flex-wrap justify-content-center">
+                                                                 <?php 
+                                                                 if (!$booking->getPetID()->getPetVaccinationPlan()) {
+                                                                      echo "<h3>Sin plan de vacunación disponible</h3>";
+                                                                 } else {
+                                                                      $vaccinationPlanPath = $booking->getPetID()->getPetVaccinationPlan();
+                                                                      $fileType = pathinfo($vaccinationPlanPath, PATHINFO_EXTENSION);
+
+                                                                      if ($fileType === 'pdf') {
+                                                                           echo '<iframe src="' . FRONT_ROOT . $vaccinationPlanPath . '" class="w-100 px-3" style="height: 60vh;" frameborder="0"></iframe>';
+                                                                      } elseif (in_array(strtolower($fileType), ['jpg', 'jpeg', 'png'])) {
+                                                                           $vaccinationPlanData = base64_encode(file_get_contents($vaccinationPlanPath));
+                                                                           echo '<img src="data:image/' . $fileType . ';base64,' . $vaccinationPlanData . '" class="img-fluid rounded shadow-sm" style="max-height: 800px;">';
+                                                                      } else {
+                                                                           echo "<h3>Formato de archivo no compatible</h3>";
+                                                                      }
+                                                                 }
+                                                                 ?>
+                                                                 </div>
+                                                            </div>
+
+                                                            <!-- Video de la mascota -->
+                                                            <div class="text-center mt-4">
+                                                                 <h6>Video</h6>
+                                                                 <?php 
                                                                       if (!$booking->getPetID()->getPetVideo()) {
-                                                                           echo "<p>Not available</p>";
-                                                                      } else {
-                                                                           echo '<div class="ratio ratio-16x9">';
-                                                                           echo '<video controls>';
-                                                                           echo '<source src="' . FRONT_ROOT . $booking->getPetID()->getPetVideo() . '" type="video/mp4">';
-                                                                           echo 'Your browser does not support the video tag.';
-                                                                           echo '</video>';
-                                                                           echo '</div>';
-                                                                      }
-                                                                      ?>
-                                                                 </div>
-                                                                 </div>
+                                                                      echo "<p>No disponible</p>";
+                                                                 } else {
+                                                                      echo '<div class="ratio ratio-4x3">';
+                                                                      echo '<video controls>';
+                                                                      echo '<source src="' . FRONT_ROOT . $booking->getPetID()->getPetVideo() . '" type="video/mp4">';
+                                                                      echo 'Tu navegador no soporta el tag de video.';
+                                                                      echo '</video>';
+                                                                      echo '</div>';
+                                                                 }
+                                                                 ?>
                                                             </div>
                                                        </div>
 
                                                        <!-- Modal Footer -->
-                                                       <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                       <div class="modal-footer d-flex bg-success justify-content-center aling-items-center">
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cerrar</button>
                                                        </div>
                                                   </div>
                                              </div>
                                              </div>
-
-
                                              <!-- Modal pet -->
+                                             <!-- Modal payment -->
+                                             <div class="modal fade" id='paymentModal<?php echo $value;?>' tabindex="-1" aria-labelledby="paymentUploadModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog modal-dialog-centered">
+                                                       <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                 <h5 class="modal-title" id="paymentModalModalLabel">Subir Comprobantes de Pago</h5>
+                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                 <form id="paymentModalForm<?php echo $value ?>" action="<?php echo FRONT_ROOT ?>Payment/generatePaymentBooking" method="post" enctype="multipart/form-data">
+                                                                      <div class="mb-3">
+                                                                      <label for="paymentReceiptLabel" class="form-label">Subir comprobante(PDF o imagen)</label>
+                                                                      <input type="file" name="paymentReceipt" class="form-control" accept=".pdf, .png, .jpg, .jpeg">
+                                                                      <input type="hidden" name="booking" value="<?php echo $value; ?>"> <!-- ID de reserva -->
+                                                                 </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                 <button type="submit" class="btn btn-primary" form="paymentModalForm<?php echo $value ?>">Subir Comprobantes</button>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                                  </div>
+
+                                             <!-- Modal payment-->
                                         <?php
                                    }}else{
                                         if($userRole!=1){
@@ -504,7 +536,7 @@ $alterRole=$userRole;
                                              <td><?php $date = date_create($booking->getStartDate()); echo date_format($date, "d/m/Y"); ?></td>
                                              <td><?php $date = date_create($booking->getEndDate()); echo date_format($date, "d/m/Y"); ?></td>
                                              <td>
-                                             <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#petModal<?php echo $booking->getPetID()->getPetID(); ?>">
+                                             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#petModal<?php echo $booking->getPetID()->getPetID(); ?>">
                                                   <?php echo $booking->getPetID()->getPetName(); ?>
                                              </button>
                                              </td>
@@ -534,15 +566,16 @@ $alterRole=$userRole;
                                              <td>
                                              <form action='<?php echo FRONT_ROOT ?>Booking/updateBookingStatus' method='post'>
                                                   <?php 
-                                                  if ($booking->getStatus() == '1') {
-                                                       echo "<input type='hidden' name='id' value='$value'>
-                                                            <input type='hidden' name='status' value='3'>
-                                                            <button type='submit' class='btn btn-outline-primary w-auto p-1 m-1'>Accept</button>";
-                                                  } elseif ($booking->getStatus() == '4') {
-                                                       echo "<input type='hidden' name='id' value='$value'>
-                                                            <input type='hidden' name='status' value='5'>
-                                                            <button type='submit' class='btn btn-outline-primary w-auto p-1 m-1'>Confirm</button>";
-                                                  }
+                                                       if ($booking->getStatus() == '1') {
+                                                            echo "<input type='hidden' name='id' value='$value'>
+                                                                 <input type='hidden' name='status' value='3'>
+                                                                 <button type='submit' class='btn btn-outline-primary w-auto p-1 m-1'>Accept</button>";
+                                                       } elseif ($booking->getStatus() == '4') {
+                                                            // Botón que abre el modal
+                                                            echo "<button type='button' class='btn btn-outline-primary w-auto p-1 m-1' data-bs-toggle='modal' data-bs-target='#confirmModal$value'>
+                                                                 Confirm
+                                                                 </button>";
+                                                       }
                                                   ?>
                                              </form>
                                              </td>
@@ -558,9 +591,57 @@ $alterRole=$userRole;
                                              </form>
                                              </td>
                                         </tr>
+                                        <!-- Modal confirm payment-->
+                                        <div class="modal fade" id='confirmModal<?php echo $value;?>' tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                             <div class="modal-dialog modal-xl">
+                                             <div class="modal-content ">
+                                                  <div class="modal-header">
+                                                  <h5 class="modal-title" id="confirmModalLabel">Confirmar Reserva</h5>
+                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                       <p>¿Estás seguro de que deseas confirmar esta reserva?</p>
+                                                       <div class="container">
+                                                            <h5 class="text-center">Comprobante de pago</h5>
+                                                       </div>
+                                                       <div class="container">
+                                                            <?php 
+                                                                 if (!$booking->getPayment()) {
+                                                                      echo "<h3>Sin plan de vacunación disponible</h3>";
+                                                                 } else {
+                                                                 $paymentPath = $booking->getPayment();
+                                                                 $fileType = pathinfo($paymentPath, PATHINFO_EXTENSION);
+
+                                                                 if ($fileType === 'pdf') {
+                                                                      echo '<iframe src="' . FRONT_ROOT . $paymentPath . '" class="w-100 px-3" style="height: 60vh;" frameborder="0"></iframe>';
+                                                                 } elseif (in_array(strtolower($fileType), ['jpg', 'jpeg', 'png'])) {
+                                                                      $paymentData = base64_encode(file_get_contents($paymentPath));
+                                                                      echo '<img src="data:image/' . $fileType . ';base64,' . $paymentData . '" class="img-fluid rounded shadow-sm" style="max-height: 800px;">';
+                                                                 } else {
+                                                                      echo "<h3>Formato de archivo no compatible</h3>";
+                                                                 }
+                                                                 }
+                                                            ?>
+                                                       </div>
+                                                  </div>
+                                                  <div class="modal-footer d-flex align-items-center justify-content-center">
+                                                       <form action='<?php echo FRONT_ROOT ?>Booking/updateBookingStatus' method='post'>
+                                                            <input type='hidden' name='id' value='<?php echo $value; ?>'>
+                                                            <input type='hidden' name='status' value='5'>
+                                                            <div class="cotainer text-center">
+                                                                 <button type="button" class="btn btn-outline-secondary mx-3" data-bs-dismiss="modal">Cancelar</button>
+                                                                 <button type="submit" class="btn btn-outline-success mx-3">Confirmar</button>
+                                                            </div>
+                                                       </form>
+                                                  </div>
+                                             </div>
+                                             </div>
+                                             </div>
+                                        <!-- Modal confirm payment-->
+                                         
                                         <!-- Modal for pet details -->
                                         <div class="modal fade" id="petModal<?php echo $booking->getPetID()->getPetID(); ?>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-                                             <div class="modal-dialog modal-lg">
+                                             <div class="modal-dialog modal-xl">
                                              <div class="modal-content shadow-lg border-0 rounded-3" style="animation: fadeIn 0.5s;">
                                                   <div class="modal-header bg-primary text-white rounded-top-3">
                                                        <h5 class="modal-title" id="modalLabel">Detalles de <?php echo $booking->getPetID()->getPetName(); ?></h5>
@@ -587,17 +668,28 @@ $alterRole=$userRole;
                                                                  <li class="list-group-item border rounded hover-effect"><strong>Detalles:</strong> <?php echo $booking->getPetID()->getPetDetails(); ?></li>
                                                                  </ul>
                                                                  <hr>
-                                                                 <div class="text-center">
-                                                                 <h6>Plan de Vacunación</h6>
-                                                                 <?php 
-                                                                 if (!$booking->getPetID()->getPetVaccinationPlan()) {
-                                                                      echo "<p>No disponible</p>";
-                                                                 } else {
-                                                                      $VaccinationPlan = $booking->getPetID()->getPetVaccinationPlan();
-                                                                      $VaccinationPlanData = base64_encode(file_get_contents($VaccinationPlan));
-                                                                      echo '<img src="data:image/jpeg;base64,' . $VaccinationPlanData . '" class="img-fluid" alt="Plan de vacunación">';
-                                                                 }
-                                                                 ?>
+                                                                 <!-- Plan de vacunación -->
+                                                                 <div class="mt-4">
+                                                                      <h5 class="text-center">Plan de Vacunación</h5>
+                                                                      <div class="d-flex flex-wrap justify-content-center">
+                                                                           <?php 
+                                                                           if (!$booking->getPetID()->getPetVaccinationPlan()) {
+                                                                                echo "<h3>Sin plan de vacunación disponible</h3>";
+                                                                           } else {
+                                                                                $vaccinationPlanPath = $booking->getPetID()->getPetVaccinationPlan();
+                                                                                $fileType = pathinfo($vaccinationPlanPath, PATHINFO_EXTENSION);
+
+                                                                                if ($fileType === 'pdf') {
+                                                                                     echo '<iframe src="' . FRONT_ROOT . $vaccinationPlanPath . '" class="w-100 px-3" style="height: 60vh;" frameborder="0"></iframe>';
+                                                                                } elseif (in_array(strtolower($fileType), ['jpg', 'jpeg', 'png'])) {
+                                                                                     $vaccinationPlanData = base64_encode(file_get_contents($vaccinationPlanPath));
+                                                                                     echo '<img src="data:image/' . $fileType . ';base64,' . $vaccinationPlanData . '" class="img-fluid rounded shadow-sm" style="max-height: 800px;">';
+                                                                                } else {
+                                                                                     echo "<h3>Formato de archivo no compatible</h3>";
+                                                                                }
+                                                                           }
+                                                                           ?>
+                                                                      </div>
                                                                  </div>
                                                                  <hr>
                                                                  <div class="text-center">
@@ -694,7 +786,6 @@ $alterRole=$userRole;
 </body>
 <script>
 const currentUserRole = document.getElementById('currentUserRole').value;
-
 paginationLinks.forEach(link => {
      link.addEventListener('click', function (e) {
           e.preventDefault();
@@ -736,8 +827,5 @@ $.ajax({
           }
      });
 }
-
 </script>
-
-
 </html>

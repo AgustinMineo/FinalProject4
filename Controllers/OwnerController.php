@@ -34,13 +34,8 @@ use Helper\SessionHelper as SessionHelper;
         require_once(VIEWS_PATH."owner-add.php");
     }
 
-    public function goMyProfile($owner){
-        $userRole=SessionHelper::InfoSession([2]);
-        require_once(VIEWS_PATH."myProfileOwner.php");
-    }
-
     public function newOwner($rol,$lastName,$firstName,$cellPhone,$birthDate,$email,$password,
-    $confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){
+        $confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){
         $userRole=0;
         if($rol!='0'){
             $userRole=SessionHelper::getCurrentRole();
@@ -95,13 +90,7 @@ use Helper\SessionHelper as SessionHelper;
     }else{
         echo '<div class="alert alert-danger">All the values are required!</div>';
         $this->addOwnerView();
-    }
-}
-
-    public function showCurrentOwner(){
-        //SessionHelper::validateUserRole([2]);
-        $owner=$this->OwnerDAO->searchOwnerByEmail(SessionHelper::getCurrentUser()->getEmail());
-        $this->goMyProfile($owner);
+        }
     }
 
 } 

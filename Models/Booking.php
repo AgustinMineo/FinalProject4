@@ -10,6 +10,7 @@ class Booking {
     private $keeperID; /// keeper id
     private $totalValue; /// Total value from the reservation
     private $amountReservation; /// amount reservation
+    private $payment;  //Url comprobante de pago
     
 
     public function getBookingID(){
@@ -59,6 +60,12 @@ class Booking {
     }
     public function setAmountReservation($amountReservation){
         $this->amountReservation = $amountReservation;
+    }
+    public function getPayment(){
+        return $this->payment;
+    }
+    public function setPayment($payment){
+        $this->payment = $payment;
     }
 }
 ?>

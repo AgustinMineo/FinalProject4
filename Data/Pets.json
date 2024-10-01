@@ -1,0 +1,28 @@
+[
+    {
+        "petID": 1,
+        "petName": "Max",
+        "petImage": "https:\/\/img.freepik.com\/premium-photo\/studio-shot-cute-black-lab-puppy-yellow-background_254268-2417.jpg?w=450",
+        "breedID": "4",
+        "petSize": "Medium",
+        "petVaccinationPlan": "https:\/\/img.freepik.com\/premium-photo\/studio-shot-cute-black-lab-puppy-yellow-background_254268-2417.jpg?w=450",
+        "petDetails": "Es un buen perro",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=Z7O3cRTEE8U",
+        "petWeight": "Medium",
+        "ownerID": 1,
+        "petAge": "2022-10-01"
+    },
+    {
+        "petID": 2,
+        "petName": "Max",
+        "petImage": "https:\/\/img.freepik.com\/premium-photo\/studio-shot-cute-black-lab-puppy-yellow-background_254268-2417.jpg?w=450",
+        "breedID": "7",
+        "petSize": "Medium",
+        "petVaccinationPlan": "https:\/\/img.freepik.com\/premium-photo\/studio-shot-cute-black-lab-puppy-yellow-background_254268-2417.jpg?w=450",
+        "petDetails": "test",
+        "petVideo": "https:\/\/www.youtube.com\/watch?v=MVy79qmsJZU",
+        "petWeight": "Medium",
+        "ownerID": "1",
+        "petAge": "2022-10-01"
+    }
+]

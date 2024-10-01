@@ -5,6 +5,8 @@ Use Models\Pet as Pet;
 interface IPetDAO{
     function AddPet(Pet $pet);
     function GetAllPet();
-    //function EditPet();
+   // function SaveData();
+  //  function RetriveData();
+
 }
 ?>

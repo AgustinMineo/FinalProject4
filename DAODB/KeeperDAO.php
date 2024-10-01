@@ -112,9 +112,10 @@ class KeeperDAO implements IKeeperDAO{
 
   public function updateTotalPoints($points,$keeperID){
     try{
+      var_dump($points);
       $query = "UPDATE ".$this->keeperTable." SET rank = '$points' WHERE keeperID = '$keeperID';";
       $this->connection = Connection::GetInstance();
-      $result = $this->connection->Execute($query);
+      $this->connection->Execute($query);
       return 3;
     }catch (Exception $ex) { throw $ex; } 
   }

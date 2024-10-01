@@ -85,7 +85,7 @@ class KeeperController{
                         $keeperID= $this->KeeperDAO->AddKeeper($newKeeper);
                         $newKeeper->setKeeperID($keeperID);
                         $this->newMailer->welcomeMail($lastName,$firstName,$email);
-                        if($userRole===0){//Se evalua si es desde admin o desde registro owner
+                        if($userRole===0){//Se evalua si es desde admin o desde registro
                             echo "<div class='alert alert-success'>¡Usuario registrado correctamente!</div>";
                             $this->goLoginKeeper();
                         }else{
@@ -97,22 +97,58 @@ class KeeperController{
                             return $newKeeper;
                         }
                     }else{
-                        echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
-                        $this->addKeeperView();
+                        if($userRole===1){
+                            $userRole=SessionHelper::InfoSession([1]);
+                            $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                            $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                            $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                            echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
+                            require_once(VIEWS_PATH."userListAdminView.php");
+                        }else{
+                            echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
+                            $this->addKeeperView();
+                        }
                     }
             }else{
+                if($userRole===1){
+                    $userRole=SessionHelper::InfoSession([1]);
+                    $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                    $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                    $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                    echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
+                    require_once(VIEWS_PATH."userListAdminView.php");
+                }else{
                 echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
                 $this->addKeeperView();
+                }
             }
         }
         else{
+            if($userRole===1){
+                $userRole=SessionHelper::InfoSession([1]);
+                $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
+                require_once(VIEWS_PATH."userListAdminView.php");
+            }else{
                 echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
                 $this->addKeeperView();
             }
+        }
         }        
         else{
-            echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
-            $this->addKeeperView();
+            if($userRole===1){
+                $userRole=SessionHelper::InfoSession([1]);
+                $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
+                require_once(VIEWS_PATH."userListAdminView.php");
+            }else{
+                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
+                $this->addKeeperView();
+            }
         }
          //$newKeeper->setPoints('0');
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO

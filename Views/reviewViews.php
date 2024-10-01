@@ -29,7 +29,7 @@ require_once("validate-session.php");
                             
                             foreach ($reviewList as $review) {
                                 ?>
-                                    <div class="card m-3" style="width: 20rem;">
+                                    <div class="card m-3 review-item" style="width: 20rem;">
                                         <div class="card-body ">
                                         <h5 class="card-title text-primary">Reseña ID: <?php echo $review->getReviewID(); ?></h5>
                                     <ul class="list-group list-group-flush">
@@ -322,8 +322,76 @@ require_once("validate-session.php");
                         ?>
                     </div>
                 </div>
+                <nav aria-label="Page navigation">
+                         <ul id="pagination" class="pagination justify-content-center">
+                         
+                         </ul>
+                    </nav>
             </section>
         </div>
     </main>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        filterReviews(); 
+    });
+
+    const reviewsPerPage = 6; 
+    let currentPage = 1; 
+    let filteredReviews = []; 
+    const reviewListPaginate = <?php echo json_encode($reviewList); ?>;
+
+    function filterReviews() {
+        const reviews = document.querySelectorAll('.review-item');
+        filteredReviews = [];
+        let foundReview = false; 
+
+        reviews.forEach(review => {
+            review.style.display = ''; 
+            filteredReviews.push(review); 
+            foundReview = true; 
+        });
+
+        if (foundReview) {
+            paginateReviews(); 
+        } else {
+            document.getElementById('pagination').innerHTML = ''; 
+        }
+    }
+
+    function paginateReviews() {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = ''; 
+
+        const totalPages = Math.ceil(filteredReviews.length / reviewsPerPage); 
+
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item';
+            li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>`;
+            pagination.appendChild(li);
+        }
+
+        displayReviews(); 
+    }
+
+    function changePage(page) {
+        currentPage = page; 
+        displayReviews(); 
+    }
+
+    function displayReviews() {
+        const start = (currentPage - 1) * reviewsPerPage;
+        const end = start + reviewsPerPage;
+
+        filteredReviews.forEach((review, index) => {
+            if (index >= start && index < end) {
+                review.style.display = '';
+            } else {
+                review.style.display = 'none'; 
+            }
+        });
+    }
+</script>
+
 </html>

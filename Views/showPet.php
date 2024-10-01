@@ -22,19 +22,33 @@ require_once("validate-session.php");
 <body>
      <main class="py-2">
           <div class="container d-flex flex-wrap bg-light">
-
                <section id="listado" class="mb-5 justify-content-center w-100">
                     <div class="container d-flex flex-wrap justify-content-center w-100">
                          <h2 class="mb-4 mt-5">Listado de Pets</h2>
-                         <div class="container d-flex flex-wrap justify-content-between">
+                              <div class="mb-4 w-100">
+                                   <input type="text" id="filterPetName" placeholder="Buscar por nombre" class="form-control filter-input" oninput="filterPets()">
+                                   <select id="filterPetSize" class="form-select filter-input" onchange="filterPets()">
+                                        <option value="">Seleccionar Tamaño</option>
+                                        <option value="Small">Small</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="Big">Big</option>
+                                   </select>
+                              </div>
+                         <div class="container d-flex flex-wrap m-5">
+                              <div class="container">
+                                   <div id="noPetsMessage" class="alert alert-danger text-center d-none">No se encontraron mascotas.</div>
+                              </div>
                               <?php
                               if(!$petList){
                                    echo "<div class='d-flex flex-wrap justify-content-center w-100'> <h1>No tiene pets cargados!</h1> </div>";
                               } else {
                                    foreach($petList as $pets) {
                                         ?>
-                                        <div class="card m-3" style="width: 20rem;">
-                                        <div class="container" style="max-width: 100%; height: 200px; overflow: hidden;">
+
+                                        <div class="card m-3 pet-item " style="width: 20rem;"
+                                        data-name="<?php echo $pets->getPetName(); ?>"
+                                        data-size="<?php echo $pets->getPetSize(); ?>">
+                                        <div class="container d-flex" style="max-width: 100%; height: 200px; overflow: hidden;">
                                              <?php 
                                                   if ($image = $pets->getPetImage()) {
                                                        $imageData = base64_encode(file_get_contents($image));
@@ -80,7 +94,7 @@ require_once("validate-session.php");
                                                                            <td><?php echo $pets->getPetName() ?></td>
                                                                            <td><?php echo $pets->getPetBreedByText() ?></td>
                                                                            <td><?php echo $pets->getPetWeight() ?></td>
-                                                                           <td><?php echo $pets->getPetSize() ?></td>
+                                                                           <td id="filterPetSize"><?php echo $pets->getPetSize() ?></td>
                                                                            <td><?php echo $pets->getPetAge() ?></td>
                                                                       </tr>
                                                                       </tbody>
@@ -347,11 +361,17 @@ require_once("validate-session.php");
                               ?>
                          </div>
                     </div>
+                    <nav aria-label="Page navigation">
+                         <ul id="pagination" class="pagination justify-content-center">
+                         
+                         </ul>
+                    </nav>
                </section>
           </div>
      </main>
 </body>
 <script>
+document.addEventListener('DOMContentLoaded', filterPets);
 function previewImage(event) {
     const imagePreview = document.getElementById('imagePreview');
     const file = event.target.files[0];
@@ -387,6 +407,7 @@ function previewVideo(event) {
 
 document.addEventListener('DOMContentLoaded', function() {
      const existingPlanUrl = document.getElementById('existingVaccinationPlan');
+     filterPets();
      if (existingPlanUrl && existingPlanUrl.value) {
           previewExistingVaccinationPlan(existingPlanUrl.value);
      }
@@ -450,6 +471,79 @@ function previewExistingVaccinationPlan(url) {
      } else {
           vaccinationPreview.innerHTML = '<h3>Archivo no compatible</h3>';
      }
+}
+
+
+const petsPerPage = 6; 
+let currentPage = 1; 
+let filteredPets = []; 
+
+function filterPets() {
+     const noPetsMessage = document.getElementById('noPetsMessage');
+     const nameFilter = document.getElementById('filterPetName').value.toLowerCase();
+     const sizeFilter = document.getElementById('filterPetSize').value.toLowerCase();
+     
+     const pets = document.querySelectorAll('.pet-item');
+     filteredPets = [];
+     let foundPet = false; 
+
+     pets.forEach(pet => {
+          const name = pet.getAttribute('data-name').toLowerCase();
+          const size = pet.getAttribute('data-size').toLowerCase();
+
+          const matchesName = name.includes(nameFilter);
+          const matchesSize = !sizeFilter || size.includes(sizeFilter);
+
+          if (matchesName && matchesSize) {
+               pet.style.display = ''; 
+               filteredPets.push(pet); // Agregar a la lista de mascotas filtradas
+               foundPet = true; 
+          } else {
+               pet.style.display = 'none'; 
+          }
+     });
+     
+     if (foundPet) {
+          noPetsMessage.classList.add('d-none'); 
+          paginatePets(); // Llamar a la función de paginación
+     } else {
+          noPetsMessage.classList.remove('d-none'); 
+          document.getElementById('pagination').innerHTML = ''; // Limpiar paginación
+     }
+}
+
+function paginatePets() {
+     const pagination = document.getElementById('pagination');
+     pagination.innerHTML = ''; // Limpiar elementos de paginación
+
+    const totalPages = Math.ceil(filteredPets.length / petsPerPage); // Total de páginas
+
+    // Crear botones de paginación
+     for (let i = 1; i <= totalPages; i++) {
+          const li = document.createElement('li');
+          li.className = 'page-item';
+          li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+          pagination.appendChild(li);
+     }
+
+     displayPets();
+}
+
+function changePage(page) {
+     currentPage = page; 
+     displayPets(); 
+}
+
+function displayPets() {
+     const pets = document.querySelectorAll('.pet-item');
+     const start = (currentPage - 1) * petsPerPage;
+     const end = start + petsPerPage;
+
+     pets.forEach((pet, index) => {
+          if (filteredPets.includes(pet)) {
+               pet.style.display = (index >= start && index < end) ? '' : 'none';
+          }
+     });
 }
 
 </script>

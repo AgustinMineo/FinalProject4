@@ -20,6 +20,7 @@ CREATE TABLE `User` (
   `questionRecovery` varchar(80) DEFAULT NULL,
   `answerRecovery` varchar(120) DEFAULT NULL,
   `roleID` tinyint(1) NOT NULL,
+  `status` BOOLEAN NOT NULL DEFAULT 1,--1 activo, 0 eliminado
   CONSTRAINT FK_UserRole FOREIGN KEY (`roleID`) REFERENCES `Roles`(`roleID`),
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)
@@ -36,8 +37,9 @@ CREATE TABLE `Keeper` (
   `keeperID` int(11) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL references User(userID),
   `animalSize` varchar(30) DEFAULT NULL,
-  `price` float DEFAULT NULL,
+  `price` DECIMAL (10,3) DEFAULT NULL,
   `cbu` varchar (20) UNIQUE KEY, 
+  `rank` DECIMAL (30,6) DEFAULT 0,
   PRIMARY KEY (`keeperID`)
 ) ENGINE=InnoDB;
 
@@ -68,10 +70,11 @@ CREATE TABLE `Booking` (
   `keeperID` int(11) NOT NULL references Keeper(keeperID),
   `petID` int(11) NOT NULL references Pet(petID),
   `status` int(11) NOT NULL references Status(statusID),
-  `totalValue` float,
-  `amountReservation` float,
+  `totalValue` DECIMAL(10,3),
+  `amountReservation` DECIMAL(10,3),
   `startDate` DATE NOT NULL, -- Fecha de inicio de la reserva
   `endDate` DATE NOT NULL,   -- Fecha de fin de la reserva
+  `payment` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`bookingID`)
 ) ENGINE=InnoDB;
 
@@ -94,7 +97,7 @@ CREATE TABLE `Review`(
 	`reviewID` int(11) NOT NULL AUTO_INCREMENT,
     `description` varchar(255),
     `rank` tinyint(5),
-    `bookingID` int(11) NOT NULL references Booking(bookingID),
+    `bookingID` int(11) NOT NULL UNIQUE references Booking(bookingID),
     PRIMARY KEY (`reviewID`)
 ) ENGINE=InnoDB;
 

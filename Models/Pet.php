@@ -91,52 +91,63 @@ class Pet{
         $this->petAge=$petAge;
     }
 
-    public function getPetBreedByText(){
-        if($this->breedID==1){
-            return "Beagle";
-        }
-            else if($this->breedID==2){
-                return "Chihuahua";
-            }
-            else if($this->breedID==3){
-                return "Bulldog";
-            }
-            else if($this->breedID==4){
-                return "German Shepherd";
-            }
-            else if($this->breedID==5){
-                return "Shih-tzu";
-            }
-            else if($this->breedID==6){
-                return "Dogo";
-            }
-            else if($this->breedID==7){
-                return "Golden Retriever";
-            }
-            else if($this->breedID==8){
-                return "Fox Terrier";
-            }
-            else if($this->breedID==9){
-                return "Whippet";
-            }
-            else if($this->breedID==11){
-                return "Pinscher";
-            }
-            else if($this->breedID==11){
-                return "Cocker";
-            }
-            else if($this->breedID==12){
-                return "Shiba Inu";
-            }
-            else if($this->breedID==13){
-                return "Doberman";
-            }
-            else if($this->breedID==14){
-                return "Border Collie";
-            }
-            else if ($this->breedID==15){
-                return "Yorkshire";
-            }else{ return "La raza no se encuentra en la base de datos.";}
-        }
+    public function getPetBreedByText() {
+        $breeds = [
+            1 => "Beagle",
+            2 => "Chihuahua",
+            3 => "Bulldog",
+            4 => "German Shepherd",
+            5 => "Shih-tzu",
+            6 => "Dogo",
+            7 => "Golden Retriever",
+            8 => "Fox Terrier",
+            9 => "Whippet",
+            10 => "Pinscher",
+            11 => "Cocker",
+            12 => "Shiba Inu",
+            13 => "Doberman",
+            14 => "Border Collie",
+            15 => "Yorkshire",
+            16 => "Poodle",
+            17 => "Rottweiler",
+            18 => "Labrador Retriever",
+            19 => "Pug",
+            20 => "Siberian Husky",
+            21 => "Boxer",
+            22 => "Dalmatian",
+            23 => "Maltese",
+            24 => "Saint Bernard",
+            25 => "Cavalier King Charles Spaniel",
+            26 => "French Bulldog",
+            27 => "Great Dane",
+            28 => "Basenji",
+            29 => "Akita",
+            30 => "Alaskan Malamute",
+            31 => "Samoyed",
+            32 => "Basset Hound",
+            33 => "Australian Shepherd",
+            34 => "Pembroke Welsh Corgi",
+            35 => "Bichon Frise",
+            36 => "Papillon",
+            37 => "Jack Russell Terrier",
+            38 => "Weimaraner",
+            39 => "Bull Terrier",
+            40 => "Pekingese",
+            41 => "Staffordshire Bull Terrier",
+            42 => "Airedale Terrier",
+            43 => "Cane Corso",
+            44 => "English Setter",
+            45 => "Saluki",
+            46 => "Italian Greyhound",
+            47 => "Portuguese Water Dog",
+            48 => "Tibetan Mastiff",
+            49 => "Chow Chow",
+            50 => "Irish Wolfhound",
+            51 => "Pitbull"
+        ];
+    
+        return $breeds[$this->breedID] ?? "La raza no se encuentra en la base de datos.";
+    }
+    
 }
 ?>

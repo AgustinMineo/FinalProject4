@@ -11,7 +11,7 @@ namespace Views;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <title>404 - Page Not Found</title>    
     <script>
-        var userRole = <?php echo isset($role) ? json_encode($role) : 0; ?>; // Asignar el rol o undefined
+        var userRole = <?php echo isset($userRole) ? json_encode($userRole) : 0; ?>; // Asignar el rol o undefined
     </script>
 </head>
 <body>
@@ -27,9 +27,9 @@ namespace Views;
     </nav> 
     <div class="container my-5 text-center">
         <div class="container">
-            <p class="lead">Oops! We can't find that page.</p>
+            <p class="lead  fs-3">Oops! We can't find that page.</p>
         </div>
-        <img src="<?php echo '/FinalProject4/' ?>Views/img/404image.webp" alt="Doggo looking confused" class="w-50">
+        <img src="<?php echo '/FinalProject4/' ?>Views/img/404image.webp" alt="Doggo looking confused" class="w-50 ">
         <br><br> 
     </div>
 

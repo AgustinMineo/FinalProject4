@@ -24,42 +24,49 @@ class KeeperController{
         $this->newMailer = new MailerDAO();
         $this->OwnerDAO = new OwnerDAO();
     }
-
     public function addKeeperView(){
         require_once(VIEWS_PATH."keeper-add.php");
     }
     public function goLoginKeeper(){
         require_once(VIEWS_PATH."loginUser.php");
     }
+
     public function goLandingKeeper(){
-        SessionHelper::validateUserRole([3]);
-        require_once(VIEWS_PATH."keeperNav.php");
+        SessionHelper::InfoSession([3]);
     }
-    public function Index($message = ""){
-        SessionHelper::validateUserRole([3]);
-         require_once(VIEWS_PATH."keeperNav.php");
-    }
-    public function myProfile($keeper){
-        SessionHelper::validateUserRole([3]);
-        require_once(VIEWS_PATH."myProfileKeeper.php");
+    public function showKeepersAll($listKeepers=null){
+        if($listKeepers === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
+        $userRole=SessionHelper::InfoSession([1,2]);
+        require_once(VIEWS_PATH. "showKeeper.php");
     }
     public function updateDaysAvailables(){
-        SessionHelper::validateUserRole([3]);
-        require_once(VIEWS_PATH."keeperNav.php");
+        SessionHelper::InfoSession([3]);
         require_once(VIEWS_PATH."updateAvailabilityDays.php");
     }
-    public function calendarDays($days,$bookings,$keeper){
-        SessionHelper::validateUserRole([3]);
-        require_once(VIEWS_PATH."keeperNav.php");
+    public function calendarDays($days= null,$bookings= null,$keeper= null){
+        if($days === null && $keeper === null && $keeper === null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
+        SessionHelper::InfoSession([3]);
         require_once(VIEWS_PATH."keeperDays.php");
     }
 
-    public function newKeeper($lastName,$firstName,$cellPhone,$birthDate,$email,
-    $password,$confirmPassword,$animalSize,$price,$userDescription,$cbu,$QuestionRecovery,$answerRecovery){
+    public function newKeeper($rol=null,$lastName,$firstName,$cellPhone,$birthDate,$email,
+    $password,$confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery,$animalSize,$price,$cbu){
+        $userRole=0;
+        if($rol!='0'){
+            $userRole=SessionHelper::getCurrentRole();
+        }
         if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
             if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
                 if(strcmp($password,$confirmPassword) == 0){
-                    if($this->KeeperDAO->searchKeeperCBU($cbu) ==NULL){
+                    if($this->KeeperDAO->searchCBU($cbu) ==NULL && strlen($cbu)<=20){
                         $newKeeper = new Keeper();
                         $newKeeper->setLastName($lastName);
                         $newKeeper->setfirstName($firstName);
@@ -71,29 +78,77 @@ class KeeperController{
                         $newKeeper->setAnimalSize($animalSize);
                         $newKeeper->setPrice($price);
                         $newKeeper->setCBU($cbu);
+                        $newKeeper->setPoints(0);
                         $newKeeper->setQuestionRecovery($QuestionRecovery);
                         $newKeeper->setAnswerRecovery($answerRecovery);
                         $newKeeper->setRol(3);
-                        $this->KeeperDAO->AddKeeper($newKeeper);
+                        $keeperID= $this->KeeperDAO->AddKeeper($newKeeper);
+                        $newKeeper->setKeeperID($keeperID);
                         $this->newMailer->welcomeMail($lastName,$firstName,$email);
-                        $this->goLoginKeeper();
+                        if($userRole===0){//Se evalua si es desde admin o desde registro
+                            echo "<div class='alert alert-success'>¡Usuario registrado correctamente!</div>";
+                            $this->goLoginKeeper();
+                        }else{
+                            $userRole=SessionHelper::InfoSession([1]);
+                            $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                            $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                            $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                            require_once(VIEWS_PATH."userListAdminView.php");
+                            return $newKeeper;
+                        }
                     }else{
-                        echo "<div class='alert alert-danger'>The CBU already exist.</div>";
-                        $this->addKeeperView();
+                        if($userRole===1){
+                            $userRole=SessionHelper::InfoSession([1]);
+                            $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                            $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                            $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                            echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
+                            require_once(VIEWS_PATH."userListAdminView.php");
+                        }else{
+                            echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
+                            $this->addKeeperView();
+                        }
                     }
             }else{
+                if($userRole===1){
+                    $userRole=SessionHelper::InfoSession([1]);
+                    $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                    $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                    $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                    echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
+                    require_once(VIEWS_PATH."userListAdminView.php");
+                }else{
                 echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
                 $this->addKeeperView();
+                }
             }
         }
         else{
+            if($userRole===1){
+                $userRole=SessionHelper::InfoSession([1]);
+                $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
+                require_once(VIEWS_PATH."userListAdminView.php");
+            }else{
                 echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
                 $this->addKeeperView();
             }
+        }
         }        
         else{
-            echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
-            $this->addKeeperView();
+            if($userRole===1){
+                $userRole=SessionHelper::InfoSession([1]);
+                $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
+                require_once(VIEWS_PATH."userListAdminView.php");
+            }else{
+                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
+                $this->addKeeperView();
+            }
         }
          //$newKeeper->setPoints('0');
          //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
@@ -104,14 +159,19 @@ class KeeperController{
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getAllKeeper();
         if($listKeepers){
-            require_once(VIEWS_PATH. "showKeeper.php");
+            $this->showKeepersAll($listKeepers);
         }else{
             echo '<div class="alert alert-danger">There is no availables keepers right now!</div>';
-            require_once(VIEWS_PATH. "landingPage.php");
+            $this->goLandingKeeper();
         }
     }
 
-    public function showKeepersByAvailability($value1,$value2){
+    public function showKeepersByAvailability($value1=null,$value2=null){
+        if($value1 === null && $value2 === null ){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         SessionHelper::validateUserRole([3]);
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getKeeperByDisponibility($value1,$value2);
@@ -122,7 +182,12 @@ class KeeperController{
         }
     }
 
-    public function updateAvailabilityDays($date1,$date2,$available){
+    public function updateAvailabilityDays($date1=null,$date2=null,$available=null){
+        if($date1 === null && $date2 === null && $available ===null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         SessionHelper::validateUserRole([3]);
         //Si la fecha date1 es < a la fecha actual deberia dar error
         //Si la fecha de date2 es < a la fecha de hoy deberia dar error
@@ -151,7 +216,12 @@ class KeeperController{
         }
     }
     //Funcion para vista calendario
-    public function updateAvailabilityDay($date,$available){
+    public function updateAvailabilityDay($date=null,$available=null){
+        if($date === null && $available ===null){
+            if(SessionHelper::getCurrentUser()){
+                SessionHelper::redirectTo403();
+            }
+        }
         SessionHelper::validateUserRole([3]);
         if($date < date('Y-m-d')){
             echo json_encode(['status' => 'error', 'message' => 'No se puede actualizar una fecha pasada a la actual ']);
@@ -187,6 +257,7 @@ class KeeperController{
     }
     //Funcion para refrescar el calendario luego de un cambio
     public function refreshDays() {
+
         SessionHelper::validateUserRole([3]);
         
         // Obtener el keeper actual
@@ -199,12 +270,6 @@ class KeeperController{
         // Generar el HTML que será enviado a la llamada AJAX
     
         return $days; /// Devuelve el HTML generado
-    }
-    
-    public function showCurrentKeeper(){
-        SessionHelper::validateUserRole([3]);
-        $keeper=$this->KeeperDAO->searchKeeperByEmail(SessionHelper::getCurrentUser()->getEmail());
-        $this->myProfile($keeper);
     }
 }
 ?>

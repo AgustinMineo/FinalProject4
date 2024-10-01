@@ -156,6 +156,40 @@ class OwnerDAO{
             throw $ex;
         }
     }
+    //Se va a utilizar para mostrar información en listados.
+    public function searchBasicInfoOwnerByID($ownerID){
+        try {
+            $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, 
+            u.userDescription, u.email, o.petAmount, o.ownerID,u.roleID
+            FROM ".$this->userTable." u 
+            INNER JOIN ".$this->ownerTable." o ON u.userID = o.userID 
+            WHERE o.ownerID = '$ownerID';";
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            if($resultSet){ 
+                foreach($resultSet as $row){
+                    $owner = new Owner();
+            
+                    $owner->setfirstName($row["firstName"]);
+                    $owner->setLastName($row["lastName"]);
+                    $owner->setEmail($row["email"]);
+                    $owner->setCellPhone($row["cellphone"]);
+                    $owner->setbirthDate($row["birthdate"]);
+                   // $owner->setPassword($row["password"]);
+                    $owner->setDescription($row["userDescription"]);
+                    $owner->setPetAmount($row["petAmount"]);
+                    $owner->setOwnerId($row["ownerID"]);
+                    //$owner->setAnswerRecovery($row["answerRecovery"]);
+                    //$owner->setQuestionRecovery($row["questionRecovery"]);
+                    $owner->setRol($row["roleID"]);
+                }
+                return $owner;
+             }
+            else{ return NULL; }
+    }  catch (Exception $ex) { throw $ex; }
+    }
     //Buscamos el USER ID del usuario con el mail.
     public function bringUserID($email){
         try {

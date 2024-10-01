@@ -39,7 +39,7 @@ abstract class User {
         return $this->birthDate;
     }
     public function setbirthDate($birthDate){
-        $this->birthDate = $birthDate;
+    $this->birthDate =$birthDate;
     }
 
     public function getEmail(){
@@ -58,8 +58,8 @@ abstract class User {
     public function getRol(){
         return $this->userRol;
     }
-    public function setRol($Rol){
-        $this->userRol = $Rol;
+    public function setRol($rol){
+        $this->userRol = $rol;
     }
 
     public function getDescription(){

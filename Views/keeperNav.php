@@ -31,6 +31,12 @@ require_once("validate-session.php");
                             <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>Booking/showBookings">Show reservations</a>
                         </li>
                         <li class="nav-item " style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
+                            <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>Review/getReviewByKeeper">Mis Reviews</a>
+                        </li> 
+                        <li class="nav-item " style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
+                            <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>Keeper/showCalendarData">Calendario</a>
+                        </li>
+                        <li class="nav-item " style="width:auto; border-style:solid; border-width:2px; border-color:white; ">
                             <a class="nav-link m-3" href="<?php echo FRONT_ROOT ?>User/logOut">Log Out</a>
                         </li>  
                     </ul>  

@@ -3,7 +3,7 @@ namespace Models;
 
 class Booking {
     private $bookingID;  /// booking ID
-    private $status;   /// 1 pending - 2 rejected -- 3 accepted -- 4 Confirmed -- 5 Finish
+    private $status;   /// 1 pending - 2 rejected -- 3 accepted -- 4 Confirmed -- 5 Finish 
     private $petID;    /// id pet and owner from petOwner
     private $startDate; // start date
     private $endDate; /// finish date
@@ -27,7 +27,7 @@ class Booking {
     public function getPetID(){
         return $this->petID;
     }
-    public function setPetID($petID){
+    public function setPetID(Pet $petID){
         $this->petID = $petID;
     }
     public function getStartDate(){
@@ -45,7 +45,7 @@ class Booking {
     public function getKeeperID(){
         return $this->keeperID;
     }
-    public function setKeeperID($keeperID){
+    public function setKeeperID(Keeper $keeperID){
         $this->keeperID = $keeperID;
     }
     public function getTotalValue(){

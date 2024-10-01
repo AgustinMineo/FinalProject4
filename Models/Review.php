@@ -3,7 +3,7 @@ namespace Models;
 
 class Review{
     private $reviewID;
-    private $booking;
+    private $booking; //Tipo booking
     private $description;
     private $points;
 
@@ -19,7 +19,7 @@ class Review{
         return $this->booking;
     }
 
-    public function setBooking($booking){
+    public function setBooking(Booking $booking){
         $this->booking = $booking;
     }
 

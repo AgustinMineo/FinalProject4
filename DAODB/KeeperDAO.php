@@ -10,7 +10,7 @@ class KeeperDAO implements IKeeperDAO{
     private $keeperTable = 'keeper';
     private $daysTable = 'keeperdays';
     private $bookingTable = 'booking';
-
+    private $petTable = 'pet';
 
 
     public function AddKeeper (Keeper $keeper){
@@ -49,6 +49,17 @@ class KeeperDAO implements IKeeperDAO{
                       $this->connection->ExecuteNonQuery($queryKeeper, $parametersKeeper);
                    };
       } catch (Exception $ex) { throw $ex; }   
+    }
+    public function searchKeeperCBU($cbu){
+      $query = "SELECT keeperID
+      FROM ".$this->keeperTable." WHERE cbu like '$cbu';";
+      $this->connection = Connection::GetInstance();
+      $resultSet = $this->connection->Execute($query);
+      if($resultSet){
+        return true;
+      }else{
+        return null;
+      }
     }
     /*public function GetAllKeeper(){
       try{
@@ -125,7 +136,7 @@ class KeeperDAO implements IKeeperDAO{
   
               return $keeperList;
           } else {
-              return NULL;
+              return null;
           }
       } catch (Exception $ex) {
           throw $ex;
@@ -133,18 +144,75 @@ class KeeperDAO implements IKeeperDAO{
   }
   
   
+  public function updateDaysByBookingIDAndStatus($idBooking, $status){
+    try{
+        //Estado depende del status pasado (2 es rechazado)
+        $availability = ($status == 2) ? 1 : 0;
 
+        // Traigo las fechas de inicio y fin del booking
+        $query = "SELECT startDate, endDate FROM ".$this->bookingTable." WHERE bookingID = :idBooking";
+        
+        $parametersSelect = ['idBooking' => $idBooking];
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query, $parametersSelect);
+        if(!empty($resultSet)){//Si no esta vacio
+          $startDate = $resultSet[0]["startDate"];
+          $endDate = $resultSet[0]["endDate"];
 
-  public function getKeeperByDisponibility($date1, $date2) {
+          $queryUpdate="UPDATE ".$this->daysTable." k
+                  SET k.available = :availability
+                  WHERE day between :startDate AND :endDate";
+                  
+                  $parameters["availability"] = $availability;
+                  $parameters["startDate"] = $startDate;
+                  $parameters["endDate"] = $endDate;
+                  // Ejecuta la consulta
+                  $this->connection = Connection::GetInstance();
+                  $result = $this->connection->ExecuteNonQuery($queryUpdate, $parameters);
+        }
+        
+        return true;
+    }
+    catch (Exception $ex) {
+        throw $ex;
+    }
+  }
+
+  public function updateDaysByKeeperIDAndDates($idKeeper,$dateStart,$dateEnd){
+    try{
+
+      $queryUpdate="UPDATE ".$this->daysTable." k
+      SET k.available = 0
+      WHERE keeperID = :keeperID and day between :startDate AND :endDate";
+      
+      $parameters["startDate"] = $dateStart;
+      $parameters["endDate"] = $dateEnd;
+      $parameters["keeperID"] = $idKeeper;
+      // Ejecuta la consulta
+      $this->connection = Connection::GetInstance();
+      $result = $this->connection->ExecuteNonQuery($queryUpdate, $parameters);
+
+      if($result){
+        return true;
+      }else{
+        return false;
+      }
+    }catch (Exception $ex) {
+      throw $ex;
+  }
+  }
+
+  public function getKeeperByDisponibility($date1, $date2,$ownerID) {
     try {
         $query = "
-        SELECT k.keeperID, u.firstName, u.lastName, u.cellphone, u.email, k.price, k.animalSize, k.cbu
+        SELECT k.keeperID, u.firstName, u.lastName, u.cellphone,u.birthdate, u.email, k.price, k.animalSize, k.cbu
         FROM " . $this->userTable . " u
         JOIN " . $this->keeperTable . " k ON k.userID = u.userID
         JOIN " . $this->daysTable . " d ON d.keeperID = k.keeperID
         LEFT JOIN " . $this->bookingTable . " b ON b.keeperID = k.keeperID
         WHERE d.available = 1
           AND d.day BETWEEN :date1 AND :date2
+          AND k.animalSize in (select p.petSize from ". $this->petTable . " p where p.ownerID = :ownerID )
           AND NOT EXISTS (
             SELECT 1
             FROM " . $this->bookingTable . " b2
@@ -162,7 +230,7 @@ class KeeperDAO implements IKeeperDAO{
       */
         $parameters['date1'] = $date1;
         $parameters['date2'] = $date2;
-
+        $parameters['ownerID'] = $ownerID;
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query, $parameters);
 
@@ -174,6 +242,7 @@ class KeeperDAO implements IKeeperDAO{
                 $keeper->setFirstName($row['firstName']);
                 $keeper->setLastName($row['lastName']);
                 $keeper->setEmail($row['email']);
+                $keeper->setbirthdate($row['birthdate']);
                 $keeper->setCellPhone($row['cellphone']);
                 $keeper->setPrice($row['price']);
                 $keeper->setCBU($row['cbu']);
@@ -188,11 +257,11 @@ class KeeperDAO implements IKeeperDAO{
         throw $ex;
     }
 }
-
+  
 
     public function searchKeeperByEmail($email){
       try {
-        $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email, k.keeperID, k.price, k.cbu,
+        $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email,u.birthdate, k.keeperID, k.price, k.cbu,
                   u.userDescription,u.questionRecovery,u.answerRecovery,k.animalSize,u.roleID
                   FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID
                   WHERE email = '$email';";
@@ -205,6 +274,7 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setFirstName($row['firstName']);
             $keeper->setLastName($row['lastName']);
             $keeper->setCellPhone($row['cellphone']);
+            $keeper->setbirthDate($row['birthdate']);
             $keeper->setEmail($row['email']);
             $keeper->setPrice($row['price']);
             $keeper->setCBU($row['cbu']);
@@ -215,7 +285,76 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setRol($row['roleID']);
             return $keeper;
           }
-        } else { return NULL; } }
+        } else { 
+          //echo '<div class="alert alert-danger">No existen keepers disponibles</div>';
+          return NULL; 
+        } 
+      }
+      catch (Exception $ex) { throw $ex; } 
+    }
+    public function searchKeeperByID($keeperID){
+      try {
+        $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email,u.birthdate, k.keeperID, k.price, k.cbu,
+                  u.userDescription,u.questionRecovery,u.answerRecovery,k.animalSize,u.roleID
+                  FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID
+                  WHERE k.keeperID = '$keeperID';";
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query);
+        if($resultSet){
+          foreach($resultSet as $row){
+            $keeper = new Keeper();
+            $keeper->setKeeperId($row['keeperID']);
+            $keeper->setFirstName($row['firstName']);
+            $keeper->setLastName($row['lastName']);
+            $keeper->setCellPhone($row['cellphone']);
+            $keeper->setEmail($row['email']);
+            $keeper->setPrice($row['price']);
+            $keeper->setbirthDate($row['birthdate']);
+            $keeper->setCBU($row['cbu']);
+            $keeper->setAnimalSize($row['animalSize']);
+            $keeper->setDescription($row['userDescription']);
+            $keeper->setQuestionRecovery($row['questionRecovery']);
+            $keeper->setAnswerRecovery($row['answerRecovery']);
+            $keeper->setRol($row['roleID']);
+            return $keeper;
+          }
+        } else { 
+          //echo '<div class="alert alert-danger">No existen keepers disponibles</div>';
+          return NULL; 
+        } 
+      }
+      catch (Exception $ex) { throw $ex; } 
+    }
+    //Para buscar sin datos privados
+    public function searchKeeperByIDReduce($keeperID){
+      try {
+        $query = "SELECT u.firstName, u.lastName, u.cellphone, u.email,u.birthdate, k.keeperID, k.price, k.cbu,
+                  u.userDescription,k.animalSize,u.roleID
+                  FROM ".$this->userTable." u JOIN ".$this->keeperTable." k ON u.userID = k.userID
+                  WHERE k.keeperID = '$keeperID';";
+        $this->connection = Connection::GetInstance();
+        $resultSet = $this->connection->Execute($query);
+        if($resultSet){
+          foreach($resultSet as $row){
+            $keeper = new Keeper();
+            $keeper->setKeeperId($row['keeperID']);
+            $keeper->setFirstName($row['firstName']);
+            $keeper->setLastName($row['lastName']);
+            $keeper->setCellPhone($row['cellphone']);
+            $keeper->setEmail($row['email']);
+            $keeper->setPrice($row['price']);
+            $keeper->setbirthDate($row['birthdate']);
+            $keeper->setCBU($row['cbu']);
+            $keeper->setAnimalSize($row['animalSize']);
+            $keeper->setDescription($row['userDescription']);
+            $keeper->setRol($row['roleID']);
+            return $keeper;
+          }
+        } else { 
+          //echo '<div class="alert alert-danger">No existen keepers disponibles</div>';
+          return NULL; 
+        } 
+      }
       catch (Exception $ex) { throw $ex; } 
     }
     public function searchKeeperToLogin($email,$password){
@@ -280,7 +419,6 @@ class KeeperDAO implements IKeeperDAO{
       }
   }
   
-
     public function changeAvailabilityDays($keeperID, $startDate, $endDate, $available) {
       // Aseguramos que $available sea un entero, 1 o 0
       $available = ($available === '1') ? 1 : 0;
@@ -291,7 +429,7 @@ class KeeperDAO implements IKeeperDAO{
   
           // Obtener los días existentes en el rango
           $queryExistingDays = "SELECT day FROM ".$this->daysTable."
-                                WHERE keeperID = :keeperID AND day BETWEEN :startDate AND :endDate";
+                                WHERE keeperID = :keeperID AND day BETWEEN :startDate AND :endDate and available!=0";
           $parametersExisting = [
               'keeperID' => $keeperID,
               'startDate' => $startDate,
@@ -299,7 +437,7 @@ class KeeperDAO implements IKeeperDAO{
           ];
           $existingDays = $this->connection->Execute($queryExistingDays, $parametersExisting);
   
-          // Crear un array con los días existentes para una actualización rápida
+          // Crear un array con los días existentes para una actualizacion rapida
           $existingDaysArray = array_column($existingDays, 'day');
           
           // Crear un array con los días del rango especificado
@@ -311,10 +449,10 @@ class KeeperDAO implements IKeeperDAO{
               if (!in_array($currentDate, $existingDaysArray)) {
                   $datesToInsert[] = $currentDate;
               }
-              // Actualizar los días existentes
+              // Actualizar los días existentes donde el status!=0
               $queryUpdate = "UPDATE ".$this->daysTable."
                               SET available = :available
-                              WHERE keeperID = :keeperID AND day = :day";
+                              WHERE keeperID = :keeperID AND day = :day and available!=0";
               $parametersUpdate = [
                   'keeperID' => $keeperID,
                   'day' => $currentDate,
@@ -345,8 +483,53 @@ class KeeperDAO implements IKeeperDAO{
           throw $ex;
       }
   }
-  
-  
+  //Funcion para cambiar el estado desde calendario.
+  public function changeAvailabilityDay($keeperID,$date,$available){
+   
+
+   try {
+       // Conectamos a la base de datos
+       $this->connection = Connection::GetInstance();
+
+       // Verificamos si el día ya existe
+       $queryExistingDay = "SELECT day FROM ".$this->daysTable."
+                             WHERE keeperID = :keeperID AND day = :day";
+       $parametersExisting = [
+           'keeperID' => $keeperID,
+           'day' => $date
+       ];
+       $existingDay = $this->connection->Execute($queryExistingDay, $parametersExisting);
+
+       // Verifica si el día existe
+       if (!empty($existingDay)) {
+           // Si el día existe, actualizamos la disponibilidad
+           $queryUpdate = "UPDATE ".$this->daysTable."
+                           SET available = :available
+                           WHERE keeperID = :keeperID AND day = :day ";
+           $parametersUpdate = [
+               'keeperID' => $keeperID,
+               'day' => $date,
+               'available' => $available
+           ];
+            $this->connection->ExecuteNonQuery($queryUpdate, $parametersUpdate);
+       } else {
+           // Si el día no existe, lo insertamos
+           $queryInsert = "INSERT INTO ".$this->daysTable." (keeperID, day, available) 
+                           VALUES (:keeperID, :day, :available)";
+           $parametersInsert = [
+               'keeperID' => $keeperID,
+               'day' => $date,
+               'available' => $available
+           ];
+            $this->connection->ExecuteNonQuery($queryInsert, $parametersInsert);
+       }
+
+       return true;
+
+   } catch (Exception $ex) {
+       throw $ex;
+   }
+}
 
 
     public function searchDays($keeperID, $value1, $value2){
@@ -363,11 +546,11 @@ class KeeperDAO implements IKeeperDAO{
         } else { return NULL; } }
       catch (Exception $ex) { throw $ex; } 
     }
-    
+    /*
     public function searchKeeperByID($keeperID){
       try {
         $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, u.birthdate, k.keeperID, 
-        k.price,k.cbu, k.animalSize,u.rolID 
+        k.price,k.cbu, k.animalSize,u.roleID 
                   FROM ".$this->userTable." u 
                   INNER JOIN ".$this->keeperTable." k ON u.userID = k.userID 
                   WHERE k.keeperID = $keeperID;";
@@ -385,7 +568,7 @@ class KeeperDAO implements IKeeperDAO{
             $keeper->setAnimalSize($row['animalSize']);
             $keeper->setPrice($row['price']);
             $keeper->setCBU($row['cbu']);
-            $keeper->setRol($row['rolID']);
+            $keeper->setRol($row['roleID']);
            // $keeper->setFirstAvailabilityDays($row['firstDate']);
             //$keeper->setLastAvailabilityDays($row['lastDate']);
           }
@@ -394,7 +577,7 @@ class KeeperDAO implements IKeeperDAO{
       } catch (Exception $th) {
         throw $th;
       }
-    }
+    }*/
     
     public function searchKeeperID($email){
       $query = "SELECT userID FROM ".$this->userTable." Where email = '$email';";

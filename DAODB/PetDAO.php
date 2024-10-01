@@ -6,6 +6,8 @@ use DAODB\Connect as Connect;
 use DAO\IPetDAO as IPetDAO;
 use Models\Pet as Pet;
 use Helper\SessionHelper as SessionHelper;
+use DAODB\OwnerDAO as OwnerDAO;
+use Models\Owner;
 
 class PetDAO implements IPetDAO{
     private $connection;
@@ -14,6 +16,10 @@ class PetDAO implements IPetDAO{
     private $breedTable = 'breed';
     private $petList = array();
     
+    public function __construct() {
+        $this->OwnerDAO = new OwnerDAO();
+    }
+
     public function AddPet(Pet $pet){
         try{
             $query = "INSERT INTO ".$this->petTable."(petID, petName, petImage, breedID, petSize, petVaccinationPlan, petDetails, petVideo, petWeight, ownerID, petAge)
@@ -46,6 +52,8 @@ class PetDAO implements IPetDAO{
             JOIN ".$this->breedTable." b ON p.breedID = b.breedID;";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
+            $owner= new Owner();
+            $owner= $this->OwnerDAO->searchBasicInfoOwnerByID($row["ownerID"]);
             if($resultSet){
                 $petList = array();
                 foreach($resultSet as $row){
@@ -59,11 +67,13 @@ class PetDAO implements IPetDAO{
                     $pet->setPetDetails($row["petDetails"]);
                     $pet->setPetVideo($row["petVideo"]);
                     $pet->setPetWeight($row["petWeight"]);
-                    $pet->setOwnerID($row["ownerID"]);
+                    $pet->setOwnerID($owner);
                     $pet->setPetAge($row["petAge"]);
                     array_push($petList, $pet);
                 }
-            return $petList; }
+                //var_dump($petList);
+            return $petList;
+         }
             else { return NULL; }
         } catch (Exception $ex) { throw $ex; }
     }
@@ -73,11 +83,14 @@ class PetDAO implements IPetDAO{
                   WHERE p.ownerID = $ownerID;";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
+        $owner= new Owner();
+        $owner= $this->OwnerDAO->searchBasicInfoOwnerByID($ownerID);
         if($resultSet){
             $petList = array();
             foreach($resultSet as $row){
                 $pet = new Pet();
                 $pet->setPetID($row['petID']);
+                $pet->setOwnerID($owner);
                 $pet->setPetName($row['petName']);
                 $pet->setBreedID($row['breedID']);
                 $pet->setPetSize($row['petSize']);
@@ -142,24 +155,28 @@ class PetDAO implements IPetDAO{
     }
     public function searchPet($petSearch){
         try{
-            $query = "SELECT petName,breedID,petDetails,petImage,petAge,ownerID,petWeight,petVideo,petVaccinationPlan,petSize 
+            $query = "SELECT petID,petName,breedID,petDetails,petImage,petAge,ownerID,petWeight,petVideo,petVaccinationPlan,petSize 
             FROM ".$this->petTable." WHERE petID = $petSearch;";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
+            $owner = new Owner();
             if($resultSet){
                 foreach($resultSet as $row){
+                    $owner= $this->OwnerDAO->searchBasicInfoOwnerByID($row['ownerID']);
                     $pet = new Pet();
+                    $pet->setPetID($row['petID']);
                     $pet->setPetName($row['petName']);
                     $pet->setBreedID($row['breedID']);
                     $pet->setPetDetails($row['petDetails']);
                     $pet->setPetImage($row['petImage']);
                     $pet->setPetAge($row['petAge']);
-                    $pet->setOwnerID($row['ownerID']);
+                    $pet->setOwnerID($owner);
                     $pet->setPetWeight($row['petWeight']);
                     $pet->setPetVideo($row['petVideo']);
                     $pet->setPetVaccinationPlan($row['petVaccinationPlan']);
                     $pet->setPetSize($row['petSize']);
                 }
+                
                 return $pet;
             } else{ return null;}
         } catch (Exception $ex) {throw $ex;}

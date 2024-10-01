@@ -2,6 +2,12 @@ CREATE DATABASE petheros;
 
 Use petheros;
 
+CREATE TABLE `Roles`(
+  `roleID` TINYINT(1) NOT NULL,
+  `roleName` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`roleID`)
+)ENGINE=InnoDB;
+
 CREATE TABLE `User` (
   `userID` int(11) NOT NULL AUTO_INCREMENT,
   `firstName` varchar(30) DEFAULT NULL,
@@ -13,8 +19,8 @@ CREATE TABLE `User` (
   `userDescription` varchar(255) DEFAULT NULL,
   `questionRecovery` varchar(80) DEFAULT NULL,
   `answerRecovery` varchar(120) DEFAULT NULL,
-  `rolID` tinyint(1) NOT NULL,
-  CONSTRAINT FK_UserRole FOREIGN KEY (`roleID`) REFERENCES `Roles`(`roleID`)
+  `roleID` tinyint(1) NOT NULL,
+  CONSTRAINT FK_UserRole FOREIGN KEY (`roleID`) REFERENCES `Roles`(`roleID`),
   PRIMARY KEY (`userID`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB;
@@ -48,9 +54,9 @@ CREATE TABLE `Pet` (
   `petDetails` varchar(255) DEFAULT NULL,
   `petName` varchar(30) DEFAULT NULL,
   `petSize` varchar(20) NOT NULL,
-  `petVideo` blob NOT NULL,
-  `petImage` blob NOT NULL,
-  `petVaccinationPlan` blob NOT NULL,
+  `petVideo` VARCHAR(255) NOT NULL,
+  `petImage` VARCHAR(255) NOT NULL,
+  `petVaccinationPlan` VARCHAR(255) NOT NULL,
   `petWeight` varchar(20) DEFAULT NULL,
   `petAge` int DEFAULT NULL,
   PRIMARY KEY (`petID`)
@@ -66,7 +72,7 @@ CREATE TABLE `Booking` (
   `amountReservation` float,
   `startDate` DATE NOT NULL, -- Fecha de inicio de la reserva
   `endDate` DATE NOT NULL,   -- Fecha de fin de la reserva
-  PRIMARY KEY (`bookingID`),
+  PRIMARY KEY (`bookingID`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `KeeperDays` (
@@ -92,17 +98,12 @@ CREATE TABLE `Review`(
     PRIMARY KEY (`reviewID`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `Roles`(
-  `roleID` TINYINT(1) NOT NULL,
-  `roleName` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`roleID`)
-)ENGINE=InnoDB;
 
 
 INSERT INTO `roles` (roleID, roleName) VALUES (1, 'Admin'), (2, 'Owner'), (3, 'Keeper');
 
 /*                                INSERT DE STATUS EN LA TABLA STATUS                       */
-INSERT INTO status VALUES ("1","Peding"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed");
+INSERT INTO status VALUES ("1","Pending"),("2","Rejected"),("3","Waiting for Payment"),("4","Waiting for confirmation"),("5","Confirmed"),("6","Finish"),("7","Completed"),("8","Overdue");
 /*                                INSERT DE STATUS EN LA TABLA STATUS                       */
 
 
@@ -159,3 +160,21 @@ INSERT INTO breed VALUES
 ("49", "Chow Chow"),
 ("50", "Irish Wolfhound");
 /*                                    INSERT DE BREEDS EN TABLA BREED                       */
+
+/*Validacion para ver si los jobs estan activos (Por defecto no en mysql) */
+SHOW VARIABLES LIKE 'event_scheduler';
+SET GLOBAL event_scheduler = ON;
+
+/*Job de actualización de estados*/
+CREATE EVENT IF NOT EXISTS update_reservations_status
+ON SCHEDULE EVERY 5 MINUTE
+DO
+
+UPDATE Booking
+SET status = 6  
+WHERE status = 5
+AND endDate < NOW();
+UPDATE Booking
+SET status = 8
+WHERE status IN (1, 3, 4)
+AND endDate < NOW();

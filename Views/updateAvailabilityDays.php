@@ -1,7 +1,6 @@
 <?php
 namespace Views;
 require_once("validate-session.php");
-date_default_timezone_set('America/Argentina/Buenos_Aires');
 ?>
 
 <!DOCTYPE html>

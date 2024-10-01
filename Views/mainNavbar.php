@@ -134,6 +134,9 @@ require_once("validate-session.php");
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/editUser"><i class="fas fa-users-cog"></i> All Users</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/showKeepers"><i class="fas fa-users-cog"></i> All Keepers</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>Review/getAllReviews"><i class="fas fa-star"></i> All Reviews</a>
                     </li>   
                     <li class="nav-item">
@@ -141,7 +144,7 @@ require_once("validate-session.php");
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>Booking/showBookings"><i class="fas fa-calendar-check"></i> All Bookings</a>
-                    </li> 
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                     </li> 

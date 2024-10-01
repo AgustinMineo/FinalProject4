@@ -27,10 +27,12 @@ use Helper\SessionHelper as SessionHelper;
 class ReviewController{
     private $ReviewDAO;
     private $BookingDAO;
+    private $KeeperDAO;
 
     public function __construct(){
         $this->ReviewDAO = new ReviewDAO();
         $this->BookingDAO = new BookingDAO();
+        $this->KeeperDAO = new KeeperDAO();
     }
 
     //Va a la navbar del owner
@@ -65,9 +67,10 @@ class ReviewController{
                         $review->setPoints($rate);
                         $result=$this->ReviewDAO->AddReview($review);
                         if($result){
-                            $newPoints = $this->KeeperDAO->getTotalPoints($booking->getKeeperID());
+                            var_dump($booking->getKeeperID()->getKeeperID());
+                            $newPoints = $this->KeeperDAO->getTotalPoints($booking->getKeeperID()->getKeeperID());
                             if($newPoints){
-                                $this->KeeperDAO->updateTotalPoints($newPoints);
+                                $this->KeeperDAO->updateTotalPoints($newPoints,$booking->getKeeperID()->getKeeperID());
                             }else{
                                 echo "<div class='alert alert-danger'>!Error getting points from the keeper !</div>";
                                 $this->goOwnerMenu();

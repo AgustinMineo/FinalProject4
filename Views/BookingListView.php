@@ -2,89 +2,16 @@
 namespace Views;
 require_once("validate-session.php");
 
-$page = 1; 
-$totalPages = 5;
 $requiredRole=$userRole;
 $alterRole=$userRole;
-
-     $statusFilter = $_GET['status'] ?? null;
-     $priceFilter = $_GET['price'] ?? null;
-     $bookingIDFilter = $_GET['bookingID'] ?? null;
-     $emailFilter = $_GET['email'] ?? null;
-     $startDateFilter = $_GET['startDate'] ?? null;
-     $endDateFilter = $_GET['endDate'] ?? null;
-     $requiredRole = $_GET['userRole'] ?? null;
-
-
-    $originalBookingList = $bookingList ?? []; //Creo una copia para tener la info si saca filtros.
-
-    // Aplico filtros si es el caso, sino retorno la copia con toda la info.
-     if ($statusFilter || $priceFilter || $bookingIDFilter || $emailFilter || $startDateFilter || $endDateFilter) {
-          $bookingList = array_filter($originalBookingList, function($booking) use ($statusFilter, $priceFilter, $bookingIDFilter, $emailFilter, $startDateFilter, $endDateFilter) {
-               $matches = true;
-
-          if ($statusFilter) {
-               $matches &= $booking->getStatus() == $statusFilter;
-          }
-          if ($priceFilter) {
-               $matches &= $booking->getTotalValue() <= $priceFilter; 
-          }
-          if ($bookingIDFilter) {
-               $matches &= $booking->getBookingID() == $bookingIDFilter;
-          }
-          if ($emailFilter) {
-               $ownerEmail = $booking->getPetID()->getOwnerID()->getEmail(); 
-               $keeperEmail = $booking->getKeeperID()->getEmail(); 
-               $matches &= ($ownerEmail === $emailFilter || $keeperEmail === $emailFilter);
-          }
-          if ($startDateFilter) {
-               $matches &= $booking->getStartDate() >= $startDateFilter;
-          }
-          if ($endDateFilter) {
-               $matches &= $booking->getEndDate() <= $endDateFilter;
-          }
-
-          return $matches;
-     });
+/*Para cambiar el alterRole y mostrar 1 vista u otra. SOLO ADMIN! */
+if($userRole===1){
+     if (isset($_POST['alterRole'])) {
+          $alterRole = intval($_POST['alterRole']);  
      } else {
-          $bookingList = $originalBookingList;
+          $alterRole = $alterRole ?? $requiredRole; 
      }
-
-    // Paginación
-     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-     $sortOrder = isset($_GET['sort']) ? $_GET['sort'] : 'asc';
-
-    //Filtro Ordenar por ID
-     if ($sortOrder === 'desc') {
-          usort($bookingList, function($a, $b) { //usort se usa para generar ordenamientos personalizados.
-            return $b->getBookingID() <=> $a->getBookingID(); // Ordena el array de forma desc
-     });
-     } else {
-     usort($bookingList, function($a, $b) {
-          return $a->getBookingID() <=> $b->getBookingID(); // Ordena el array de forma asc
-     });
-     }
-
-    // Configuración de la paginación
-     $itemsPerPage = 5; //Cantida de paginas
-     $totalItems = count($bookingList); // Usa la lista filtrada
-     $totalPages = $totalItems > 0 ? ceil($totalItems / $itemsPerPage) : 1; // Evita division por cero
-
-     $startIndex = max(0, ($page - 1) * $itemsPerPage); // Asegura que no sea negativo
-
-     // Obtener los ítems para la página actual
-     $bookingList = array_slice($bookingList, $startIndex, $itemsPerPage);
-
-
-    /*Para cambiar el alterRole y mostrar 1 vista u otra. SOLO ADMIN! */
-     if($userRole===1){
-          if (isset($_POST['alterRole'])) {
-               $alterRole = intval($_POST['alterRole']);  
-          } else {
-               $alterRole = $alterRole ?? $requiredRole; 
-          }
-     }
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -98,14 +25,37 @@ $alterRole=$userRole;
      <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-     
+
+     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
+     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
 </head>
+<style>
+     .loader {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 50px;
+          height: 50px;
+          border: 5px solid #f3f3f3; 
+          border-top: 5px solid #3498db;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          z-index: 10;
+     }
+
+     /* Animación del loader */
+     @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+     }
+</style>
      <title>Booking <?php if($userRole ===2){echo 'Owner';}elseif($userRole===3){echo 'Keeper';}else{echo 'Admin';}?></title>
 <body>
      <main class="py-5">
-     <input type="hidden" id="currentUserRole" value="<?php $userRole; ?>">
-
-     <?php if($userRole === 1):?>
+          <input type="hidden" id="currentUserRole" value="<?php $userRole; ?>">
+          <?php if($userRole === 1):?>
      <div class="admin-menu text-center">
           <form id="roleForm" method="post" action="" class="mb-3">
                <h3>Menú Admin</h3>
@@ -117,66 +67,18 @@ $alterRole=$userRole;
                </div>
           </form>
      </div>
+
      <?php endif;?>
-     <div class=" mb-4 d-flex container">
-               <form method="get" action="showBookings" class="d-flex flex-wrap gap-2">
-               <input type="hidden" id="requiredRole" value ="<?php echo $userRole?>">
-                    <!-- Filtro de Estado -->
-                    <label for="status">Estados</label>
-                    <select name="status" class="form-select">
-                         <option value="">Filtrar por Estado</option>
-                         <option value="1">1 - Peding</option>
-                         <option value="2">2 - Rejected</option>
-                         <option value="3">3 - Waiting for Payment</option>
-                         <option value="4">4 - Waiting for confirmation</option>
-                         <option value="5">5 - Confirmed</option>
-                         <option value="6">6 - Finish</option>
-                         <option value="7">7 - Completed</option>
-                         <option value="8">8 - Overdue</option>
-                    </select>
-
-                    <!-- Filtro de Precio -->
-                    <label for="price">Precio máximo:</label>
-                    <input type="number" name="price" class="form-control" placeholder="Filtrar por Precio">
-
-                    <!-- Filtro por ID -->
-                    <label for="bookingID">ID de Reserva:</label>
-                    <input type="number" name="bookingID" class="form-control" placeholder="Buscar por ID">
-
-                    <!-- Filtro por Correo -->
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" class="form-control" placeholder="Filtrar por Correo">
-
-                    <!-- Filtro por Fechas -->
-                    <label for="startDate">Fecha de Inicio:</label>
-                    <input type="date" name="startDate" class="form-control" placeholder="Fecha de Inicio">
-                    <label for="endDate">Fecha de Fin:</label>
-                    <input type="date" name="endDate" class="form-control" placeholder="Fecha de Fin">
-
-                    <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
-               </form>
-          </div>
-          <div class="container d-flex text-center">
-               <div class="container">
-                    <form id="filterForm">
-                         <select id="sort" name="sort">
-                              <option value="asc" <?= $sortOrder === 'asc' ? 'selected' : ''; ?>>ID Ascendente</option>
-                              <option value="desc" <?= $sortOrder === 'desc' ? 'selected' : ''; ?>>ID Descendente</option>
-                         </select>
-                         <button type="submit" class="btn btn-primary">Filtrar</button>
-                    </form>
-               </div>
-          </div>
-     </div>
-
      <?php if($userRole === 2 || $alterRole === 2 || $userRole ===1 && $alterRole!=3): ?>
 
-          <section id="listado" class="mb-5">
+          <section id="table-container" class="mb-5" id="mainContent">
+          <div id="loaderOwner" class="loader"></div>
                <div class="container">
                     <h2 class="mb-4 text-center">Listado de reservas <?php if($userRole ===1 || $alterRole===1 ){echo '- Vista owner';}?></h2>
-                    <table class="table bg-light-alpha text-center">
-                         <thead>
-                         <th>Booking id</th>
+                    <table class="table table-striped table-bordered"id="bookingsTableOwner">
+                    <thead class="thead-light">
+                         <tr>
+                              <th>Booking id</th>
                               <th>Cuidador</th>
                               <th>Pet Name</th>
                               <th>First date</th>
@@ -185,100 +87,138 @@ $alterRole=$userRole;
                               <th>Total value</th>
                               <th>Status</th>
                               <th>Actividad</th>
+                         </tr>
                          </thead>
                          <tbody>
-                              <div class="container d-flex flex-wrap flex-row w-100 ">
-                              <?php
-                              if($bookingList){
-                                   foreach($bookingList as $booking)
-                                   {
-                                        ?> 
-                                             <tr class="
-                                             <?php 
-                                             if ($booking->getStatus() == 1) {
+                         <?php
+                         if ($bookingList) {
+                              foreach ($bookingList as $booking) { 
+                                   ?>
+                                   <tr class="<?php 
+                                        if ($booking->getStatus() == 1) {
                                              echo "table-secondary";
-                                             } elseif ($booking->getStatus() == 2 || $booking->getStatus() == 8) {
+                                        } elseif ($booking->getStatus() == 2 || $booking->getStatus() == 8) {
                                              echo "table-danger";
-                                             } elseif ($booking->getStatus() == 3 || $booking->getStatus() == 4) {
+                                        } elseif ($booking->getStatus() == 3 || $booking->getStatus() == 4) {
                                              echo "table-primary";
-                                             } else {
+                                        } else {
                                              echo "table-success";
+                                        }
+                                   ?> table-hover text-center text-white">
+                                        
+                                        <td><?php echo $value =$booking->getBookingID(); ?></td>
+                                        
+                                        <!-- Info cuidador -->
+                                        <td>
+                                             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#keeperModal<?php echo $booking->getKeeperID()->getKeeperId(); ?>">Info cuidador</button>
+                                        </td>
+
+                                        <!-- Pet Name -->
+                                        <td>
+                                             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#petModal<?php echo $booking->getPetID()->getPetID(); ?>"><?php echo $booking->getPetID()->getPetName() ?></button>
+                                        </td>
+
+                                        <!-- First date -->
+                                        <td><?php $date = date_create($booking->getStartDate()); echo date_format($date, "d/m/Y"); ?></td>
+
+                                        <!-- Last Date -->
+                                        <td><?php $date = date_create($booking->getEndDate()); echo date_format($date, "d/m/Y"); ?></td>
+
+                                        <!-- Reserva a pagar -->
+                                        <td>$<?php echo $booking->getAmountReservation(); ?></td>
+
+                                        <!-- Total value -->
+                                        <td>$<?php echo $booking->getTotalValue(); ?></td>
+
+                                        <!-- Status -->
+                                        <td><?php 
+                                             $status = $booking->getStatus();
+                                             if ($status == '1') {
+                                             echo "<h6>Pending</h6>";
+                                             } elseif ($status == 2) {
+                                             echo "<h6>Rejected</h6>";
+                                             } elseif ($status == 3) {
+                                             echo "<h6>Waiting for payment</h6>";
+                                             } elseif ($status == 4) {
+                                             echo "<h6>Waiting for confirmation</h6>";
+                                             } elseif ($status == 5) {
+                                             echo "<h6>Confirmed</h6>";
+                                             } elseif ($status == 6) {
+                                             echo "<h6>Finish</h6>";
+                                             } elseif ($status == 7) {
+                                             echo "<h6>Completed</h6>";
+                                             } else {
+                                             echo "<h6>Overdue</h6>";
                                              }
-                                             ?>"
-                                             
-                                             table  table-hover table align-middle text-center text-white" >
+                                        ?></td>
+
+                                        <!-- Actividad -->
+                                        <td>
+                                             <!-- Review button for status '6' -->
+                                             <?php if ($booking->getStatus() == '6') { ?>
                                                   
-                                                  <td><?php echo $value=$booking->getBookingID(); ?></td>
-                                                  
-                                                  <th><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#keeperModal<?php echo $booking->getKeeperID()->getKeeperId(); ?>">Info cuidador</button></th>
-                                                  <th><button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#petModal<?php echo $booking->getPetID()->getPetID(); ?>"><?php echo $booking->getPetID()->getPetName() ?></button></th>
-                                                  <td><?php $date=date_create($booking->getStartDate()); echo date_format($date,"d/m/Y");  ?></td>
-                                                  <td><?php $date=date_create($booking->getEndDate()); echo date_format($date,"d/m/Y");  ?></td>
-                                                  <td>$<?php echo $booking->getAmountReservation() ?></td>
-                                                  <td>$<?php echo $booking->getTotalValue()?></td>
-                                                  <td><?php if($booking->getStatus() == '1'){echo "<h6>Pending</h6>";} elseif($booking->getStatus() == 2){echo "<h6>Rejected</h6>";}elseif($booking->getStatus() == 3){echo "<h6>Waiting for payment</h6>";}
-                                                  elseif($booking->getStatus() == 4){echo "<h6>Waiting for confirmation</h6>";}elseif($booking->getStatus() == 5){echo "<h6>Confirmed</h6>";}
-                                                  elseif($booking->getStatus() == 6){echo "<h6>Finish</h6>";}elseif($booking->getStatus() == 7){echo "<h6>Completed</h6>";}else{echo "<h6>Overdue</h6>";}?></td>
-                                                  <td><form action='<?php echo FRONT_ROOT ?>Review/newReview' method='post'><?php if($booking->getStatus() == '6'){ echo " 
-                                                       <button type='button' class='btn btn-secondary' data-bs-toggle='modal' data-bs-target='#exampleModal$value' data-bs-whatever='@getbootstrap'>New Review</button>
-                                                       <div class='modal fade' id='exampleModal$value' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
-                                                       <div class='modal-dialog modal-xl'>
-                                                       <div class='modal-content'>
-                                                            <div class='modal-header'>
-                                                            <h5 class='modal-title'></h5>
-                                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                                            </div>
-                                                            <div class='modal-body'>
-                                                            
-                                                            <div class='wrapper'>
-                                                            <div class='container text-black'>
-                                                       <article class='part card-details'>
-                                                            <div class='modal-body'>
-                                                            <form action='FRONT_ROOT.Booking/generatePaymentBooking' method='post'>
-                                                            <div class='w-100 d-flex flex-wrap text-center'>Your Valoration</div>
-                                                            <div class='d-flex flex-start'>
-                                                                 <div style='position:left;'>
-                                                                 <input type='radio' id='st5' name='rate' value='5' />
-                                                                      <label for='st5'></label>
-                                                                      <input type='radio' id='st4' name='rate' value='4' />
-                                                                      <label for='st4'></label>
-                                                                      <input type='radio' id='st3' name='rate' value='3'/>
-                                                                      <label for='st3'></label>
-                                                                      <input type='radio' id='st2' name='rate' value='2' />
-                                                                      <label for='st2'></label>
-                                                                      <input type='radio' id='st1' name='rate' value='1' checked/>
-                                                                      <label for='st1'></label>
+                                                       <form action='<?php echo FRONT_ROOT ?>Review/newReview' method='post'>
+                                                            <button type='button' class='btn btn-secondary' data-bs-toggle='modal' data-bs-target='#exampleModal<?php echo $value; ?>' data-bs-whatever='@getbootstrap'>New Review</button>
+                                                            <div class='modal fade' id='exampleModal<?php echo $value; ?>' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+                                                                 <div class='modal-dialog modal-xl'>
+                                                                      <div class='modal-content'>
+                                                                      <div class='modal-header'>
+                                                                           <h5 class='modal-title'>New Review</h5>
+                                                                           <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                                      </div>
+                                                                      <div class='modal-body'>
+                                                                           <div class='wrapper'>
+                                                                                <div class='container text-black'>
+                                                                                     <article class='part card-details'>
+                                                                                          <div class='modal-body'>
+                                                                                          <form action='<?php echo FRONT_ROOT; ?>Booking/generatePaymentBooking' method='post'>
+                                                                                               <div class='w-100 d-flex flex-wrap text-center'>Your Valoration</div>
+                                                                                               <div class='d-flex flex-start'>
+                                                                                                    <div style='position:left;'>
+                                                                                                         <input type='radio' id='st5' name='rate' value='5' />
+                                                                                                         <label for='st5'>5</label>
+                                                                                                         <input type='radio' id='st4' name='rate' value='4' />
+                                                                                                         <label for='st4'>4</label>
+                                                                                                         <input type='radio' id='st3' name='rate' value='3' />
+                                                                                                         <label for='st3'>3</label>
+                                                                                                         <input type='radio' id='st2' name='rate' value='2' />
+                                                                                                         <label for='st2'>2</label>
+                                                                                                         <input type='radio' id='st1' name='rate' value='1' checked />
+                                                                                                         <label for='st1'>1</label>
+                                                                                                    </div>
+                                                                                               </div>
+                                                                                               <input type='hidden' name='booking' value='<?php echo $value; ?>'>
+                                                                                               <div class='d-flex flex-wrap w-100'>
+                                                                                                    <h6 for='message-text'>Feedback</h6>
+                                                                                                    <textarea class='form-control' name='feedback' id='feedback' maxlength='255'></textarea>
+                                                                                               </div>
+                                                                                          </form>
+                                                                                          </div>
+                                                                                     </article>
+                                                                                </div>
+                                                                           </div>
+                                                                      </div>
+                                                                      <div class='modal-footer d-flex flex-wrap justify-content-center align-items-center'>
+                                                                           <button type='button' class='btn btn-danger' data-bs-dismiss='modal'>Close</button>
+                                                                           <button type='submit' class='btn btn-success'>Send Review</button>
+                                                                      </div>
+                                                                      </div>
                                                                  </div>
                                                             </div>
-                                                                      <input type='hidden' name='booking' value='$value'>
-                                                                      <div class='d-flex flex-wrap w-100'>
-                                                                      <h6 for='message-text' >Feedback</h6>
-                                                                      <textarea class='form-control' name='feedback' id='feedback' maxlength='255'></textarea>
-                                                                      </div>
-                                                            </div>
-                                                       </article>
-                                                                      
-                                                                      </div>
-                                                                 
-                                                                      </div>
-                                                                      </div>
-                                                                      <div class='modal-footer d-flex flex-wrap justify-content-center alight-items-center'>
-                                                                      <button type='button' class='btn btn-danger' data-bs-dismiss='modal'>Close</button>
-                                                                      <button type='submit' class='btn btn-success' data-bs-dismiss='modal'>Send Review</button>
-                                                                      </div>
-                                                                 
-                                                       </div>
-                                                       </div>
-                                                       </div>
-                                                       ";}?></form></td>
-                                                  <td><form action='<?php echo FRONT_ROOT ?> Payment/generatePaymentBooking' method='post'>
-                                                  <?php if($booking->getStatus() == '3'){ echo "
-                                                       <input type='hidden' name='booking' value='$value'>
-                                                       <button type='button' class='btn btn-secondary' data-bs-toggle='modal' data-bs-target='#paymentModal$value'>
-                                                            Realizar Pago
-                                                            </button>
-                                                       ";}?></form></td>
-                                             </tr>
+                                                       </form>
+                                                  </td>
+                                                  <?php } ?>
+
+                                              
+
+                                             <!-- Payment button for status '3' -->
+                                             <?php if ($booking->getStatus() == '3') { ?>
+                                             <form action='<?php echo FRONT_ROOT ?>Payment/generatePaymentBooking' method='post'>
+                                                  <input type='hidden' name='booking' value='<?php echo $booking->getBookingID(); ?>'>
+                                                  <button type='button' class='btn btn-secondary' data-bs-toggle='modal' data-bs-target='#paymentModal<?php echo $booking->getBookingID(); ?>'>Realizar Pago</button>
+                                             </form>
+                                             <?php } ?>
+                                        </td>
                                              <!-- Modal keeper -->
                                              <div class="modal fade" id="keeperModal<?php echo $booking->getKeeperID()->getKeeperId(); ?>" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                                              <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -469,40 +409,16 @@ $alterRole=$userRole;
                </table>
           </div>
      </section>
-     <?php if($userRole === 2 && $totalPages>1 || $userRole=== 1 && $alterRole=== 2 && $totalPages>1 || $totalPages>1 && $userRole === 2 ):?>
-          <div class="container">
-               <nav aria-label="Owner Paginate">
-                    <ul class="pagination" id="pagination">
-                         <?php if ($page > 1): ?>
-                              <li class="page-item">
-                                   <a class="page-link" href="?page=<?= $page - 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Previous">« Anterior</a>
-                              </li>
-                         <?php endif; ?>
-
-                         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                              <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
-                                   <a class="page-link" href="?page=<?= $i; ?>&requiredRole=<?= $userRole; ?>"><?= $i; ?></a>
-                              </li>
-                         <?php endfor; ?>
-
-                         <?php if ($page < $totalPages): ?>
-                              <li class="page-item">
-                                   <a class="page-link" href="?page=<?= $page + 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Next">Siguiente »</a>
-                              </li>
-                         <?php endif; ?>
-                    </ul>
-               </nav>
-          </div>
-     <?php endif; ?><!--Cierro if paginado-->
 
      <?php endif; ?><!--Cierro if owner view-->
 
      <!--Vista keeper-->
      <?php if($userRole ===3 || $alterRole===3 || $userRole ===1 && $alterRole!=2):?>
-          <section id="listado" class="mb-5">
+          <section id="table-container" class="mb-5">
                <div class="container">
+                    <div id="loaderKeeper" class="loader"></div>
                     <h2 class="mb-4 text-center">Listado de reservas <?php if($userRole === 1 || $alterRole===3 && $userRole===1){echo '- Vista Keeper';}?></h2>
-                    <table class="table table-striped table-bordered text-center">
+                    <table class="table table-striped table-bordered text-center" id="bookingsTableKeeper">
                          <thead class="table-primary">
                               <tr>
                                    <th>Booking ID</th>
@@ -730,102 +646,72 @@ $alterRole=$userRole;
                </div>
           </section>
 
-          <?php if($userRole===3 && $totalPages>1  || $userRole===1 && $alterRole===3 && $totalPages>1 ):?>
-          <div class="container">
-               <nav aria-label="Page navigation example">
-                    <ul class="pagination" id="pagination">
-                         <?php if ($page > 1): ?>
-                              <li class="page-item">
-                                   <a class="page-link" href="?page=<?= $page - 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Previous">« Anterior</a>
-                              </li>
-                         <?php endif; ?>
-
-                         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                              <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
-                                   <a class="page-link" href="?page=<?= $i; ?>&requiredRole=<?= $userRole; ?>"><?= $i; ?></a>
-                              </li>
-                         <?php endfor; ?>
-
-                         <?php if ($page < $totalPages): ?>
-                              <li class="page-item">
-                                   <a class="page-link" href="?page=<?= $page + 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Next">Siguiente »</a>
-                              </li>
-                         <?php endif; ?>
-                    </ul>
-               </nav>
-          </div>
-          <?php endif;?><!--Cierro navbar-->
      <?php endif; ?> <!--Cierro vista keeper-->
-     <!--If paginado admin-->
-     <?php if($userRole===1 && $alterRole=== 1 && $totalPages>1):?>
-                    <div class="container">
-                         <nav aria-label="Page navigation Admin">
-                              <ul class="pagination" id="pagination">
-                                   <?php if ($page > 1): ?>
-                                        <li class="page-item">
-                                             <a class="page-link" href="?page=<?= $page - 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Previous">« Anterior</a>
-                                        </li>
-                                   <?php endif; ?>
 
-                                   <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                        <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
-                                             <a class="page-link" href="?page=<?= $i; ?>&requiredRole=<?= $userRole; ?>"><?= $i; ?></a>
-                                        </li>
-                                   <?php endfor; ?>
-
-                                   <?php if ($page < $totalPages): ?>
-                                        <li class="page-item">
-                                             <a class="page-link" href="?page=<?= $page + 1; ?>&requiredRole=<?= $userRole; ?>" aria-label="Next">Siguiente »</a>
-                                        </li>
-                                   <?php endif; ?>
-                              </ul>
-                         </nav>
-                    </div>
-               <?php endif; ?><!--Cierro If paginado admin-->
 </main>
 </body>
 <script>
-const currentUserRole = document.getElementById('currentUserRole').value;
-paginationLinks.forEach(link => {
-     link.addEventListener('click', function (e) {
-          e.preventDefault();
-          const page = this.getAttribute('data-page');
-          const currentSortOrder = '<?= $sortOrder ?>'; // Obtengo el valor actual de sortOrder
+$(document).ready(function() {
+    // Mostrar el loader antes de que las tablas se carguen
+    $('#loaderOwner').show();
+    $('#loaderKeeper').show();
 
-          // cargo datos en el ajax
-          loadData(page, currentSortOrder, currentUserRole);
-     });
+    // Inicialización de las tablas
+    var tableBookings = $('#bookingsTableOwner').DataTable({
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "pageLength": 5,
+        "lengthMenu": [5, 10, 25, 50],
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ registros por página",
+            "zeroRecords": "No se encontraron resultados",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros totales)",
+            "search": "Buscar:",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+        // Simulación de carga para que el loader se vea un poco antes de cargar los datos
+        "initComplete": function(settings, json) {
+            // Ocultar el loader una vez que las tablas estén completamente cargadas
+            $('#loaderOwner').fadeOut();
+        }
+    });
+
+    var tableBookingsKeeper = $('#bookingsTableKeeper').DataTable({
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "pageLength": 5,
+        "lengthMenu": [5, 10, 25, 50],
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ registros por página",
+            "zeroRecords": "No se encontraron resultados",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrado de _MAX_ registros totales)",
+            "search": "Buscar:",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+        // Simulación de carga para que el loader se vea un poco antes de cargar los datos
+        "initComplete": function(settings, json) {
+            // Ocultar el loader una vez que las tablas estén completamente cargadas
+            $('#loaderKeeper').fadeOut();
+        }
+    });
 });
 
-
-function loadData(page, sort = '', requiredRole) {
-    // recopilo filtros
-const statusFilter = document.querySelector('input[name="status"]').value;
-const priceFilter = document.querySelector('input[name="price"]').value;
-const bookingIDFilter = document.querySelector('input[name="bookingID"]').value;
-const emailFilter = document.querySelector('input[name="email"]').value;
-const startDateFilter = document.querySelector('input[name="startDate"]').value;
-const endDateFilter = document.querySelector('input[name="endDate"]').value;
-const requiredRole = document.getElementById('userRoleID').value;//Role
-    //const requiredRole = document.getElementById('userRoleID').value;
-$.ajax({
-     url: 'BookingListView.php',
-     type: 'GET',
-     data: {
-          page: page,
-          sort: sort,
-          status: statusFilter,
-          price: priceFilter,
-          bookingID: bookingIDFilter,
-          email: emailFilter,
-          startDate: startDateFilter,
-          endDate: endDateFilter,
-            requiredRole: requiredRole // Envio el role por tema de sessionHelper
-          },
-          success: function(data) {
-               $('#listado').html(data); // Actualiza el contenido de listado
-          }
-     });
-}
 </script>
+
 </html>

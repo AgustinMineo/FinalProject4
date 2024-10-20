@@ -18,7 +18,6 @@ class PetController{
         $this->PetDAO = new PetDAO();
         $this->OwnerDAO = new OwnerDAO();       
     }
-
     //Views
     public function goLanding(){
         $userRole=SessionHelper::InfoSession([1,2]);
@@ -38,7 +37,6 @@ class PetController{
 
         require_once(VIEWS_PATH . "showPet.php");
     }
-    
     public function newPet($petName, $breedID, $petSize,$petDetails, $petWeight, $petAge,$petImage,$petVaccinationPlan,$petVideo) {
         if (SessionHelper::getCurrentUser()) {
             $owner = new Owner();
@@ -54,7 +52,6 @@ class PetController{
             $pet->setOwnerID($owner);
     
             $uploadResult = $this->uploadFile($pet);
-            //var_dump($uploadResult);
     
             if ($uploadResult['success']) {
                 $pet->setPetImage($uploadResult['petImage']);
@@ -110,7 +107,6 @@ class PetController{
         }
     }
     //Controla de subir los archivos (Se llama en newPet)
-        
     private function uploadFile(Pet $pet, $existingFiles = []) {
         $uploadDir = PETS_PATH . "{$pet->getOwnerID()->getOwnerID()}-{$pet->getBreedID()}-{$pet->getPetName()}/";
     
@@ -175,7 +171,6 @@ class PetController{
     
         return $result;
     }
-    
     public function updatePet($petID, $breedID, $petSize, $petDetails, $petWeight, $petAge, $petImage, $petVaccinationPlan, $petVideo) {
         // Traigo el pet por si no se actualizo alguna data.
         $currentPetData = $this->PetDAO->getPetByID($petID);

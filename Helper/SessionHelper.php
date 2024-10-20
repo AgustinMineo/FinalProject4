@@ -9,6 +9,7 @@ use Models\User as User;
 //use DAO\KeeperDAO;
 use DAODB\OwnerDAO;
 use DAODB\KeeperDAO;
+use DAODB\MessageDAO;
 
 class SessionHelper{
     private $OwnerDAO;

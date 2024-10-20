@@ -49,7 +49,7 @@
      }
      .password-group {
           display: flex;
-          gap: 10px; /* Espacio entre los campos de contraseña */
+          gap: 10px; 
      }
      .password-group input {
           flex: 1;
@@ -70,7 +70,7 @@
      <section id="listado" class="mb-5">
      <div class="container">
           <h2 class="text-center">New Keeper Registration</h2>
-          <form action="<?php echo FRONT_ROOT ?>Keeper/newKeeper" method="post" class="p-4">
+          <form action="<?php echo FRONT_ROOT ?>Keeper/newKeeper" method="post" class="p-4" enctype="multipart/form-data">
                <input type="hidden" name="rol" value="0">
                <div class="mb-3">
                     <label for="lastName">Last Name</label>
@@ -143,6 +143,15 @@
                <div class="mb-3">
                     <label for="cbu">CBU</label>
                     <input type="text" name="cbu" id="cbu" class="form-control" required>
+               </div>
+               <div class="mb-3">
+                    <div class="mb-3">
+                         <label for="imageKeeper">Imagen</label>
+                         <input type="file" name="imageKeeper[]" id="imageKeeper" class="form-control" accept=".jpg, .jpeg, .png, .webp">
+                    </div> 
+                    <div class="container d-flex aling-items-center justify-content-center" id="previewBlock">
+                         <img id="preview" src="#" alt="Vista previa de la imagen" style="max-width: 200px; display: none;">
+                    </div>
                </div>
                <div class="d-flex justify-content-center mt-4">
                     <button type="submit" id="saveUser" class="btn btn-dark w-25">Sign Up</button>
@@ -277,7 +286,26 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
-
+//Pre-view imagen
+document.getElementById('imageKeeper').addEventListener('change', function(event) {
+     const file = event.target.files[0];
+     const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+     const fileExtension = file.name.split('.').pop().toLowerCase();
+     if (!allowedExtensions.includes(fileExtension)) {
+          alert('Solo se permiten archivos con las siguientes extensiones: ' + allowedExtensions.join(', '));
+          event.target.value = '';
+          document.getElementById('preview').style.display = 'none';
+          document.getElementById('previewBlock').style.display = 'none';
+     return;
+     }
+     const reader = new FileReader();
+     reader.onload = function(e) {
+          document.getElementById('preview').src = e.target.result;
+          document.getElementById('previewBlock').style.display = 'block';
+          document.getElementById('preview').style.display = 'block';
+     };
+     reader.readAsDataURL(file);
+});
 </script>
 </html>
 

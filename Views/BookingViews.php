@@ -67,7 +67,13 @@ require_once("validate-session.php");
                 foreach ($listKeepers as $keeper) {
                     ?>
                     <div class="card d-flex flex-wrap m-3" style="width: 25%; border: none; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-                        <img src="<?php echo IMG_PATH ?>keeperDog.svg" class="card-img-top" alt="KEEPER IMG" style="border-radius: 0.5rem;">
+                        <img src="<?php
+                        if($keeper->getImage()){
+                            echo FRONT_ROOT . $keeper->getImage();
+                        }else{
+                            echo FRONT_ROOT . USER_PATH .'\userDefaultImage.jpg';
+                        }?>
+                        " class="card-img-top" alt="KEEPER IMG" style="border-radius: 0.5rem;">
                         <div class="card-body text-center">
                             <h5 class="card-title" style="font-weight: bold; color: #007BFF;"><?php echo $keeper->getLastName(); ?> <?php echo $keeper->getfirstName(); ?></h5>
                             <p class="card-text">Experienced and loving keeper ready to take care of your pets.</p>

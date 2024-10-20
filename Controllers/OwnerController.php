@@ -6,8 +6,9 @@
 use Models\Owner as Owner;
 use DAODB\OwnerDAO as OwnerDAO;
 use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\UserDAO as UserDAO;
 use DAO\MailerDAO as MailerDAO;
-
+use Helper\FileUploader as FileUploader;
 use Helper\SessionHelper as SessionHelper;
 
  class OwnerController
@@ -16,11 +17,15 @@ use Helper\SessionHelper as SessionHelper;
     private $newOwner;
     private $newMailer;
     private $KeeperDAO;
+    private $fileUploader;
+    private $UserDAO;
     
     public function  __construct(){
         $this->OwnerDAO = new OwnerDAO();
+        $this->UserDAO = new UserDAO();
         $this->newMailerDAO = new MailerDAO();
         $this->KeeperDAO = new KeeperDAO();
+        $this->fileUploader = new FileUploader(USER_PATH);
     }
 
     public function goLoginOwner(){
@@ -35,7 +40,7 @@ use Helper\SessionHelper as SessionHelper;
     }
 
     public function newOwner($rol,$lastName,$firstName,$cellPhone,$birthDate,$email,$password,
-        $confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery){
+        $confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery,$files){
         $userRole=0;
         if($rol!='0'){
             $userRole=SessionHelper::getCurrentRole();
@@ -63,12 +68,24 @@ use Helper\SessionHelper as SessionHelper;
                         //Si el rol enviado es 1 y el rol del currentUser es 1 (Admin) pisamos el rol
                         $newOwner->setRol(1);//Asigno role admin
                     }
-                    $this->OwnerDAO->AddOwner($newOwner);
+                    $ownerId = $this->OwnerDAO->AddOwner($newOwner);
+                    if ($ownerId) {
+                        if (isset($_FILES['imageOwner']) && $_FILES['imageOwner']['error'][0] === UPLOAD_ERR_OK) {
+                            $formatName = function($files, $key) use ($ownerId) {
+                                $extension = strtolower(pathinfo($_FILES['imageOwner']['name'][$key], PATHINFO_EXTENSION));
+                                return "profile_image_{$ownerId}." . $extension;
+                            };
+                            $imageRoute = $this->fileUploader->uploadFiles($_FILES['imageOwner'], $ownerId, $formatName);
+                            if ($imageRoute) {
+                                $this->UserDAO->updateImage($imageRoute[0],$newOwner->getEmail());
+                            }
+                        }
+                    }
                     $this->newMailerDAO->welcomeMail($lastName,$firstName,$email);
 
                     if($userRole===0){//Se evalua si es desde admin o desde registro owner
                         $_SESSION["loggedUser"] = $newOwner;
-                        $this->goLandingOwner();
+                        $this->goLoginOwner();
                     }else{
                         $userRole=SessionHelper::InfoSession([1]);
                         $ownerUsers = $this->OwnerDAO->GetAllOwner();
@@ -87,10 +104,10 @@ use Helper\SessionHelper as SessionHelper;
                 $this->addOwnerView();  
             }
         }
-    }else{
-        echo '<div class="alert alert-danger">All the values are required!</div>';
-        $this->addOwnerView();
-        }
+        }else{
+            echo '<div class="alert alert-danger">All the values are required!</div>';
+            $this->addOwnerView();
+            }
     }
 
 } 

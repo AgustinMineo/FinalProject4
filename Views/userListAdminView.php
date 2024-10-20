@@ -154,7 +154,7 @@ require_once("validate-session.php");
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <form id="newUserForm" action="<?php echo FRONT_ROOT ?>User/newUserByAdmin" method="post">
+                <form id="newUserForm" action="<?php echo FRONT_ROOT ?>" method="post" enctype="multipart/form-data">
                     <!-- Select para elegir el tipo de usuario -->
                     <div class="mb-3">
                         <label for="userRole" class="form-label">User Role</label>
@@ -247,6 +247,15 @@ require_once("validate-session.php");
                             <input type="text" class="form-control" id="CBU" name="CBU" required>
                         </div>
                     </div>
+                    <div class="mb-3">
+                        <div class="mb-3">
+                            <label for="image">Imagen</label>
+                            <input type="file" name="image[]" id="image" class="form-control" accept=".jpg, .jpeg, .png, .webp">
+                        </div> 
+                        <div class="container d-flex aling-items-center justify-content-center" id="previewBlock">
+                            <img id="preview" src="#" alt="Vista previa de la imagen" style="max-width: 200px; display: none;">
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary" id="saveUser">Save User</button>
@@ -307,11 +316,14 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function () {
     const userRole = document.getElementById('userRole');
     const newUserForm = document.getElementById('newUserForm');
+    const image = document.getElementById('image');
     const keeperFields = document.getElementById('keeperFields');
     const ownerFields = document.getElementById('ownerFields');
     const animalSizeInput = document.getElementById('animalSize');
     const cbuInput = document.getElementById('CBU');
     const priceInput = document.getElementById('price');
+    const preview = document.getElementById('preview');
+    const previewBlock = document.getElementById('previewBlock');
 
     userRole.addEventListener('change', function () {
         handleRoleChange(this.value);
@@ -321,20 +333,21 @@ document.addEventListener('DOMContentLoaded', function () {
     handleRoleChange(userRole.value);
 
     function handleRoleChange(role) {
-        // Habilitar/ocultar campos según el rol
         if (role === '1') { // Admin
             ownerFields.classList.add('d-none');
             keeperFields.classList.add('d-none');
             animalSizeInput.disabled = true;
             resetFields();
             newUserForm.action = '<?php echo FRONT_ROOT ?>Owner/newOwner';
-        } else if (role === '2') { // Owner
+            setImageInputAttributes('imageOwner[]', 'imageOwner');
+        } else if (role === '2') { 
             ownerFields.classList.remove('d-none');
             keeperFields.classList.add('d-none');
             animalSizeInput.disabled = true;
             resetFields();
             newUserForm.action = '<?php echo FRONT_ROOT ?>Owner/newOwner';
-        } else if (role === '3') { // Keeper
+            setImageInputAttributes('imageOwner[]', 'imageOwner');
+        } else if (role === '3') { 
             ownerFields.classList.add('d-none');
             keeperFields.classList.remove('d-none');
             animalSizeInput.disabled = false;
@@ -344,9 +357,40 @@ document.addEventListener('DOMContentLoaded', function () {
             animalSizeInput.setAttribute('required', true);
             priceInput.setAttribute('required', true);
             newUserForm.action = '<?php echo FRONT_ROOT ?>Keeper/newKeeper';
+            setImageInputAttributes('imageKeeper[]', 'imageKeeper');
         }
+
+        const updatedImageInput = document.getElementById(image.id);
+        updatedImageInput.addEventListener('change', showPreview);
     }
 
+    function setImageInputAttributes(newName, newId) {
+        image.setAttribute('name', newName);
+        image.setAttribute('id', newId);
+    }
+
+    // Función para mostrar la vista previa de la imagen
+    function showPreview(event) {
+        const file = event.target.files[0];
+        const allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        if (!allowedExtensions.includes(fileExtension)) {
+            alert('Solo se permiten archivos con las siguientes extensiones: ' + allowedExtensions.join(', '));
+            event.target.value = '';
+            preview.style.display = 'none';
+            previewBlock.style.display = 'none';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            previewBlock.style.display = 'block';
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
     function resetFields() {
         // Deshabilitar todos los campos y limpiar atributos requeridos
         animalSizeInput.disabled = true;
@@ -502,5 +546,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
 </script>
 </html>

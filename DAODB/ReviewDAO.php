@@ -99,10 +99,10 @@ class ReviewDAO implements IReviewDAO{
     function getReviewByOwner($ownerID){
         try {
             $query = "SELECT r.*
-                  FROM ".$this->reviewTable." r 
-                  JOIN ".$this->bookingTable." b ON r.bookingID = b.bookingID
-                  JOIN ".$this->petTable." p ON p.petID = b.petID
-                  WHERE p.ownerID = '$ownerID';";
+                FROM ".$this->reviewTable." r 
+                JOIN ".$this->bookingTable." b ON r.bookingID = b.bookingID
+                JOIN ".$this->petTable." p ON p.petID = b.petID
+                WHERE p.ownerID = '$ownerID';";
 
             $this->connection = Connection::GetInstance();
 
@@ -133,9 +133,9 @@ class ReviewDAO implements IReviewDAO{
     function getReviewByKeeper($keeperID){
         try {
             $query = "SELECT r.*
-                  FROM ".$this->reviewTable." r 
-                  JOIN ".$this->bookingTable." b ON r.bookingID = b.bookingID
-                  WHERE b.keeperID = '$keeperID';";
+                FROM ".$this->reviewTable." r 
+                JOIN ".$this->bookingTable." b ON r.bookingID = b.bookingID
+                WHERE b.keeperID = '$keeperID';";
 
             $this->connection = Connection::GetInstance();
 
@@ -166,9 +166,9 @@ class ReviewDAO implements IReviewDAO{
     function getReviewByBooking($bookingID){
         try {
             $query = "SELECT r.*
-                  FROM ".$this->reviewTable." r 
-                  JOIN ".$this->bookingTable." b ON r.bookingID = b.bookingID
-                  WHERE r.bookingID = '$bookingID';";
+                FROM ".$this->reviewTable." r 
+                JOIN ".$this->bookingTable." b ON r.bookingID = b.bookingID
+                WHERE r.bookingID = '$bookingID';";
 
             $this->connection = Connection::GetInstance();
 

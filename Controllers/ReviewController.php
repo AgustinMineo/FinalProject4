@@ -35,9 +35,9 @@ class ReviewController{
         $this->KeeperDAO = new KeeperDAO();
     }
 
-    //Va a la navbar del owner
-    public function goOwnerMenu(){
-        SessionHelper::InfoSession([2]);
+    //Va a la navbar
+    public function goMenu(){
+        SessionHelper::InfoSession([1,2,3]);
     }
     //Va al reviwe
     public function goReviewMenu($reviewList = null){
@@ -73,28 +73,28 @@ class ReviewController{
                                 $this->KeeperDAO->updateTotalPoints($newPoints,$booking->getKeeperID()->getKeeperID());
                             }else{
                                 echo "<div class='alert alert-danger'>!Error getting points from the keeper !</div>";
-                                $this->goOwnerMenu();
+                                $this->goMenu();
                             }
                         }
                     }else{
                         echo "<div class='alert alert-danger'>!Error searching the booking!</div>";
-                        $this->goOwnerMenu();
+                        $this->goMenu();
                     }
                 }else{
                     echo "<div class='alert alert-danger'>!Error, All fields are required to creating a review!</div>";
-                    $this->goOwnerMenu();
+                    $this->goMenu();
                 }
             }else{
                 echo "<div class='alert alert-danger'>!Error, Insufficient permissions to creating a review!</div>";
-                $this->goOwnerMenu();
+                $this->goMenu();
             }
             if($result){
                 $this->BookingDAO->updateByID($bookingID,'7');
                 echo "<div class='alert alert-success'>The review was create successfully!</div>";
-                $this->goOwnerMenu();
+                $this->goMenu();
             }else{
                 echo "<div class='alert alert-danger'>Ups!Error creating the review!</div>";
-                $this->goOwnerMenu();
+                $this->goMenu();
             }
         }
     }
@@ -109,7 +109,7 @@ class ReviewController{
                 $this->goReviewMenu($reviewList);
             }else{
                 echo "<div class='alert alert-danger'>!Error, There is no reviews yet!</div>";
-                $this->goOwnerMenu();
+                $this->goMenu();
             }
         }elseif(SessionHelper::getCurrentRole()===3){
             $reviewList = $this->ReviewDAO->getReviewByKeeper(SessionHelper::getCurrentKeeperID());
@@ -117,7 +117,7 @@ class ReviewController{
                 $this->goReviewMenu($reviewList);
             }else{
                 echo "<div class='alert alert-danger'>!Error, There is no reviews yet!</div>";
-                $this->goReviewMenu($reviewList);
+                $this->goMenu();
             }
         }else{ 
             echo "<div class='alert alert-danger'>!Error, Insufficient permissions to see all reviews!</div>";

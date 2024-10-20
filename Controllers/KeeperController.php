@@ -1,13 +1,15 @@
 <?php
- namespace Controllers;
- use Models\Keeper as Keeper;
- use Helper\SessionHelper as SessionHelper;
+namespace Controllers;
+use Models\Keeper as Keeper;
+use Helper\SessionHelper as SessionHelper;
+use Helper\FileUploader as FileUploader;
 
 //use DAO\KeeperDAO as KeeperDAO;
-//use DAO\OwnerDAO as OwnerDAO;
+//use DAO\OwnerDAO as OwnerDAO; 
 
 use DAO\MailerDAO as MailerDAO;
 use DAODB\KeeperDAO as KeeperDAO;
+use DAODB\UserDAO as UserDAO;
 use DAODB\OwnerDAO as OwnerDAO;
 use DAODB\BookingDAO as BookingDAO;
 
@@ -17,12 +19,16 @@ class KeeperController{
     private $newKeeper;
     private $newMailer;
     private $OwnerDAO;
+    private $fileUploader;
+    private $UserDAO;
 
     public function __construct(){
         $this->KeeperDAO = new KeeperDAO();
         $this->BookingDAO = new BookingDAO();
         $this->newMailer = new MailerDAO();
         $this->OwnerDAO = new OwnerDAO();
+        $this->UserDAO = new UserDAO();
+        $this->fileUploader = new FileUploader(USER_PATH);
     }
     public function addKeeperView(){
         require_once(VIEWS_PATH."keeper-add.php");
@@ -34,11 +40,14 @@ class KeeperController{
     public function goLandingKeeper(){
         SessionHelper::InfoSession([3]);
     }
+    public function goLandingUser(){
+        SessionHelper::InfoSession([1,2]);
+    }
     public function showKeepersAll($listKeepers=null){
-        if($listKeepers === null ){
+        if($listKeepers === null){
             if(SessionHelper::getCurrentUser()){
                 SessionHelper::redirectTo403();
-            }
+            }    
         }
         $userRole=SessionHelper::InfoSession([1,2]);
         require_once(VIEWS_PATH. "showKeeper.php");
@@ -58,7 +67,7 @@ class KeeperController{
     }
 
     public function newKeeper($rol=null,$lastName,$firstName,$cellPhone,$birthDate,$email,
-    $password,$confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery,$animalSize,$price,$cbu){
+        $password,$confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery,$animalSize,$price,$cbu,$files){
         $userRole=0;
         if($rol!='0'){
             $userRole=SessionHelper::getCurrentRole();
@@ -84,6 +93,18 @@ class KeeperController{
                         $newKeeper->setRol(3);
                         $keeperID= $this->KeeperDAO->AddKeeper($newKeeper);
                         $newKeeper->setKeeperID($keeperID);
+                        if($keeperID){
+                            if (isset($_FILES['imageKeeper']) && $_FILES['imageKeeper']['error'][0] === UPLOAD_ERR_OK) {
+                                $formatName = function($files, $key) use ($keeperID) {
+                                    $extension = strtolower(pathinfo($_FILES['imageKeeper']['name'][$key], PATHINFO_EXTENSION));
+                                    return "profile_image_{$keeperID}." . $extension;
+                                };
+                                $imageRoute = $this->fileUploader->uploadFiles($_FILES['imageKeeper'], $keeperID, $formatName);
+                                if ($imageRoute) {
+                                    $this->UserDAO->updateImage($imageRoute[0],$newKeeper->getEmail());
+                                }
+                            }
+                        }
                         $this->newMailer->welcomeMail($lastName,$firstName,$email);
                         if($userRole===0){//Se evalua si es desde admin o desde registro
                             echo "<div class='alert alert-success'>¡Usuario registrado correctamente!</div>";
@@ -162,7 +183,7 @@ class KeeperController{
             $this->showKeepersAll($listKeepers);
         }else{
             echo '<div class="alert alert-danger">There is no availables keepers right now!</div>';
-            $this->goLandingKeeper();
+            $this->goLandingUser();
         }
     }
 
@@ -257,7 +278,6 @@ class KeeperController{
     }
     //Funcion para refrescar el calendario luego de un cambio
     public function refreshDays() {
-
         SessionHelper::validateUserRole([3]);
         
         // Obtener el keeper actual

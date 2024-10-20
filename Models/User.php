@@ -2,6 +2,7 @@
 namespace Models;
 
 abstract class User {
+    private $userID;
     private $lastName;
     private $firstName;
     private $cellPhone;
@@ -13,13 +14,21 @@ abstract class User {
     private $answerRecovery;
     private $rol; // 1- Admin, 2- Owner, 3- Keeper
     private $status; //1 activo, 0 eliminado
+    private $image;
     
     // Getter and setters
+    public function getUserID(){
+        return $this->userID;
+    }
+    public function setUserID($userID){
+         $this->userID = $userID;
+    }
+
     public function getLastName(){
         return $this->lastName;
     }
     public function setLastName($lastName){
-         $this->lastName = $lastName;
+        $this->lastName = $lastName;
     }
 
     public function getfirstName(){
@@ -89,6 +98,25 @@ abstract class User {
     public function setStatus($status){
         $this->status = $status;
     }
-
+    public function getImage(){
+        return $this->image;
+    }
+    public function setImage($image){
+        $this->image = $image;
+    }
+    public function toArray() {
+        return [
+            'userID' => $this->userID,
+            'lastName' => $this->lastName,
+            'firstName' => $this->firstName,
+            'cellPhone' => $this->cellPhone,
+            'birthDate' => $this->birthDate,
+            'email' => $this->email,
+            'userDescription' => $this->userDescription,
+            'rol' => $this->rol,
+            'status' => $this->status,
+            'image' => $this->image,
+        ];
+    }
 }
 ?>

@@ -34,6 +34,11 @@ require_once("validate-session.php");
         .filter-input {
             margin-bottom: 10px;
         }
+        .card:hover {
+            transform: scale(1.05);
+            transition: transform 0.2s;
+        }
+
     </style>
 </head>
 <body>
@@ -53,49 +58,53 @@ require_once("validate-session.php");
             </select>
         </div>
 
-        <div class="row" id="keepersList">
+        <div class="row g-4" id="keepersList">
             <div id="noKeepersMessage" class="alert alert-danger text-center ">No se encontraron keepers.</div>
             <?php foreach ($listKeepers as $keeper) { ?>
-                <div class="col-md-4 mb-4 keeper-item" 
-                data-email="<?php echo $keeper->getEmail(); ?>"
-                data-price="<?php echo $keeper->getPrice(); ?>"
-                data-size="<?php echo $keeper->getAnimalSize(); ?>">
-                <div class="card shadow-sm">
+                <div class="col-md-4 keeper-item" 
+                    data-email="<?php echo $keeper->getEmail(); ?>"
+                    data-price="<?php echo $keeper->getPrice(); ?>"
+                    data-size="<?php echo $keeper->getAnimalSize(); ?>">
                     
-                    <div class="card-body text-center">
-                        <h5 class="card-title"><i class="fas fa-user"></i> <?php echo $keeper->getFirstName() . ' ' . $keeper->getLastName(); ?></h5>
-                        <div class="info-section">
-                                <p class="card-text info-item"><i class="fas fa-mobile-alt"></i> <?php echo $keeper->getCellPhone(); ?></p>
-                                <hr class="separator">
-                                <p class="card-text info-item"><i class="fas fa-calendar-alt"></i> <?php $date = date_create($keeper->getBirthDate()); echo date_format($date, "d/m/Y"); ?></p>
-                                <hr class="separator">
-                                <p class="card-text info-item"><i class="fas fa-envelope"></i> <?php echo $keeper->getEmail(); ?></p>
-                                <hr class="separator">
-                                <p class="card-text info-item"><i class="fas fa-paw"></i> Tamaño de Animal: <?php echo $keeper->getAnimalSize(); ?></p>
-                                <hr class="separator">
-                                <p class="card-text info-item"><i class="fas fa-dollar-sign"></i> Precio: $<?php echo number_format($keeper->getPrice(), 2); ?></p>
-                            </div>
-                            <button type="button" class="btn btn-outline-info mt-3" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#availabilityModal<?php echo $keeper->getKeeperId(); ?>" 
-                                    onclick='initializeCalendar(<?php echo $keeper->getKeeperId(); ?>, <?php echo json_encode($keeper->getAvailability()); ?>)'>
-                                <i class="fas fa-eye"></i> Ver Disponibilidad
+                    <div class="card h-100 shadow-sm border-1">
+                        <div class="text-center mt-3">
+                            <img src="<?php echo $keeper->getImage() ? FRONT_ROOT . $keeper->getImage() : FRONT_ROOT . USER_PATH . 'userDefaultImage.jpg'; ?>" 
+                                alt="Imagen de <?php echo $keeper->getFirstName(); ?>" 
+                                class="card-img-top rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                        </div>
+                        
+                        <div class="card-body text-center">
+
+                            <h5 class="card-title fw-bold mb-0"><?php echo $keeper->getFirstName() . ' ' . $keeper->getLastName(); ?></h5>
+                            <p class="text-muted small mb-2"><i class="fas fa-mobile-alt"></i> <?php echo $keeper->getCellPhone(); ?></p>
+                            <p class="text-muted small mb-2"><i class="fas fa-calendar-alt"></i> <?php echo date_format(date_create($keeper->getBirthDate()), "d/m/Y"); ?></p>
+                            <p class="text-muted small mb-2"><i class="fas fa-envelope"></i> <?php echo $keeper->getEmail(); ?></p>
+                            
+                            <p class="text-muted small mb-2"><i class="fas fa-paw"></i> Tamaño de Animal: <?php echo $keeper->getAnimalSize(); ?></p>
+                            
+                            <p class="text-primary fs-5 fw-bold mt-3"><i class="fas fa-dollar-sign"></i> $<?php echo number_format($keeper->getPrice(), 2); ?></p>
+                            
+                            <button type="button" class="btn btn-info btn-sm mt-3 px-4" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#availabilityModal<?php echo $keeper->getKeeperId(); ?>" 
+                                onclick='initializeCalendar(<?php echo $keeper->getKeeperId(); ?>, <?php echo json_encode($keeper->getAvailability()); ?>)'>
+                                <i class="fas fa-calendar-check"></i> Ver Disponibilidad
                             </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="availabilityModal<?php echo $keeper->getKeeperId(); ?>" tabindex="-1" aria-labelledby="availabilityModalLabel<?php echo $keeper->getKeeperId(); ?>" aria-hidden="true">
-                                <div class="modal-dialog modal-xl">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="availabilityModalLabel<?php echo $keeper->getKeeperId(); ?>">Disponibilidad de <?php echo $keeper->getFirstName() . ' ' . $keeper->getLastName(); ?></h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div id="calendar<?php echo $keeper->getKeeperId(); ?>"></div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                        </div>
-                                    </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="availabilityModal<?php echo $keeper->getKeeperId(); ?>" tabindex="-1" aria-labelledby="availabilityModalLabel<?php echo $keeper->getKeeperId(); ?>" aria-hidden="true">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="availabilityModalLabel<?php echo $keeper->getKeeperId(); ?>">Disponibilidad de <?php echo $keeper->getFirstName() . ' ' . $keeper->getLastName(); ?></h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="calendar<?php echo $keeper->getKeeperId(); ?>"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 </div>
                             </div>
                         </div>

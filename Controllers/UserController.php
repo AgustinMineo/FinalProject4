@@ -7,21 +7,26 @@ namespace Controllers;
 use DAODB\OwnerDAO as OwnerDAO;
 use DAODB\KeeperDAO as KeeperDAO;
 use DAODB\UserDAO as UserDAO;
+use DAODB\MessageDAO as MessageDAO;
 use Models\Owner as Owner;
 use Models\Keeper as Keeper;
 use Models\User as User;
-
 use Helper\SessionHelper as SessionHelper;
+use Helper\FileUploader as FileUploader;
 
 class UserController{
     private $OwnerDAO;
     private $KeeperDAO;
     private $UserDAO;
+    private $MessageDAO;
+    private $fileUploader;
 
     public function __construct(){
         $this->OwnerDAO = new OwnerDAO();
         $this->KeeperDAO = new KeeperDAO();
         $this->UserDAO = new UserDAO();
+        $this->MessageDAO = new MessageDAO();
+        $this->fileUploader = new FileUploader(USER_PATH);
     }
     //Registros de usuario (Owner)
     public function newOwner(){
@@ -73,9 +78,16 @@ class UserController{
                         $flag = 0;
                         $user=$this->OwnerDAO->searchAdminByEmail($userSearch);
                     }elseif($role===1 && $userSearch != SessionHelper::getCurrentUser()->getEmail()){
-                        //Editando a otro usuario admin
+                        //Editando a otro usuario admin.
+                        $editUserRole = intval($this->UserDAO->getRoleByEmail($userSearch));
+                        if($editUserRole === 2){
+                            $user = $this->OwnerDAO->searchOwnerByEmail($userSearch);
+                        }elseif($editUserRole ===3){
+                            $user= $this->KeeperDAO->searchKeeperByEmail($userSearch);
+                        }else{
+                            $user=$this->OwnerDAO->searchAdminByEmail($userSearch);
+                        }
                         $flag = 1;
-                        $user=$this->OwnerDAO->searchAdminByEmail($userSearch);
                     }
                 }
             }elseif(intval(SessionHelper::getCurrentUser()->getRol()) === 1){//Si ocurrio algo en el update
@@ -136,6 +148,7 @@ class UserController{
                     $newOwner = $this->OwnerDAO->searchOwnerToLogin($email,$password);
                         if($newOwner){
                             if($newOwner->getStatus()==='1'){
+                                $_SESSION['messageCount'] = $this->MessageDAO->getUnreadMessages($newOwner->getUserID());
                                 $loggedUser = $newOwner;
                                 $_SESSION["loggedUser"] = $loggedUser;
                                 echo '<div class="alert alert-success">Login successful!</div>';
@@ -148,6 +161,7 @@ class UserController{
                             if($newKeeper){
                                 if($newKeeper->getStatus()==='1'){
                                     $loggedUser = $newKeeper;
+                                    $_SESSION['messageCount']  = $this->MessageDAO->getUnreadMessages($newKeeper->getUserID());
                                     $_SESSION["loggedUser"] = $loggedUser;
                                     echo '<div class="alert alert-success my-0">Login successful!</div>';
                                     $this->goNavBar();
@@ -162,9 +176,11 @@ class UserController{
                             }
                     }elseif($newAdmin = $this->OwnerDAO->searchAdminToLogin($email,$password)){
                         if($newAdmin->getStatus()==='1'){
+                            $_SESSION['messageCount'] = $this->MessageDAO->getUnreadMessages($newAdmin->getUserID());
                             $_SESSION["loggedUser"] = $newAdmin;
                             echo '<div class="alert alert-success">Login successful!</div>';
                             $this->goNavBar();
+                            
                         }else{
                             echo '<div class="alert alert-danger my-0"> The User is deleted!</div>';
                             $this->gologinUser();
@@ -531,5 +547,40 @@ class UserController{
             echo "No esta log o algo raro, evaluar este caso.";
         }
     }   
+    public function updateImage($userEmail = null, $userId) {
+        if ($userEmail === null) {
+            if (SessionHelper::getCurrentUser()) {
+                SessionHelper::redirectTo403();
+            }
+        }
+    
+        $response = 0;
+    
+        if (isset($_FILES['newImage']) && $_FILES['newImage']['error'][0] === UPLOAD_ERR_OK) {
+            $formatName = function($files, $key) use ($userId) {
+                $extension = strtolower(pathinfo($_FILES['newImage']['name'][$key], PATHINFO_EXTENSION));
+                return "profile_image_{$userId}." . $extension;
+            };
+    
+            $imageRoute = $this->fileUploader->uploadFiles($_FILES['newImage'], $userId, $formatName);
+    
+            if ($imageRoute) {
+                $response = $this->UserDAO->updateImage($imageRoute[0], $userEmail);
+                if ($response) {
+                    echo '<div class="alert alert-success">You have successfully updated your image!</div>';
+                    $this->goEditView($userEmail, $response);
+                } else {
+                    echo '<div class="alert alert-danger">Failed to update the image in the database!</div>';
+                    $this->goEditView($userEmail, $response);
+                }
+            } else {
+                echo '<div class="alert alert-danger">Error while uploading the image!</div>';
+                $this->goEditView($userEmail, $response);
+            }
+        } else {
+            echo '<div class="alert alert-danger">No image uploaded or there was an error!</div>';
+            $this->goEditView($userEmail, $response);
+        }
+    }
 }
 ?>

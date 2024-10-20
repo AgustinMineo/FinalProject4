@@ -1,6 +1,13 @@
 <?php
 namespace Views;
 require_once("validate-session.php");
+$countMessage = isset($_SESSION['messageCount']) ? $_SESSION['messageCount'] : 0;
+$total =0;
+if($countMessage){
+    foreach($countMessage as $unread){
+        $total+=$unread['cantidad'];
+    }
+}
 ?>
 
 <!doctype html>
@@ -81,6 +88,16 @@ require_once("validate-session.php");
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/showCalendarData"><i class="fas fa-calendar"></i> Calendar</a>
                     </li>
+                    <li class="nav-item position-relative">
+                            <a class="nav-link d-inline-block position-relative" href="<?php echo FRONT_ROOT ?>Message/getChats">
+                                <i class="fas fa-calendar"></i> Chats
+                                <?php if ($total > 0): ?>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="currentCountID">
+                                        <?php echo $total; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                     </li>  
@@ -116,6 +133,17 @@ require_once("validate-session.php");
                         <li class="nav-item">
                             <a class="nav-link p-1" href="<?php echo FRONT_ROOT ?>Review/getAllReviews"><i class="fas fa-comment"></i> Review Menu</a>
                         </li> 
+                        <li class="nav-item position-relative">
+                            <a class="nav-link d-inline-block position-relative" href="<?php echo FRONT_ROOT ?>Message/getChats">
+                                <i class="fas fa-calendar"></i> Chats
+                                <?php if ($total > 0): ?>
+                                    <!-- Mostrar el contador de mensajes sobre el enlace "Chats" -->
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="currentCountID">
+                                        <?php echo $total; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link p-1" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                         </li> 
@@ -145,9 +173,23 @@ require_once("validate-session.php");
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>Booking/showBookings"><i class="fas fa-calendar-check"></i> All Bookings</a>
                     </li>
+                    <li class="nav-item position-relative">
+                            <a class="nav-link d-inline-block position-relative" href="<?php echo FRONT_ROOT ?>Message/getChats">
+                                <i class="fas fa-calendar"></i> Chats
+                                <?php if ($total > 0): ?>
+                                    <!-- Mostrar el contador de mensajes sobre el enlace "Chats" -->
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="currentCountID">
+                                        <?php echo $total; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                        </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>ChatAdmin/getViewChatInformation"><i class="fas fa-calendar-check"></i> Chat Administration</a>
                     </li> 
+                        <li class="nav-item">
+                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                    </li>
                 </ul>
             </div>
         </nav>

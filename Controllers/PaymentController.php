@@ -37,8 +37,6 @@ class PaymentController {
         $userRole=SessionHelper::InfoSession([2]);
         require_once(VIEWS_PATH."landingPage.php");
     }
-
-
     public function generatePaymentBooking($booking=null,$paymentReceipt=null){
         if($booking ===null && $paymentReceipt === null){
             if(SessionHelper::getCurrentUser()){
@@ -74,7 +72,6 @@ class PaymentController {
         }
 
     }
-
     private function uploadPaymentFile($bookingID, $uploadPaymentFile){
         // Definir el directorio de subida
         $uploadDir = PAYMENT_PATH . "Reservation - {$bookingID}/";

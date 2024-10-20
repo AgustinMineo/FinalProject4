@@ -6,25 +6,61 @@ use DAODB\Connect as Connect;
 use Helper\SessionHelper as SessionHelper;
 use Models\Owner as Owner;
 use DAO\IUserDAO as IUserDAO;
-
+use DAO\OwnerDAO as OwnerDAO;
+use DAO\KeeperDAO as KeeperDAO;
 class UserDAO implements IUserDAO{
-
+    
     private $connection;
     private $userTable = 'user';
+    private $keeperTable = 'keeper';
+    private $ownerTable = 'owner';
 
 
+    //Busca los usuarios activos (MessageController la usa)
+    public function getUserByIdReduce($userID){
+        try {
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.cellphone, u.birthdate, 
+            u.userDescription, u.email,u.roleID,u.status,u.userImage
+            FROM ".$this->userTable." u WHERE status = 1 and userID='$userID';";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if($resultSet){ 
+                foreach($resultSet as $row){
+                    $user = new Owner();
+                    $user->setUserID($row["userID"]);
+                    $user->setfirstName($row["firstName"]);
+                    $user->setLastName($row["lastName"]);
+                    $user->setEmail($row["email"]);
+                    $user->setCellPhone($row["cellphone"]);
+                    $user->setbirthDate($row["birthdate"]);
+                    $user->setDescription($row["userDescription"]);
+                    $user->setRol($row["roleID"]);
+                    $user->setStatus($row["status"]);
+                    $user->setImage($row["userImage"]);
+                }
+                return $user;
+            }
+            else{
+                return NULL; 
+            }
+        } catch (Exception $ex) 
+        { 
+            throw $ex; 
+        }
+    }
     //Busca un usuario por correo
     public function searchUserByEmail($email){
         try {
-            $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, 
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.cellphone, u.birthdate, 
             u.password, u.userDescription, u.email, u.userID,
-            u.answerRecovery,u.questionRecovery,u.roleID,u.status
+            u.answerRecovery,u.questionRecovery,u.roleID,u.status,u.userImage
             FROM ".$this->userTable." u WHERE email = '$email';";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             if($resultSet){ 
                 foreach($resultSet as $row){
                     $user = new Owner();
+                    $user->setUserID($row['userID']);
                     $user->setfirstName($row["firstName"]);
                     $user->setLastName($row["lastName"]);
                     $user->setEmail($row["email"]);
@@ -36,6 +72,7 @@ class UserDAO implements IUserDAO{
                     $user->setQuestionRecovery($row["questionRecovery"]);
                     $user->setRol($row["roleID"]);
                     $user->setStatus($row["status"]);
+                    $user->setImage($row["userImage"]);
                 }
                 return $user;
             }
@@ -208,6 +245,18 @@ class UserDAO implements IUserDAO{
             $this->connection->Execute($query);
             return $this->getRoleByEmail($emailUser);
             
+        } catch (Exception $ex) 
+        { 
+            throw $ex; 
+        }
+    }
+    public function updateImage($imagePath,$emailUser){
+        try{
+            $query = "UPDATE ".$this->userTable." SET userImage = '$imagePath' WHERE email = '$emailUser';";
+            $this->connection = Connection::GetInstance();
+            $this->connection->Execute($query);
+            return $this->getRoleByEmail($emailUser);
+
         } catch (Exception $ex) 
         { 
             throw $ex; 

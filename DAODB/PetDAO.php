@@ -37,9 +37,7 @@ class PetDAO implements IPetDAO{
             $parameters["petAge"] = $pet->getPetAge();
             $this->connection = Connection::GetInstance();
             //Funcion para hacer el Update de PETAMOUNT en la Tabla de Owners. 
-            if($this->connection->ExecuteNonQuery($query, $parameters)){
-                $this->OwnerDAO->incrementPetAmount(SessionHelper::getCurrentOwnerID());
-            }
+            $this->connection->ExecuteNonQuery($query, $parameters);
             return true;
         } catch (Exception $ex) { throw $ex; } 
     }
@@ -81,8 +79,8 @@ class PetDAO implements IPetDAO{
     }
     public function searchPets($ownerID){
         $query = "SELECT p.petName, p.petSize, p.petDetails, p.petImage, p.petVaccinationPlan, p.petVideo, p.petWeight, p.petAge, p.petID, p.breedID
-                  FROM ".$this->petTable." p JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID 
-                  WHERE p.ownerID = $ownerID;";
+                FROM ".$this->petTable." p JOIN ".$this->ownerTable." o ON o.ownerID = p.ownerID 
+                WHERE p.ownerID = $ownerID;";
         $this->connection = Connection::GetInstance();
         $resultSet = $this->connection->Execute($query);
         $owner= new Owner();

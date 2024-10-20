@@ -46,7 +46,75 @@ require_once("validate-session.php");
 
   <div class="container my-5">
 
-    <h3 class="fw-normal text-center mb-4"><?php if($flag === 1 && $userRole===1){  echo 'Modificando a '. "<strong>". $user->getLastName(). " " . $user->getFirstName() . "</strong>"; }else{ echo 'Your Profile';} ?> </h3>
+  <h3 class="fw-normal text-center mb-4"><?php if($flag === 1 && $userRole===1){  echo 'Modificando a '. "<strong>". $user->getLastName(). " " . $user->getFirstName() . "</strong>"; }else{ echo 'Your Profile';} ?> </h3>
+  <!--Image Section -->
+    <div class="col-md-12 my-2">
+      <div class="card shadow card-uniform">
+          <div class="card-body text-center">
+              <h4 class="card-title"><i class="fas fa-user"></i> Image</h4>
+              <div class="container">
+                  <img id="imagePreview" src="<?php 
+                  
+                  if ($image = $user->getImage()) {
+                      $imageData = base64_encode(file_get_contents($image));
+                      echo 'data:image/jpeg;base64,'.$imageData;
+                    }else{
+                      $image = 'Upload\UserImages\userDefaultImage.jpg';
+                      $imageData = base64_encode(file_get_contents($image));
+                      echo 'data:image/jpeg;base64,'.$imageData;
+                  }
+                  ?>" alt="Vista previa de la imagen" 
+                  class="img-fluid mt-2" 
+                  style="max-width: 200px; max-height: 200px; object-fit: cover;">
+              </div>
+              <button class="btn btn-outline-primary mt-3" data-bs-toggle="modal" data-bs-target="#ImageModal">
+                  <span>Edit Image</span>
+              </button>
+          </div>
+      </div>
+  </div>
+  <div class="modal fade" id="ImageModal" tabindex="-1" aria-labelledby="editImageLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editImageLabel">Edit Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <h6>Imagen actual:</h6>
+                <img id="currentImagePreview" src="<?php 
+                    if ($image = $user->getImage()) {
+                        $imageData = base64_encode(file_get_contents($image));
+                        echo 'data:image/jpeg;base64,'.$imageData;
+                    }else{
+                      $image = 'Upload\UserImages\userDefaultImage.jpg';
+                      $imageData = base64_encode(file_get_contents($image));
+                      echo 'data:image/jpeg;base64,'.$imageData;
+                    }
+                ?>" alt="Current Image" class="img-fluid mt-2" style="max-width: 200px; max-height: 200px; object-fit: cover;">
+
+                <h6>Nueva imagen Preview:</h6>
+                <div class="container d-flex align-items-center justify-content-center">
+                  <img id="newImagePreview" src="" alt="New Image Preview" class="img-fluid mt-2" style="max-width: 200px; max-height: 200px; object-fit: cover; display: none;">
+                </div>
+                <form action="<?php echo FRONT_ROOT ?>User/updateImage" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="newImage" class="form-label">Seleccione la nueva imagen</label>
+                        <input type="file" class="form-control" id="newImage" name="newImage[]" accept="image/*" required onchange="previewNewImage(event)">
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="userEmail" value="<?php echo $user->getEmail(); ?>">
+                        <input type="hidden" name="userId" value="<?php echo $user->getUserID(); ?>">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+  <!--Image Section -->
+
   <!-- Last Name Section -->
   <div class="row mb-4">
   <!-- Last Name Section -->
@@ -382,8 +450,8 @@ require_once("validate-session.php");
 
     <!-- Keeper section (Only Keeper) -->
     <!--Se evalua de la siguiente forma, si es keeper se muestra,
-     sino si es admin y flag=1 (Editando un usuario, se muestra)-->
-    <?php if($userRole===3 || ($userRole===1 && $flag===1 && $user->getRol()==='3')): ?>
+    sino si es admin y flag=1 (Editando un usuario, se muestra)-->
+    <?php if($userRole === 3 || ($userRole === 1 && $flag=== 1 && $user->getRol() === '3')): ?>
     <!-- Keeper Animal Size Section -->
     <div class="col-md-6 my-2">
         <div class="card shadow ">
@@ -555,6 +623,24 @@ require_once("validate-session.php");
   <!-- Delete User Section -->
   </div>
   </div><!--End row-->
+  <script>
+    function previewNewImage(event) {
+        const newImagePreview = document.getElementById('newImagePreview');
+        const file = event.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                newImagePreview.src = e.target.result;
+                newImagePreview.style.display = 'block'; // Mostrar la nueva vista previa
+            };
+            reader.readAsDataURL(file);
+        } else {
+            newImagePreview.src = '';
+            newImagePreview.style.display = 'none'; // Ocultar la nueva vista previa si no hay archivo
+        }
+    }
+</script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>

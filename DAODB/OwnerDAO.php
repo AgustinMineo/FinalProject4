@@ -30,13 +30,13 @@ class OwnerDAO{
                     $parameters["answerRecovery"] = $owner->getAnswerRecovery();
                     $parameters["roleID"] = $owner->getRol();
                     $this->connection = Connection::GetInstance();
-                    if($this->connection->ExecuteNonQuery($query, $parameters) 
-                        && intval($owner->getRol())===2){
+                    $this->connection->ExecuteNonQuery($query, $parameters);
+                    $userID = $this->connection->lastInsertId();
+                        if(intval($owner->getRol())===2){
                         //Se agrega validación de rol === 2 para poder crear los usuarios admin 
                         //Sobre la tabla de owners sin crear un registro sobre la tabla owner
                         $queryOwner = "INSERT INTO ".$this->ownerTable."(ownerId, userID, petAmount)
-                        VALUES (:ownerId, :userID, :petAmount);
-                        ";
+                        VALUES (:ownerId, :userID, :petAmount);";
                         $parametersOwner["ownerId"] = NULL;
                         //Traemos el USER ID de la base y pasamos como parametro.
                         $parametersOwner["userID"] = $this->bringUserID($owner->getEmail());
@@ -44,10 +44,10 @@ class OwnerDAO{
 
                         $this->connection->ExecuteNonQuery($queryOwner, $parametersOwner);
                     };
+                    return $userID;
         } catch (Exception $ex) {
             throw $ex;
         }   
-
     }
     //Funcion para obtener todos los Owner de la DB
     public function GetAllOwner(){
@@ -55,9 +55,9 @@ class OwnerDAO{
         try {
             $ownerList = array();
 
-            $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, 
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.email, u.cellphone, 
             u.birthdate, u.password,u.userDescription,o.petAmount,o.ownerID,
-            u.answerRecovery,u.questionRecovery,u.roleID,u.status
+            u.answerRecovery,u.questionRecovery,u.roleID,u.status,u.userImage
             FROM ".$this->userTable." u 
             INNER JOIN ".$this->ownerTable." o ON o.userID = u.userID and u.roleID=2";
 
@@ -67,7 +67,7 @@ class OwnerDAO{
 
             foreach($resultSet as $row){
                 $owner = new Owner();
-                
+                $owner->setUserID($row['userID']);
                 $owner->setfirstName($row["firstName"]);
                 $owner->setLastName($row["lastName"]);
                 $owner->setEmail($row["email"]);
@@ -81,6 +81,7 @@ class OwnerDAO{
                 $owner->setQuestionRecovery($row["questionRecovery"]);
                 $owner->setRol($row["roleID"]);
                 $owner->setStatus($row["status"]);
+                $owner->setImage($row["userImage"]);
                 array_push($ownerList, $owner);
             }
             return $ownerList;
@@ -94,9 +95,9 @@ class OwnerDAO{
         try {
             $ownerList = array();
 
-            $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, 
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.email, u.cellphone, 
             u.birthdate, u.password,u.userDescription,
-            u.answerRecovery,u.questionRecovery,u.roleID,u.status
+            u.answerRecovery,u.questionRecovery,u.roleID,u.status,u.userImage
             FROM ".$this->userTable." u where u.roleID=1";
 
             $this->connection = Connection::GetInstance();
@@ -105,7 +106,7 @@ class OwnerDAO{
 
             foreach($resultSet as $row){
                 $owner = new Owner();
-                
+                $owner->setUserID($row['userID']);
                 $owner->setfirstName($row["firstName"]);
                 $owner->setLastName($row["lastName"]);
                 $owner->setEmail($row["email"]);
@@ -119,6 +120,7 @@ class OwnerDAO{
                 $owner->setQuestionRecovery($row["questionRecovery"]);
                 $owner->setRol($row["roleID"]);
                 $owner->setStatus($row["status"]);
+                $owner->setImage($row["userImage"]);
                 array_push($ownerList, $owner);
             }
             return $ownerList;
@@ -129,9 +131,9 @@ class OwnerDAO{
     //Funcion para validar que no exista el mail
     public function searchOwnerByEmail($email){
         try {
-                $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, 
+                $query = "SELECT u.userID,u.firstName, u.lastName, u.cellphone, u.birthdate, 
                 u.password, u.userDescription, u.email, o.petAmount, o.ownerID,
-                u.answerRecovery,u.questionRecovery,u.roleID,u.status
+                u.answerRecovery,u.questionRecovery,u.roleID,u.status,u.userImage
                 FROM ".$this->userTable." u 
                 INNER JOIN ".$this->ownerTable." o ON u.userID = o.userID 
                 WHERE email = '$email';";
@@ -140,7 +142,7 @@ class OwnerDAO{
                 if($resultSet){ 
                     foreach($resultSet as $row){
                         $owner = new Owner();
-                
+                        $owner->setUserID($row['userID']);
                         $owner->setfirstName($row["firstName"]);
                         $owner->setLastName($row["lastName"]);
                         $owner->setEmail($row["email"]);
@@ -154,6 +156,7 @@ class OwnerDAO{
                         $owner->setQuestionRecovery($row["questionRecovery"]);
                         $owner->setRol($row["roleID"]);
                         $owner->setStatus($row["status"]);
+                        $owner->setImage($row["userImage"]);
                     }
                     return $owner;
                  }
@@ -162,15 +165,16 @@ class OwnerDAO{
     }
     public function searchAdminByEmail($email){
         try {
-            $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, 
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.cellphone, u.birthdate, 
             u.password, u.userDescription, u.email,
-            u.answerRecovery,u.questionRecovery,u.roleID,u.status
+            u.answerRecovery,u.questionRecovery,u.roleID,u.status,u.userImage
             FROM ".$this->userTable." u WHERE u.email = '$email';";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             if($resultSet){ 
                 foreach($resultSet as $row){
                     $admin = new Owner();
+                    $admin->setUserID($row['userID']);
                     $admin->setfirstName($row["firstName"]);
                     $admin->setLastName($row["lastName"]);
                     $admin->setEmail($row["email"]);
@@ -182,6 +186,7 @@ class OwnerDAO{
                     $admin->setQuestionRecovery($row["questionRecovery"]);
                     $admin->setRol($row["roleID"]);
                     $admin->setStatus($row["status"]);
+                    $admin->setImage($row["userImage"]);
                 }
                 return $admin;
              }
@@ -191,9 +196,9 @@ class OwnerDAO{
     //Funcion para buscar Owner para iniciar seseion
     public function searchOwnerToLogin($email, $password){
         try {
-            $query = "SELECT o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, 
+            $query = "SELECT u.userID,o.ownerID, u.firstName, u.lastName, u.email, u.cellphone, 
             u.birthdate, u.password, u.userDescription, o.petAmount,u.answerRecovery,
-            u.questionRecovery,u.roleID,u.status FROM 
+            u.questionRecovery,u.roleID,u.status,u.userImage FROM 
             ".$this->userTable." u 
             RIGHT JOIN ".$this->ownerTable." o ON u.userID = o.userID 
             WHERE email = '$email' AND password = md5($password);";
@@ -207,6 +212,7 @@ class OwnerDAO{
                 foreach($resultSet as $row){
 
                 $owner = new Owner();
+                $owner->setUserID($row["userID"]);
                 $owner->setOwnerId($row["ownerID"]);
                 $owner->setfirstName($row["firstName"]);
                 $owner->setLastName($row["lastName"]);
@@ -220,6 +226,7 @@ class OwnerDAO{
                 $owner->setQuestionRecovery($row["questionRecovery"]);
                 $owner->setRol($row["roleID"]);
                 $owner->setStatus($row["status"]);
+                $owner->setImage($row["userImage"]);
                 return $owner;
             }
         }
@@ -230,10 +237,10 @@ class OwnerDAO{
     //Dado que si es un usuario admin no se genera registro en ownerTable, se tiene que evaluar por separado.
     public function searchAdminToLogin($email,$password){
         try {
-            $query = "SELECT u.firstName, u.lastName, u.email, u.cellphone, 
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.email, u.cellphone, 
             u.birthdate, u.password, u.userDescription,u.answerRecovery,
-            u.questionRecovery,u.roleID,u.status FROM 
-            ".$this->userTable." u WHERE email = '$email' AND password = md5($password);";
+            u.questionRecovery,u.roleID,u.status,u.userImage FROM 
+            ".$this->userTable." u WHERE email = '$email' AND password = md5($password) and roleID=1;";
 
             $this->connection = Connection::GetInstance();
 
@@ -243,6 +250,7 @@ class OwnerDAO{
             {
                 foreach($resultSet as $row){
                 $admin = new Owner();
+                $admin->setUserID($row["userID"]);
                 $admin->setfirstName($row["firstName"]);
                 $admin->setLastName($row["lastName"]);
                 $admin->setEmail($row["email"]);
@@ -254,6 +262,7 @@ class OwnerDAO{
                 $admin->setQuestionRecovery($row["questionRecovery"]);
                 $admin->setRol($row["roleID"]);
                 $admin->setStatus($row["status"]);
+                $admin->setImage($row["userImage"]);
                 return $admin;
             }
         }
@@ -264,8 +273,8 @@ class OwnerDAO{
     //Se va a utilizar para mostrar información en listados.
     public function searchBasicInfoOwnerByID($ownerID){
         try {
-            $query = "SELECT u.firstName, u.lastName, u.cellphone, u.birthdate, 
-            u.userDescription, u.email, o.petAmount, o.ownerID,u.roleID,u.status
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.cellphone, u.birthdate, 
+            u.userDescription, u.email, o.petAmount, o.ownerID,u.roleID,u.status,u.userImage
             FROM ".$this->userTable." u 
             INNER JOIN ".$this->ownerTable." o ON u.userID = o.userID 
             WHERE o.ownerID = '$ownerID';";
@@ -276,7 +285,7 @@ class OwnerDAO{
             if($resultSet){ 
                 foreach($resultSet as $row){
                     $owner = new Owner();
-            
+                    $owner->setUserID($row['userID']);
                     $owner->setfirstName($row["firstName"]);
                     $owner->setLastName($row["lastName"]);
                     $owner->setEmail($row["email"]);
@@ -287,12 +296,47 @@ class OwnerDAO{
                     $owner->setOwnerId($row["ownerID"]);
                     $owner->setRol($row["roleID"]);
                     $owner->setStatus($row["status"]);
+                    $owner->setImage($row["userImage"]);
                 }
                 return $owner;
              }
             else{ return NULL; }
     }  catch (Exception $ex) { throw $ex; }
     }
+    //Busca un owner por userID
+    public function searchBasicInfoOwnerByUserID($userID){
+        try {
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.cellphone, u.birthdate, 
+            u.userDescription, u.email, o.petAmount, o.ownerID,u.roleID,u.status,u.userImage
+            FROM ".$this->userTable." u 
+            INNER JOIN ".$this->ownerTable." o ON u.userID = o.userID 
+            WHERE u.userID = '$userID';";
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            if($resultSet){ 
+                foreach($resultSet as $row){
+                    $owner = new Owner();
+                    $owner->setUserID($row['userID']);
+                    $owner->setfirstName($row["firstName"]);
+                    $owner->setLastName($row["lastName"]);
+                    $owner->setEmail($row["email"]);
+                    $owner->setCellPhone($row["cellphone"]);
+                    $owner->setbirthDate($row["birthdate"]);
+                    $owner->setDescription($row["userDescription"]);
+                    $owner->setPetAmount($row["petAmount"]);
+                    $owner->setOwnerId($row["ownerID"]);
+                    $owner->setRol($row["roleID"]);
+                    $owner->setStatus($row["status"]);
+                    $owner->setImage($row["userImage"]);
+                }
+                return $owner;
+             }
+            else{ return NULL; }
+    }  catch (Exception $ex) { throw $ex; }
+    }
+
     //Buscamos el USER ID del usuario con el mail.
     public function bringUserID($email){
         try {

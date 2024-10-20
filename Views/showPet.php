@@ -279,13 +279,15 @@ require_once("validate-session.php");
                                                                       <div class="col-lg-6">
                                                                            <div class="form-group">
                                                                                 <label for="petVaccinationPlan" class="form-label">Plan de Vacunación (PDF/Imagen)</label>
-                                                                                <input type="file" name="petVaccinationPlan" class="form-control" accept=".pdf, .png, .jpg, .jpeg" onchange="previewVaccinationPlan(event)">
+                                                                                <input type="file" name="petVaccinationPlan" class="form-control" accept=".pdf, .png, .jpg, .jpeg" onchange="previewVaccinationPlan(event, <?php echo $pets->getPetID(); ?>)">
 
-                                                                                <div id="vaccinationPreview" class="mt-2" style="height: 80vh">
+
+                                                                                <div id="vaccinationPreview_<?php echo $pets->getPetID(); ?>" class="mt-2" style="height: 80vh">
                                                                                      <?php if ($pets->getPetVaccinationPlan()) : ?>
-                                                                                          <input type="hidden" id="existingVaccinationPlan" value="<?php echo FRONT_ROOT . $pets->getPetVaccinationPlan(); ?>">
+                                                                                     <input type="hidden" id="existingVaccinationPlan_<?php echo $pets->getPetID(); ?>" value="<?php echo FRONT_ROOT . $pets->getPetVaccinationPlan(); ?>">
                                                                                      <?php endif; ?>
                                                                                 </div>
+
                                                                            </div>
                                                                       </div>
 
@@ -373,48 +375,54 @@ require_once("validate-session.php");
 <script>
 document.addEventListener('DOMContentLoaded', filterPets);
 function previewImage(event) {
-    const imagePreview = document.getElementById('imagePreview');
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    
-    reader.onload = function() {
-        imagePreview.src = reader.result;
-        imagePreview.style.display = 'block';
-    }
-    
-    if (file) {
-        reader.readAsDataURL(file);
-    }
+     const imagePreview = document.getElementById('imagePreview');
+     const file = event.target.files[0];
+     const reader = new FileReader();
+     
+     reader.onload = function() {
+          imagePreview.src = reader.result;
+          imagePreview.style.display = 'block';
+     }
+     
+     if (file) {
+          reader.readAsDataURL(file);
+     }
 }
 
 function previewVideo(event) {
-    const videoPreview = document.getElementById('videoPreview');
-    const videoSource = document.getElementById('videoSource');
-    const currentVideo= document.getElementById('current-video');
-    const file = event.target.files[0];
-    const reader = new FileReader();
+     const videoPreview = document.getElementById('videoPreview');
+     const videoSource = document.getElementById('videoSource');
+     const currentVideo= document.getElementById('current-video');
+     const file = event.target.files[0];
+     const reader = new FileReader();
 
-    if (file) {
-        reader.onload = function() {
-            videoSource.src = reader.result;
-            videoPreview.style.display = 'block'; // Mostrar el video
-            currentVideo.style.display='none';
-            videoPreview.load(); // Cargar el nuevo video
-        }
-        reader.readAsDataURL(file);
-    }
+     if (file) {
+          reader.onload = function() {
+               videoSource.src = reader.result;
+               videoPreview.style.display = 'block'; // Mostrar el video
+               currentVideo.style.display='none';
+               videoPreview.load(); // Cargar el nuevo video
+          }
+          reader.readAsDataURL(file);
+     }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-     const existingPlanUrl = document.getElementById('existingVaccinationPlan');
-     filterPets();
-     if (existingPlanUrl && existingPlanUrl.value) {
-          previewExistingVaccinationPlan(existingPlanUrl.value);
-     }
-});
+    // Llamar a la funcion para cada mascota por su id correspondiente
+     const petElements = document.querySelectorAll('[id^="existingVaccinationPlan_"]');
 
-function previewVaccinationPlan(event) {
-     const vaccinationPreview = document.getElementById('vaccinationPreview');
+     petElements.forEach(function(element) {
+          const petID = element.id.split('_')[1];  // Extraer el ID de la mascota desde el ID del elemento
+          const existingPlanUrl = document.getElementById('existingVaccinationPlan_' + petID);
+
+          if (existingPlanUrl && existingPlanUrl.value) {
+               previewExistingVaccinationPlan(existingPlanUrl.value, petID);
+          }
+     });
+});
+//Para mostrar el plan si se modifica el actual en la vista Modificar Pet
+function previewVaccinationPlan(event, petID) {
+     const vaccinationPreview = document.getElementById('vaccinationPreview_' + petID);
      const file = event.target.files[0];
      const reader = new FileReader();
 
@@ -446,12 +454,11 @@ function previewVaccinationPlan(event) {
           reader.readAsDataURL(file);
      }
 }
+//Para mostrar el existente
+function previewExistingVaccinationPlan(url, petID) {
+     const vaccinationPreview = document.getElementById('vaccinationPreview_' + petID);
+     vaccinationPreview.innerHTML = ''; 
 
-function previewExistingVaccinationPlan(url) {
-     const vaccinationPreview = document.getElementById('vaccinationPreview');
-     vaccinationPreview.innerHTML = ''; // Limpiar la vista previa
-
-     // Detectar si es PDF o imagen
      const fileType = url.split('.').pop().toLowerCase();
 
      if (fileType === 'pdf') {

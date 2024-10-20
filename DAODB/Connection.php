@@ -12,15 +12,17 @@ class Connection
     private static $instance = null;
 
     private function __construct(){
-
         try {
-            $this->pdo = new PDO("mysql:host=".DB_HOST."; dbname=".DB_NAME, DB_USER, DB_PASS);
+            //Agrego el charset para evitar que los campos con caracteres especiales aparezcan con ?
+            $this->pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=utf8mb4", DB_USER, DB_PASS);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (Exception $ex) {
             throw $ex;
         }
     }
-
+    public function lastInsertId(){
+        return $this->pdo->lastInsertId();
+    }
     public static function GetInstance(){
         if(self::$instance == null)
             self::$instance = new Connection();

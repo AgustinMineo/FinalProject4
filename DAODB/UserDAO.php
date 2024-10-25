@@ -21,7 +21,7 @@ class UserDAO implements IUserDAO{
         try {
             $query = "SELECT u.userID,u.firstName, u.lastName, u.cellphone, u.birthdate, 
             u.userDescription, u.email,u.roleID,u.status,u.userImage
-            FROM ".$this->userTable." u WHERE status = 1 and userID='$userID';";
+            FROM ".$this->userTable." u WHERE userID='$userID';";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
             if($resultSet){ 

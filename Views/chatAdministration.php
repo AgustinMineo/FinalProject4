@@ -2192,12 +2192,13 @@ $groupListJson = json_encode($groupArray);
                     response.forEach(member => {
                         const user = member.user;
                         const role = member.role;
+                        const isCurrentUser = user.userID == <?php echo $currentUser; ?>;
                         membersList += `
                             <div class="card mb-3 shadow-sm member" data-email="${user.email}">
                                 <div class="card-body d-flex align-items-center">
                                     <img src="<?php echo FRONT_ROOT ?>${user.image}" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
                                     <div class="flex-grow-1">
-                                        <h5 class="mb-0">${user.firstName} ${user.lastName}</h5>
+                                        <h5 class="mb-0">${isCurrentUser ? 'Tú' : user.firstName + ' ' + user.lastName}</h5>
                                         <p class="mb-0"><i class="bi bi-telephone me-2"></i>${user.cellPhone}</p>
                                         <p class="mb-0"><i class="bi bi-envelope me-2"></i>${user.email}</p>
                                         <small class="text-muted">${role.name}</small>
@@ -2734,126 +2735,139 @@ $groupListJson = json_encode($groupArray);
     }
     function showInvitationsModal(invitations) {
         const updateInvitationList = (filteredInvitations) => {
-            const invitationList = filteredInvitations.map(invitation => `
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                    <div class="card shadow border-light rounded" style="cursor: pointer;" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="<?php echo FRONT_ROOT ?>${invitation.invited_user.image}" alt="Imagen del usuario" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px;">
-                                <div>
-                                    <h5 class="card-title mb-0">
-                                        <i class="bi bi-person-fill me-2"></i>
-                                        ${invitation.invited_user.firstName} ${invitation.invited_user.lastName}
-                                    </h5>
-                                    <h6 class="card-subtitle mb-1 text-muted">
-                                        <i class="bi bi-person-check me-2"></i>
-                                        Invitado por: ${invitation.invited_by.firstName} ${invitation.invited_by.lastName}
-                                    </h6>
+            const invitationList = filteredInvitations.map(invitation => {
+                const imgSrc = invitation.invited_user.image && invitation.invited_user.image.trim() !== "" ? 
+                    `<?php echo FRONT_ROOT ?>${invitation.invited_user.image}` : 
+                    '<?php echo FRONT_ROOT ?>Upload/UserImages/userDefaultImage.jpg';
+
+                return `
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                        <div class="card shadow border-light rounded" style="cursor: pointer;" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="${imgSrc}" alt="Imagen del usuario" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px;">
+                                    <div>
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-person-fill me-2"></i>
+                                            ${invitation.invited_user.firstName} ${invitation.invited_user.lastName}
+                                        </h5>
+                                        <h6 class="card-subtitle mb-1 text-muted">
+                                            <i class="bi bi-person-check me-2"></i>
+                                            Invitado por: ${invitation.invited_by.firstName} ${invitation.invited_by.lastName}
+                                        </h6>
+                                    </div>
                                 </div>
+                                
+                                <div class="mb-3">
+                                    <p class="mb-1">
+                                        <i class="bi bi-people-fill me-2"></i>
+                                        <strong>Grupo:</strong> ${invitation.groupId.name}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-chat-dots-fill me-2"></i>
+                                        <strong>Mensaje:</strong> ${invitation.message}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                        <strong>Estado:</strong> ${invitation.status.name}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-file-earmark-person me-2"></i>
+                                        <strong>Rol Invitado:</strong> ${invitation.roleInvited.name}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-calendar-event me-2"></i>
+                                        <strong>Enviado el:</strong> ${new Date(invitation.send_at).toLocaleString()}
+                                    </p>
+                                    ${invitation.responded_at ? 
+                                        `<p class="mb-1">
+                                            <i class="bi bi-calendar-check me-2"></i>
+                                            <strong>Respondido el:</strong> ${new Date(invitation.responded_at).toLocaleString()}
+                                        </p>` : 
+                                        `<p class="text-warning mb-1">
+                                            <i class="bi bi-exclamation-circle me-2"></i> 
+                                            <strong>No respondido</strong>
+                                        </p>`}
+                                </div>
+                                
+                                <button class="btn btn-primary w-100" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
+                                    <i class="bi bi-eye-fill me-2"></i>
+                                    Ver Detalles
+                                </button>
                             </div>
-                            
-                            <div class="mb-3">
-                                <p class="mb-1">
-                                    <i class="bi bi-people-fill me-2"></i>
-                                    <strong>Grupo:</strong> ${invitation.groupId.name}
-                                </p>
-                                <p class="mb-1">
-                                    <i class="bi bi-chat-dots-fill me-2"></i>
-                                    <strong>Mensaje:</strong> ${invitation.message}
-                                </p>
-                                <p class="mb-1">
-                                    <i class="bi bi-check-circle-fill me-2"></i>
-                                    <strong>Estado:</strong> ${invitation.status.name}
-                                </p>
-                                <p class="mb-1">
-                                    <i class="bi bi-file-earmark-person me-2"></i>
-                                    <strong>Rol Invitado:</strong> ${invitation.roleInvited.name}
-                                </p>
-                                <p class="mb-1">
-                                    <i class="bi bi-calendar-event me-2"></i>
-                                    <strong>Enviado el:</strong> ${new Date(invitation.send_at).toLocaleString()}
-                                </p>
-                                ${invitation.responded_at ? 
-                                    `<p class="mb-1">
-                                        <i class="bi bi-calendar-check me-2"></i>
-                                        <strong>Respondido el:</strong> ${new Date(invitation.responded_at).toLocaleString()}
-                                    </p>` : 
-                                    `<p class="text-warning mb-1">
-                                        <i class="bi bi-exclamation-circle me-2"></i> 
-                                        <strong>No respondido</strong>
-                                    </p>`}
-                            </div>
-                            
-                            <button class="btn btn-primary w-100" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
-                                <i class="bi bi-eye-fill me-2"></i>
-                                Ver Detalles
-                            </button>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             $('#invitationsModal .modal-body .row').html(invitationList);
         };
+
         const createModalContent = (invitations) => {
-            const invitationList = invitations.map(invitation => `
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                    <div class="card shadow border-light rounded" style="cursor: pointer;" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
-                        <div class="card-body p-3">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="<?php echo FRONT_ROOT ?>${invitation.invited_user.image}" alt="Imagen del usuario" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px;">
-                                <div>
-                                    <h5 class="card-title mb-0">
-                                        <i class="bi bi-person-fill me-2"></i>
-                                        ${invitation.invited_user.firstName} ${invitation.invited_user.lastName}
-                                    </h5>
-                                    <h6 class="card-subtitle mb-1 text-muted">
-                                        <i class="bi bi-person-check me-2"></i>
-                                        Invitado por: ${invitation.invited_by.firstName} ${invitation.invited_by.lastName}
-                                    </h6>
+            const invitationList = invitations.map(invitation => {
+                const imgSrc = invitation.invited_user.image && invitation.invited_user.image.trim() !== "" ? 
+                    `<?php echo FRONT_ROOT ?>${invitation.invited_user.image}` : 
+                    '<?php echo FRONT_ROOT ?>Upload/UserImages/userDefaultImage.jpg';
+
+                return `
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                        <div class="card shadow border-light rounded" style="cursor: pointer;" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
+                            <div class="card-body p-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="${imgSrc}" alt="Imagen del usuario" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px;">
+                                    <div>
+                                        <h5 class="card-title mb-0">
+                                            <i class="bi bi-person-fill me-2"></i>
+                                            ${invitation.invited_user.firstName} ${invitation.invited_user.lastName}
+                                        </h5>
+                                        <h6 class="card-subtitle mb-1 text-muted">
+                                            <i class="bi bi-person-check me-2"></i>
+                                            Invitado por: ${invitation.invited_by.firstName} ${invitation.invited_by.lastName}
+                                        </h6>
+                                    </div>
                                 </div>
+                                
+                                <div class="mb-3">
+                                    <p class="mb-1">
+                                        <i class="bi bi-people-fill me-2"></i>
+                                        <strong>Grupo:</strong> ${invitation.groupId.name}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-chat-dots-fill me-2"></i>
+                                        <strong>Mensaje:</strong> ${invitation.message}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-check-circle-fill me-2"></i>
+                                        <strong>Estado:</strong> ${invitation.status.name}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-file-earmark-person me-2"></i>
+                                        <strong>Rol Invitado:</strong> ${invitation.roleInvited.name}
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="bi bi-calendar-event me-2"></i>
+                                        <strong>Enviado el:</strong> ${new Date(invitation.send_at).toLocaleString()}
+                                    </p>
+                                    ${invitation.responded_at ? 
+                                        `<p class="mb-1">
+                                            <i class="bi bi-calendar-check me-2"></i>
+                                            <strong>Respondido el:</strong> ${new Date(invitation.responded_at).toLocaleString()}
+                                        </p>` : 
+                                        `<p class="text-warning mb-1">
+                                            <i class="bi bi-exclamation-circle me-2"></i> 
+                                            <strong>No respondido</strong>
+                                        </p>`}
+                                </div>
+                                
+                                <button class="btn btn-primary w-100" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
+                                    <i class="bi bi-eye-fill me-2"></i>
+                                    Ver Detalles
+                                </button>
                             </div>
-                            
-                            <div class="mb-3">
-                                <p class="mb-1">
-                                    <i class="bi bi-people-fill me-2"></i>
-                                    <strong>Grupo:</strong> ${invitation.groupId.name}
-                                </p>
-                                <p class="mb-1">
-                                    <i class="bi bi-chat-dots-fill me-2"></i>
-                                    <strong>Mensaje:</strong> ${invitation.message}
-                                </p>
-                                <p class="mb-1">
-                                    <i class="bi bi-check-circle-fill me-2"></i>
-                                    <strong>Estado:</strong> ${invitation.status.name}
-                                </p>
-                                <p class="mb-1">
-                                    <i class="bi bi-file-earmark-person me-2"></i>
-                                    <strong>Rol Invitado:</strong> ${invitation.roleInvited.name}
-                                </p>
-                                <p class="mb-1">
-                                    <i class="bi bi-calendar-event me-2"></i>
-                                    <strong>Enviado el:</strong> ${new Date(invitation.send_at).toLocaleString()}
-                                </p>
-                                ${invitation.responded_at ? 
-                                    `<p class="mb-1">
-                                        <i class="bi bi-calendar-check me-2"></i>
-                                        <strong>Respondido el:</strong> ${new Date(invitation.responded_at).toLocaleString()}
-                                    </p>` : 
-                                    `<p class="text-warning mb-1">
-                                        <i class="bi bi-exclamation-circle me-2"></i> 
-                                        <strong>No respondido</strong>
-                                    </p>`}
-                            </div>
-                            
-                            <button class="btn btn-primary w-100" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
-                                <i class="bi bi-eye-fill me-2"></i>
-                                Ver Detalles
-                            </button>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             return `
                 <div class="modal fade" id="invitationsModal" tabindex="-1" aria-labelledby="invitationsModalLabel" aria-hidden="true">
@@ -2864,16 +2878,16 @@ $groupListJson = json_encode($groupArray);
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                             </div>
                             <div class="modal-body">
-                            <h3>Filtros</h3>
+                                <h3>Filtros</h3>
                                 <div class="mb-3">
                                     <input type="text" id="emailFilter" class="form-control" placeholder="Buscar por correo" />
                                 </div>
                                 <div class="mb-5">
                                     <select id="statusFilter" class="form-select">
-                                    <option value="">Todas</option>
-                                    <?php foreach ($groupInvitation as $invitations): ?>
-                                        <option value="<?php echo $invitations->getName()?>"><?php echo $invitations->getName()?></option>
-                                    <?php endforeach;?>
+                                        <option value="">Todas</option>
+                                        <?php foreach ($groupInvitation as $invitations): ?>
+                                            <option value="<?php echo $invitations->getName()?>"><?php echo $invitations->getName()?></option>
+                                        <?php endforeach;?>
                                     </select>
                                 </div>
                                 <div class="row g-3">
@@ -2924,6 +2938,7 @@ $groupListJson = json_encode($groupArray);
             $(this).remove();
         });
     }
+
     function showInvitationDetails(invitation) {
         const detailsModalContent = `
         <div class="modal fade" id="invitationDetailsModal" tabindex="-1" aria-labelledby="invitationDetailsModalLabel" aria-hidden="true">

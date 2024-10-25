@@ -1244,7 +1244,9 @@ $privacyListJson = json_encode($privacyArray);
                             class="rounded-circle me-2" 
                             style="width: 40px; height: 40px; object-fit: cover;">
                         <div>
-                            <strong class="${member.status === '0' ? 'text-danger' : ''}">${member.user.firstName} ${member.user.lastName}</strong>
+                            <strong class="${member.status === '0' ? 'text-danger' : ''}">
+                            ${isCurrentUser ? 'Tú' : member.user.firstName + ' ' + member.user.lastName}
+                            </strong>
                             <p class="mb-0 text-muted">${member.role.name}</p>
                         </div>
                     </div>

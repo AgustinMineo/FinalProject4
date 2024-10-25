@@ -97,5 +97,18 @@ class GroupInvitationController{
             echo json_encode(["success" => false, "message" => $e->getMessage()]);
         }
     }
+    public function getInvitationsByGroup($groupID) {
+        if(!$groupID){
+            echo json_encode(['success' => false, 'message' => 'El campo groupID es obligatorio.']);
+            return;
+        }
+        $invitations = $this->GroupInvitationDAO->getPendingInvitationsByGroup($groupID);
+        if ($invitations) {
+            echo json_encode(['success' => true, 'invitations' => $invitations]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'No se encontraron invitaciones.']);
+        }
+    }
+    
 }
 ?>

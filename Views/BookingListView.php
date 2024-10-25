@@ -50,6 +50,26 @@ if($userRole===1){
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
      }
+     .rating-icons {
+          display: flex;
+          gap: 10px; 
+     }
+
+     .rating-label {
+          cursor: pointer;
+          font-size: 30px;
+          transition: transform 0.3s;
+     }
+
+     input[type="radio"]:checked + .rating-label i {
+          color: gold; 
+          transform: scale(1.5);
+     }
+
+     .rating-label i {
+          color: #ccc; 
+     }
+
 </style>
      <title>Booking <?php if($userRole ===2){echo 'Owner';}elseif($userRole===3){echo 'Keeper';}else{echo 'Admin';}?></title>
 <body>
@@ -169,32 +189,51 @@ if($userRole===1){
                                                                       <div class='modal-body'>
                                                                            <div class='wrapper'>
                                                                                 <div class='container text-black'>
-                                                                                     <article class='part card-details'>
-                                                                                          <div class='modal-body'>
+                                                                                <article class='part card-details'>
+                                                                                     <div class='modal-body'>
                                                                                           <form action='<?php echo FRONT_ROOT; ?>Booking/generatePaymentBooking' method='post'>
-                                                                                               <div class='w-100 d-flex flex-wrap text-center'>Your Valoration</div>
-                                                                                               <div class='d-flex flex-start'>
-                                                                                                    <div style='position:left;'>
-                                                                                                         <input type='radio' id='st5' name='rate' value='5' />
-                                                                                                         <label for='st5'>5</label>
-                                                                                                         <input type='radio' id='st4' name='rate' value='4' />
-                                                                                                         <label for='st4'>4</label>
-                                                                                                         <input type='radio' id='st3' name='rate' value='3' />
-                                                                                                         <label for='st3'>3</label>
-                                                                                                         <input type='radio' id='st2' name='rate' value='2' />
-                                                                                                         <label for='st2'>2</label>
-                                                                                                         <input type='radio' id='st1' name='rate' value='1' checked />
-                                                                                                         <label for='st1'>1</label>
+                                                                                               <div class='w-100 text-center mb-4'>
+                                                                                                    <h5>Your Valoration</h5>
+                                                                                               </div>
+                                                                                               <div class='d-flex flex-start mb-3 justify-content-center'>
+                                                                                                    <div class='rating-icons'>
+                                                                                                         <input type='radio' id='st1' name='rate' value='1' class='d-none' checked />
+                                                                                                         <label for='st1' class='rating-label' title='1 Star'>
+                                                                                                         <i class="fas fa-star"></i>
+                                                                                                         </label>
+
+                                                                                                         <input type='radio' id='st2' name='rate' value='2' class='d-none' />
+                                                                                                         <label for='st2' class='rating-label' title='2 Stars'>
+                                                                                                         <i class="fas fa-star"></i>
+                                                                                                         </label>
+
+                                                                                                         <input type='radio' id='st3' name='rate' value='3' class='d-none' />
+                                                                                                         <label for='st3' class='rating-label' title='3 Stars'>
+                                                                                                         <i class="fas fa-star"></i>
+                                                                                                         </label>
+
+                                                                                                         <input type='radio' id='st4' name='rate' value='4' class='d-none' />
+                                                                                                         <label for='st4' class='rating-label' title='4 Stars'>
+                                                                                                         <i class="fas fa-star"></i>
+                                                                                                         </label>
+
+                                                                                                         <input type='radio' id='st5' name='rate' value='5' class='d-none' />
+                                                                                                         <label for='st5' class='rating-label' title='5 Stars'>
+                                                                                                         <i class="fas fa-star"></i>
+                                                                                                         </label>
                                                                                                     </div>
                                                                                                </div>
+                                                                                               <div class='w-100 text-center mb-3'>
+                                                                                                    <h6>Selected Rating: <span id="selected-rating" style="font-weight: bold;">1</span> Star</h6>
+                                                                                               </div>
                                                                                                <input type='hidden' name='booking' value='<?php echo $value; ?>'>
-                                                                                               <div class='d-flex flex-wrap w-100'>
+                                                                                               <div class='d-flex flex-wrap w-100 mb-3'>
                                                                                                     <h6 for='message-text'>Feedback</h6>
                                                                                                     <textarea class='form-control' name='feedback' id='feedback' maxlength='255'></textarea>
                                                                                                </div>
                                                                                           </form>
-                                                                                          </div>
-                                                                                     </article>
+                                                                                     </div>
+                                                                                </article>
                                                                                 </div>
                                                                            </div>
                                                                       </div>
@@ -784,7 +823,12 @@ if($userRole===1){
           }
      });
      });
-
+     //Para setear el ranking en review
+     document.querySelectorAll('input[name="rate"]').forEach((radio) => {
+          radio.addEventListener('change', function() {
+               document.getElementById('selected-rating').innerText = this.value;
+          });
+     });
 </script>
 
 </html>

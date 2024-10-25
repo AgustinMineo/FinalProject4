@@ -2,9 +2,15 @@
 namespace Views;
 require_once("validate-session.php");
 $countMessage = isset($_SESSION['messageCount']) ? $_SESSION['messageCount'] : 0;
+$countMesageGroup=isset($_SESSION['messageCountGroup']) ? $_SESSION['messageCountGroup'] : 0;
 $total =0;
 if($countMessage){
     foreach($countMessage as $unread){
+        $total+=$unread['cantidad'];
+    }
+}
+if($countMesageGroup){
+    foreach($countMesageGroup as $unread){
         $total+=$unread['cantidad'];
     }
 }
@@ -187,7 +193,7 @@ if($countMessage){
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>ChatAdmin/getViewChatInformation"><i class="fas fa-calendar-check"></i> Chat Administration</a>
                     </li> 
-                        <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                     </li>
                 </ul>

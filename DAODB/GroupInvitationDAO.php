@@ -68,12 +68,13 @@ class GroupInvitationDAO {
                     $status = $this->GroupInvitationStatusDAO->getInvitationStatusById($row['status_id']);
                     $group = $this->GroupDAO->getGroupByID($row['group_id']);
                     $invitedBy = $this->UserDAO->getUserByIdReduce($row['invited_by']);
+                    $invitedUser = $this->UserDAO->getUserByIdReduce($row['invited_user_id']);
                     $roleInvited = $this->GroupRoleDAO->getGroupRoleById($row['roleInvited']);
                     $invitation = new GroupInvitation();
                     $invitation->setId($row['id']);
                     $invitation->setGroupId($group);
                     $invitation->setInvitedBy($invitedBy);
-                    $invitation->setInvitedUser(SessionHelper::getCurrentUser());
+                    $invitation->setInvitedUser($invitedUser);
                     $invitation->setStatus($status);
                     $invitation->setSendAt($row['sent_at']);
                     $invitation->setRespondeAt($row['responded_at']);
@@ -86,6 +87,46 @@ class GroupInvitationDAO {
                 return [];
             }
         } catch (Exception $ex) {
+            error_log("Error al obtener invitaciones pendientes: " . $ex->getMessage());
+            throw $ex;
+        }
+    }
+    public function getPendingInvitationsByGroup($groupID){
+        try {
+            $query = "SELECT gi.*
+            FROM " . $this->groupInvitationTable . " gi
+            JOIN groups g ON g.id = gi.group_id
+            JOIN user u ON u.userID = gi.invited_by
+            WHERE g.id=:groupID order by gi.status_id asc ";
+
+        $parameters["groupID"] = $groupID;
+
+        $resulSet=$this->connection->Execute($query, $parameters);
+        if($resulSet){
+            $invitationList=array();
+            foreach($resulSet as $row){
+                $status = $this->GroupInvitationStatusDAO->getInvitationStatusById($row['status_id']);
+                $group = $this->GroupDAO->getGroupByID($row['group_id']);
+                $invitedBy = $this->UserDAO->getUserByIdReduce($row['invited_by']);
+                $invitedUser = $this->UserDAO->getUserByIdReduce($row['invited_user_id']);
+                $roleInvited = $this->GroupRoleDAO->getGroupRoleById($row['roleInvited']);
+                $invitation = new GroupInvitation();
+                $invitation->setId($row['id']);
+                $invitation->setGroupId($group);
+                $invitation->setInvitedBy($invitedBy);
+                $invitation->setInvitedUser($invitedUser);
+                $invitation->setStatus($status);
+                $invitation->setSendAt($row['sent_at']);
+                $invitation->setRespondeAt($row['responded_at']);
+                $invitation->setMessage($row['message']);
+                $invitation->setRoleInvited($roleInvited);
+                array_push($invitationList,$invitation->toArray());
+            }
+            return $invitationList;
+        }else{
+            return [];
+        }
+        }catch (Exception $ex) {
             error_log("Error al obtener invitaciones pendientes: " . $ex->getMessage());
             throw $ex;
         }

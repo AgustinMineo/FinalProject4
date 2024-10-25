@@ -11,6 +11,7 @@ use DAODB\GroupStatusDAO as GroupStatusDAO;
 use DAODB\GroupPrivacyDAO as GroupPrivacyDAO;
 use DAODB\GroupRoleDAO as GroupRoleDAO;
 use DAODB\GroupTypeDAO as GroupTypeDAO;
+use DAODB\GroupInvitationStatusDAO as GroupInvitationStatusDAO;
 class MessageController{
     
     private $MessageDAO;
@@ -27,10 +28,10 @@ class MessageController{
         $this->GroupPrivacyDAO = new GroupPrivacyDAO();
         $this->GroupRoleDAO = new GroupRoleDAO();
         $this->GroupTypeDAO = new GroupTypeDAO();
+        $this->GroupInvitationStatusDAO = new GroupInvitationStatusDAO();
     }
 
-    public function goChatView($chats,$statusList,$privacyList,$roleList,$typeList,$groupList){
-
+    public function goChatView($chats,$statusList,$privacyList,$roleList,$typeList,$groupList,$groupInvitation){
         $currentUser = SessionHelper::getCurrentUser()->getUserID();
         $userRole=SessionHelper::InfoSession([1,2,3]);
         require_once(VIEWS_PATH."chatView.php");
@@ -95,7 +96,8 @@ class MessageController{
         $roleList=$this->GroupRoleDAO->getAllGroupRole();
         $typeList=$this->GroupTypeDAO->getAllGroupType();
         $groupList = $this->GroupDAO->getGroupsByUser(SessionHelper::getCurrentUser());
-        $this->goChatView($chats,$statusList,$privacyList,$roleList,$typeList,$groupList);
+        $groupInvitation = $this->GroupInvitationStatusDAO->getInvitationStatus();
+        $this->goChatView($chats,$statusList,$privacyList,$roleList,$typeList,$groupList,$groupInvitation);
     }
     //Funcion preparada para enviar en formato al ajax
     public function getChatMessages($chatUserID) {
@@ -146,6 +148,48 @@ class MessageController{
             }
         }
     }
+    public function getUnreadMessagesGroup() {
+        // Asegurarse de que el usuario esté autenticado
+        if(SessionHelper::getCurrentUser()->getUserID()) {
+            try {
+                // Llamar al DAO para obtener los mensajes no leídos
+                $totalMessages = $this->MessageDAO->getUnreadMessagesGroup(SessionHelper::getCurrentUser()->getUserID());
+                $resultValue = [];
+    
+                // Verificar que el resultado sea un array válido
+                if (is_array($totalMessages) && count($totalMessages) > 0) {
+                    foreach($totalMessages as $message) {
+                        $resultValue[] = $message;
+                    }
+    
+                    // Actualizar la sesión con los mensajes no leídos del grupo
+                    $_SESSION['messageCountGroup'] = $totalMessages;
+                } else {
+                    // Si no hay mensajes, vaciar la sesión
+                    $_SESSION['messageCountGroup'] = [];
+                }
+    
+                // Enviar la respuesta en formato JSON
+                echo json_encode($resultValue);
+                exit();
+                
+            } catch (Exception $e) {
+                // Manejo de excepciones, asegurando una salida clara en caso de error
+                echo json_encode([
+                    'error' => 'Error en la controller',
+                    'message' => $e->getMessage() // Mensaje detallado del error
+                ]);
+                exit();
+            }
+        } else {
+            // Si el usuario no está autenticado, enviar un error
+            echo json_encode([
+                'error' => 'Usuario no autenticado'
+            ]);
+            exit();
+        }
+    }
+    
     
 
 }

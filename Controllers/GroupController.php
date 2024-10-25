@@ -59,7 +59,6 @@ class GroupController
     public function newGroup($currentUserID  = null, $groupName  = null, $groupType  = null ,$groupPrivacy = null,$description = null, $rules = null, $start_date=null, $end_date=null,$files = null) {
         if (!is_null($currentUserID) && !is_null($groupName) && !is_null($groupType) && !is_null($groupPrivacy) && !is_null($description) && !is_null($rules)) {
             try {
-
                 $newGroup = new Group();
                 $newGroup->setCreated_by($currentUserID);
                 $newGroup->setName($groupName);
@@ -244,6 +243,119 @@ class GroupController
         }else{
             echo json_encode(['success' => false, 'message' => 'Error al modificar el nombre de grupo.']);
             return; 
+        }
+    }
+    public function getGroupByID($groupID) {
+        if ($groupID) {
+            try {
+                $group = $this->GroupDAO->getGroupByID($groupID);
+                if ($group) {
+                    $groupBuild = $group->toArray(); 
+                    $response = [
+                        'success' => true,
+                        'data' => $groupBuild 
+                    ];
+    
+                    echo json_encode($response);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Grupo no encontrado.']);
+                }
+            } catch (Exception $ex) {
+                echo json_encode(['success' => false, 'error' => $ex->getMessage()]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'ID de grupo no proporcionado.']);
+        }
+    }
+    
+    //Admin
+    public function changeStatusGroup($groupID,$status){
+        if ($groupID === null && $status === null) {
+            if (SessionHelper::getCurrentUser()) {
+                SessionHelper::redirectTo403();
+            }
+        }else{
+            try{
+                $result = $this->GroupDAO->changeStatusGroup($groupID,$status);
+                if(is_array($result)){
+                    echo json_encode(
+                        ['success' => true, 
+                        'message' => 'Se cambio de estado el grupo.'
+                        ]);
+                    return;
+                }else{
+                    echo json_encode(
+                        ['success' => false, 
+                        'message' => 'Error al cambiar de estado el grupo.'
+                    ]);
+                    return;
+                }
+            }catch(Exception $ex){
+                throw $ex;
+            }
+            echo json_encode(['success' => false, 'message' => 'Error al cambiar de estado el grupo.']);
+            return; 
+        }
+    }
+    public function updateGroup($groupID = null, $groupName = null, $groupType = null, $groupPrivacy = null, $description = null, $rules = null, $start_date = null, $end_date = null, $files = null) {
+        if (empty($groupID) || empty($groupName) || empty($groupType) || empty($groupPrivacy) || empty($description) || empty($rules)) {
+            echo json_encode(['success' => false, 'message' => 'Todos los campos son obligatorios.']);
+            return;
+        }
+    
+        try {
+            $groupInfoID = $this->GroupDAO->GetGroupInfoIDByGroupID($groupID);
+    
+            if (!$groupInfoID) {
+                echo json_encode(['success' => false, 'message' => 'Información del grupo no encontrada.']);
+                return;
+            }
+    
+            $groupImageRoute = null;
+            if (isset($_FILES['groupImage']) && $_FILES['groupImage']['error'][0] === UPLOAD_ERR_OK) {
+                $subFolder = $groupID;
+                $formatName = function($files, $key) use ($groupID) {
+                    $extension = strtolower(pathinfo($_FILES['groupImage']['name'][$key], PATHINFO_EXTENSION));
+                    return "{$groupID}-image." . $extension;
+                };
+                $groupImageRoute = $this->fileUploader->uploadFiles($_FILES['groupImage'], $subFolder, $formatName);
+            } else {
+                $groupImageRoute = [$this->GroupInfoDAO->getCurrentGroupImage($groupInfoID)];
+            }
+    
+            $groupInfo = new GroupInfo();
+            $groupInfo->setId($groupInfoID);
+            $groupInfo->setDescription($description);
+            $groupInfo->setRules($rules);
+            $groupInfo->setImage($groupImageRoute[0]);
+            $groupInfo->setStartDate($start_date ? $start_date : null);
+            $groupInfo->setEndDate($end_date ? $end_date : null);
+            $groupInfoStatus = $this->GroupInfoDAO->updateGroupInfo($groupInfo,$groupInfoID);
+    
+            if ($groupInfoStatus) {
+                $group = new Group();
+                $group->setId($groupID);
+                $group->setName($groupName);
+                $group->setGroupType($groupType);
+                $group->setGroupPrivacy($groupPrivacy);
+                $group->setGroupInfo($groupInfoID);
+                $updateGroupStatus = $this->GroupDAO->updateGroup($group);
+    
+                if ($updateGroupStatus) {
+                    echo json_encode(['success' => true, 'message' => 'Grupo actualizado exitosamente.']);
+                    return;
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Error al actualizar el grupo.']);
+                    return;
+                }
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Error al actualizar la información del grupo.']);
+                return;
+            }
+    
+        } catch (Exception $ex) {
+            echo json_encode(['success' => false, 'message' => $ex->getMessage()]);
+            return;
         }
     }
     

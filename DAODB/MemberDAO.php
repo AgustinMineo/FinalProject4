@@ -112,7 +112,12 @@ class MemberDAO{
             $parameters['groupID']=$groupID;
             $parameters['role']=$role;
             $this->connection = Connection::GetInstance();
-            return $this->connection->Execute($query, $parameters);
+            $result = $this->connection->Execute($query, $parameters);
+            if($result >0){
+                return true;
+            }else{
+                return false;
+            }
         }catch(Exception $ex){
             throw $ex;
         }
@@ -121,7 +126,7 @@ class MemberDAO{
         try{
             $query = "SELECT gm.id,gm.group_id,gm.user_id,gm.joined_at,gm.status,gm.role 
             FROM " .$this->groupMemberTable. " gm JOIN " .$this->groupTable ." g
-            ON g.id = gm.group_id WHERE g.id=:groupID AND gm.user_id = :user_id AND gm.status !=1;
+            ON g.id = gm.group_id WHERE g.id=:groupID AND gm.user_id = :user_id;
             ";
             $parameters['groupID']=$groupID;
             $parameters['user_id']=$user_id;

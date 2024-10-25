@@ -12,7 +12,7 @@ class GroupRoleDAO {
 
     public function getAllGroupRole() {
         try {
-            $query = "SELECT * FROM " . $this->groupRoleTable . " WHERE is_active = 1 ORDER BY id ASC";
+            $query = "SELECT * FROM " . $this->groupRoleTable . " ORDER BY id ASC";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
 
@@ -52,6 +52,84 @@ class GroupRoleDAO {
                 return $groupRole;
             }
             return null;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function validateUniqueName($id, $name){
+        try {
+            $query = "SELECT * FROM " . $this->groupRoleTable . " WHERE name like :name AND id not in(:id)";
+
+            $parameters['id'] = $id;
+            $parameters['name'] = $name;
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query, $parameters);
+            if (is_array($resultSet) && count($resultSet) > 0) {
+                return true;
+            } else {
+                return null;
+            }
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function deleteGroupRole($roleID) {
+        try {
+            $query = "UPDATE " . $this->groupRoleTable . " SET is_active = 0 WHERE id = :roleID";
+            $parameters = array();
+            $parameters['roleID'] = $roleID;
+
+            $this->connection = Connection::GetInstance();
+            $result = $this->connection->Execute($query, $parameters);
+            
+            return $result; 
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function createGroupRole(GroupRole $groupRole) {
+        try {
+            $query = "INSERT INTO " . $this->groupRoleTable . " (name, description, is_active) VALUES (:name, :description, :is_active)";
+            $parameters = array();
+            $parameters['name'] = $groupRole->getName();
+            $parameters['description'] = $groupRole->getDescription();
+            $parameters['is_active'] = $groupRole->getIsActive();
+
+            $this->connection = Connection::GetInstance();
+            $result = $this->connection->Execute($query, $parameters);
+            
+            return $result; 
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function updateGroupRole(GroupRole $groupRole) {
+        try {
+            $query = "UPDATE " . $this->groupRoleTable . " SET name = :name, description = :description, is_active = :is_active WHERE id = :id";
+            $parameters = array();
+            $parameters['id'] = $groupRole->getId();
+            $parameters['name'] = $groupRole->getName();
+            $parameters['description'] = $groupRole->getDescription();
+            $parameters['is_active'] = $groupRole->getIsActive();
+
+            $this->connection = Connection::GetInstance();
+            $result = $this->connection->Execute($query, $parameters);
+            
+            return $result;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function reactivateGroupRole($roleID){
+        try {
+            $query = "UPDATE " . $this->groupRoleTable . " SET is_active = 1 WHERE id = :roleID";
+            $parameters = array();
+            $parameters['roleID'] = $roleID;
+
+            $this->connection = Connection::GetInstance();
+            $result = $this->connection->Execute($query, $parameters);
+            
+            return $result; 
         } catch (Exception $ex) {
             throw $ex;
         }

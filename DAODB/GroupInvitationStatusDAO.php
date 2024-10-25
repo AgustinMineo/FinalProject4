@@ -5,16 +5,11 @@ use DAODB\Connection;
 use Exception;
 
 class GroupInvitationStatusDAO{
-    private $connection;
     private $statusTable = "invitation_status";
-
-    public function __construct() {
-        $this->connection = Connection::GetInstance();
-    }
 
     public function getInvitationStatus() {
         try {
-            $query = "SELECT * FROM " . $this->statusTable . " WHERE is_active = 1 ORDER BY id ASC";
+            $query = "SELECT * FROM " . $this->statusTable . " ORDER BY id ASC";
             $this->connection = Connection::GetInstance();
             $resultSet = $this->connection->Execute($query);
 
@@ -58,6 +53,73 @@ class GroupInvitationStatusDAO{
             throw $ex;
         }  
     }
+    public function validateUniqueName($id, $name){
+        try {
+            $query = "SELECT * FROM " . $this->statusTable . " WHERE name like :name AND id not in(:id)";
+
+            $parameters['id'] = $id;
+            $parameters['name'] = $name;
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query, $parameters);
+            if (is_array($resultSet) && count($resultSet) > 0) {
+                return true;
+            } else {
+                return null;
+            }
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function createInvitationStatus(GroupInvitationStatus $invitationStatus) {
+        try {
+            $query = "INSERT INTO " . $this->statusTable . " (name, description, is_active) VALUES (:name, :description, :is_active)";
+            $parameters['name'] = $invitationStatus->getName();
+            $parameters['description'] = $invitationStatus->getDescription();
+            $parameters['is_active'] = $invitationStatus->getIsActive();
+
+            $this->connection = Connection::GetInstance();
+            return $this->connection->Execute($query, $parameters);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function updateInvitationStatus(GroupInvitationStatus $invitationStatus) {
+        try {
+            $query = "UPDATE " . $this->statusTable . " SET name = :name, description = :description, is_active = :is_active WHERE id = :id";
+            $parameters['id'] = $invitationStatus->getId();
+            $parameters['name'] = $invitationStatus->getName();
+            $parameters['description'] = $invitationStatus->getDescription();
+            $parameters['is_active'] = $invitationStatus->getIsActive();
+
+            $this->connection = Connection::GetInstance();
+            return $this->connection->Execute($query, $parameters);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function deleteInvitationStatus($invitationStatusId) {
+        try {
+            $query = "UPDATE " . $this->statusTable . " SET is_active = 0 WHERE id = :id";
+            $parameters['id'] = $invitationStatusId;
+
+            $this->connection = Connection::GetInstance();
+            return $this->connection->Execute($query, $parameters);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+    public function reactivateInvitationStatus($invitationStatusId){
+        try {
+            $query = "UPDATE " . $this->statusTable . " SET is_active = 1 WHERE id = :id";
+            $parameters['id'] = $invitationStatusId;
+
+            $this->connection = Connection::GetInstance();
+            return $this->connection->Execute($query, $parameters);
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
 }
+
 ?>
 

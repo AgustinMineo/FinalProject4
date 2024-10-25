@@ -262,5 +262,39 @@ class UserDAO implements IUserDAO{
             throw $ex; 
         }
     }
+    //Devuelve todos los usuarios activos
+    public function getAllUsersReduce(){
+        try {
+            $query = "SELECT u.userID,u.firstName, u.lastName, u.cellphone, u.birthdate, 
+            u.userDescription, u.email,u.roleID,u.status,u.userImage
+            FROM ".$this->userTable." u WHERE status = 1;";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if($resultSet){ 
+                $userList=array();
+                foreach($resultSet as $row){
+                    $user = new Owner();
+                    $user->setUserID($row["userID"]);
+                    $user->setfirstName($row["firstName"]);
+                    $user->setLastName($row["lastName"]);
+                    $user->setEmail($row["email"]);
+                    $user->setCellPhone($row["cellphone"]);
+                    $user->setbirthDate($row["birthdate"]);
+                    $user->setDescription($row["userDescription"]);
+                    $user->setRol($row["roleID"]);
+                    $user->setStatus($row["status"]);
+                    $user->setImage($row["userImage"]);
+                    array_push($userList,$user);
+                }
+                return $userList;
+            }
+            else{
+                return NULL; 
+            }
+        } catch (Exception $ex) 
+        { 
+            throw $ex; 
+        }
+    }
 }
 ?>

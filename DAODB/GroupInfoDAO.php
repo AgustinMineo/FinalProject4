@@ -104,6 +104,28 @@ class GroupInfoDAO{
             return;
         }
     }
+    public function getCurrentGroupImage($id){
+        if($id){
+            try{
+                $query = "SELECT image FROM " .$this->groupInfoTable. " WHERE id = :id";
+                $parameters['id']= $id;
+                $this->connection = Connection::GetInstance();
+                $resultSet=$this->connection->Execute($query,$parameters);
+                if($resultSet){
+                    foreach($resultSet as $row){
+                        $groupInfoImage = $row['image'];
+                    }
+                    return $groupInfoImage;
+                }else{
+                    return '';
+                }
+            }catch(Exeption $ex){
+                throw $ex;
+            }
+        }else{
+            return false;
+        }
+    }
     public function updateGroupInfo(GroupInfo $groupInfo, $groupInfoId) {
         try {
             $query = "UPDATE " .$this->groupInfoTable . " SET 
@@ -124,8 +146,12 @@ class GroupInfoDAO{
             $parameters["groupInfoId"] = $groupInfoId;
     
             $this->connection = Connection::GetInstance();
-            return $this->connection->Execute($query, $parameters);
-    
+            $result =$this->connection->Execute($query, $parameters);
+            if($result>0){
+                return true;
+            }else{
+                return false;
+            }
         } catch (Exception $ex) {
             throw $ex;
         }

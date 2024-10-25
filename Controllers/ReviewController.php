@@ -67,7 +67,6 @@ class ReviewController{
                         $review->setPoints($rate);
                         $result=$this->ReviewDAO->AddReview($review);
                         if($result){
-                            var_dump($booking->getKeeperID()->getKeeperID());
                             $newPoints = $this->KeeperDAO->getTotalPoints($booking->getKeeperID()->getKeeperID());
                             if($newPoints){
                                 $this->KeeperDAO->updateTotalPoints($newPoints,$booking->getKeeperID()->getKeeperID());

@@ -2,7 +2,7 @@
 namespace Views;
 require_once("validate-session.php");
 $countMessage = isset($_SESSION['messageCount']) ? $_SESSION['messageCount'] : 0;
-
+$countMessageGroup = isset($_SESSION['messageCountGroup']) ? $_SESSION['messageCountGroup'] : 0;
 // Transformo los arrays para poder usarlos en la vista de modifyRole
 $rolesArray = [];
 $typeArray = [];
@@ -236,7 +236,17 @@ $privacyListJson = json_encode($privacyArray);
                                 } else {
                                     $imgSrc = GROUPS_PATH . "Default/DefaultGroupImage.jpg";
                                 }
-                                $groupTypeName = $group->getGroupType()->getName(); 
+                                $groupTypeName = $group->getGroupType()->getName();
+
+                                $unreadGroupMessages = 0;
+                                if ($countMessageGroup) {
+                                    foreach ($countMessageGroup as $message) {
+                                        if ($message['idGrupo'] == $group->getId()) {
+                                            $unreadGroupMessages = $message['cantidad']; 
+                                            break;
+                                        }
+                                    }
+                                }
                                 ?>
                                 <li class="list-group-item d-flex align-items-center"
                                     data-group-id="<?php echo $group->getId(); ?>"
@@ -244,10 +254,14 @@ $privacyListJson = json_encode($privacyArray);
                                     onclick="loadGroupMessages(<?php echo $group->getId(); ?>); setGroupID(<?php echo $group->getId();?>);">
                                     <img src="<?php echo $imgSrc; ?>" alt="Group Image" class="group-image me-2 groupImage<?php echo $group->getId(); ?>" style="width: 40px; height: 40px; border-radius: 50%;">
                                     <span class="groupNameDisplay<?php echo $group->getId(); ?>"><?php echo $group->getName(); ?></span>
+                                    <?php if ($unreadGroupMessages > 0): ?>
+                                        <span class="badge bg-danger ms-2" id="group-badge-<?php echo $group->getId(); ?>"><?php echo $unreadGroupMessages; ?></span>
+                                    <?php endif; ?>
                                     <span class="badge bg-success ms-auto"><?php echo $groupTypeName; ?></span>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
+
                     <?php endif;?>
                 </div>
             </div>
@@ -312,7 +326,6 @@ $privacyListJson = json_encode($privacyArray);
         </div>
     </div>
 </div>
-
 <!-- Modal nuevo chat-->
 
 <!-- Modal nuevo grupo-->
@@ -370,6 +383,11 @@ $privacyListJson = json_encode($privacyArray);
                     <div class="mb-4">
                         <label for="groupImage" class="form-label">Imagen del Grupo</label>
                         <input type="file" class="form-control" id="groupImage" name="groupImage[]" accept="image/*">
+                    </div>
+                    <div class="mb-4 w-100 d-flex align-items-center justify-content-center">
+                        <div id="imagePreview" class="border p-3" style="height: 200px; display: none;">
+                            <img id="previewImg" src="" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 100%;">
+                        </div>
                     </div>
                     <div class="container text-center">
                         <button type="button" class="btn btn-primary w-100" id="submitGroupButton">Crear Grupo</button>
@@ -609,9 +627,7 @@ $privacyListJson = json_encode($privacyArray);
                                         <p class="mb-0" id="groupDescShort<?php echo $group->getId(); ?>" data-group-id="<?php echo $group->getId(); ?>">
                                             <?php echo $group->getGroupInfo()->getDescription(); ?>
                                         </p>
-                                        <!--<p class="mb-0 d-none" id="groupDescFull<?php echo $group->getId(); ?>">
-                                            <?php echo $group->getGroupInfo()->getDescription(); ?>
-                                        </p>-->
+
                                     </div>
                                 </div>
                                 <div class="card shadow-sm">
@@ -633,8 +649,45 @@ $privacyListJson = json_encode($privacyArray);
                                     <div class="card-body">
                                         <h6 class="fw-bold">Miembros</h6>
                                         <input type="hidden" name="currentUserIdRole" id="currentUserIdRole" value="<?php echo $currentUser ?>">
+                                        <div class="row mb-3">
+                                            <div class="row mb-3">
+                                            <!-- Filtro por correo -->
+                                            <div class="col-md-4">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="email-addon">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" id="emailFilter_<?php echo $group->getId(); ?>" placeholder="Filtrar por correo" 
+                                                        onkeyup="filterMembers(<?php echo $group->getId(); ?>)" aria-label="Filtrar por correo" aria-describedby="email-addon">
+                                                </div>
+                                            </div>
+                                            <!-- Filtro por nombre -->
+                                            <div class="col-md-4">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="name-addon">
+                                                        <i class="fas fa-user"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control" id="nameFilter_<?php echo $group->getId(); ?>" placeholder="Filtrar por nombre" 
+                                                        onkeyup="filterMembers(<?php echo $group->getId(); ?>)" aria-label="Filtrar por nombre" aria-describedby="name-addon">
+                                                </div>
+                                            </div>
+                                            <!-- Filtro por rol -->
+                                            <div class="col-md-4">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="role-addon">
+                                                        <i class="fas fa-user-tag"></i>
+                                                    </span>
+                                                    <select class="form-select" id="roleFilter_<?php echo $group->getId(); ?>" onchange="filterMembers(<?php echo $group->getId(); ?>)">
+                                                        <option value="">Filtrar por rol</option>
+                                                        <?php foreach($roleList as $role): ?>
+                                                        <option value='<?php echo $role->getId() ?>'><?php echo $role->getName() ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
                                         <div id="membersList<?php echo $group->getId(); ?>" class="list-group" style="max-height: 400px; overflow-y: auto;">
-
                                         </div>
                                     </div>
                                 </div>
@@ -642,10 +695,14 @@ $privacyListJson = json_encode($privacyArray);
                                 <div id="adminBlock<?php echo $group->getId(); ?>" class="container shadow-sm my-4 p-4 bg-light rounded adminBlock<?php echo $group->getId();?>" style="display: block;">
                                     <h6 class="mb-4 text-primary">Administrar Grupo</h6>
                                     <div class="list-group">
-                                        <?php if($group->getCreated_by()->getUserID() === $currentUser): ?>
+                                        <?php if($group->getCreated_by()->getUserID()  === $currentUser): ?>
                                             <button type="button" class="list-group-item list-group-item-action btn btn-danger my-2" data-bs-toggle="modal" data-bs-target="#deleteGroupModal<?php echo $group->getId(); ?>">Eliminar Grupo</button>
                                         <?php endif; ?>
                                         <button type="button" class="list-group-item list-group-item-action btn btn-warning my-2" data-bs-toggle="modal" data-bs-target="#inviteGroupModal<?php echo $group->getId(); ?>">Invitar al Grupo</button>
+                                        <button type="button" class="list-group-item list-group-item-action btn btn-warning my-2" onclick="loadGroupInvitations(<?php echo $group->getId(); ?>)">
+                                            <i class="bi bi-people mx-1"></i>
+                                            Invitaciones
+                                        </button>
                                     </div>
                                 </div>
 
@@ -732,7 +789,8 @@ $privacyListJson = json_encode($privacyArray);
                     </div>
                     <div class="mb-3">
                         <label for="roleSelector<?php echo $group->getId(); ?>" class="form-label">Seleccionar Rol</label>
-                        <select class="form-select" id="roleInvited" name="roleInvited" required>
+                        <!--<select class="form-select" id="roleInvited" name="roleInvited" required>-->
+                        <select class="form-select" id="roleInvited<?php echo $group->getId(); ?>" name="roleInvited" required>
                             <option value="" selected disabled>Seleccione un rol</option>
                             <?php if($roleList):?>
                                 <?php foreach($roleList as $role):?>
@@ -746,14 +804,13 @@ $privacyListJson = json_encode($privacyArray);
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="sendInvitation(<?php echo $group->getId(); ?>, <?php echo $currentUser; ?>, $('#roleInvited').val())">Enviar Invitación</button>
+                    <button type="button" class="btn btn-primary" onclick="sendInvitation(<?php echo $group->getId(); ?>, <?php echo $currentUser; ?>, $('#roleInvited<?php echo $group->getId(); ?>').val())">Enviar Invitación</button>
                 </div>
             </div>
         </div>
     </div>
 <?php endforeach; ?>
 <!--Modal Detalle grupo-->
-<!-- Modal editar grupo -->
 <!-- Modal Invitaciones -->
 <div class="modal fade" id="invitationLoader" tabindex="-1" aria-labelledby="invitationLoader" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -975,7 +1032,6 @@ $privacyListJson = json_encode($privacyArray);
         });
     });
 
-
     // Función para manejar el cambio de chat y guardar el estado en localStorage
     function changeChatState(receiverId, groupId) {
         localStorage.setItem('activeChat', JSON.stringify({ receiverId, groupId }));
@@ -1001,7 +1057,23 @@ $privacyListJson = json_encode($privacyArray);
             }
         }, 4000);
     }
+    //pre-view imagen
+    $('#groupImage').on('change', function(event) {
+        var input = event.target;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                $('#previewImg').attr('src', e.target.result);
+                $('#imagePreview').show();
+            }
 
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            $('#imagePreview').hide();
+            $('#previewImg').attr('src', '');
+        }
+    });
     // Evento para cambiar al chat de grupo
     // Al hacer clic en un grupo
     groupItems.forEach(item => {
@@ -1109,7 +1181,7 @@ $privacyListJson = json_encode($privacyArray);
             startMessagePolling(receiverId, groupId);
         }
     });
-    //Carga los miembros del grupo activo.
+
     function getMembersByGroup(groupId) {
         $.ajax({
             url: '<?php echo FRONT_ROOT ?>Member/getAllMembersByGroup',
@@ -1119,8 +1191,6 @@ $privacyListJson = json_encode($privacyArray);
                 try {
                     let members = JSON.parse(response);
                     let roleCurrentUser = null;
-                    let membersHtml = '';
-
 
                     members.forEach(function(member) {
                         if (member.user.userID == currentUserIdRole) {
@@ -1128,72 +1198,113 @@ $privacyListJson = json_encode($privacyArray);
                         }
                     });
 
-
                     if (roleCurrentUser === null) {
                         console.error('No se pudo determinar el rol del usuario actual.');
                         return; 
                     }
 
-                    members.forEach(function(member) {
-                        const isCurrentUser = member.user.userID == currentUserIdRole;
-                        const imgSrc = member.user.image ? member.user.image : 'Upload/UserImages/userDefaultImage.jpg';
+                    if (!window.groupMembers) {
+                        window.groupMembers = {};
+                    }
+                    // Guardar los miembros por ID de grupo
+                    window.groupMembers[groupId] = members; 
+                    window.roleCurrentUser = roleCurrentUser;
 
-                        membersHtml += `
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <img src="<?php echo FRONT_ROOT ?>${imgSrc}" alt="${member.user.firstName} ${member.user.lastName}" 
-                                        class="rounded-circle me-2" 
-                                        style="width: 40px; height: 40px; object-fit: cover;">
-                                    <div>
-                                        <strong class="${member.status === '0' ? 'text-danger' : ''}">${member.user.firstName} ${member.user.lastName}</strong>
-                                        <p class="mb-0 text-muted">${member.role.name}</p>
-                                    </div>
-                                </div>
-                                <div class="d-flex align-items-center">
-                                    ${(roleCurrentUser === 1 && parseInt(member.role.id) !== 1) || 
-                                    (roleCurrentUser === 2 && parseInt(member.role.id) > 2) || 
-                                    (roleCurrentUser > 2 && member.user.userID === currentUserID.value) ? 
-                                    (member.status === '1' ? `
-                                        <button class="btn btn-sm btn-danger me-3" 
-                                                onclick="deleteMember('${member.group_id.id}','${member.user.userID}')">
-                                            <i class="fas fa-trash-alt"></i> Eliminar usuario
-                                        </button>
-                                    ` : `
-                                        <button class="btn btn-sm btn-success me-3" 
-                                                onclick="reactivateMember('${member.group_id.id}','${member.user.userID}')">
-                                            <i class="fas fa-user-check"></i> Reactivar usuario
-                                        </button>
-                                    `) : ''}
-                                    
-                                    ${!isCurrentUser && (
-                                        (roleCurrentUser === 1 && parseInt(member.role.id) !== 1) ||
-                                        (roleCurrentUser === 2 && parseInt(member.role.id) > 2)
-                                    ) ? `
-                                        <button class="btn btn-sm btn-warning me-3" 
-                                                onclick="openRoleModal('${member.user.userID}', '${member.user.firstName} ${member.user.lastName}', '${member.role.name}', '${member.role.id}','${member.group_id.id}','${roleCurrentUser}')">
-                                            <i class="fas fa-user-edit"></i> Cambiar Rol
-                                        </button>
-                                    ` : ''}
-                                    
-                                    <small class="${member.status === '0' ? 'text-danger' : 'text-muted'}">${member.status === '1' ? 'Active' : 'Inactive'}</small>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    $(`#membersList${groupId}`).html(membersHtml);
+                    renderMembers(groupId, members, roleCurrentUser);
 
                 } catch (ex) {
                     console.error('Error al parsear el JSON:', ex);
                 }
             },
             error: function() {
-                alert('Error al llamar a la API.');
+                alert('Error en la request.');
             }
         });
     }
+    // Función para renderizar los miembros
+    function renderMembers(groupId, members, roleCurrentUser, filters = { email: '', name: '', role: '' }) {
+        let membersHtml = '';
 
-    
+        const filteredMembers = members.filter(member => {
+            const emailMatch = member.user.email.toLowerCase().includes(filters.email.toLowerCase());
+            const nameMatch = member.user.firstName.toLowerCase().includes(filters.name.toLowerCase()) || 
+                            member.user.lastName.toLowerCase().includes(filters.name.toLowerCase());
+            const roleMatch = filters.role === '' || member.role.id.toString() === filters.role;
+            return emailMatch && nameMatch && roleMatch;
+        });
+
+        filteredMembers.forEach(function(member) {
+            const isCurrentUser = member.user.userID == currentUserIdRole;
+            const imgSrc = member.user.image ? member.user.image : 'Upload/UserImages/userDefaultImage.jpg';
+
+            membersHtml += `
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="<?php echo FRONT_ROOT ?>${imgSrc}" alt="${member.user.firstName} ${member.user.lastName}" 
+                            class="rounded-circle me-2" 
+                            style="width: 40px; height: 40px; object-fit: cover;">
+                        <div>
+                            <strong class="${member.status === '0' ? 'text-danger' : ''}">
+                            ${isCurrentUser ? 'Tú' : member.user.firstName + ' ' + member.user.lastName}
+                            </strong>
+                            <p class="mb-0 text-muted">${member.role.name}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        ${(roleCurrentUser === 1 && parseInt(member.role.id) !== 1) || 
+                        (roleCurrentUser === 2 && parseInt(member.role.id) > 2) || 
+                        (roleCurrentUser > 2 && member.user.userID === currentUserID.value) ? 
+                        (member.status === '1' ? `
+                            <button class="btn btn-sm btn-danger me-3" 
+                                    onclick="deleteMember('${member.group_id.id}','${member.user.userID}')">
+                                <i class="fas fa-trash-alt"></i> Eliminar usuario
+                            </button>
+                        ` : `
+                            <button class="btn btn-sm btn-success me-3" 
+                                    onclick="reactivateMember('${member.group_id.id}','${member.user.userID}')">
+                                <i class="fas fa-user-check"></i> Reactivar usuario
+                            </button>
+                        `) : ''}
+
+                        ${!isCurrentUser && (
+                            (roleCurrentUser === 1 && parseInt(member.role.id) !== 1) ||
+                            (roleCurrentUser === 2 && parseInt(member.role.id) > 2)
+                        ) ? `
+                            <button class="btn btn-sm btn-warning me-3" 
+                                    onclick="openRoleModal('${member.user.userID}', '${member.user.firstName} ${member.user.lastName}', '${member.role.name}', '${member.role.id}','${member.group_id.id}','${roleCurrentUser}')">
+                                <i class="fas fa-user-edit"></i> Cambiar Rol
+                            </button>
+                        ` : ''}
+                        <small class="${member.status === '0' ? 'text-danger' : 'text-muted'}">${member.status === '1' ? 'Active' : 'Inactive'}</small>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (filteredMembers.length === 0) {
+            membersHtml = `
+            <div class="alert alert-danger" role="alert">
+                <p class="text-muted">No se encontraron miembros.</p>
+            </div>
+            `;
+        }
+
+        $(`#membersList${groupId}`).html(membersHtml);
+    }
+    // Filtro de miembros
+    function filterMembers(groupId) {
+        const emailFilter = document.getElementById(`emailFilter_${groupId}`).value;
+        const nameFilter = document.getElementById(`nameFilter_${groupId}`).value;
+        const roleFilter = document.getElementById(`roleFilter_${groupId}`).value;
+
+        const filters = {
+            email: emailFilter,
+            name: nameFilter,
+            role: roleFilter 
+        };
+        const members = window.groupMembers[groupId] || [];
+        renderMembers(groupId, members, window.roleCurrentUser, filters);
+    }
     //Muestro los modales de detalle
     document.getElementById('chatDetailsButton').addEventListener('click', function () {
         if (isGroupChatActive) {
@@ -1266,8 +1377,7 @@ $privacyListJson = json_encode($privacyArray);
                     });
                     document.getElementById(`badge-${chatUserID}`).style.display = 'none';//Escondo los mensajes pendientes del chat actual
                     // Llama a getUnreadMessages para actualizar los valores de la session de unreadMessages
-                    updateUnreadMessages();
-                    
+                    updateTotalUnreadMessages();
                     isLoading = false; // Actualiza el estado de carga
                 } catch (error) {
                     //console.error("Error al procesar la respuesta:", error);
@@ -1291,13 +1401,14 @@ $privacyListJson = json_encode($privacyArray);
     function loadGroupMessages(groupId, initialLoad = true) {
         if (isLoading || !groupId) return;
         isLoading = true;
+        
         $.ajax({
-        url: '<?php echo FRONT_ROOT ?>Message/getGroupMessages',
-        type: 'POST',
-        data: { groupId: groupId },
-        success: function(response) {
-            var messages;
-            try {
+            url: '<?php echo FRONT_ROOT ?>Message/getGroupMessages',
+            type: 'POST',
+            data: { groupId: groupId },
+            success: function(response) {
+                var messages;
+                try {
                     messages = JSON.parse(response);
                     var messageContainer = $('#messageContainer');
 
@@ -1305,6 +1416,7 @@ $privacyListJson = json_encode($privacyArray);
                         messageContainer.html(''); 
                         messageContainer.scrollTop(messageContainer.scrollHeight);
                     }
+
                     messages.forEach(function(message) {
                         var messageClass = (message.sender_id == '<?php echo $currentUser ?>' ? 'sent' : 'received');
 
@@ -1324,23 +1436,23 @@ $privacyListJson = json_encode($privacyArray);
                         
                         messageHTML += '</div>';
                         
-                        messageContainer.scrollTop(messageContainer.scrollHeight);
                         messageContainer.prepend(messageHTML);
                     });
-
-                    isLoading = false; // Actualiza el estado de carga
+                    document.getElementById(`group-badge-${groupId}`).style.display = 'none';
+                    updateTotalUnreadMessages();
+                    isLoading = false; 
                 } catch (error) {
                     console.error("Error al procesar la respuesta:", error);
                     isLoading = false;
                 }
-        },
-        error: function(xhr, status, error) {
-            console.error("Error en la solicitud AJAX:", error);
-            isLoading = false;
-        }
-    });
-
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX:", error);
+                isLoading = false;
+            }
+        });
     }
+
 
     //Evento para envio de mensajes
     function sendMessage(event) {
@@ -1412,8 +1524,7 @@ $privacyListJson = json_encode($privacyArray);
             },
             success: function(response) {
                 messageInput.value = '';
-
-                loadPrivateMessages(userId,true);
+                location.reload();
             },
             error: function(xhr, status, error) {
                 console.error("Error al enviar el mensaje:", error);
@@ -1422,7 +1533,10 @@ $privacyListJson = json_encode($privacyArray);
         });
     }
     //Estado de mensajes no leidos
-    function updateUnreadMessages() {
+    function updateTotalUnreadMessages() {
+        let totalUnread = 0;
+
+        // chat privados
         $.ajax({
             url: '<?php echo FRONT_ROOT ?>Message/getUnreadMessages',
             type: 'POST',
@@ -1434,28 +1548,52 @@ $privacyListJson = json_encode($privacyArray);
                     console.error("Error al analizar la respuesta:", e);
                     return;
                 }
-                // Valido que sea arreglo
-                if (Array.isArray(unreadMessages) && unreadMessages.length > 0) {
-                    let totalUnread = 0;
 
+                if (Array.isArray(unreadMessages) && unreadMessages.length > 0) {
                     unreadMessages.forEach(message => {
-                        totalUnread += parseInt(message.cantidad, 10); // Convierto a numero
+                        totalUnread += parseInt(message.cantidad, 10); // Sumo los mensajes privados
                     });
-                    document.getElementById('currentCountID').innerText = totalUnread;
-                } else {
-                    console.log("No hay mensajes no leídos o la respuesta está vacía.");
-                    totalUnread=0;
-                    document.getElementById('currentCountID').style.display = 'none'; 
                 }
+
+                // grupos
+                $.ajax({
+                    url: '<?php echo FRONT_ROOT ?>Message/getUnreadMessagesGroup',
+                    type: 'POST',
+                    success: function(unreadGroupResponse) {
+                        let unreadGroupMessages;
+                        try {
+                            unreadGroupMessages = JSON.parse(unreadGroupResponse);
+                        } catch (e) {
+                            console.error("Error al analizar la respuesta de grupos:", e);
+                            return;
+                        }
+
+                        if (Array.isArray(unreadGroupMessages) && unreadGroupMessages.length > 0) {
+                            unreadGroupMessages.forEach(message => {
+                                totalUnread += parseInt(message.cantidad, 10);
+                            });
+                        }
+
+                        // Actualizo el contador
+                        const totalCountElement = document.getElementById('currentCountID');
+                        if (totalUnread > 0) {
+                            totalCountElement.innerText = totalUnread;
+                            totalCountElement.style.display = 'inline'; 
+                        } else {
+                            totalCountElement.style.display = 'none'; 
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error en la solicitud de mensajes no leídos del grupo:", error);
+                    }
+                });
             },
             error: function(xhr, status, error) {
                 console.error("Error en la solicitud de mensajes no leídos:", error);
-                console.log("Estado de la respuesta:", status); 
-                console.log("Respuesta del servidor:", xhr.responseText);
             }
         });
     }
-    
+
     //Evento en relacion a grupos de tipo Evento (Se agregaron un rango de fechas de disponiblidad)
     document.getElementById('groupType').addEventListener('change', function() {
         const selectedValue = this.value;
@@ -1476,7 +1614,6 @@ $privacyListJson = json_encode($privacyArray);
             endDateInput.removeAttribute('required'); 
         }
     });
-
 
     //Nuevo grupo
     $(document).ready(function() {
@@ -1582,6 +1719,7 @@ $privacyListJson = json_encode($privacyArray);
                         title: '¡Eliminado!',
                         text: 'El grupo ha sido eliminado.',
                         icon: 'success',
+                        color: "#716add",
                         confirmButtonColor: '#3085d6'
                     }).then(() => {
                         location.reload();
@@ -1624,6 +1762,11 @@ $privacyListJson = json_encode($privacyArray);
             background: '#ffffff', 
             color: '#000000'
         }).then((result) => {
+            alert(groupId);
+            alert(currentUser);
+            alert(email);
+            alert(message);
+            alert(roleInvited);
             if (result.isConfirmed) {
                 $.ajax({
                     url: '<?php echo FRONT_ROOT ?>GroupInvitation/sendInvitation',
@@ -1812,65 +1955,115 @@ $privacyListJson = json_encode($privacyArray);
         const roleInvitedName= $(this).data('roleinvited-name');
         const roleInvitedDescription= $(this).data('roleinvited-description');
         const detailsContent = `
-            <div class="card my-3 w-100 shadow-sm border-info mx-0">
-                <div class="card-body">
-                    <h5 class="card-title text-info">
-                        <i class="fas fa-users"></i> Detalles de la Invitación
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-1"><strong>Grupo:</strong> <span class="text-muted">${groupName}</span></li>
-                        <li class="mb-1"><strong>Descripción del Grupo:</strong> <span class="text-muted">${groupDescription}</span></li>
-                        <li class="mb-1"><strong>Reglas del Grupo:</strong> <span class="text-muted">${groupRules}</span></li>
-                        <li class="mb-1"><strong>Privacidad del Grupo:</strong> <span class="text-muted">${groupPrivacy} - ${groupPrivacyDescription}</span></li>
-                        <li class="mb-1"><strong>Tipo de Grupo:</strong> <span class="text-muted">${groupType}</span></li>
-                        <li class="mb-1"><strong>Estado del Grupo:</strong> <span class="text-muted">${groupStatus}</span></li>
-                    </ul>
+                <div class="container my-5">
+                <div class="card border-light shadow-lg">
+                    <div class="card-header bg-info text-white text-center rounded-top">
+                        <h5 class="mb-0"><i class="fas fa-users"></i> Detalles de la Invitación</h5>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-3">
+                            <strong><i class="bi bi-house-door-fill"></i> Grupo:</strong><br> 
+                            <span class="text-muted">${groupName}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-file-earmark-text"></i> Descripción:</strong><br> 
+                            <span class="text-muted">${groupDescription}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-tags-fill"></i> Tipo:</strong><br> 
+                            <span class="text-muted">${groupType}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-check-circle-fill"></i> Estado:</strong><br> 
+                            <span class="text-muted">${groupStatus}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-file-earmark-lock-fill"></i> Reglas:</strong><br> 
+                            <span class="text-muted">${groupRules}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-shield-lock-fill"></i> Privacidad:</strong><br> 
+                            <span class="text-muted">${groupPrivacy} - ${groupPrivacyDescription}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-light shadow-lg my-4">
+                    <div class="card-header bg-success text-white text-center rounded-top">
+                        <h5 class="mb-0"><i class="fas fa-user-check"></i> Información del Invitador</h5>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-3">
+                            <strong><i class="bi bi-person-fill"></i> Invitado por:</strong><br> 
+                            <span class="text-muted">${invitedBy}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-chat-left-text-fill"></i> Mensaje:</strong><br> 
+                            <span class="text-muted">${message}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-calendar-date"></i> Enviado el:</strong><br> 
+                            <span class="text-muted">${sendAt}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-calendar-check"></i> Respondido el:</strong><br> 
+                            <span class="text-muted">${respondedAt}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-light shadow-lg my-4">
+                    <div class="card-header bg-warning text-white text-center rounded-top">
+                        <h5 class="mb-0"><i class="fas fa-user"></i> Información del Usuario Invitado</h5>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-3">
+                            <strong><i class="bi bi-person-fill"></i> Invitado a:</strong><br> 
+                            <span class="text-muted">${invitedUser}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-exclamation-circle-fill"></i> Estado de la Invitación:</strong><br> 
+                            <span class="text-muted">${status}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-light shadow-lg my-4">
+                    <div class="card-header bg-secondary text-white text-center rounded-top">
+                        <h5 class="mb-0"><i class="fas fa-user"></i> Role a ocupar</h5>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-3">
+                            <strong><i class="bi bi-shield-fill"></i> Role:</strong><br> 
+                            <span class="text-muted">${roleInvitedName}</span>
+                        </div>
+                        <hr>
+                        <div class="mb-3">
+                            <strong><i class="bi bi-file-earmark-text"></i> Descripción:</strong><br> 
+                            <span class="text-muted">${roleInvitedDescription}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center my-4">
+                    <h4>¡Tú decides!</h4>
+                    <p class="text-muted">Elige una de las siguientes opciones para continuar con tu invitación:</p>
+                </div>
+                <div class="d-flex flex-wrap justify-content-center align-items-center w-100 my-3">
+                    <button type="button" class="btn btn-success mx-2 btn-lg shadow" onclick="acceptInvitation(${invitationId}, '${groupId}', '${user}', '${roleInvitedId}')">
+                        <i class="fas fa-check-circle"></i> Aceptar Invitación
+                    </button>
+                    <button type="button" class="btn btn-danger mx-2 btn-lg shadow" onclick="rejectInvitation(${invitationId})">
+                        <i class="fas fa-times-circle"></i> Rechazar Invitación
+                    </button>
                 </div>
             </div>
-            <div class="card my-3 w-100 shadow-sm border-success">
-                <div class="card-body">
-                    <h5 class="card-title text-success">
-                        <i class="fas fa-user-check"></i> Información del Invitador
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-1"><strong>Invitado por:</strong> <span class="text-muted">${invitedBy}</span></li>
-                        <li class="mb-1"><strong>Mensaje:</strong> <span class="text-muted">${message}</span></li>
-                        <li class="mb-1"><strong>Enviado el:</strong> <span class="text-muted">${sendAt}</span></li>
-                        <li class="mb-1"><strong>Respondido el:</strong> <span class="text-muted">${respondedAt}</span></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card my-3 w-100 shadow-sm border-warning">
-                <div class="card-body">
-                    <h5 class="card-title text-warning">
-                        <i class="fas fa-user"></i> Información del Usuario Invitado
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-1"><strong>Invitado a:</strong> <span class="text-muted">${invitedUser}</span></li>
-                        <li class="mb-1"><strong>Estado de la Invitación:</strong> <span class="text-muted">${status}</span></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="card my-3 w-100 shadow-sm border-warning">
-                <div class="card-body">
-                    <h5 class="card-title text-warning">
-                        <i class="fas fa-user"></i> Role a ocupar
-                    </h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-1"><strong>Role:</strong> <span class="text-muted">${roleInvitedName}</span></li>
-                        <li class="mb-1"><strong>Descripción:</strong> <span class="text-muted">${roleInvitedDescription}</span></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="container">
-                <h4 class="text-center mt-4">Acciones</h4>
-            </div>
-            <div class="d-flex flex-wrap justify-content-center align-items-center w-100 my-3">
-                <button type="button" class="btn btn-success mx-2" style="flex-grow: 1;" onclick="acceptInvitation(${invitationId}, '${groupId}', '${user}', '${roleInvitedId}')">Aceptar Invitación</button>
-                <button type="button" class="btn btn-danger mx-2" style="flex-grow: 1;" onclick="rejectInvitation(${invitationId})">Rechazar Invitación</button>
-            </div>
-        `;
-
+            `;
         $('#invitationLoader .modal-body').html(detailsContent);
     });
 
@@ -1882,6 +2075,7 @@ $privacyListJson = json_encode($privacyArray);
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Enviar',
+            color: "#716add",
             cancelButtonText: 'Cancelar',
             reverseButtons: true,
             background: '#ffffff', 
@@ -1902,6 +2096,7 @@ $privacyListJson = json_encode($privacyArray);
                         Swal.fire({
                             position: "top-end",
                             icon: "success",
+                            color: "#716add",
                             title: "Invitación aceptada",
                             showConfirmButton: false,
                             timer: 1500
@@ -1922,6 +2117,7 @@ $privacyListJson = json_encode($privacyArray);
             } else {
                 Swal.fire({
                     icon: "info",
+                    color: "#716add",
                     title: "Cancelado",
                     text: "La invitación no ha sido aceptada."
                 });
@@ -1938,6 +2134,7 @@ $privacyListJson = json_encode($privacyArray);
             showCancelButton: true,
             confirmButtonText: 'Sí, rechazar',
             cancelButtonText: 'Cancelar',
+            color: "#716add",
             reverseButtons: true,
             background: '#ffffff', 
             color: '#000000'
@@ -1954,6 +2151,7 @@ $privacyListJson = json_encode($privacyArray);
                         Swal.fire({
                             position: "top-end",
                             icon: "success",
+                            color: "#716add",
                             title: "Invitación rechazada",
                             showConfirmButton: false,
                             timer: 1500
@@ -1966,6 +2164,7 @@ $privacyListJson = json_encode($privacyArray);
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
+                            color: "#716add",
                             text: "Error al rechazar la invitación. Inténtalo de nuevo.",
                         });
                     }
@@ -1975,6 +2174,7 @@ $privacyListJson = json_encode($privacyArray);
                 Swal.fire({
                     icon: "info",
                     title: "Cancelado",
+                    color: "#716add",
                     text: "La invitación no ha sido rechazada."
                 });
             }
@@ -2123,11 +2323,11 @@ $privacyListJson = json_encode($privacyArray);
                 userID: userID
             },
             success: function(response) {
-                console.log(response);
                 response = JSON.parse(response);
                 if (response.success) {
                     Swal.fire({
                         icon: 'success',
+                        color: "#716add",
                         title: '¡Te has unido al grupo!',
                         text: 'Ahora eres miembro de este grupo.',
                         confirmButtonText: 'Aceptar'
@@ -2138,6 +2338,7 @@ $privacyListJson = json_encode($privacyArray);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
+                        color: "#716add",
                         text: response.message || 'Hubo un problema al intentar unirte al grupo.',
                         confirmButtonText: 'Aceptar'
                     });
@@ -2147,6 +2348,7 @@ $privacyListJson = json_encode($privacyArray);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
+                    color: "#716add",
                     text: 'Ocurrió un error inesperado.',
                     confirmButtonText: 'Aceptar'
                 });
@@ -2170,8 +2372,9 @@ $privacyListJson = json_encode($privacyArray);
                     Swal.fire({
                         icon: 'success',
                         title: '¡El usuario fue eliminado!',
+                        color: "#716add",
                         text: 'El usuario fue eliminado correctamente.',
-                        confirmButtonText: 'Aceptar'
+                        confirmButtonText: 'Aceptar',
                     }).then(() => {
                         if(parseInt(userID) === <?php echo $currentUser?>){ //Si sale del grupo el usuario, se refresca la vista
                             window.location.reload();
@@ -2212,6 +2415,7 @@ $privacyListJson = json_encode($privacyArray);
                 if (response.success) {
                     Swal.fire({
                         icon: 'success',
+                        color: "#716add",
                         title: '¡El usuario fue reactivado!',
                         text: 'El usuario fue reactivado correctamente.',
                         confirmButtonText: 'Aceptar'
@@ -2254,7 +2458,7 @@ $privacyListJson = json_encode($privacyArray);
                     `;
                 previewImage = `<div class="mt-3 d-flex flex-wrap align-items-center justify-content-center">
                                     <h6 class="w-100 text-center">Pre-view</h6>
-                                    <img id="imagePreview" src="#" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 300px; display: none;" class="img-thumbnail"/>
+                                    <img id="imagePreviewEdit" src="#" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 300px; display: none;" class="img-thumbnail"/>
                                 </div>`;
                 break;
             case 'name':
@@ -2321,9 +2525,8 @@ $privacyListJson = json_encode($privacyArray);
         editModal.show();
     }
 
-
     function previewImageFile(input) {
-        const preview = document.getElementById('imagePreview');
+        const preview = document.getElementById('imagePreviewEdit');
         const file = input.files[0];
         const reader = new FileReader();
 
@@ -2491,7 +2694,332 @@ $privacyListJson = json_encode($privacyArray);
         }
         return userColors[userId];
     }
-    
+    //Invitaciones
+    //Busca invitaciones por grupo
+    function loadGroupInvitations(groupId) {
+        $.ajax({
+            url: '<?php echo FRONT_ROOT ?>GroupInvitation/getInvitationsByGroup',
+            type: 'POST',
+            data: { groupId: groupId },
+            success: function(response) {
+                const responseJ = JSON.parse(response);
+                if (responseJ.success) {
+                    showInvitationsModal(responseJ.invitations);
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: responseJ.message,
+                        background: '#ffffff',
+                        color: '#000000',
+                        iconColor: '#dc3545'
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un problema al cargar las invitaciones.',
+                    background: '#ffffff',
+                    color: '#000000',
+                    iconColor: '#dc3545'
+                });
+            }
+        });
+    }
+    function showInvitationDetails(invitation) {
+        const detailsModalContent = `
+        <div class="modal fade" id="invitationDetailsModal" tabindex="-1" aria-labelledby="invitationDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content shadow-xl">
+                    <div class="modal-header bg-gradient-info">
+                        <h5 class="modal-title" id="invitationDetailsModalLabel">Detalles de la Invitación</h5>
+                        <button type="button" class="btn-close btn-close-black" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <!-- Información del Invitado -->
+                        <div class="mb-4 border p-4 rounded bg-light">
+                            <h5 class="mb-4 text-center">Invitado</h5>
+                            <div class="d-flex flex-column align-items-center mb-4">
+                                <img src="<?php echo FRONT_ROOT ?>${invitation.invited_user.image}" 
+                                    alt="Imagen del usuario" 
+                                    class="img-fluid rounded-circle mb-3" 
+                                    style="width: 100px; height: 100px;">
+                                
+                                <div class="text-center">
+                                    <p class="mb-1 fw-bold">${invitation.invited_user.firstName} ${invitation.invited_user.lastName}</p>
+                                    <p class="mb-1 text-muted">Email: <span class="fw-normal">${invitation.invited_user.email}</span></p>
+                                    <p class="mb-1 text-muted">Descripción: <span class="fw-normal">${invitation.invited_user.userDescription}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Información de la Invitación -->
+                        <div class="mb-4 p-4 rounded bg-light shadow-sm border border-secondary">
+                            <div class="mb-4 p-4 rounded bg-light shadow-sm border border-secondary">
+                            <h5 class="mb-3 text-center">Invitación</h5>
+                            <div class="d-flex flex-column align-items-center justify-content-center">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-person-check me-3" style="font-size: 1.5rem; color: #007bff;"></i>
+                                    <p class="mb-0"><strong>Invitado por:</strong> <span class="fw-bold">${invitation.invited_by.firstName} ${invitation.invited_by.lastName}</span></p>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-chat-text me-3" style="font-size: 1.5rem; color: #17a2b8;"></i>
+                                    <p class="mb-0"><strong>Mensaje:</strong> <span class="text-muted">${invitation.message}</span></p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mb-3">
+                                    <div class="w-100 d-flex align-items-center justify-content-center flex-wrap">
+                                        <div class="mb-0 d-flex align-items-center">
+                                            <i class="bi bi-flag" style="font-size: 1.5rem; color: #28a745;"></i>
+                                            <span class="mx-1"><strong>Estado:</strong></span>
+                                            <span class="badge m-0 ${invitation.status.id === '3' ? 'bg-danger' : invitation.status.id === '2' ? 'bg-success' : 'bg-primary'}">
+                                                ${invitation.status.name}
+                                            </span>
+                                        </div>
+                                        <div class="w-100">
+                                            <p class="text-muted w-100 mb-0 ms-2">
+                                            ${invitation.status.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-clock me-3" style="font-size: 1.5rem; color: #ffc107;"></i>
+                                    <p class="mb-0"><strong>Enviado el:</strong> <span class="text-muted">${new Date(invitation.send_at).toLocaleString()}</span></p>
+                                </div>
+                                ${invitation.responded_at ? 
+                                    `<div class="d-flex align-items-center mb-3">
+                                        <i class="bi bi-clock-history me-3" style="font-size: 1.5rem; color: #6c757d;"></i>
+                                        <p class="mb-0"><strong>Respondido el:</strong> <span class="text-muted">${new Date(invitation.responded_at).toLocaleString()}</span></p>
+                                    </div>` 
+                                    : 
+                                    `<div class="text-warning mb-1 d-flex align-items-center">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        <p class="mb-0">No respondido</p>
+                                    </div>`
+                                }
+                            </div>
+                        </div>
+                        <!-- Información del Grupo -->
+                        <div class="mb-4 p-4 rounded bg-light shadow-sm">
+                            <h5 class="mb-4 text-center"><i class="fas fa-users"></i> Grupo</h5>
+                            <div class="text-center mb-3">
+                                <!-- Imagen del Grupo -->
+                                <img src="<?php echo FRONT_ROOT ?>${invitation.groupId.groupInfo.image}" 
+                                    alt="Imagen del grupo" 
+                                    class="img-fluid rounded shadow" 
+                                    style="max-width: 300px; height: auto; border: 2px solid #007bff; transition: transform 0.3s;">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong>Nombre:</strong></p>
+                                    <p class="text-muted">${invitation.groupId.name}</p>
+                                </div>
+
+                                <div class="col-md-12 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong>Descripción:</strong></p>
+                                    <p class="text-muted">${invitation.groupId.groupInfo.description}</p>
+                                </div>
+
+                                <div class="col-md-6 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong><i class="fas fa-tag"></i> Tipo:</strong></p>
+                                    <p class="text-muted">${invitation.groupId.groupType.name} - ${invitation.groupId.groupType.description}</p>
+                                </div>
+
+                                <div class="col-md-6 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong><i class="fas fa-lock"></i> Privacidad:</strong></p>
+                                    <p class="text-muted">${invitation.groupId.groupPrivacy.name} - ${invitation.groupId.groupPrivacy.description}</p>
+                                </div>
+
+                                <div class="col-md-6 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong><i class="fas fa-book"></i> Reglas:</strong></p>
+                                    <p class="text-muted">${invitation.groupId.groupInfo.rules}</p>
+                                </div>
+
+                                <div class="col-md-6 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong><i class="fas fa-check-circle"></i> Estado:</strong></p>
+                                    <p class="text-muted">
+                                        <span class="badge bg-success w-100">${invitation.groupId.statusId.name}</span>
+                                        <span class="d-block text-muted">${invitation.groupId.statusId.description}</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-md-4 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong><i class="fas fa-calendar-alt"></i> Fecha de Creación:</strong></p>
+                                    <p class="text-muted">${new Date(invitation.groupId.created_at).toLocaleString()}</p>
+                                </div>
+
+                                <div class="col-md-4 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong><i class="fas fa-calendar-check"></i> Fecha de Inicio:</strong></p>
+                                    <p class="text-muted">${new Date(invitation.groupId.groupInfo.start_date).toLocaleDateString()}</p>
+                                </div>
+
+                                <div class="col-md-4 mb-3 text-center border border-primary rounded p-3 shadow-sm">
+                                    <p class="mb-1"><strong><i class="fas fa-calendar-times"></i> Fecha de Fin:</strong></p>
+                                    <p class="text-muted">${new Date(invitation.groupId.groupInfo.end_date).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información del Rol -->
+                        <div class="border p-4 rounded bg-light shadow-sm">
+                            <h5 class="mb-3 text-center">Rol</h5>
+                            <p class="mb-1">
+                                <strong>Rol Invitado:</strong>
+                            </p>
+                            <p class="mb-1">
+                                <span class="badge bg-info ms-2 p-2">${invitation.roleInvited.name}</span>
+                            </p>
+                            <p class="text-muted mb-0">- ${invitation.roleInvited.description}</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        $('body').append(detailsModalContent);
+
+        $('#invitationDetailsModal').modal('show');
+
+        $('#invitationDetailsModal').on('hidden.bs.modal', function () {
+            $('#invitationDetailsModal').remove();
+            $(this).remove();
+        });
+    }
+    function showInvitationsModal(invitations) {
+        const updateInvitationList = (filteredInvitations) => {
+            const invitationList = filteredInvitations.map(invitation => `
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card shadow border-light rounded" style="cursor: pointer;">
+                        <div class="card-body p-3">
+                            <h5 class="card-title">
+                                <i class="bi bi-person-fill me-2"></i>
+                                ${invitation.invited_user.firstName} ${invitation.invited_user.lastName}
+                            </h5>
+                            <p><strong>Grupo:</strong> ${invitation.groupId.name}</p>
+                            <p><strong>Invitado por:</strong> ${invitation.invited_by.firstName} ${invitation.invited_by.lastName}</p>
+                            <p><strong>Estado:</strong> <span class="badge ${getStatusClass(invitation.status.name)}">${invitation.status.name}</span></p>
+                            <p><strong>Correo:</strong> ${invitation.invited_user.email}</p>
+                            <button class="btn btn-primary w-100" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
+                                <i class="bi bi-eye-fill me-2"></i>
+                                Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            $('#invitationsModal .modal-body .row').html(invitationList);
+        };
+
+        const getStatusClass = (status) => {
+            switch (status) {
+                case 'Aceptado':
+                    return 'bg-success text-white';
+                case 'Rechazado':
+                    return 'bg-danger text-white';
+                case 'Vencido':
+                    return 'bg-warning text-dark';
+                default:
+                    return 'bg-primary text-white';
+            }
+        };
+
+        const createModalContent = () => {
+            return `
+                <div class="modal fade" id="invitationsModal" tabindex="-1" aria-labelledby="invitationsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen">
+                        <div class="modal-content">
+                            <div class="modal-header bg-gradient-primary">
+                                <h5 class="modal-title" id="invitationsModalLabel">Invitaciones Pendientes</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h3>Filtros</h3>
+                                <div class="mb-3">
+                                    <input type="text" id="emailFilter" class="form-control" placeholder="Buscar por correo" />
+                                </div>
+                                <div class="mb-5">
+                                    <select id="statusFilter" class="form-select">
+                                        <option value="">Todas</option>
+                                        <?php foreach ($groupInvitation as $invitations): ?>
+                                            <option value="<?php echo $invitations->getName()?>"><?php echo $invitations->getName()?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                                <div class="row g-3">
+                                    ${invitations.map(invitation => `
+                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                                            <div class="card shadow border-light rounded">
+                                                <div class="card-body p-3">
+                                                    <h5 class="card-title">
+                                                    <div class="d-flex align-items-center mb-3">
+                                                        <img src="<?php echo FRONT_ROOT ?>${invitation.invited_user.image}" alt="Imagen del usuario" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px;">
+                                                    <div>
+                                                        ${invitation.invited_user.firstName} ${invitation.invited_user.lastName}
+                                                    </h5>
+                                                    <p><strong>Grupo:</strong> ${invitation.groupId.name}</p>
+                                                    <p><strong>Invitado por:</strong> ${invitation.invited_by.firstName} ${invitation.invited_by.lastName}</p>
+                                                    <p><strong>Estado:</strong> <span class="badge ${getStatusClass(invitation.status.name)}">${invitation.status.name}</span></p>
+                                                    <p><strong>Correo:</strong> ${invitation.invited_user.email}</p>
+                                                    <button class="btn btn-primary w-100" onclick="showInvitationDetails(${JSON.stringify(invitation).replace(/"/g, '&quot;')})">
+                                                        <i class="bi bi-eye-fill me-2"></i>
+                                                        Ver Detalles
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        $('body').append(createModalContent());
+        $('#invitationsModal').modal('show');
+
+        // Filtros
+        $('#emailFilter').on('input', function() {
+            const emailValue = $(this).val().toLowerCase();
+            const statusValue = $('#statusFilter').val();
+            
+            const filteredInvitations = invitations.filter(invitation => {
+                const emailMatches = invitation.invited_user.email.toLowerCase().includes(emailValue);
+                const statusMatches = statusValue ? invitation.status.name === statusValue : true;
+                return emailMatches && statusMatches;
+            });
+            
+            updateInvitationList(filteredInvitations);
+        });
+
+        $('#statusFilter').on('change', function() {
+            const emailValue = $('#emailFilter').val().toLowerCase();
+            const statusValue = $(this).val();
+            
+            const filteredInvitations = invitations.filter(invitation => {
+                const emailMatches = invitation.invited_user.email.toLowerCase().includes(emailValue);
+                const statusMatches = statusValue ? invitation.status.name === statusValue : true;
+                return emailMatches && statusMatches;
+            });
+            
+            updateInvitationList(filteredInvitations);
+        });
+
+        $('#invitationsModal').on('hidden.bs.modal', function () {
+            $(this).remove();
+        });
+    }
 </script>
 </body>
 </html>

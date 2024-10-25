@@ -193,6 +193,30 @@ class MessageDAO {
             throw $e;
         }
     }
+    //Trae el id de usuario y la cantidad de mensajes no leidos por grupo que tiene el usuario logeado
+    public function getUnreadMessagesGroup($userID){
+        try {
+            $query = "SELECT count(id) as 'cantidad',group_id as 'idGrupo' FROM " . $this->tableMessageGroup . "
+                    WHERE user_id = :userID AND is_read=0 group by group_id";
+            
+            $parameters["userID"] = $userID;
+            $unreadMessages=array();
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query, $parameters);
+            foreach ($resultSet as $row) {
+                $unreadMessages[]=[
+                    'cantidad'=> $row["cantidad"],
+                    'idGrupo'=> $row["idGrupo"]
+                ];
+            }
+
+            return $unreadMessages;
+
+        } catch (Exception $e) {
+            error_log("Error en getUnreadMessages: " . $e->getMessage());
+            throw $e;
+        }
+    }
     //Actualiza los mensajes a leidos.
     public function updateUnreadMessages($userID,$senderID){
         try{

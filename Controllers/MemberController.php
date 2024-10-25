@@ -71,7 +71,8 @@ class MemberController{
                 $oldOwner = $this->MemberDAO->getOwnerIdByGroupId($groupID);
                 $result = $this->MemberDAO->updateMemberRole($memberId,$role,$groupID);
                 $changeOwner = $this->MemberDAO->updateMemberRole($oldOwner,2,$groupID);
-                if($result && $changeOwner){
+                $newOwner = $this->GroupDAO->updateGroupOwner($groupID,$memberId);
+                if($result && $changeOwner && $newOwner){
                     echo json_encode(["success" => true, "Se actualizo el nuevo dueño del grupo"]); 
                     return;
                 }else{

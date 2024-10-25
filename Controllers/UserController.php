@@ -149,6 +149,7 @@ class UserController{
                         if($newOwner){
                             if($newOwner->getStatus()==='1'){
                                 $_SESSION['messageCount'] = $this->MessageDAO->getUnreadMessages($newOwner->getUserID());
+                                $_SESSION['messageCountGroup'] = $this->MessageDAO->getUnreadMessagesGroup($newOwner->getUserID());
                                 $loggedUser = $newOwner;
                                 $_SESSION["loggedUser"] = $loggedUser;
                                 echo '<div class="alert alert-success">Login successful!</div>';
@@ -162,6 +163,7 @@ class UserController{
                                 if($newKeeper->getStatus()==='1'){
                                     $loggedUser = $newKeeper;
                                     $_SESSION['messageCount']  = $this->MessageDAO->getUnreadMessages($newKeeper->getUserID());
+                                    $_SESSION['messageCountGroup'] = $this->MessageDAO->getUnreadMessagesGroup($newAdmin->getUserID());
                                     $_SESSION["loggedUser"] = $loggedUser;
                                     echo '<div class="alert alert-success my-0">Login successful!</div>';
                                     $this->goNavBar();
@@ -177,6 +179,7 @@ class UserController{
                     }elseif($newAdmin = $this->OwnerDAO->searchAdminToLogin($email,$password)){
                         if($newAdmin->getStatus()==='1'){
                             $_SESSION['messageCount'] = $this->MessageDAO->getUnreadMessages($newAdmin->getUserID());
+                            $_SESSION['messageCountGroup'] = $this->MessageDAO->getUnreadMessagesGroup($newAdmin->getUserID());
                             $_SESSION["loggedUser"] = $newAdmin;
                             echo '<div class="alert alert-success">Login successful!</div>';
                             $this->goNavBar();

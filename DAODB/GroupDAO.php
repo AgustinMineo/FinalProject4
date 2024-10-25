@@ -63,7 +63,6 @@ class GroupDAO{
         }
         return false;
     }
-    
     //Trae los grupos en base al usuario actual
     public function getGroupsByUser($currentUser){
         $currentUserId = $currentUser->getUserId();
@@ -120,13 +119,12 @@ class GroupDAO{
             }
         }
     }
-    //Se agrego validacion por estado
     public function getGroupByID($groupID){
         if($groupID){
             try{ 
                 $query = "SELECT DISTINCT id,name,created_by,
                 created_at,group_type,status_id,group_privacy,groupInfo_id FROM " 
-                . $this->groupTable . " WHERE id = $groupID AND status_id in (1,4)";
+                . $this->groupTable . " WHERE id = $groupID";
                 
                 $this->connection = Connection::GetInstance();
                 $resultSet = $this->connection->Execute($query);
@@ -135,59 +133,12 @@ class GroupDAO{
                         $currentUser = $this->UserDAO->getUserByIdReduce($row['created_by']);
                         $group=$this->buildGroupByRow($row,$currentUser);
                     }
-
                 }
-                
                 return $group;
             }catch(Exception $ex){
                 throw $ex;
             }
         }
-    }
-    public function getAllGroups(){
-        try{
-            $query = "SELECT * FROM " 
-            . $this->groupTable . "
-                order by created_at desc";
-
-                $this->connection = Connection::GetInstance();
-                $resultSet = $this->connection->Execute($query, $parameters);
-
-                $groupUser = array();
-
-                foreach ($resultSet as $row) {
-                    $user = $this->UserDAO->getUserByIdReduce($row["chat_user_id"]);
-                    if ($user) {
-                        array_push($groupUser, $user);
-                    }
-                }
-
-        return $chatUsers;
-        }catch(Exception $ex){
-            throw $ex;
-        }
-    }
-    public function updateGroup(Group $modifyGroup){
-        if ($modifyGroup) {
-            try {
-                $query = "UPDATE " . $this->groupTable . " 
-                        SET name = :name, group_type = :group_type, group_privacy = :group_privacy,
-                        groupInfo_id = :groupInfo_id WHERE id = :id";
-    
-                $parameters['id'] = $modifyGroup->getId();
-                $parameters['name'] = $modifyGroup->getName();
-                $parameters['group_type'] = $modifyGroup->getGroupType();
-                $parameters['group_privacy'] = $modifyGroup->getGroupPrivacy();
-                $parameters['groupInfo_id'] = $modifyGroup->getGroupInfo(); 
-                $this->connection = Connection::GetInstance();
-                $this->connection->Execute($query, $parameters);
-    
-                return true; 
-            } catch (Exception $ex) {
-                throw $ex; 
-            }
-        }
-        return false; 
     }
     private function buildGroupByRow($row,$user){
         $groupType = $this->GroupTypeDAO->getGroupTypeById($row["group_type"]);
@@ -224,7 +175,7 @@ class GroupDAO{
             $query = "SELECT g.* FROM " 
             . $this->groupTable . " g WHERE g.id NOT IN 
             (SELECT group_id FROM " . $this->groupMemberTable . " WHERE user_id = :userID) 
-            AND g.group_privacy in (1,3,5) AND g.status_id=1 order by g.created_at desc";
+            AND g.group_privacy not in (2,4) AND g.status_id=1 order by g.created_at desc";
 
                 $parameters['userID']=$userID;
                 $this->connection = Connection::GetInstance();
@@ -290,6 +241,20 @@ class GroupDAO{
             throw $ex; 
         }
     }
+    public function updateGroupOwner($groupID,$newOwner){
+        try {
+            $query = "UPDATE " . $this->groupTable . " 
+                    SET created_by = :newOwner WHERE id = :groupID";
+            $parameters['groupID'] = $groupID;
+            $parameters['newOwner'] = $newOwner;
+            $this->connection = Connection::GetInstance();
+            $this->connection->Execute($query, $parameters);
+
+            return true; 
+        } catch (Exception $ex) {
+            throw $ex; 
+        }
+    }
     public function GetGroupInfoIDByGroupID($groupID){
         if($groupID){
             try{ 
@@ -308,6 +273,71 @@ class GroupDAO{
             }catch(Exception $ex){
                 throw $ex;
             }
+        }
+    }
+    /*               METODOS ADMIN                */
+    //Cambia el estado del grupo en base al enviado
+    public function changeStatusGroup($groupID,$status){
+        try{
+            $query = "UPDATE " . $this->groupTable . " 
+                        SET status_id = :status WHERE id = :groupID";
+
+            $parameters['groupID'] = $groupID;
+            $parameters['status'] = $status;
+            $this->connection = Connection::GetInstance();
+            return $this->connection->Execute($query,$parameters);
+        }catch(Exepction $ex){
+            throw $ex;
+        }
+    }
+    //Actualiza un grupo completo
+    public function updateGroup(Group $modifyGroup){
+        if ($modifyGroup) {
+            try {
+                $query = "UPDATE " . $this->groupTable . " 
+                        SET name = :name, group_type = :group_type, group_privacy = :group_privacy,
+                        groupInfo_id = :groupInfo_id WHERE id = :id";
+    
+                $parameters['id'] = $modifyGroup->getId();
+                $parameters['name'] = $modifyGroup->getName();
+                $parameters['group_type'] = $modifyGroup->getGroupType();
+                $parameters['group_privacy'] = $modifyGroup->getGroupPrivacy();
+                $parameters['groupInfo_id'] = $modifyGroup->getGroupInfo(); 
+                $this->connection = Connection::GetInstance();
+                $result =$this->connection->Execute($query, $parameters);
+                if($result>0){
+                    return true; 
+                }else{
+                    return false;
+                }
+            } catch (Exception $ex) {
+                throw $ex; 
+            }
+        }
+        return false; 
+    }
+    //Obtiene todos los grupos, se usa en ChatAdminView
+    public function getAllGroups(){
+        try{
+            $query = "SELECT * FROM " 
+            . $this->groupTable . "
+                order by created_at desc";
+
+                $this->connection = Connection::GetInstance();
+                $resultSet = $this->connection->Execute($query);
+                if($resultSet){
+                    $groupList = array();
+                    foreach ($resultSet as $row) {
+                        $user = $this->UserDAO->getUserByIdReduce($row["created_by"]);
+                        $group=$this->buildGroupByRow($row,$user);
+                        array_push($groupList, $group);
+                    }
+                    return $groupList;
+                }else{
+                    return [];
+                }
+        }catch(Exception $ex){
+            throw $ex;
         }
     }
 

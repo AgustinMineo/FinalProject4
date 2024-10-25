@@ -112,7 +112,6 @@ class KeeperDAO implements IKeeperDAO{
 
   public function updateTotalPoints($points,$keeperID){
     try{
-      var_dump($points);
       $query = "UPDATE ".$this->keeperTable." SET rank = '$points' WHERE keeperID = '$keeperID';";
       $this->connection = Connection::GetInstance();
       $this->connection->Execute($query);
@@ -213,26 +212,26 @@ class KeeperDAO implements IKeeperDAO{
   }
 
   public function updateDaysByKeeperIDAndDates($idKeeper,$dateStart,$dateEnd){
-    try{
+      try{
 
-      $queryUpdate="UPDATE ".$this->daysTable." k
-      SET k.available = 0
-      WHERE keeperID = :keeperID and day between :startDate AND :endDate";
-      
-      $parameters["startDate"] = $dateStart;
-      $parameters["endDate"] = $dateEnd;
-      $parameters["keeperID"] = $idKeeper;
-      $this->connection = Connection::GetInstance();
-      $result = $this->connection->ExecuteNonQuery($queryUpdate, $parameters);
+        $queryUpdate="UPDATE ".$this->daysTable." k
+        SET k.available = 0
+        WHERE keeperID = :keeperID and day between :startDate AND :endDate";
+        
+        $parameters["startDate"] = $dateStart;
+        $parameters["endDate"] = $dateEnd;
+        $parameters["keeperID"] = $idKeeper;
+        $this->connection = Connection::GetInstance();
+        $result = $this->connection->ExecuteNonQuery($queryUpdate, $parameters);
 
-      if($result){
-        return true;
-      }else{
-        return false;
-      }
-    }catch (Exception $ex) {
-      throw $ex;
-  }
+        if($result){
+          return true;
+        }else{
+          return false;
+        }
+      }catch (Exception $ex) {
+        throw $ex;
+    }
   }
 
   public function getKeeperByDisponibility($date1, $date2,$ownerID) {

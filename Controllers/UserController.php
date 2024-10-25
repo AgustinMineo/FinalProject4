@@ -163,7 +163,7 @@ class UserController{
                                 if($newKeeper->getStatus()==='1'){
                                     $loggedUser = $newKeeper;
                                     $_SESSION['messageCount']  = $this->MessageDAO->getUnreadMessages($newKeeper->getUserID());
-                                    $_SESSION['messageCountGroup'] = $this->MessageDAO->getUnreadMessagesGroup($newAdmin->getUserID());
+                                    $_SESSION['messageCountGroup'] = $this->MessageDAO->getUnreadMessagesGroup($newKeeper->getUserID());
                                     $_SESSION["loggedUser"] = $loggedUser;
                                     echo '<div class="alert alert-success my-0">Login successful!</div>';
                                     $this->goNavBar();

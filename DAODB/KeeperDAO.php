@@ -94,13 +94,13 @@ class KeeperDAO implements IKeeperDAO{
 
   public function getTotalPoints($keeperID){
     try{
-      $queryRank = "SELECT (SUM(k.rank)/count(r.reviewID)) as 'Promedio' FROM ".$this->reviewTable." r
+      $queryRank = "SELECT (SUM(r.rank)/count(r.reviewID)) as 'Promedio' FROM ".$this->reviewTable." r
       JOIN ".$this->bookingTable." b ON b.bookingID = r.bookingID 
       JOIN ".$this->keeperTable." k ON k.keeperID = b.keeperID
-      WHERE k.keeperID = '$keeperID'";
-      
+      WHERE k.keeperID = :keeperID";
+      $parameters['keeperID']=$keeperID;
       $this->connection = Connection::GetInstance();
-      $resultSet = $this->connection->Execute($queryRank);
+      $resultSet = $this->connection->Execute($queryRank,$parameters);
       
       if($resultSet){
         foreach ($resultSet as $row) {

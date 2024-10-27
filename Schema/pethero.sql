@@ -19,7 +19,7 @@ CREATE TABLE User (
   userDescription varchar(255) DEFAULT NULL,
   questionRecovery varchar(80) DEFAULT NULL,
   answerRecovery varchar(120) DEFAULT NULL,
-  userImage varchar(150),
+  userImage varchar(255),
   roleID tinyint(1) NOT NULL,
   status BOOLEAN NOT NULL DEFAULT 1,--1 activo, 0 eliminado
   CONSTRAINT FK_UserRole FOREIGN KEY (roleID) REFERENCES Roles(roleID),
@@ -64,7 +64,6 @@ CREATE TABLE Pet (
   petAge int DEFAULT NULL,
   PRIMARY KEY (petID)
 ) ENGINE=InnoDB;
-
 
 CREATE TABLE Booking (
   bookingID int(11) NOT NULL AUTO_INCREMENT,
@@ -127,8 +126,6 @@ CREATE TABLE group_message_reads (
     FOREIGN KEY (user_id) REFERENCES user(userID),
     FOREIGN KEY (group_id) REFERENCES groups(id)
 ) ENGINE=InnoDB;
-
-
 
 /*Grupos*/
 CREATE TABLE group_status (
@@ -223,6 +220,61 @@ CREATE TABLE group_invitations(
   FOREIGN KEY (roleInvited) REFERENCES group_role(id),
 )ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+/*Flujo incidencias*/
+CREATE TABLE incident_type (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT NOT NULL,
+  is_active BOOLEAN DEFAULT 1
+) ENGINE=InnoDB;
+
+CREATE TABLE incident_status (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT NOT NULL,
+  is_active BOOLEAN DEFAULT 1
+) ENGINE=InnoDB;
+
+CREATE TABLE incidents (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  idUsuario INT NOT NULL,
+  incidentTypeId INT NOT NULL,
+  incidentStatus INT NOT NULL,
+  incidentDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  description TEXT NOT NULL,
+  FOREIGN KEY (idUsuario) REFERENCES user(userId), 
+  FOREIGN KEY (incidentTypeId) REFERENCES incident_type(id),
+  FOREIGN KEY (incidentStatus) REFERENCES incident_status(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE incident_answer (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  idIncident INT NOT NULL,
+  idUser INT NOT NULL,
+  answerDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  answer TEXT NOT NULL,
+  FOREIGN KEY (idIncident) REFERENCES incidents(id),
+  FOREIGN KEY (idUser) REFERENCES user(userId)
+) ENGINE=InnoDB;
+
+INSERT INTO incident_status (name, description, is_active) VALUES
+  ('Abierto', 'La incidencia ha sido reportada y está pendiente de atención.', 1),
+  ('En Progreso', 'La incidencia está siendo atendida por el equipo correspondiente.', 1),
+  ('Cerrado', 'La incidencia ha sido resuelta.', 1),
+  ('Resuelto', 'La incidencia ha sido solucionada y está cerrada.', 1),
+  ('Reabierto', 'La incidencia ha sido reabierta para atención adicional.', 1);
+
+INSERT INTO incident_type (name, description, is_active) VALUES 
+  ('Reservas', 'Incidencias relacionadas con las reservas.', 1),
+  ('Mascotas', 'Incidencias relacionadas con las mascotas.', 1),
+  ('Grupos', 'Incidencias relacionadas con los grupos.', 1),
+  ('Reseñas', 'Incidencias relacionadas con las reseñas.', 1),
+  ('General', 'Incidencias generales.', 1),
+  ('Usuarios', 'Incidencias relacionadas con los usuarios.', 1),
+  ('Pagos', 'Incidencias relacionadas con los pagos.', 1),
+  ('Notificaciones', 'Incidencias relacionadas con notificaciones del sistema.', 1);
+
+  
 /*Insets Groups*/
 INSERT INTO group_status (id, name,is_active, description) VALUES 
   (1, 'Activo',1, 'El grupo está activo y puede ser accedido por los usuarios con los permisos adecuados.'),

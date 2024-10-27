@@ -30,7 +30,8 @@ if($countMesageGroup){
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            max-width: 1200px;
+            max-width: auto;
+            width: auto;
         }
 
         .nav-item {
@@ -75,26 +76,26 @@ if($countMesageGroup){
 </head>
 <body>
     <?php if ($userRole == 3):?>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
-            <div class="container d-flex flex-wrap justify-content-center mt-3" id="containerID">
-                <ul class="nav flex-column flex-sm-row">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/editUser"><i class="fas fa-user"></i> My profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/updateDaysAvailables"><i class="fas fa-calendar-alt"></i> Update Availability</a>
-                    </li>   
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Booking/showBookings"><i class="fas fa-book"></i> Show reservations</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Review/getAllReviews"><i class="fas fa-star"></i> My Reviews</a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/showCalendarData"><i class="fas fa-calendar"></i> Calendar</a>
-                    </li>
-                    <li class="nav-item position-relative">
+        <header>
+            <nav class="navbar navbar-expand-xl navbar-dark shadow-sm">
+                <div class="container d-flex justify-content-center mt-3" id="containerID">
+                    <ul class="nav flex-column flex-sm-row">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/editUser"><i class="fas fa-user"></i> My profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/updateDaysAvailables"><i class="fas fa-calendar-alt"></i> Update Availability</a>
+                        </li>   
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Booking/showBookings"><i class="fas fa-book"></i> Show reservations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Review/getAllReviews"><i class="fas fa-star"></i> My Reviews</a>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/showCalendarData"><i class="fas fa-calendar"></i> Calendar</a>
+                        </li>
+                        <li class="nav-item position-relative">
                             <a class="nav-link d-inline-block position-relative" href="<?php echo FRONT_ROOT ?>Message/getChats">
                                 <i class="fas fa-calendar"></i> Chats
                                 <?php if ($total > 0): ?>
@@ -104,18 +105,23 @@ if($countMesageGroup){
                                 <?php endif; ?>
                             </a>
                         </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-                    </li>  
-                </ul>  
-            </div>
-        </nav>
-    </header> 
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Incident/loadViewIncidents">
+                                <i class="fas fa-exclamation-triangle me-1"></i> Incidencias
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                        </li>  
+                    </ul>  
+                </div>
+            </nav>
+        </header> 
     <?php endif; ?>
 
     <?php if ($userRole == 2):?>
         <header>
-            <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+            <nav class="navbar navbar-expand-xl navbar-dark shadow-sm">
                 <div class="container d-flex flex-wrap justify-content-center mt-3" id="containerID">
                     <ul class="nav flex-column flex-sm-row">
                         <li class="nav-item">
@@ -143,11 +149,15 @@ if($countMesageGroup){
                             <a class="nav-link d-inline-block position-relative" href="<?php echo FRONT_ROOT ?>Message/getChats">
                                 <i class="fas fa-calendar"></i> Chats
                                 <?php if ($total > 0): ?>
-                                    <!-- Mostrar el contador de mensajes sobre el enlace "Chats" -->
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="currentCountID">
                                         <?php echo $total; ?>
                                     </span>
                                 <?php endif; ?>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Incident/loadViewIncidents">
+                                <i class="fas fa-exclamation-triangle me-1"></i> Incidencias
                             </a>
                         </li>
                         <li class="nav-item">
@@ -160,46 +170,50 @@ if($countMesageGroup){
     <?php endif; ?>
 
     <?php if ($userRole == 1):?>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
-            <div class="container d-flex flex-wrap justify-content-center mt-3" id="containerID">
-                <ul class="nav flex-column flex-sm-row">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/editUser"><i class="fas fa-users-cog"></i> All Users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/showKeepers"><i class="fas fa-users-cog"></i> All Keepers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Review/getAllReviews"><i class="fas fa-star"></i> All Reviews</a>
-                    </li>   
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Pet/showPets"><i class="fas fa-dog"></i> All Pets</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>Booking/showBookings"><i class="fas fa-calendar-check"></i> All Bookings</a>
-                    </li>
-                    <li class="nav-item position-relative">
-                            <a class="nav-link d-inline-block position-relative" href="<?php echo FRONT_ROOT ?>Message/getChats">
-                                <i class="fas fa-calendar"></i> Chats
-                                <?php if ($total > 0): ?>
-                                    <!-- Mostrar el contador de mensajes sobre el enlace "Chats" -->
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="currentCountID">
-                                        <?php echo $total; ?>
-                                    </span>
-                                <?php endif; ?>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+                <div class="container d-flex flex-wrap justify-content-center mt-3" id="containerID">
+                    <ul class="nav flex-column flex-sm-row">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/editUser"><i class="fas fa-users-cog"></i> All Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Keeper/showKeepers"><i class="fas fa-users-cog"></i> All Keepers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Review/getAllReviews"><i class="fas fa-star"></i> All Reviews</a>
+                        </li>   
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Pet/showPets"><i class="fas fa-dog"></i> All Pets</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Booking/showBookings"><i class="fas fa-calendar-check"></i> All Bookings</a>
+                        </li>
+                        <li class="nav-item position-relative">
+                                <a class="nav-link d-inline-block position-relative" href="<?php echo FRONT_ROOT ?>Message/getChats">
+                                    <i class="fas fa-calendar"></i> Chats
+                                    <?php if ($total > 0): ?>
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="currentCountID">
+                                            <?php echo $total; ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>ChatAdmin/getViewChatInformation"><i class="fas fa-calendar-check"></i> Chat Administration</a>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Incident/loadViewIncidents">
+                                <i class="fas fa-exclamation-triangle me-1"></i> Incidencias
                             </a>
                         </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>ChatAdmin/getViewChatInformation"><i class="fas fa-calendar-check"></i> Chat Administration</a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/logOut"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
     <?php endif; ?>
 </body>
 </html>

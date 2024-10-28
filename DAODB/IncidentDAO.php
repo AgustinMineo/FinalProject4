@@ -13,6 +13,7 @@ use DAODB\UserDAO as UserDAO;
 use DAODB\IncidentTypeDAO as IncidentTypeDAO;
 use DAODB\IncidentStatusDAO as IncidentStatusDAO;
 use DAODB\IncidentAnswerDAO as IncidentAnswerDAO;
+use DAODB\IncidentFileDAO as IncidentFileDAO;
 
 class IncidentDAO {
     
@@ -21,11 +22,13 @@ class IncidentDAO {
     private $IncidentStatusDAO;
     private $IncidentAnswerDAO;
     private $userDAO;
+    private $IncidentFileDAO;
 
     public function __construct() {
         $this->IncidentTypeDAO = new IncidentTypeDAO();
         $this->IncidentStatusDAO = new IncidentStatusDAO();
         $this->IncidentAnswerDAO = new IncidentAnswerDAO();
+        $this->IncidentFileDAO = new IncidentFileDAO();
         $this->UserDAO = new UserDAO();
     }
 
@@ -44,7 +47,7 @@ class IncidentDAO {
             $this->connection = Connection::GetInstance();
             $result= $this->connection->Execute($query, $parameters);
             if(is_array($result)){
-                return true;
+                return $this->connection->lastInsertId(); 
             }else{
                 return false;
             }
@@ -161,6 +164,8 @@ class IncidentDAO {
         $incident->setStatusId($incidentStatus);
         $incidentAnswers = $this->IncidentAnswerDAO->getAnswersByIncidentId($row['id']);
         $incident->setAnswers($incidentAnswers);
+        $incidentFiles = $this->IncidentFileDAO->getFilesByIncidentId($row['id']);
+        $incident->setFiles($incidentFiles);
         return $incident;
     }
 }

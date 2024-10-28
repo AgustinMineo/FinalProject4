@@ -77,8 +77,8 @@ if($countMesageGroup){
 <body>
     <?php if ($userRole == 3):?>
         <header>
-            <nav class="navbar navbar-expand-xl navbar-dark shadow-sm">
-                <div class="container d-flex justify-content-center mt-3" id="containerID">
+            <nav class="navbar navbar-expand-xl navbar-dark shadow-sm d-flex justify-content-center align-items-center">
+                <div class="d-flex justify-content-center mt-3" id="containerID">
                     <ul class="nav flex-column flex-sm-row">
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/editUser"><i class="fas fa-user"></i> My profile</a>
@@ -121,8 +121,8 @@ if($countMesageGroup){
 
     <?php if ($userRole == 2):?>
         <header>
-            <nav class="navbar navbar-expand-xl navbar-dark shadow-sm">
-                <div class="container d-flex flex-wrap justify-content-center mt-3" id="containerID">
+            <nav class="navbar navbar-expand-xl navbar-dark shadow-sm d-flex justify-content-center align-items-center">
+                <div class="d-flex flex-wrap justify-content-center mt-3" id="containerID">
                     <ul class="nav flex-column flex-sm-row">
                         <li class="nav-item">
                             <a class="nav-link p-1" href="<?php echo FRONT_ROOT ?>User/editUser"><i class="fas fa-user"></i> My profile</a>
@@ -171,8 +171,8 @@ if($countMesageGroup){
 
     <?php if ($userRole == 1):?>
         <header>
-            <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
-                <div class="container d-flex flex-wrap justify-content-center mt-3" id="containerID">
+            <nav class="navbar navbar-expand-lg navbar-dark shadow-sm d-flex justify-content-center align-items-center">
+                <div class="d-flex flex-wrap justify-content-center align-items-center mt-3" id="containerID">
                     <ul class="nav flex-column flex-sm-row">
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo FRONT_ROOT ?>User/editUser"><i class="fas fa-users-cog"></i> All Users</a>
@@ -205,6 +205,11 @@ if($countMesageGroup){
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo FRONT_ROOT ?>Incident/loadViewIncidents">
                                 <i class="fas fa-exclamation-triangle me-1"></i> Incidencias
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo FRONT_ROOT ?>Incident/loadAdministrationIncidentView">
+                                <i class="fas fa-exclamation-triangle me-1"></i> Administrar Incidencias
                             </a>
                         </li>
                         <li class="nav-item">

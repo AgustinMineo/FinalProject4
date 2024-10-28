@@ -505,15 +505,16 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             return; 
         }
-        const emailRegex = /^(?!.*\.\.)([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+        const emailRegex = /^(?!.*\s)(?!.*\.\.)([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
         if (!emailRegex.test(email)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Formato de correo electrónico inválido o contiene puntos consecutivos!'
+                text: 'Formato de correo electrónico inválido o contiene espacios o puntos consecutivos!'
             });
             return;
         }
+
 
         const validExtensions = ['.com', '.net', '.org', '.edu', '.mx','.ar','.gob','.edu'];
         if (!validExtensions.some(ext => email.endsWith(ext))) {

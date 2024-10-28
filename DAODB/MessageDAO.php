@@ -232,10 +232,11 @@ class MessageDAO {
     }
     public function updateUnreadMessagesGroup($user_id,$group_id){
         try{
-            $query = "UPDATE ".$this->tableMessageGroup." SET is_read = 1 
+            $query = "UPDATE ".$this->tableMessageGroup." SET is_read = 1, read_at=:now 
             WHERE user_id = :user_id and group_id = :group_id and is_read=0;";
             $parameters['user_id']=$user_id;
             $parameters['group_id']=$group_id;
+            $parameters['now']=date('Y-m-d H:i:s');
             $this->connection = Connection::GetInstance();
             $this->connection->Execute($query,$parameters);
             return true;

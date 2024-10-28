@@ -9,6 +9,7 @@ class Incident {
     private $incidentDate;
     private $description;
     private $answers = [];
+    private $files;
 
     public function getId() {
         return $this->id;
@@ -64,6 +65,14 @@ class Incident {
     public function getAnswers() {
         return $this->answers;
     }
+
+    public function setFiles($files) {
+        $this->files = $files;
+    }
+
+    public function getFiles() {
+        return $this->files;
+    }
     public function toArray() {
         return [
             'id' => $this->id,
@@ -72,6 +81,7 @@ class Incident {
             'statusId' => $this->statusId ? $this->statusId->toArray() : null, 
             'incidentDate' => $this->incidentDate,
             'description' => $this->description,
+            'files' => $this->files,
             'answers' => array_map(function($answer) {
                 return $answer->toArray();
             }, $this->answers), 

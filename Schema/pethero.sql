@@ -257,11 +257,19 @@ CREATE TABLE incident_answer (
   FOREIGN KEY (idUser) REFERENCES user(userId)
 ) ENGINE=InnoDB;
 
+CREATE TABLE incident_files (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    incident_id INT NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (incident_id) REFERENCES incidents(id)
+) ENGINE=InnoDB;
+
 INSERT INTO incident_status (name, description, is_active) VALUES
   ('Abierto', 'La incidencia ha sido reportada y está pendiente de atención.', 1),
   ('En Progreso', 'La incidencia está siendo atendida por el equipo correspondiente.', 1),
-  ('Cerrado', 'La incidencia ha sido resuelta.', 1),
-  ('Resuelto', 'La incidencia ha sido solucionada y está cerrada.', 1),
+  ('Resuelto', 'La incidencia ha sido solucionada', 1),
+  ('Cerrado', 'La incidencia está cerrada', 1),
   ('Reabierto', 'La incidencia ha sido reabierta para atención adicional.', 1);
 
 INSERT INTO incident_type (name, description, is_active) VALUES 
@@ -397,7 +405,7 @@ CREATE EVENT IF NOT EXISTS update_reservations_status
     WHERE status IN (1, 3, 4)
     AND endDate < NOW();
 
-/*Job vencimiento de invitaciones*/
+/*Job vencimiento de invitaciones - luego de 3 dias se vencen*/
 CREATE EVENT IF NOT EXISTS update_invitation_status
   ON SCHEDULE EVERY 1 DAY
   DO
@@ -415,3 +423,17 @@ CREATE EVENT update_messages_for_inactive_members
   update group_message_reads SET is_read=1
   WHERE is_read=0 
   and user_id in (SELECT DISTINCT gm.user_id from group_members gm where gm.status=0);
+
+/*Job para eliminar grupos de tipo evento que finalizaron su rango de fechas*/
+CREATE EVENT updateGroupEventStatus
+	ON SCHEDULE EVERY 1 DAY
+	DO
+		UPDATE groups g
+		SET g.status_id = 3
+		WHERE g.status_id = 1 
+		  AND EXISTS (
+			  SELECT 1
+			  FROM group_info gi
+			  WHERE gi.id = g.groupInfo_id
+				AND gi.end_date < NOW()
+		  );

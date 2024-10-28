@@ -46,8 +46,6 @@ $groupListJson = json_encode($groupArray);
     .img-fluid:hover {
         transform: scale(1.05);
     }
-    
-    /* Mejora de bordes en las columnas */
     .border {
         border: 1px solid #007bff;
     }

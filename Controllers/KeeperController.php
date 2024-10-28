@@ -65,117 +65,98 @@ class KeeperController{
         SessionHelper::InfoSession([3]);
         require_once(VIEWS_PATH."keeperDays.php");
     }
-
-    public function newKeeper($rol=null,$lastName,$firstName,$cellPhone,$birthDate,$email,
-        $password,$confirmPassword,$userDescription,$QuestionRecovery,$answerRecovery,$animalSize,$price,$cbu,$files){
-        $userRole=0;
-        if($rol!='0'){
-            $userRole=SessionHelper::getCurrentRole();
+    public function newKeeper($rol = null, $lastName, $firstName, $cellPhone, $birthDate, $email,
+        $password, $confirmPassword, $userDescription, $QuestionRecovery, $answerRecovery, $animalSize, $price, $cbu, $files) {
+        $userRole = 0;
+        if ($rol != '0') {
+            $userRole = SessionHelper::getCurrentRole();
         }
-        if($this->KeeperDAO->searchKeeperByEmail($email) == NULL){
-            if($this->OwnerDAO->searchOwnerByEmail($email) == NULL){
-                if(strcmp($password,$confirmPassword) == 0){
-                    if($this->KeeperDAO->searchCBU($cbu) ==NULL && strlen($cbu)<=20){
-                        $newKeeper = new Keeper();
-                        $newKeeper->setLastName($lastName);
-                        $newKeeper->setfirstName($firstName);
-                        $newKeeper->setCellPhone($cellPhone);
-                        $newKeeper->setbirthDate($birthDate);
-                        $newKeeper->setEmail($email);
-                        $newKeeper->setPassword($password);
-                        $newKeeper->setDescription($userDescription);
-                        $newKeeper->setAnimalSize($animalSize);
-                        $newKeeper->setPrice($price);
-                        $newKeeper->setCBU($cbu);
-                        $newKeeper->setPoints(0);
-                        $newKeeper->setQuestionRecovery($QuestionRecovery);
-                        $newKeeper->setAnswerRecovery($answerRecovery);
-                        $newKeeper->setRol(3);
-                        $keeperID= $this->KeeperDAO->AddKeeper($newKeeper);
-                        $newKeeper->setKeeperID($keeperID);
-                        if($keeperID){
-                            if (isset($_FILES['imageKeeper']) && $_FILES['imageKeeper']['error'][0] === UPLOAD_ERR_OK) {
-                                $formatName = function($files, $key) use ($keeperID) {
-                                    $extension = strtolower(pathinfo($_FILES['imageKeeper']['name'][$key], PATHINFO_EXTENSION));
-                                    return "profile_image_{$keeperID}." . $extension;
-                                };
-                                $imageRoute = $this->fileUploader->uploadFiles($_FILES['imageKeeper'], $keeperID, $formatName);
-                                if ($imageRoute) {
-                                    $this->UserDAO->updateImage($imageRoute[0],$newKeeper->getEmail());
-                                }
-                            }
-                        }
-                        $this->newMailer->welcomeMail($lastName,$firstName,$email);
-                        if($userRole===0){//Se evalua si es desde admin o desde registro
-                            echo "<div class='alert alert-success'>¡Usuario registrado correctamente!</div>";
-                            $this->goLoginKeeper();
-                        }else{
-                            $userRole=SessionHelper::InfoSession([1]);
-                            $ownerUsers = $this->OwnerDAO->GetAllOwner();
-                            $keeperUsers= $this->KeeperDAO->GetAllKeeper();
-                            $adminUsers = $this->OwnerDAO->GetAllAdminUser();
-                            require_once(VIEWS_PATH."userListAdminView.php");
-                            return $newKeeper;
-                        }
-                    }else{
-                        if($userRole===1){
-                            $userRole=SessionHelper::InfoSession([1]);
-                            $ownerUsers = $this->OwnerDAO->GetAllOwner();
-                            $keeperUsers= $this->KeeperDAO->GetAllKeeper();
-                            $adminUsers = $this->OwnerDAO->GetAllAdminUser();
-                            echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
-                            require_once(VIEWS_PATH."userListAdminView.php");
-                        }else{
-                            echo "<div class='alert alert-danger'>The CBU already exist or has more than 20 digits.</div>";
-                            $this->addKeeperView();
+
+        // Validar si el correo ya existe
+        if ($this->UserDAO->validateUniqueEmail($email)) {
+            if ($userRole === 1) {
+                $userRole = SessionHelper::InfoSession([1]);
+                $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                $keeperUsers = $this->KeeperDAO->GetAllKeeper();
+                $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                echo "<div class='alert alert-danger'>Email already exists! Please try again with another email</div>";
+                require_once(VIEWS_PATH . "userListAdminView.php");
+            } else {
+                echo "<div class='alert alert-danger'>Email already exists! Please try again with another email</div>";
+                $this->addKeeperView();
+            }
+            return;
+        }
+        if (strcmp($password, $confirmPassword) == 0) {
+            if ($this->KeeperDAO->searchCBU($cbu) == NULL && strlen($cbu) <= 20) {
+                $newKeeper = new Keeper();
+                $newKeeper->setLastName($lastName);
+                $newKeeper->setfirstName($firstName);
+                $newKeeper->setCellPhone($cellPhone);
+                $newKeeper->setbirthDate($birthDate);
+                $newKeeper->setEmail($email);
+                $newKeeper->setPassword($password);
+                $newKeeper->setDescription($userDescription);
+                $newKeeper->setAnimalSize($animalSize);
+                $newKeeper->setPrice($price);
+                $newKeeper->setCBU($cbu);
+                $newKeeper->setPoints(0);
+                $newKeeper->setQuestionRecovery($QuestionRecovery);
+                $newKeeper->setAnswerRecovery($answerRecovery);
+                $newKeeper->setRol(3);
+                $keeperID = $this->KeeperDAO->AddKeeper($newKeeper);
+                $newKeeper->setKeeperID($keeperID);
+                if ($keeperID) {
+                    if (isset($_FILES['imageKeeper']) && $_FILES['imageKeeper']['error'][0] === UPLOAD_ERR_OK) {
+                        $formatName = function($files, $key) use ($keeperID) {
+                            $extension = strtolower(pathinfo($_FILES['imageKeeper']['name'][$key], PATHINFO_EXTENSION));
+                            return "profile_image_{$keeperID}." . $extension;
+                        };
+                        $imageRoute = $this->fileUploader->uploadFiles($_FILES['imageKeeper'], $keeperID, $formatName);
+                        if ($imageRoute) {
+                            $this->UserDAO->updateImage($imageRoute[0], $newKeeper->getEmail());
                         }
                     }
-            }else{
-                if($userRole===1){
-                    $userRole=SessionHelper::InfoSession([1]);
+                }
+                $this->newMailer->welcomeMail($lastName, $firstName, $email);
+                if ($userRole === 0) {
+                    echo "<div class='alert alert-success'>¡Usuario registrado correctamente!</div>";
+                    $this->goLoginKeeper();
+                } else {
+                    $userRole = SessionHelper::InfoSession([1]);
                     $ownerUsers = $this->OwnerDAO->GetAllOwner();
-                    $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                    $keeperUsers = $this->KeeperDAO->GetAllKeeper();
                     $adminUsers = $this->OwnerDAO->GetAllAdminUser();
-                    echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
-                    require_once(VIEWS_PATH."userListAdminView.php");
-                }else{
-                echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
-                $this->addKeeperView();
+                    require_once(VIEWS_PATH . "userListAdminView.php");
+                    return $newKeeper;
+                }
+            } else {
+                if ($userRole === 1) {
+                    $userRole = SessionHelper::InfoSession([1]);
+                    $ownerUsers = $this->OwnerDAO->GetAllOwner();
+                    $keeperUsers = $this->KeeperDAO->GetAllKeeper();
+                    $adminUsers = $this->OwnerDAO->GetAllAdminUser();
+                    echo "<div class='alert alert-danger'>The CBU already exists or has more than 20 digits.</div>";
+                    require_once(VIEWS_PATH . "userListAdminView.php");
+                } else {
+                    echo "<div class='alert alert-danger'>The CBU already exists or has more than 20 digits.</div>";
+                    $this->addKeeperView();
                 }
             }
-        }
-        else{
-            if($userRole===1){
-                $userRole=SessionHelper::InfoSession([1]);
+        } else {
+            if ($userRole === 1) {
+                $userRole = SessionHelper::InfoSession([1]);
                 $ownerUsers = $this->OwnerDAO->GetAllOwner();
-                $keeperUsers= $this->KeeperDAO->GetAllKeeper();
+                $keeperUsers = $this->KeeperDAO->GetAllKeeper();
                 $adminUsers = $this->OwnerDAO->GetAllAdminUser();
-                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
-                require_once(VIEWS_PATH."userListAdminView.php");
-            }else{
-                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
+                echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
+                require_once(VIEWS_PATH . "userListAdminView.php");
+            } else {
+                echo "<div class='alert alert-danger'>Passwords are not the same. Please try again</div>";
                 $this->addKeeperView();
             }
         }
-        }        
-        else{
-            if($userRole===1){
-                $userRole=SessionHelper::InfoSession([1]);
-                $ownerUsers = $this->OwnerDAO->GetAllOwner();
-                $keeperUsers= $this->KeeperDAO->GetAllKeeper();
-                $adminUsers = $this->OwnerDAO->GetAllAdminUser();
-                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
-                require_once(VIEWS_PATH."userListAdminView.php");
-            }else{
-                echo "<div class='alert alert-danger'>Email already exist! Please try again with another email</div>";
-                $this->addKeeperView();
-            }
-        }
-         //$newKeeper->setPoints('0');
-         //$newKeeper->setkeeperId($this->searchLastKeeperID()); TO DO
-         //$newKeeper->setKeeperImg($keeperImg);
     }
-
     public function showKeepers(){
         $listKeepers = array();
         $listKeepers = $this->KeeperDAO->getAllKeeper();

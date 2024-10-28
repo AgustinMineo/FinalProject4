@@ -1,11 +1,13 @@
 <?php
 namespace Controllers;
 use Helper\SessionHelper as SessionHelper;
+use Helper\FileUploader as FileUploader;
 
 use DAODB\IncidentTypeDAO as IncidentTypeDAO;
 use DAODB\IncidentStatusDAO as IncidentStatusDAO;
 use DAODB\IncidentDAO as IncidentDAO;
 use DAODB\IncidentAnswerDAO as IncidentAnswerDAO;
+use DAODB\IncidentFileDAO as IncidentFileDAO;
 use Models\Incident as Incident;
 use Models\IncidentAnswer as IncidentAnswer;
 class IncidentController {
@@ -19,6 +21,8 @@ class IncidentController {
         $this->IncidentTypeDAO = new IncidentTypeDAO();
         $this->IncidentStatusDAO = new IncidentStatusDAO();
         $this->IncidentAnswerDAO = new IncidentAnswerDAO();
+        $this->IncidentFileDAO = new IncidentFileDAO();
+        $this->fileUploader = new FileUploader(INCIDENT_PATH);
     }
     public function goIncidentView($incidentTypeList=null,$incidentStatusList=null,$incidentsList=null){
         if($incidentTypeList === null && $incidentStatusList == null && $incidentsList === null){
@@ -34,8 +38,8 @@ class IncidentController {
         $incidentTypeList =array();
         $incidentStatusList=array();
         $incidentsList=array();
-        $incidentStatusList = $this->IncidentStatusDAO->getAllIncidentStatus();
-        $incidentTypeList = $this->IncidentTypeDAO->getAllIncidentTypes();
+        $incidentStatusList = $this->IncidentStatusDAO->getAllIncidentStatusActive();
+        $incidentTypeList = $this->IncidentTypeDAO->getAllIncidentTypesActives();
         if(SessionHelper::getCurrentRole() === 1){
             $incidentsList = $this->IncidentDAO->getAllIncidents();
         }else{
@@ -43,7 +47,24 @@ class IncidentController {
         }
         $this->goIncidentView($incidentTypeList,$incidentStatusList,$incidentsList);
     }
-
+    public function goIncidentAdministrationView($incidentStatusList=null,$incidentTypeList=null){
+        if($incidentTypeList === null && $incidentStatusList == null){
+            if(SessionHelper::getCurrentUser()->getRole()!=='1'){
+                SessionHelper::redirectTo403();
+            }    
+        }
+        $userRole=SessionHelper::InfoSession([1]);
+        $userID = intval(SessionHelper::getCurrentUser()->getUserId());
+        require_once(VIEWS_PATH. "IncidentAdministration.php");
+    }
+    public function loadAdministrationIncidentView(){
+        $incidentTypeList =array();
+        $incidentStatusList=array();
+        $incidentStatusList = $this->IncidentStatusDAO->getAllIncidentStatus();
+        $incidentTypeList = $this->IncidentTypeDAO->getAllIncidentTypes();
+        $this->goIncidentAdministrationView($incidentStatusList,$incidentTypeList);
+    }
+    /*
     public function newIncident($userId, $incidentTypeId, $description) {
         try {
             if ($userId === null && $incidentTypeId === null && $description === null) {
@@ -63,6 +84,53 @@ class IncidentController {
             if($result){
                 echo json_encode(['success' => true, 'message' => '¡Incidente creado exitosamente!']);
             }else{
+                echo json_encode(['success' => false, 'message' => '¡La incidencia no pudo ser creada!']);
+            }
+        } catch (Exception $ex) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Error al crear el incidente: ' . $ex->getMessage()]);
+        }
+    }*/
+    public function newIncident($userId, $incidentTypeId, $description) {
+        try {
+            if ($userId === null || $incidentTypeId === null || $description === null) {
+                if (SessionHelper::getCurrentUser()) {
+                    SessionHelper::redirectTo403();
+                }
+            }
+    
+            $statusId = 1;
+            $incident = new Incident();
+            $incident->setUserId($userId);
+            $incident->setIncidentTypeId($incidentTypeId);
+            $incident->setStatusId($statusId);
+            $incident->setDescription($description);
+            $incident->setIncidentDate(date('Y-m-d H:i:s'));
+    
+            $result = $this->IncidentDAO->newIncident($incident);
+    
+            if ($result) {
+                $incidentId = $result;
+            
+                $subFolder = $incidentId; 
+                $incidentImageRoute = [];
+    
+                if (isset($_FILES['media'])) {
+                    $formatName = function($files, $key) use ($incidentId) {
+                        $extension = strtolower(pathinfo($files['name'][$key], PATHINFO_EXTENSION));
+                        return "{$incidentId}-image-{$key}." . $extension; // Nombre de archivo único por índice
+                    };
+                    $incidentImageRoute = $this->fileUploader->uploadFiles($_FILES['media'], $subFolder, $formatName);
+
+                    //Guardo en base los patch
+                    foreach ($incidentImageRoute as $file) {
+                        $this->IncidentFileDAO->saveIncidentFile($incidentId, $file);
+                    }
+                }
+                if($result){
+                    echo json_encode(['success' => true, 'message' => '¡Incidente creado exitosamente!']);
+                }
+            } else {
                 echo json_encode(['success' => false, 'message' => '¡La incidencia no pudo ser creada!']);
             }
         } catch (Exception $ex) {
@@ -116,7 +184,7 @@ class IncidentController {
             }
             $incident = $this->IncidentDAO->getIncidentById($incidentId);
             
-            if ($incident) {
+            if (!is_null($incident)) {
                 echo json_encode(
                     ['success' => true, 
                     'message' => 'Incidencia obtenia correctamente',

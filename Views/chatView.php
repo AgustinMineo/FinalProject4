@@ -1830,51 +1830,6 @@ $privacyListJson = json_encode($privacyArray);
             }
         });
     }
-    //Valido el rol del usuario actual
-    /*function validateGroupRole(groupId, currentUser) {
-        $.ajax({
-            url: '<?php echo FRONT_ROOT ?>Member/getUserRoleByGroup', 
-            type: 'POST',
-            data: {
-                groupId: groupId,
-                userId: currentUser
-            },
-            success: function(response) {
-                const data = JSON.parse(response);
-                const userRole = data.role;
-                const adminBlock = document.getElementById('adminBlock' + groupId);
-                const adminBlocks = document.querySelectorAll(`[id^="adminBlock${groupId}"]`);
-                const messageInput = document.getElementById('messageInputID');
-                const detailInvited = document.getElementById('InvitedUserDetails');
-                const InvitedUserDetails = document.getElementById('InvitedUserDetails');
-                if (parseInt(userRole) === 1 || parseInt(userRole) === 2) {
-                    adminBlocks.forEach(block => {
-                        block.style.display = 'block';
-                    });
-                } else if(parseInt(userRole) === 4){
-                    alert(userRole);
-                    membersListID.style.display ='none';
-                    //adminBlock.style.display = 'none';
-                    messageInput.style.display = 'none';
-                    InvitedUserDetails.style.display='block';
-                    detailInvited.style.display='block'
-                    adminBlocks.forEach(block => {
-                        block.style.display = 'none';
-                    }); 
-                }else {
-                    adminBlocks.forEach(block => {
-                        block.style.display = 'none';
-                    }); 
-                    // adminBlock.style.display = 'none';
-                }
-                
-                //$('#modalGroup' + groupId).modal('show');
-            },
-            error: function() {
-                console.error('Error al obtener el rol del usuario.');
-            }
-        });
-    }*/
     function validateGroupRole(groupId, currentUser) {
     $.ajax({
         url: '<?php echo FRONT_ROOT ?>Member/getUserRoleByGroup', 
@@ -1896,6 +1851,7 @@ $privacyListJson = json_encode($privacyArray);
             console.log('membersListID:', membersListID);
             console.log('messageInput:', messageInput);
             console.log('InvitedUserDetails:', detailInvited);
+
             if (membersListID) membersListID.style.display = ''; 
             if (messageInput) messageInput.style.display = ''; 
             if (detailInvited) detailInvited.style.display = ''; 

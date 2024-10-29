@@ -114,7 +114,7 @@ require_once("validate-session.php");
         </div>
 
         <!-- Paginación -->
-        <nav>
+        <nav class="mt-3">
             <ul class="pagination" id="pagination"></ul>
         </nav>
     </div>

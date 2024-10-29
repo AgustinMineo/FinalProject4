@@ -95,7 +95,7 @@ if($userRole===1){
           <div id="loaderOwner" class="loader"></div>
                <div class="container">
                     <h2 class="mb-4 text-center">Listado de reservas <?php if($userRole ===1 || $alterRole===1 ){echo '- Vista owner';}?></h2>
-                    <table class="table table-striped table-bordered"id="bookingsTableOwner">
+                    <table class="table table-striped table-dark"id="bookingsTableOwner">
                     <thead class="thead-light">
                          <tr>
                               <th>Booking id</th>
@@ -485,8 +485,8 @@ if($userRole===1){
                <div class="container">
                     <div id="loaderKeeper" class="loader"></div>
                     <h2 class="mb-4 text-center">Listado de reservas <?php if($userRole === 1 || $alterRole===3 && $userRole===1){echo '- Vista Keeper';}?></h2>
-                    <table class="table table-striped table-bordered text-center" id="bookingsTableKeeper">
-                         <thead class="table-primary">
+                    <table class="table table-dark text-center" id="bookingsTableKeeper">
+                         <thead class="table-dark">
                               <tr>
                                    <th>Booking ID</th>
                                    <th>First Date</th>

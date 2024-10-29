@@ -149,50 +149,38 @@ class MessageController{
         }
     }
     public function getUnreadMessagesGroup() {
-        // Asegurarse de que el usuario esté autenticado
         if(SessionHelper::getCurrentUser()->getUserID()) {
             try {
-                // Llamar al DAO para obtener los mensajes no leídos
                 $totalMessages = $this->MessageDAO->getUnreadMessagesGroup(SessionHelper::getCurrentUser()->getUserID());
                 $resultValue = [];
     
-                // Verificar que el resultado sea un array válido
                 if (is_array($totalMessages) && count($totalMessages) > 0) {
                     foreach($totalMessages as $message) {
                         $resultValue[] = $message;
                     }
     
-                    // Actualizar la sesión con los mensajes no leídos del grupo
                     $_SESSION['messageCountGroup'] = $totalMessages;
                 } else {
-                    // Si no hay mensajes, vaciar la sesión
                     $_SESSION['messageCountGroup'] = [];
                 }
     
-                // Enviar la respuesta en formato JSON
                 echo json_encode($resultValue);
                 exit();
                 
             } catch (Exception $e) {
-                // Manejo de excepciones, asegurando una salida clara en caso de error
                 echo json_encode([
                     'error' => 'Error en la controller',
-                    'message' => $e->getMessage() // Mensaje detallado del error
+                    'message' => $e->getMessage()
                 ]);
                 exit();
             }
         } else {
-            // Si el usuario no está autenticado, enviar un error
             echo json_encode([
                 'error' => 'Usuario no autenticado'
             ]);
             exit();
         }
     }
-    
-    
 
 }
-
-
 ?>

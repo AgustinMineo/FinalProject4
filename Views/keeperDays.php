@@ -307,20 +307,32 @@ function isBooked($day, $bookings) {
                         </div>
 
                         <!-- Vaccination Plan -->
-                        <div class="container mb-4 text-center">
-                            <h5><strong>Plan de Vacunación</strong></h5>
-                            <?php
-                            if ($imagePetVaccinationPlan = $bookingDetail->getPetID()->getPetVaccinationPlan()) {
-                                $imageDataVaccinationPlan = base64_encode(file_get_contents($imagePetVaccinationPlan));
-                                echo '<img src="data:image/jpeg;base64,'.$imageDataVaccinationPlan.'" class="img-fluid rounded mb-3" alt="Plan de vacunación">';
+                        <div class="d-flex flex-wrap justify-content-center w-100 mt-2">
+                            <h5>Plan de Vacunación</h5>
+                        </div>
+                        <div class="d-flex flex-wrap justify-content-center w-100">
+                            <?php 
+                            if (!$bookingDetail->getPetID()->getPetVaccinationPlan()) {
+                                echo "<h3>Sin plan de vacunación disponible</h3>";
                             } else {
-                                echo "<h5 class='text-muted'>No tiene imagen de plan de vacunación</h5>";
+                                $vaccinationPlanPath = $bookingDetail->getPetID()->getPetVaccinationPlan();
+                                $fileType = pathinfo($vaccinationPlanPath, PATHINFO_EXTENSION);
+                                if ($fileType === 'pdf') {
+                                // Muestro pdf
+                                    echo '<iframe src="' . FRONT_ROOT . $vaccinationPlanPath . '" class="w-100 px-3" style="height: 60vh;" frameborder="0"></iframe>';
+                                } elseif (in_array(strtolower($fileType), ['jpg', 'jpeg', 'png'])) {
+                                    // Muestro imagen
+                                    $vaccinationPlanData = base64_encode(file_get_contents($vaccinationPlanPath));
+                                    echo '<img src="data:image/' . $fileType . ';base64,' . $vaccinationPlanData . '" class="img-fluid rounded shadow-sm" style="max-height: 800px;">';
+                            } else {
+                                echo "<h3>Formato de archivo no compatible</h3>";
+                                }
                             }
-                            ?>
+                        ?>
                         </div>
 
                         <!-- Pet Video -->
-                        <div class="container mb-4 text-center">
+                        <div class="container my-4 text-center ">
                             <h5><strong>Video</strong></h5>
                             <?php 
                             if (!$bookingDetail->getPetID()->getPetVideo()) {

@@ -152,7 +152,7 @@ class UserController{
                                 $_SESSION['messageCountGroup'] = $this->MessageDAO->getUnreadMessagesGroup($newOwner->getUserID());
                                 $loggedUser = $newOwner;
                                 $_SESSION["loggedUser"] = $loggedUser;
-                                echo '<div class="alert alert-success">Login successful!</div>';
+                                echo '<div class="alert alert-success my-0">Login successful!</div>';
                                 $this->goNavBar();
                             }else{
                                 echo '<div class="alert alert-danger my-0"> The User is deleted!</div>';
@@ -181,7 +181,7 @@ class UserController{
                             $_SESSION['messageCount'] = $this->MessageDAO->getUnreadMessages($newAdmin->getUserID());
                             $_SESSION['messageCountGroup'] = $this->MessageDAO->getUnreadMessagesGroup($newAdmin->getUserID());
                             $_SESSION["loggedUser"] = $newAdmin;
-                            echo '<div class="alert alert-success">Login successful!</div>';
+                            echo '<div class="alert alert-success my-0">Login successful!</div>';
                             $this->goNavBar();
                             
                         }else{

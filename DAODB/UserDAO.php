@@ -296,5 +296,24 @@ class UserDAO implements IUserDAO{
             throw $ex; 
         }
     }
+    
+    public function validateUniqueEmail($email){
+        try {
+            $query = "SELECT u.userID
+            FROM ".$this->userTable." u WHERE email =:email;";
+            $parameters['email']=$email;
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query,$parameters);
+            if($resultSet){ 
+                return !empty($resultSet);
+            }
+            else{
+                return false; 
+            }
+        } catch (Exception $ex) 
+        { 
+            throw $ex; 
+        }
+    }
 }
 ?>

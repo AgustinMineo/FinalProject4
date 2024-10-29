@@ -1023,19 +1023,18 @@ $groupListJson = json_encode($groupArray);
     const groupListJson = <?php echo $groupListJson; ?>;
     //Mostrar o esconder las fechas del newGroup o editGroup
     document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('groupTypeEdit').addEventListener('change', function() {
-            const selectedValue = this.value;
-            const startDateContainer = document.getElementById('startDateContainer');
-            const endDateContainer = document.getElementById('endDateContainer');
-            const startDateInput = document.getElementById('startDateEdit');
-            const endDateInput = document.getElementById('endDateEdit');
+        const groupTypeSelect = document.getElementById('groupType');
+        const startDateContainer = document.getElementById('dateFields');
+        const endDateContainer = document.getElementById('dateFieldsEnd');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
 
-            const today = new Date().toISOString().split('T')[0];
-            startDateInput.setAttribute('min', today);
-            endDateInput.setAttribute('min', today);
+        const today = new Date().toISOString().split('T')[0];
+        startDateInput.setAttribute('min', today);
+        endDateInput.setAttribute('min', today);
 
-            
-            if (selectedValue === '6') { 
+        function toggleDateFields() {
+            if (groupTypeSelect.value === '6') { 
                 startDateContainer.style.display = 'block';
                 endDateContainer.style.display = 'block';
                 startDateInput.setAttribute('required', 'required');
@@ -1046,21 +1045,10 @@ $groupListJson = json_encode($groupArray);
                 startDateInput.removeAttribute('required');
                 endDateInput.removeAttribute('required');
             }
-        });
-
-        const currentGroupType = document.getElementById('groupTypeEdit').value;
-        const eventType = '6';
-        if (currentGroupType === eventType) {
-            document.getElementById('startDateContainer').style.display = 'block';
-            document.getElementById('endDateContainer').style.display = 'block';
-            document.getElementById('startDateEdit').setAttribute('required', 'required');
-            document.getElementById('endDateEdit').setAttribute('required', 'required');
-        } else {
-            document.getElementById('startDateContainer').style.display = 'none';
-            document.getElementById('endDateContainer').style.display = 'none';
         }
+        groupTypeSelect.addEventListener('change', toggleDateFields);
+        toggleDateFields();
     });
-
     //Cambiar el valor de la variable de currentUser
     document.getElementById('selectedUser').addEventListener('change', function() {
         var selectedUserID = this.value;
@@ -1167,6 +1155,7 @@ $groupListJson = json_encode($groupArray);
         });
     }
     // Modal de eliminación
+    
     deleteButtons.forEach(button => {
         button.addEventListener('click', function() {
             setChangeModalData(button);
@@ -1837,6 +1826,16 @@ $groupListJson = json_encode($groupArray);
                     return;
                 }
             }
+            if (startDate >= endDate) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error de fechas',
+                        color: "#716add",
+                        text: 'La fecha de fin no puede ser menor o igual a la fecha de inicio.',
+                        confirmButtonText: 'Aceptar'
+                    });
+                return;
+            }
 
             formData.append('currentUserID', currentUserID);
             formData.append('groupName', groupName);
@@ -2134,8 +2133,26 @@ $groupListJson = json_encode($groupArray);
     }
     function updateGroup() {
         const formData = new FormData($('#editGroupForm')[0]);
-        console.log([...formData]);
-
+        let startDate, endDate;
+        for (const [key, value] of formData) {
+            if (key === 'start_date') {
+                startDate = value;
+            } else if (key === 'end_date') {
+                endDate = value;
+            }
+        }
+        if (startDate && endDate) {
+            if (new Date(endDate) <= new Date(startDate)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de fechas',
+                    color: "#716add",
+                    text: 'La fecha de fin no puede ser menor o igual a la fecha de inicio.',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+        }
         $.ajax({
             url: '<?php echo FRONT_ROOT ?>Group/updateGroup',
             type: 'POST',

@@ -217,7 +217,7 @@ require_once("validate-session.php");
                                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                 <form action="<?php echo '/FinalProject4/' ?>Pet/updatePet" method="post" enctype="multipart/form-data" class="bg-light p-5 rounded shadow-sm w-100">
+                                                                 <form action="<?php echo FRONT_ROOT ?>Pet/updatePet" method="post" enctype="multipart/form-data" class="bg-light p-5 rounded shadow-sm w-100">
                                                                       <input type="hidden" id="petID" name="petID" value="<?php echo $pets->getPetID();?>">
                                                                       <div class="row gy-3">
                                                                       <!-- Pet Name -->
@@ -232,8 +232,8 @@ require_once("validate-session.php");
                                                                       <div class="col-lg-6">
                                                                            <div class="form-group">
                                                                                 <label for="petImage" class="form-label">Imagen de la Mascota (PNG/JPEG)</label>
-                                                                                <input type="file" name="petImage" class="form-control" accept=".png, .jpg, .jpeg" onchange="previewImage(event)">
-                                                                                <img id="imagePreview" src="<?php 
+                                                                                <input type="file" name="petImage" class="form-control" accept=".png, .jpg, .jpeg" onchange="previewImage(event,<?php echo $pets->getPetID()?>)">
+                                                                                <img id="imagePreview<?php echo $pets->getPetID()?>" src="<?php 
                                                                                      if ($image = $pets->getPetImage()) {
                                                                                           $imageData = base64_encode(file_get_contents($image));
                                                                                           echo 'data:image/jpeg;base64,'.$imageData;
@@ -296,11 +296,11 @@ require_once("validate-session.php");
                                                                       <div class="col-lg-6">
                                                                       <div class="form-group">
                                                                            <label for="petVideo" class="form-label">Video de la Mascota (MP4)</label>
-                                                                           <input type="file" name="petVideo" class="form-control" accept="video/mp4" onchange="previewVideo(event)">
+                                                                           <input type="file" name="petVideo" class="form-control" accept="video/mp4" onchange="previewVideo(event,<?php echo $pets->getPetID()?>)">
 
                                                                            <div class="d-flex flex-wrap justify-content-center w-100">
-                                                                                <video id="videoPreview" width="920" height="720" controls class="rounded shadow-sm" style="display: none;">
-                                                                                     <source id="videoSource" src="<?php echo FRONT_ROOT . $pets->getPetVideo(); ?>" type="video/mp4">
+                                                                                <video id="videoPreview<?php echo $pets->getPetID()?>" width="920" height="720" controls class="rounded shadow-sm" style="display: none;">
+                                                                                     <source id="videoSource<?php echo $pets->getPetID()?>" src="<?php echo FRONT_ROOT . $pets->getPetVideo(); ?>" type="video/mp4">
                                                                                      Tu navegador no soporta el elemento de video.
                                                                                 </video>
 
@@ -308,7 +308,8 @@ require_once("validate-session.php");
                                                                                      if (!$pets->getPetVideo()) {
                                                                                      echo "<h3>Sin video</h3>";
                                                                                      } else {
-                                                                                     echo '<video  width="820" height="720" controls class="rounded shadow-sm" id="current-video">';
+                                                                                     $petID = $pets->getPetID();
+                                                                                     echo '<video width="820" height="720" controls class="rounded shadow-sm" id="current-video'. $petID .'">';
                                                                                      echo '<source src="' .FRONT_ROOT . $pets->getPetVideo() . '" type="video/mp4">';
                                                                                      echo 'Your browser does not support the video tag.';
                                                                                      echo '</video>';
@@ -374,8 +375,9 @@ require_once("validate-session.php");
 </body>
 <script>
 document.addEventListener('DOMContentLoaded', filterPets);
-function previewImage(event) {
-     const imagePreview = document.getElementById('imagePreview');
+
+function previewImage(event,petID) {
+     const imagePreview = document.getElementById('imagePreview' + petID);
      const file = event.target.files[0];
      const reader = new FileReader();
      
@@ -389,10 +391,10 @@ function previewImage(event) {
      }
 }
 
-function previewVideo(event) {
-     const videoPreview = document.getElementById('videoPreview');
-     const videoSource = document.getElementById('videoSource');
-     const currentVideo= document.getElementById('current-video');
+function previewVideo(event,petID) {
+     const videoPreview = document.getElementById('videoPreview' + petID);
+     const videoSource = document.getElementById('videoSource' + petID);
+     const currentVideo= document.getElementById('current-video' + petID);
      const file = event.target.files[0];
      const reader = new FileReader();
 

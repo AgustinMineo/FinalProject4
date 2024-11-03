@@ -86,7 +86,6 @@ CREATE TABLE KeeperDays (
   PRIMARY KEY (keeperDaysID, keeperID, day)
 ) ENGINE=InnoDB;
 
-
 CREATE TABLE Status(
 	statusID int(11) NOT NULL AUTO_INCREMENT,
     name varchar(40) NOT NULL UNIQUE KEY,
@@ -192,7 +191,7 @@ CREATE TABLE group_info(
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   start_date DATE DEFAULT NULL,
-  end_date DATE DEFAULT NULL,
+  end_date DATE DEFAULT NULL
 )ENGINE=InnoDB;
 
 /*Flujo de invitaciones a grupos*/

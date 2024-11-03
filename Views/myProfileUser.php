@@ -13,7 +13,6 @@ require_once("validate-session.php");
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
   <title>PET HERO</title>
   <style>
-        /* Animación de entrada deslizante desde arriba */
         @keyframes slideInDown {
             from {
                 transform: translateY(-50px);
@@ -25,18 +24,13 @@ require_once("validate-session.php");
             }
         }
 
-        /* Aplica la animación solo al abrir */
         .modal.show .modal-dialog {
             animation: slideInDown 0.5s ease-out;
         }
-
-        /* Estilo del modal (bordes redondeados y sombra) */
         .modal-content {
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
-
-        /* Fondo del backdrop más oscuro */
         .modal-backdrop {
             background-color: rgba(0, 0, 0, 0.8);
         }
@@ -46,7 +40,7 @@ require_once("validate-session.php");
 
   <div class="container my-5">
 
-  <h3 class="fw-normal text-center mb-4"><?php if($flag === 1 && $userRole===1){  echo 'Modificando a '. "<strong>". $user->getLastName(). " " . $user->getFirstName() . "</strong>"; }else{ echo 'Your Profile';} ?> </h3>
+  <h3 class="fw-normal text-center mb-4"><?php if($flag === 1 && $userRole===1){  echo 'Modificando a '. "<strong>". $user->getLastName() . " " . $user->getFirstName() . "</strong>"; }else{ echo 'Your Profile';} ?> </h3>
   <!--Image Section -->
     <div class="col-md-12 my-2">
       <div class="card shadow card-uniform">

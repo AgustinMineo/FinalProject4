@@ -63,7 +63,7 @@ class UserController{
 
             if($role){
                 //Caso de que entre por vista de admin (Owner o Keeper)
-                if(is_string($userSearch) && filter_var($userSearch,FILTER_VALIDATE_EMAIL) && $role!=1){
+                if(is_string($userSearch) && filter_var($userSearch,FILTER_VALIDATE_EMAIL) && $role!==1){
                     $flag=1;
                     if($role === 2){
                         $user = $this->OwnerDAO->searchOwnerByEmail($userSearch);
@@ -101,9 +101,7 @@ class UserController{
                     $user= $this->KeeperDAO->searchKeeperByEmail($userSearch);
                 }
             }
-            
-            require_once(VIEWS_PATH."myProfileUser.php");
-            //exit();
+            require_once(VIEWS_PATH . "myProfileUser.php");
         }
     }
     //Vista para editar a todos los usuarios (Admin,owner y keeper (Vista admin))
@@ -290,6 +288,7 @@ class UserController{
         if($newEmail != $userEmail){
             $exist = $this->UserDAO->searchUserByEmail($newEmail);
             $response = null;
+            $newEmail = trim($newEmail);
             if(!$exist){
                 $response = $this->UserDAO->updateEmail($newEmail,$userEmail);
                 if($response){
@@ -398,7 +397,7 @@ class UserController{
         if($CBU){
             $flag = $this->KeeperDAO->searchCBU($CBU);
             if(!$flag){
-                $response = $this->KeeperDAO->updateCBU($CBU,$keeperID);
+                $response = $this->KeeperDAO->updateCBU(trim($CBU),$keeperID);
                 if($response){
                     echo '<div class="alert alert-success">You have successful update your CBU!</div>';
                     $this->goEditView($userEmail,$response);;

@@ -199,7 +199,6 @@ require_once("validate-session.php");
     <!-- Modal Cambiar Estado -->
 <script>
     $(document).ready(function() {
-        console.log('entre');
         $('#incidentTable').DataTable({
             "paging": true,
             "searching": true,
@@ -250,6 +249,15 @@ require_once("validate-session.php");
                     'Por favor, completa todos los campos requeridos.',
                     'error'
                 );
+                return;
+            }
+            if (description.length <20) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'La descripción tiene que tener mas de 20 caracteres.',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
                 return;
             }
             Swal.fire({
@@ -306,7 +314,6 @@ require_once("validate-session.php");
                 }
             });
     }
-
     function submitAnswer(incidentId) {
         const userId = <?php echo $userID?>;
         const answer = document.getElementById('answer').value.trim();
@@ -319,7 +326,15 @@ require_once("validate-session.php");
             });
             return;
         }
-
+        if (answer.length <5) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'La respuesta tiene que tener mas de 5 caracteres.',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
         $.ajax({
             type: "POST",
             url: "<?php echo FRONT_ROOT ?>IncidentAnswer/newIncidentAnswer",
@@ -601,7 +616,6 @@ require_once("validate-session.php");
             }
         });
     }
-
     //Flujo imagenes y videos
     function previewMedia() {
         const fileInput = document.getElementById('mediaUpload');

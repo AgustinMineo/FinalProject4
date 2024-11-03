@@ -58,39 +58,13 @@ class IncidentController {
         require_once(VIEWS_PATH. "IncidentAdministration.php");
     }
     public function loadAdministrationIncidentView(){
+        SessionHelper::InfoSession([1]);
         $incidentTypeList =array();
         $incidentStatusList=array();
         $incidentStatusList = $this->IncidentStatusDAO->getAllIncidentStatus();
         $incidentTypeList = $this->IncidentTypeDAO->getAllIncidentTypes();
         $this->goIncidentAdministrationView($incidentStatusList,$incidentTypeList);
     }
-    /*
-    public function newIncident($userId, $incidentTypeId, $description) {
-        try {
-            if ($userId === null && $incidentTypeId === null && $description === null) {
-                if (SessionHelper::getCurrentUser()) {
-                    SessionHelper::redirectTo403();
-                }
-            }
-            $statusId = 1;
-            $incident = new Incident();
-            $incident->setUserId($userId);
-            $incident->setIncidentTypeId($incidentTypeId);
-            $incident->setStatusId($statusId);
-            $incident->setDescription($description);
-            $incident->setIncidentDate(date('Y-m-d H:i:s'));
-
-            $result = $this->IncidentDAO->newIncident($incident);
-            if($result){
-                echo json_encode(['success' => true, 'message' => '¡Incidente creado exitosamente!']);
-            }else{
-                echo json_encode(['success' => false, 'message' => '¡La incidencia no pudo ser creada!']);
-            }
-        } catch (Exception $ex) {
-            http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Error al crear el incidente: ' . $ex->getMessage()]);
-        }
-    }*/
     public function newIncident($userId, $incidentTypeId, $description) {
         try {
             if ($userId === null || $incidentTypeId === null || $description === null) {
@@ -118,7 +92,7 @@ class IncidentController {
                 if (isset($_FILES['media'])) {
                     $formatName = function($files, $key) use ($incidentId) {
                         $extension = strtolower(pathinfo($files['name'][$key], PATHINFO_EXTENSION));
-                        return "{$incidentId}-image-{$key}." . $extension; // Nombre de archivo único por índice
+                        return "{$incidentId}-image-{$key}." . $extension;
                     };
                     $incidentImageRoute = $this->fileUploader->uploadFiles($_FILES['media'], $subFolder, $formatName);
 
@@ -146,13 +120,6 @@ class IncidentController {
                     SessionHelper::redirectTo403();
                 }
             }
-
-            if (strlen($answer) < 5 || strlen($answer) > 500) {
-                http_response_code(400);
-                echo json_encode(['success' => false, 'message' => 'La respuesta debe tener entre 5 y 500 caracteres.']);
-                return;
-            }
-
             $incidentAnswer = new IncidentAnswer();
             $incidentAnswer->setIncidentId($incidentId);
             $incidentAnswer->setUserId($userId);

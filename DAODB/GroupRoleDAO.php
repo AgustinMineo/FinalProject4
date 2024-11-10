@@ -32,6 +32,28 @@ class GroupRoleDAO {
             throw $ex;
         }  
     }
+    public function getAllGroupRoleActive() {
+        try {
+            $query = "SELECT * FROM " . $this->groupRoleTable . " WHERE is_active=1 ORDER BY id ASC";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+
+            $groupRoleList = array();
+            if (!empty($resultSet)) {
+                foreach ($resultSet as $row) {
+                    $groupRole = new GroupRole();
+                    $groupRole->setId($row['id']);
+                    $groupRole->setName($row['name']);
+                    $groupRole->setIsActive($row['is_active']);
+                    $groupRole->setDescription($row['description']);
+                    array_push($groupRoleList, $groupRole);
+                }
+            }
+            return $groupRoleList;
+        } catch (Exception $ex) {
+            throw $ex;
+        }  
+    }
     public function getGroupRoleById($roleID) {
         try {
             $query = "SELECT * FROM " . $this->groupRoleTable . " WHERE id = :roleID LIMIT 1";

@@ -42,7 +42,6 @@ $groupListJson = json_encode($groupArray);
 
 </head>
 <style>
-    /* Animaciones al pasar el mouse sobre la imagen */
     .img-fluid:hover {
         transform: scale(1.05);
     }
@@ -840,7 +839,11 @@ $groupListJson = json_encode($groupArray);
                         <select class="form-select" id="groupType" name="groupType" required>
                             <option value="" disabled selected>Seleccione un tipo de grupo</option>
                             <?php foreach ($groupTypeList as $type): ?>
-                                <option value="<?php echo $type->getId(); ?>"><?php echo $type->getName(); ?></option>
+                                <?php if ($type->getIsActive() === '1'): ?>
+                                    <option value="<?php echo $type->getId(); ?>">
+                                        <?php echo $type->getName(); ?>
+                                    </option>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </select>
                         <div class="invalid-feedback">Por favor, seleccione un tipo de grupo.</div>
@@ -851,7 +854,11 @@ $groupListJson = json_encode($groupArray);
                         <select class="form-select" id="groupPrivacy" name="groupPrivacy" required>
                             <option value="" disabled selected>Seleccione la privacidad</option>
                             <?php foreach ($groupPrivacyList as $privacy): ?>
-                                <option value="<?php echo $privacy->getId(); ?>"><?php echo $privacy->getName(); ?></option>
+                                <?php if ($privacy->getIsActive() === '1'): ?>
+                                    <option value="<?php echo $privacy->getId(); ?>">
+                                        <?php echo $privacy->getName(); ?>
+                                    </option>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </select>
                         <div class="invalid-feedback">Por favor, seleccione la privacidad del grupo.</div>
@@ -922,9 +929,11 @@ $groupListJson = json_encode($groupArray);
                             <select class="form-select border-primary" id="groupStatus" name="groupStatus" required>
                                 <option value="" disabled selected>Seleccione un estado</option>
                                 <?php foreach ($groupStatusList as $status): ?>
-                                    <option value="<?php echo $status->getId(); ?>">
-                                        <?php echo $status->getName(); ?>
-                                    </option>
+                                    <?php if ($status->getIsActive() === '1'): ?>
+                                        <option value="<?php echo $status->getId(); ?>">
+                                            <?php echo $status->getName(); ?>
+                                        </option>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </select>
                         </div>
@@ -968,7 +977,11 @@ $groupListJson = json_encode($groupArray);
                         <select class="form-select" id="groupTypeEdit" name="groupType" required>
                             <option value="">Seleccione un tipo de grupo</option>
                             <?php foreach ($groupTypeList as $type): ?>
-                                <option value="<?php echo $type->getId(); ?>"><?php echo $type->getName(); ?></option>
+                                <?php if ($type->getIsActive() === '1'): ?>
+                                    <option value="<?php echo $type->getId(); ?>">
+                                        <?php echo $type->getName(); ?>
+                                    </option>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -977,7 +990,11 @@ $groupListJson = json_encode($groupArray);
                         <select class="form-select" id="groupPrivacyEdit" name="groupPrivacy" required>
                             <option value="">Seleccione la privacidad</option>
                             <?php foreach ($groupPrivacyList as $privacy): ?>
-                                <option value="<?php echo $privacy->getId(); ?>"><?php echo $privacy->getName(); ?></option>
+                                <?php if ($privacy->getIsActive() === '1'): ?>
+                                    <option value="<?php echo $privacy->getId(); ?>">
+                                        <?php echo $privacy->getName(); ?>
+                                    </option>
+                                <?php endif; ?>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -2513,8 +2530,10 @@ $groupListJson = json_encode($groupArray);
     function showChangeRoleModal(userId,currentRoleId,groupID) {
         let roleOptions = '';
         groupListJson.forEach(role => {
-            const selected = parseInt(role.id) === parseInt(currentRoleId) ? 'selected' : '';
-            roleOptions += `<option value="${role.id}" ${selected}>${role.name}</option>`;
+            if(role.is_active==='1'){
+                const selected = parseInt(role.id) === parseInt(currentRoleId) ? 'selected' : '';
+                roleOptions += `<option value="${role.id}" ${selected}>${role.name}</option>`;
+            }
         });
         const modalHtml = `
             <div class="modal fade" id="changeRoleModal" tabindex="-1" aria-labelledby="changeRoleModalLabel" aria-hidden="true">
@@ -2662,7 +2681,6 @@ $groupListJson = json_encode($groupArray);
                 groupID: groupID
             },
             success: function(response) {
-                console.log(response);
                 response = JSON.parse(response);
                 if (response.success) {
                     Swal.fire({

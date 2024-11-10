@@ -86,7 +86,7 @@ class MessageDAO {
     public function getMessagesByGroup($groupID) {
         try {
             $query = "
-                SELECT m.message, m.sender_id, m.receiver_id, m.sent_at,
+                SELECT m.message, m.sender_id, m.receiver_id, m.sent_at,u.userImage,
                     concat(u.firstName, ' ', u.lastName) as NombreUsuario,
                     CASE 
                         WHEN COUNT(mg.is_read = 0 OR NULL) = 0 THEN 1
@@ -193,12 +193,13 @@ class MessageDAO {
             throw $e;
         }
     }
-    //Trae el id de usuario y la cantidad de mensajes no leidos por grupo que tiene el usuario logeado
+    //Trae el id de usuario y la cantidad de mensajes no leidos por grupo activo que tiene el usuario logeado
     public function getUnreadMessagesGroup($userID){
         try {
-            $query = "SELECT count(id) as 'cantidad',group_id as 'idGrupo' FROM " . $this->tableMessageGroup . "
-                    WHERE user_id = :userID AND is_read=0 group by group_id";
-            
+            $query = "SELECT count(gm.id) as 'cantidad', gm.group_id as 'idGrupo' FROM " . $this->tableMessageGroup . " gm
+            JOIN " . $this->groupTable . " g on g.id = gm.group_id
+            WHERE gm.user_id = :userID AND gm.is_read = 0 AND g.status_id IN (1) GROUP BY gm.group_id";
+
             $parameters["userID"] = $userID;
             $unreadMessages=array();
             $this->connection = Connection::GetInstance();

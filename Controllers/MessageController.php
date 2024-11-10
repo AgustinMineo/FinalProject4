@@ -91,10 +91,10 @@ class MessageController{
     //Cargo datos para la vista del currentUser
     public function getChats(){
         $chats = $this->MessageDAO->getChatsByUserID(SessionHelper::getCurrentUser()->getUserID());
-        $statusList=$this->GroupStatusDAO->getAllGroupStatus();
-        $privacyList=$this->GroupPrivacyDAO->getAllGroupPrivacy();
-        $roleList=$this->GroupRoleDAO->getAllGroupRole();
-        $typeList=$this->GroupTypeDAO->getAllGroupType();
+        $statusList=$this->GroupStatusDAO->getAllGroupStatusActive();
+        $privacyList=$this->GroupPrivacyDAO->getAllGroupPrivacyActive();
+        $roleList=$this->GroupRoleDAO->getAllGroupRoleActive();
+        $typeList=$this->GroupTypeDAO->getAllGroupTypeActive();
         $groupList = $this->GroupDAO->getGroupsByUser(SessionHelper::getCurrentUser());
         $groupInvitation = $this->GroupInvitationStatusDAO->getInvitationStatus();
         $this->goChatView($chats,$statusList,$privacyList,$roleList,$typeList,$groupList,$groupInvitation);

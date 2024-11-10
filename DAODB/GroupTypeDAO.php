@@ -33,6 +33,29 @@ class GroupTypeDAO{
             throw $ex;
         }  
     }
+    public function getAllGroupTypeActive(){
+        try{
+            $query = "SELECT * FROM " . $this->groupTypeTable . " WHERE is_active=1 order by id asc";
+            $this->connection = Connection::GetInstance();
+            $resultSet = $this->connection->Execute($query);
+            if (!empty($resultSet)) {
+                $groupTypeList = array();
+                foreach($resultSet as $row){
+                    $groupType = new GroupTypes();
+                    $groupType->setId($row['id']);
+                    $groupType->setName($row['name']);
+                    $groupType->setIsActive($row['is_active']);
+                    $groupType->setDescription($row['description']);
+                    array_push($groupTypeList,$groupType);
+                }
+                return $groupTypeList;
+            }
+
+        return $groupTypeList;
+        }catch(Exception $ex){
+            throw $ex;
+        }  
+    }
     public function getGroupTypeById($typeID) {
         try {
             $query = "SELECT * FROM " . $this->groupTypeTable . " WHERE id = :typeID LIMIT 1";

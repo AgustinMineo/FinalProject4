@@ -49,7 +49,6 @@ class ChatAdminController{
     }
     public function getViewChatInformation(){
         SessionHelper::InfoSession([1]);
-        //$chats = $this->MessageDAO->getChatsByUserID(SessionHelper::getCurrentUser()->getUserID());
         $groupStatusList =$this->GroupStatusDAO->getAllGroupStatus();
         $groupPrivacyList =$this->GroupPrivacyDAO->getAllGroupPrivacy();
         $groupRoleList =$this->GroupRoleDAO->getAllGroupRole();

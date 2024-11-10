@@ -1422,8 +1422,8 @@ $privacyListJson = json_encode($privacyArray);
 
                         var userColor = getUserColor(message.sender_id);
                         var userName = (message.sender_id == '<?php echo $currentUser ?>' ? 'Tú' : message.NombreUsuario);
-                        
                         var messageHTML = '<div class="message ' + messageClass + '">' +
+                            '<img src="' + <?php echo FRONT_ROOT ?> +  message.userImage + '" alt="User Image" class="rounded-circle me-2" width="40" height="40">' +
                             '<strong class="" style="color:' + userColor + ';">' + userName + ':</strong>' +
                             '<p class="mt-1 mb-0 font-monospace">' + message.message + '</p>' +
                             '<div class="d-flex justify-content-end date">' + formatDate(message.sent_at) + '</div>';
@@ -1772,11 +1772,6 @@ $privacyListJson = json_encode($privacyArray);
             background: '#ffffff', 
             color: '#000000'
         }).then((result) => {
-            alert(groupId);
-            alert(currentUser);
-            alert(email);
-            alert(message);
-            alert(roleInvited);
             if (result.isConfirmed) {
                 $.ajax({
                     url: '<?php echo FRONT_ROOT ?>GroupInvitation/sendInvitation',

@@ -1665,17 +1665,17 @@ $privacyListJson = json_encode($privacyArray);
                     });
                     return;
                 }
+                if (startDate >= endDate) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de fechas',
+                            color: "#716add",
+                            text: 'La fecha de fin no puede ser menor o igual a la fecha de inicio.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                        return;
+                    }
             }
-            if (startDate >= endDate) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error de fechas',
-                        color: "#716add",
-                        text: 'La fecha de fin no puede ser menor o igual a la fecha de inicio.',
-                        confirmButtonText: 'Aceptar'
-                    });
-                    return;
-                }
 
             formData.append('currentUserID', currentUserID);
             formData.append('groupName', groupName);
@@ -1887,7 +1887,6 @@ $privacyListJson = json_encode($privacyArray);
             },
             success: function(response) {
                 const data = JSON.parse(response);
-                console.table(data);
                 $('#invitationLoader .modal-body').empty(); 
                 
                 if (data.length > 0) {

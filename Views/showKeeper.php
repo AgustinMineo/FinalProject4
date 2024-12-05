@@ -82,7 +82,7 @@ require_once("validate-session.php");
                             
                             <p class="text-muted small mb-2"><i class="fas fa-paw"></i> Tamaño de Animal: <?php echo $keeper->getAnimalSize(); ?></p>
                             
-                            <p class="text-primary fs-5 fw-bold mt-3"><i class="fas fa-dollar-sign"></i> $<?php echo number_format($keeper->getPrice(), 2); ?></p>
+                            <p class="text-primary fs-5 fw-bold mt-3"><i class="fas fa-dollar-sign"></i> <?php echo number_format($keeper->getPrice(), 2); ?></p>
                             
                             <button type="button" class="btn btn-info btn-sm mt-3 px-4" 
                                 data-bs-toggle="modal" 

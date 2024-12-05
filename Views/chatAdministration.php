@@ -1842,16 +1842,16 @@ $groupListJson = json_encode($groupArray);
                     });
                     return;
                 }
-            }
-            if (startDate >= endDate) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error de fechas',
-                        color: "#716add",
-                        text: 'La fecha de fin no puede ser menor o igual a la fecha de inicio.',
-                        confirmButtonText: 'Aceptar'
-                    });
-                return;
+                if (startDate >= endDate) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de fechas',
+                            color: "#716add",
+                            text: 'La fecha de fin no puede ser menor o igual a la fecha de inicio.',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    return;
+                }
             }
 
             formData.append('currentUserID', currentUserID);

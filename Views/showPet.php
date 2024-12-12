@@ -491,46 +491,37 @@ function filterPets() {
      const noPetsMessage = document.getElementById('noPetsMessage');
      const nameFilter = document.getElementById('filterPetName').value.toLowerCase();
      const sizeFilter = document.getElementById('filterPetSize').value.toLowerCase();
-     
-     const pets = document.querySelectorAll('.pet-item');
-     filteredPets = [];
-     let foundPet = false; 
 
-     pets.forEach(pet => {
+     const pets = Array.from(document.querySelectorAll('.pet-item'));
+     
+     filteredPets = pets.filter(pet => {
           const name = pet.getAttribute('data-name').toLowerCase();
           const size = pet.getAttribute('data-size').toLowerCase();
-
-          const matchesName = name.includes(nameFilter);
-          const matchesSize = !sizeFilter || size.includes(sizeFilter);
-
-          if (matchesName && matchesSize) {
-               pet.style.display = ''; 
-               filteredPets.push(pet); // Agregar a la lista de mascotas filtradas
-               foundPet = true; 
-          } else {
-               pet.style.display = 'none'; 
-          }
+          return name.includes(nameFilter) && (!sizeFilter || size.includes(sizeFilter));
      });
-     
-     if (foundPet) {
-          noPetsMessage.classList.add('d-none'); 
-          paginatePets(); // Llamar a la función de paginación
+
+     currentPage = 1;
+
+     if (filteredPets.length > 0) {
+          noPetsMessage.classList.add('d-none');
+          paginatePets();
      } else {
-          noPetsMessage.classList.remove('d-none'); 
-          document.getElementById('pagination').innerHTML = ''; // Limpiar paginación
+          noPetsMessage.classList.remove('d-none');
+          document.getElementById('pagination').innerHTML = ''; 
+          displayPets();
      }
 }
 
 function paginatePets() {
      const pagination = document.getElementById('pagination');
-     pagination.innerHTML = ''; // Limpiar elementos de paginación
+     pagination.innerHTML = ''; //Limpio lo previo
 
-    const totalPages = Math.ceil(filteredPets.length / petsPerPage); // Total de páginas
+     const totalPages = Math.ceil(filteredPets.length / petsPerPage);
+     if (totalPages === 0) return;
 
-    // Crear botones de paginación
      for (let i = 1; i <= totalPages; i++) {
           const li = document.createElement('li');
-          li.className = 'page-item';
+          li.className = 'page-item' + (i === currentPage ? ' active' : '');
           li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
           pagination.appendChild(li);
      }
@@ -539,21 +530,20 @@ function paginatePets() {
 }
 
 function changePage(page) {
-     currentPage = page; 
-     displayPets(); 
+     currentPage = page;
+     paginatePets();
 }
 
 function displayPets() {
      const pets = document.querySelectorAll('.pet-item');
+     pets.forEach(pet => pet.style.display = 'none');
+
      const start = (currentPage - 1) * petsPerPage;
      const end = start + petsPerPage;
 
-     pets.forEach((pet, index) => {
-          if (filteredPets.includes(pet)) {
-               pet.style.display = (index >= start && index < end) ? '' : 'none';
-          }
-     });
+     filteredPets.slice(start, end).forEach(pet => pet.style.display = '');
 }
+
 
 </script>
 </html>

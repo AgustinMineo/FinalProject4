@@ -42,6 +42,11 @@ class GroupRoleController {
         try {
             
             if (intval(SessionHelper::getCurrentUser()->getRol()) === 1) {
+                $nameValid = $this->GroupRoleDAO->validateUniqueName(0, $name);
+                    if (!is_null($nameValid)) {
+                        echo json_encode(['success' => false, 'message' => 'Error! El nombre del rol de grupo ya existe!.']);
+                        return;
+                    }
                 $groupRole = new GroupRole();
                 $groupRole->setName($name);
                 $groupRole->setDescription($description);

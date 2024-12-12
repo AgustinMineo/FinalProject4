@@ -516,12 +516,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
 
-        const validExtensions = ['.com', '.net', '.org', '.edu', '.mx','.ar','.gob','.edu'];
+        const validExtensions = ['.com', '.net', '.org', '.edu', '.mx','.ar','.gob','.edu','.pethero.com'];
         if (!validExtensions.some(ext => email.endsWith(ext))) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'La extensión del correo debe ser .com, .net, .org, .edu, .mx, .ar, .gob, y .edu!'
+                text: 'La extensión del correo debe ser .com, .net, .org, .edu, .mx, .ar, .gob, pethero.com y .edu!'
             });
             return; 
         }

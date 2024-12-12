@@ -2225,6 +2225,7 @@ $groupListJson = json_encode($groupArray);
                         const user = member.user;
                         const role = member.role;
                         const isCurrentUser = user.userID == <?php echo $currentUser; ?>;
+                        console.log(member.role.id);
                         membersList += `
                             <div class="card mb-3 shadow-sm member" data-email="${user.email}">
                                 <div class="card-body d-flex align-items-center">
@@ -2236,11 +2237,12 @@ $groupListJson = json_encode($groupArray);
                                         <small class="text-muted">${role.name}</small>
                                     </div>
                                     <div>
-                                        ${member.status === "1" ? 
-                                            `<button class="btn btn-danger btn-sm" onclick="showRemoveModal(${user.userID}, '${user.firstName} ${user.lastName}', ${groupId})"><i class="bi bi-x-circle"></i> Eliminar</button>` :
-                                            `<button class="btn btn-success btn-sm" onclick="showReactivateModal(${user.userID}, '${user.firstName} ${user.lastName}', ${groupId})"><i class="bi bi-check-circle"></i> Reactivar</button>`
+                                        ${member.role.id !== "1" ? 
+                                            `${member.status === "1" ? 
+                                                `<button class="btn btn-danger btn-sm" onclick="showRemoveModal(${user.userID}, '${user.firstName} ${user.lastName}', ${groupId})"><i class="bi bi-x-circle"></i> Eliminar</button>` :
+                                                `<button class="btn btn-success btn-sm" onclick="showReactivateModal(${user.userID}, '${user.firstName} ${user.lastName}', ${groupId})"><i class="bi bi-check-circle"></i> Reactivar</button>`}
+                                            <button class="btn btn-warning btn-sm" onclick="showChangeRoleModal(${user.userID},${role.id},${groupId})"><i class="bi bi-pencil"></i> Cambiar Rol</button>` : ''
                                         }
-                                        <button class="btn btn-warning btn-sm" onclick="showChangeRoleModal(${user.userID},${role.id},${groupId})"><i class="bi bi-pencil"></i> Cambiar Rol</button>
                                     </div>
                                 </div>
                             </div>

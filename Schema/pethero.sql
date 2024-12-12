@@ -399,6 +399,7 @@ CREATE EVENT IF NOT EXISTS update_reservations_status
     SET status = 6  
     WHERE status = 5
     AND endDate < NOW();
+    
     UPDATE Booking
     SET status = 8
     WHERE status IN (1, 3, 4)
@@ -418,7 +419,6 @@ CREATE EVENT IF NOT EXISTS update_invitation_status
 CREATE EVENT update_messages_for_inactive_members
   ON SCHEDULE EVERY 1 HOUR
   DO
-  BEGIN
   update group_message_reads SET is_read=1
   WHERE is_read=0 
   and user_id in (SELECT DISTINCT gm.user_id from group_members gm where gm.status=0);
@@ -436,3 +436,7 @@ CREATE EVENT updateGroupEventStatus
 			  WHERE gi.id = g.groupInfo_id
 				AND gi.end_date < NOW()
 		  );
+
+
+/*Para ver los jobs*/
+SELECT * FROM information_schema. EVENTS;

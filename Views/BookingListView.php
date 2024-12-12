@@ -83,7 +83,7 @@ if($userRole===1){
                     <input type="hidden" id="userRoleID" value ="<?php echo $userRole?>">
                     <button type="submit" name="alterRole" value="2" class="btn <?php if($alterRole === 2){echo 'btn-primary';}else{echo 'btn-secondary';}?>">Simular como Owner</button>
                     <button type="submit" name="alterRole" value="3" class="btn <?php if($alterRole === 3){echo 'btn-primary';}else{echo 'btn-secondary';}?>" >Simular como Keeper</button>
-                    <button type="submit" name="alterRole" value="1" class="btn <?php if($alterRole === 1 && $alterRole=== 1){echo 'btn-primary';}else{echo 'btn-secondary';}?>" >Volver a Admin</button>
+                    <button type="submit" name="alterRole" value="1" class="btn <?php if($alterRole === 1 && $alterRole=== 1){echo 'btn-primary';}else{echo 'btn-secondary';}?>" >Admin</button>
                </div>
           </form>
      </div>

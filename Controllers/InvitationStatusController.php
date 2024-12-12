@@ -41,6 +41,11 @@ class InvitationStatusController {
         try {
             
             if (intval(SessionHelper::getCurrentUser()->getRol()) === 1) {
+                $nameValid = $this->GroupInvitationStatusDAO->validateUniqueName(0, $name);
+                if (!is_null($nameValid)) {
+                    echo json_encode(['success' => false, 'message' => 'Error! El nombre del estado de invitación ya existe!.']);
+                    return;
+                }
                 $invitationStatus = new GroupInvitationStatus();
                 $invitationStatus->setName($name);
                 $invitationStatus->setDescription($description);

@@ -41,6 +41,11 @@ class GroupPrivacyController {
         }
         try {
             if (intval(SessionHelper::getCurrentUser()->getRol()) === 1) {
+                $nameValid = $this->GroupPrivacyDAO->validateUniqueName(0, $name);
+                if (!is_null($nameValid)) {
+                    echo json_encode(['success' => false, 'message' => 'Error! El nombre de la privacidad de grupo ya existe!.']);
+                    return;
+                }
                 $groupPrivacy = new GroupPrivacy();
                 $groupPrivacy->setName($name);
                 $groupPrivacy->setDescription($description);

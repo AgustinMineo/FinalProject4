@@ -63,6 +63,11 @@ class GroupStatusController {
             }
         }else{
             try {
+                $nameValid = $this->GroupStatusDAO->validateUniqueName(0,$name);
+                if(!is_null($nameValid)){
+                    echo json_encode(['success' => false, 'message' => 'Error! El nombre del estado de grupo fue ya existe!.' ]);
+                    return;
+                }
                 $newGroupStatus = new GroupStatus();
                 $newGroupStatus->setName($name);
                 $newGroupStatus->setDescription($description);

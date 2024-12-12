@@ -41,6 +41,11 @@ class GroupTypeController {
         }
         try {
             if (intval(SessionHelper::getCurrentUser()->getRol()) === 1) {
+                $nameValid = $this->GroupTypeDAO->validateUniqueName(0, $name);
+                if (!is_null($nameValid)) {
+                    echo json_encode(['success' => false, 'message' => 'Error! El nombre del tipo de grupo ya existe!.']);
+                    return;
+                }
                 $groupType = new GroupTypes();
                 $groupType->setName($name);
                 $groupType->setDescription($description);
